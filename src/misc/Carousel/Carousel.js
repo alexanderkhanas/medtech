@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import s from "./Carousel.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { ReactComponent as ArrowIcon } from "../../assets/next.svg";
+import {
+  faChevronRight,
+  faChevronLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import { Transition } from "react-transition-group";
 
 const Carousel = ({ images, className }) => {
   const [activeImageId, setActiveImageId] = useState(0);
+  const [isAnimation, setAnimation] = useState(false);
+
   const setNextImage = () => {
     setActiveImageId((prev) => (prev + 1 < images.length ? prev + 1 : 0));
   };
@@ -14,65 +19,41 @@ const Carousel = ({ images, className }) => {
   };
 
   useEffect(() => {
+    setAnimation((prev) => !prev);
     console.log(activeImageId);
   }, [activeImageId]);
 
   return (
     <div className={`${s.container} ${className}`}>
-      <img
-        className={s.main__image}
-        src={images[activeImageId]}
-        alt="loading"
+      <Transition in={isAnimation} timeout={400}>
+        {(state) => {
+          const transitionStyle = {
+            entering: { opacity: 0.7 },
+            entered: { opacity: 1 },
+            exiting: { opacity: 0.7 },
+            exited: { opacity: 1 },
+          };
+          return (
+            <img
+              className={s.main__image}
+              src={images[activeImageId]}
+              alt="loading"
+              style={transitionStyle[state]}
+            />
+          );
+        }}
+      </Transition>
+
+      <FontAwesomeIcon
+        onClick={setNextImage}
+        icon={faChevronLeft}
+        className={`${s.switch__button} ${s.switch__button__left}`}
       />
-      <div className={s.secondary__images}>
-        {images[activeImageId + 1] ? (
-          <>
-            <img
-              className={`${s.secondary__image} ${s.secondary__image__active}`}
-              src={images[activeImageId]}
-              alt="loading"
-            />
-            <img
-              className={s.secondary__image}
-              src={images[activeImageId + 1]}
-              onClick={setNextImage}
-              alt="loading"
-            />
-          </>
-        ) : (
-          <>
-            <img
-              className={s.secondary__image}
-              src={images[activeImageId - 1]}
-              onClick={setPreviousImage}
-              alt="loading"
-            />
-            <img
-              className={`${s.secondary__image} ${s.secondary__image__active}`}
-              src={images[activeImageId]}
-              alt="loading"
-            />
-          </>
-        )}
-        <div className={s.switch__buttons}>
-          <button onClick={setNextImage} className={s.switch__button}>
-            <ArrowIcon
-              //   onClick={setNextImage}
-              className={s.switch__button__icon}
-            />
-            {/* <FontAwesomeIcon
-              icon={faArrowUp}
-              className={s.switch__button__icon}
-            /> */}
-          </button>
-          <button onClick={setPreviousImage} className={s.switch__button}>
-            <ArrowIcon
-              //   onClick={setPreviousImage}
-              className={`${s.switch__button__icon} ${s.switch__button__icon__last}`}
-            />
-          </button>
-        </div>
-      </div>
+      <FontAwesomeIcon
+        onClick={setPreviousImage}
+        icon={faChevronRight}
+        className={`${s.switch__button} ${s.switch__button__right}`}
+      />
     </div>
   );
 };

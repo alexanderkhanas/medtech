@@ -1,25 +1,13 @@
 .container {
   display: flex;
   position: relative;
-  width: 55%;
+  width: 100%;
 }
 
 .main__image {
-  width: 600px;
-  height: 250px;
-  margin-right: 10px;
-}
-
-.secondary__images {
-  display: flex;
-  flex-direction: column;
-}
-
-.secondary__image {
-  width: 100px;
-  height: 80px;
-  margin-bottom: 10px;
-  cursor: pointer;
+  width: 100%;
+  height: 700px;
+  transition: 0.4s;
 }
 
 .switch__buttons {
@@ -30,21 +18,26 @@
 }
 
 .switch__button {
-  background: rgba(238, 238, 238, 0.762);
-  height: 30px;
   margin: 0 3px;
-  width: 30px;
-  position: relative;
+  font-size: 30px;
+  position: absolute;
   display: flex;
   justify-content: center;
   cursor: pointer;
   outline: none;
+  align-self: center;
+}
+
+.switch__button__left {
+  left: 5%;
+}
+
+.switch__button__right {
+  right: 5%;
 }
 
 .switch__button__icon {
-  position: absolute;
-  bottom: -15px;
-  width: 80%;
+  width: 100px;
   transform: rotate(90deg);
   cursor: pointer;
 }
@@ -55,25 +48,12 @@
   transform: rotate(-90deg);
 }
 
-.secondary__image__active {
-  border: 3px solid #ff0066;
-}
-
 @media (min-width: 700px) and (max-width: 800px) {
   .container {
     width: 100%;
   }
   .main__image {
-    width: 500px;
     height: 350px;
-    margin-right: 10px;
-  }
-
-  .secondary__image {
-    width: 150px;
-    height: 120px;
-    margin-bottom: 10px;
-    cursor: pointer;
   }
 }
 
@@ -83,14 +63,5 @@
   }
   .main__image {
     height: 250px;
-    margin-right: 10px;
-    width: 67vw;
-  }
-
-  .secondary__image {
-    width: 17vw;
-    height: 80px;
-    margin-bottom: 10px;
-    cursor: pointer;
   }
 }

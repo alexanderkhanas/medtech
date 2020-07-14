@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  position: relative;
+  width: 55%;
+}
+
+.main__image {
+  width: 600px;
+  height: 250px;
+  margin-right: 10px;
+}
+
+.secondary__images {
+  display: flex;
+  flex-direction: column;
+}
+
+.secondary__image {
+  width: 100px;
+  height: 80px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.switch__buttons {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.switch__button {
+  background: rgba(238, 238, 238, 0.762);
+  height: 30px;
+  margin: 0 3px;
+  width: 30px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+}
+
+.switch__button__icon {
+  position: absolute;
+  bottom: -15px;
+  width: 80%;
+  transform: rotate(90deg);
+  cursor: pointer;
+}
+
+.switch__button__icon__last {
+  top: -15px;
+  bottom: initial;
+  transform: rotate(-90deg);
+}
+
+.secondary__image__active {
+  border: 3px solid #ff0066;
+}
+
+@media (min-width: 700px) and (max-width: 800px) {
+  .container {
+    width: 100%;
+  }
+  .main__image {
+    width: 500px;
+    height: 350px;
+    margin-right: 10px;
+  }
+
+  .secondary__image {
+    width: 150px;
+    height: 120px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 650px) {
+  .container {
+    width: 100%;
+  }
+  .main__image {
+    height: 250px;
+    margin-right: 10px;
+    width: 67vw;
+  }
+
+  .secondary__image {
+    width: 17vw;
+    height: 80px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+}

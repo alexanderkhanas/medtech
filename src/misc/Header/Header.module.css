@@ -1,0 +1,36 @@
+.header {
+  display: flex;
+  justify-content: space-around;
+  padding: 25px 20px;
+  max-height: 80px;
+}
+
+.contact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.ph_number,
+.mail,
+.location {
+  border: none;
+  margin: 20px;
+}
+.header_icon {
+  color: #076cec;
+}
+
+.menu_main_wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+li ul {
+  display: inline;
+}
+
+li {
+  list-style-type: none;
+}

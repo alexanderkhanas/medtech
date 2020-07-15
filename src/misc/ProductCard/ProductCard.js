@@ -46,7 +46,7 @@ const ProductCard = ({ product }) => {
         <img className={s.card__img} src={gallery[0]} alt="" />
       </div>
       <div className={s.card__footer}>
-        <h3 className={s.card__title}>{title}</h3>
+        <h4 className={s.card__title}>{title}</h4>
         <div className={s.card__price__container}>
           <span className={s.card__price}>{price + " "} ₴</span>
           <Button

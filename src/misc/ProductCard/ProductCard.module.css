@@ -6,8 +6,9 @@
   margin-bottom: 30px;
   position: relative;
   padding: 20px 10px;
-  margin: 5px;
+  margin: 10px;
   transition: 0.15s;
+  width: 250px;
 }
 
 .card__img {
@@ -20,6 +21,7 @@
   text-transform: capitalize;
   font-weight: bold;
   margin: 15px 0;
+  font-size: 1.3rem;
 }
 
 .card__price {
@@ -41,6 +43,10 @@
 
 .card__footer {
   padding: 0 20px;
+}
+
+.card__button {
+  transition: 0.2s;
 }
 
 .card__footer .card__price__container .active__card__button {

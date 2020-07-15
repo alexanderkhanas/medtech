@@ -6,7 +6,7 @@ import Header from "./misc/Header/Header";
 const App = () => {
   return (
     <Router>
-      <Header />
+      {window.innerWidth > 500 && <Header />}{" "}
       <Switch>
         <Route path="/" exact>
           <Home />

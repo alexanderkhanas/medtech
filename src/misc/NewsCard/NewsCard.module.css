@@ -1,0 +1,39 @@
+.card {
+  width: 32.5%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.card__img {
+  object-fit: cover;
+  width: 100%;
+  cursor: pointer;
+}
+
+.card__footer {
+  padding: 20px 20%;
+  background: #f4f4f4;
+  text-align: center;
+}
+
+.card__title {
+  margin-bottom: 15px;
+}
+
+.card__subtitle {
+  color: rgb(138, 138, 138);
+  font-weight: lighter;
+  margin-bottom: 35px;
+}
+
+@media (max-width: 1000px) {
+  .card {
+    width: 48%;
+  }
+}
+
+@media (max-width: 750px) {
+  .card {
+    width: 100%;
+  }
+}

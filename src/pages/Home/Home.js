@@ -1,15 +1,26 @@
 import React, { useState } from "react";
 import s from "./Home.module.css";
-import Carousel from "../../misc/Carousel/Carousel";
+import ImageCarousel from "../../misc/Carousel/Carousel";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import { connect } from "react-redux";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-const Home = ({ bestRatingProducts, featuredProducts, popularProducts }) => {
+import AdvantagesCard from "../../misc/AdvantagesCard/AdvantagesCard";
+import Carousel from "@brainhubeu/react-carousel";
+import "@brainhubeu/react-carousel/lib/style.css";
+import NewsCard from "../../misc/NewsCard/NewsCard";
+
+const Home = ({ products, recentNews }) => {
+  const {
+    bestRatingProducts,
+    featuredProducts,
+    popularProducts,
+    newProducts,
+  } = products;
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   return (
     <div>
-      <Carousel
+      <ImageCarousel
         images={[
           "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider-sm3_767x.jpg?v=1543380475",
           "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider01_2000x.jpg?v=1543380436",
@@ -18,43 +29,124 @@ const Home = ({ bestRatingProducts, featuredProducts, popularProducts }) => {
         ]}
       />
       <FixedWrapper className={s.tabs__container}>
-        <h1 className={s.tabs__title}>Обрати по категорії</h1>
-        <Tabs>
-          <TabList className={s.tabs}>
-            {["Рекомендовані", "Найпопулярніші", "Найвища оцінка"].map(
-              (item, i) => (
-                <Tab
-                  onClick={() => setActiveTabIndex(i)}
-                  key={i}
-                  className={
-                    activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
-                  }
-                >
-                  {item}
-                </Tab>
-              )
-            )}
-          </TabList>
-          <TabPanel className={s.tab__panel}>
-            {featuredProducts.map((product, i) => (
+        <div className={s.section}>
+          <h3 className={s.tabs__title}>Обрати по категорії</h3>
+          <Tabs>
+            <TabList className={s.tabs}>
+              {["Рекомендовані", "Найпопулярніші", "Найвища оцінка"].map(
+                (item, i) => (
+                  <Tab
+                    onClick={() => setActiveTabIndex(i)}
+                    key={i}
+                    className={
+                      activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
+                    }
+                  >
+                    {item}
+                  </Tab>
+                )
+              )}
+            </TabList>
+            <TabPanel className={s.tab__panel}>
+              <Carousel
+                arrows={true}
+                offset={10}
+                slidesPerPage={Math.floor(window.innerWidth / 350)}
+                infinite
+                className={s.assd}
+                lazyLoad={true}
+              >
+                {featuredProducts.map((product, i) => (
+                  <ProductCard key={i} {...{ product }} />
+                ))}
+              </Carousel>
+            </TabPanel>
+            <TabPanel className={s.tab__panel}>
+              <Carousel
+                arrows={true}
+                offset={10}
+                slidesPerPage={Math.floor(window.innerWidth / 350)}
+                infinite
+                className={s.assd}
+                lazyLoad={true}
+              >
+                {popularProducts.map((product, i) => (
+                  <ProductCard key={i} {...{ product }} />
+                ))}
+              </Carousel>
+            </TabPanel>
+
+            <TabPanel className={s.tab__panel}>
+              <Carousel
+                arrows={true}
+                offset={10}
+                slidesPerPage={Math.floor(window.innerWidth / 350)}
+                infinite
+                className={s.assd}
+                lazyLoad={true}
+              >
+                {bestRatingProducts.map((product, i) => (
+                  <ProductCard key={i} {...{ product }} />
+                ))}
+              </Carousel>
+            </TabPanel>
+          </Tabs>
+        </div>
+        <div className={`${s.section} ${s.advantages}`}>
+          <h3 className={s.section__title}>Переваги</h3>
+          <div className={s.advantages__cards}>
+            <AdvantagesCard
+              title="Доставка по всій Україні"
+              bodyText="Для доставки використано сервіс Нова Пошта з можливістю оформлення та відстеження замовлень"
+              imgSrc={require("../../assets/deliveryIcon.png")}
+              mainColor="#35c7df"
+            />
+            <AdvantagesCard
+              title="Час роботи"
+              bodyText="Працюємо з 9-ої до 6-ої з понеділка до п'ятниці"
+              imgSrc={require("../../assets/scheduleIcon.png")}
+              mainColor="#076cec"
+            />
+            <AdvantagesCard
+              title="Час роботи"
+              bodyText="Працюємо з 9-ої до 6-ої з понеділка до п'ятниці"
+              imgSrc={require("../../assets/scheduleIcon.png")}
+              mainColor="#076cec"
+            />
+            <AdvantagesCard
+              title="Доставка по всій Україні"
+              bodyText="Для доставки використано сервіс Нова Пошта з можливістю оформлення та відстеження замовлень"
+              imgSrc={require("../../assets/deliveryIcon.png")}
+              mainColor="#35c7df"
+            />
+          </div>
+        </div>
+        <div className={s.section}>
+          <h3 className={s.section__title}>Останні товари</h3>
+          <Carousel
+            arrows={true}
+            slidesPerPage={Math.floor(window.innerWidth / 350)}
+            infinite
+            lazyLoad={true}
+          >
+            {newProducts.map((product, i) => (
               <ProductCard key={i} {...{ product }} />
             ))}
-          </TabPanel>
-          <TabPanel className={s.tab__panel}>
-            {popularProducts.map((product, i) => (
-              <ProductCard key={i} {...{ product }} />
+          </Carousel>
+        </div>
+        <div className={s.section}>
+          <h3 className={s.section__title}>Новини</h3>
+          <div className={s.news__container}>
+            {recentNews.map(({ title, subtitle, bodyText, imgSrc }, i) => (
+              <NewsCard
+                {...{ title }}
+                {...{ imgSrc }}
+                {...{ subtitle }}
+                {...{ bodyText }}
+                key={i}
+              />
             ))}
-          </TabPanel>
-          <TabPanel className={s.tab__panel}>
-            {bestRatingProducts.map((product, i) => (
-              <ProductCard key={i} {...{ product }} />
-            ))}
-          </TabPanel>
-        </Tabs>
-      </FixedWrapper>
-      <FixedWrapper>
-        <div className={s.advantages}>
-          <h2 className={s.advantages__title}>Переваги</h2>
+          </div>
         </div>
       </FixedWrapper>
     </div>
@@ -63,9 +155,13 @@ const Home = ({ bestRatingProducts, featuredProducts, popularProducts }) => {
 
 const mapStateToProps = (state) => {
   return {
-    featuredProducts: state.products.featured,
-    popularProducts: state.products.popular,
-    bestRatingProducts: state.products.bestRating,
+    products: {
+      featuredProducts: state.products.featured,
+      popularProducts: state.products.popular,
+      bestRatingProducts: state.products.bestRating,
+      newProducts: state.products.new,
+    },
+    recentNews: state.news.recent,
   };
 };
 

@@ -18,9 +18,12 @@ h2,
 h3,
 h4,
 h5,
-h6,
-p {
+h6 {
   font-family: "Nunito", sans-serif;
+  margin: 0;
+}
+p {
+  font-family: Roboto;
   margin: 0;
 }
 

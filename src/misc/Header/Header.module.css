@@ -1,8 +1,7 @@
 .header {
   display: flex;
   justify-content: space-around;
-  padding: 25px 20px;
-  max-height: 80px;
+  padding: 25px;
 }
 
 .contact {
@@ -10,6 +9,9 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+}
+.contact button {
+  font-size: 16px;
 }
 
 .ph_number,
@@ -21,16 +23,37 @@
 .header_icon {
   color: #076cec;
 }
+.header_icon:hover {
+  color: aqua;
+}
 
 .menu_main_wrapper {
   display: flex;
   justify-content: space-around;
+  padding: 30px;
+}
+.menu_main_wrapper button {
+  font-size: 18px;
+  border: none;
 }
 
-li ul {
-  display: inline;
+.menu_main_wrapper button:hover {
+  color: aqua;
 }
 
-li {
-  list-style-type: none;
+.site_nav {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.small_menu_item {
+  display: flex;
+  align-items: center;
+}
+.small_menu_item button:hover {
+  color: aqua;
+}
+.small_menu_button button {
+  color: #076cec;
 }

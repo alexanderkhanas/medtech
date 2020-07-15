@@ -34,24 +34,20 @@ function Header() {
       </header>
       <div className={s.menu_main_wrapper}>
         <div>
-          <li className={s.site_nav}>
-            <ul>Home</ul>
-            <ul>Collection</ul>
-            <ul>Shop</ul>
-            <ul>Biomedical</ul>
-            <ul>Equipment</ul>
-            <ul>Medic Tools</ul>
-            <ul>Pages</ul>
-          </li>
+          <button>Home</button>
+          <button>Collection</button>
+          <button>Shop</button>
+          <button>Biomedical</button>
+          <button>Equipment</button>
+          <button>Medic Tools</button>
+          <button>Pages</button>
         </div>
         <div className={s.small_menu_item}>
-          <li>
-            <ul>My Account</ul>
-            <ul>Item</ul>
-            <ul>
-              <FontAwesomeIcon icon={faSearch} className={s.header_icon} />
-            </ul>
-          </li>
+          <div className={s.small_menu_button}>
+            <button>My Account</button>
+            <button>Item</button>
+          </div>
+          <FontAwesomeIcon icon={faSearch} className={s.header_icon} />
         </div>
       </div>
     </>

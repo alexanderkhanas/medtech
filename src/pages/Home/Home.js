@@ -52,6 +52,9 @@ const Home = ({ bestRatingProducts, featuredProducts, popularProducts }) => {
           </TabPanel>
         </Tabs>
       </div>
+      <div className={s.advantages}>
+        <h2>Переваги</h2>
+      </div>
     </div>
   );
 };

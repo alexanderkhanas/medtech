@@ -20,6 +20,7 @@
   padding: 8px 25px;
   font-weight: lighter;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .tab__active {

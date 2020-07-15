@@ -6,10 +6,12 @@
   margin-bottom: 30px;
   position: relative;
   padding: 20px 10px;
+  margin: 5px;
+  transition: 0.15s;
 }
 
 .card__img {
-  width: 70%;
+  width: 60%;
   margin: 5% 0 0 15%;
 }
 
@@ -27,5 +29,40 @@
   text-align: center;
 }
 
+.card__price__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card__cart__icon {
+  font-size: 23px;
+  transition: 0.2s;
+}
+
 .card__footer {
+  padding: 0 20px;
+}
+
+.card__footer .card__price__container .active__card__button {
+  background: #00e92f;
+}
+
+.cart__icon__entering {
+  opacity: 1;
+  transform: rotate(0deg);
+}
+
+.cart__icon__entered {
+  opacity: 0.4;
+  transform: rotate(45deg);
+}
+
+.cart__icon__exiting {
+  opacity: 1;
+  transform: rotate(0deg);
+}
+
+.cart__icon__exited {
+  opacity: 1;
+  transform: rotate(0deg);
 }

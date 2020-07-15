@@ -5,6 +5,7 @@ import Input from "../Input/Input";
 const PhoneNumberInput = (props) => (
   <InputMask
     mask="+380-99-999-9999"
+    placeholder="Номер телефону"
     maskChar={null}
     value={props.value}
     onChange={props.onChange}

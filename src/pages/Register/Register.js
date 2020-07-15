@@ -1,21 +1,30 @@
 import React, { useState } from "react";
-import s from "./Auth.module.css";
+import s from "./Register.module.css";
 import Input from "../../misc/Inputs/Input/Input";
-import { Formik, ErrorMessage } from "formik";
+import Button from "../../misc/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import {
+  faEye,
+  faEyeSlash,
   faCheckCircle,
   faExclamationCircle,
-  faKey,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../misc/Button/Button";
+import { Formik, ErrorMessage } from "formik";
+import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import { useHistory } from "react-router-dom";
 
-const Auth = () => {
+const Register = () => {
   const [isRegister, setRegister] = useState(false);
   const setFormRegister = () => setRegister(true);
   const setFormLogin = () => setRegister(false);
+
+  const [isAgree, setIsAgree] = useState(false);
+  const agreeCheckbox = ({ target: { checked } }) => {
+    console.log(isAgree, checked);
+    setIsAgree(checked);
+  };
   const h = useHistory();
   return (
     <div>
@@ -33,11 +42,14 @@ const Auth = () => {
           ) {
             errors.email = "Невірно введена електронна пошта";
           }
+          if (values.password != values.passwordConfirm) {
+            errors.passwordConfirm = "ne spivpadae";
+          }
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
           alert(JSON.stringify(values));
-          prompt("123");
+          prompt("TU Chui?");
         }}
       >
         {({
@@ -50,7 +62,6 @@ const Auth = () => {
           isSubmiting,
         }) => {
           console.log("values :", values);
-
           const SuccessIcon = () => (
             <FontAwesomeIcon
               icon={faCheckCircle}
@@ -68,9 +79,17 @@ const Auth = () => {
               <div className={s.body}>
                 <div className={s.container}>
                   <div className={s.title__container}>
-                    <h4 className={s.title}>ACCOUNT</h4>
+                    <h3 className={s.title}>CREATE ACCOUNT</h3>
                   </div>
                   <div className={s.input__container}>
+                    <div className={s.login}>
+                      <Input placeholder="Ім’я" />
+                      <Input placeholder="Прізвище" />
+                      <Input placeholder="По-батькові" />
+                    </div>
+                    <div className={s.ph__number}>
+                      <PhoneNumberInput />
+                    </div>
                     <div className={s.email}>
                       <Input
                         onChange={handleChange}
@@ -86,30 +105,47 @@ const Auth = () => {
                       <Input
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        type="password"
                         Icon={!errors.password ? SuccessIcon : ErrorIcon}
                         name="password"
                         value={values.password}
-                        placeholder="••••••••"
+                        type="password"
+                        placeholder="Пароль"
                       />
                     </div>
-                    <Button title="123" className={s.submit_button} />
+                    <div className={s.pswd}>
+                      <Input
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        Icon={!errors.passwordConfirm ? SuccessIcon : ErrorIcon}
+                        name="passwordConfirm"
+                        value={values.passwordConfirm}
+                        type="password"
+                        placeholder="Підтвердіть пароль"
+                      />
+                    </div>
+                    <div className={s.check_box}>
+                      <p>
+                        <input
+                          type="checkbox"
+                          name="chexbox"
+                          onChange={agreeCheckbox}
+                          chacked={isAgree}
+                        />
+                        Погоджуюся з політикою кофіденційності
+                      </p>
+                    </div>
+                    <Button title="Зареєструватися" disabled={!isAgree} />
                   </div>
-                  <div className={s.fbt}>
-                    <button className={s.restore}>Відновити акаунт</button>
-                    <button className={s.reg}>
-                      Зареєструватись
-                      <FontAwesomeIcon icon={faKey} className={s.faKey} />
-                    </button>
-                    <button
-                      className={s.reg}
-                      onClick={() => {
-                        h.goBack();
-                      }}
-                    >
-                      Продовжити покупки
-                    </button>
-                  </div>
+                  <button
+                    className={s.goback}
+                    className={s.reg}
+                    onClick={() => {
+                      h.goBack();
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faArrowLeft} />
+                    Продовжити покупки
+                  </button>
                   <div className={s.logwith}>
                     <FontAwesomeIcon
                       icon={faGoogle}
@@ -130,4 +166,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Register;

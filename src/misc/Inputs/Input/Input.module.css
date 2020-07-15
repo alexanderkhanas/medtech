@@ -1,9 +1,9 @@
 .input {
-  border-radius: 30px;
+  display: flex;
+  justify-content: center;
   outline: none;
   border: 0.5px solid #7e858037;
   padding: 10px 15px;
-  width: 100%;
 }
 
 .input::placeholder {
@@ -27,15 +27,9 @@
 }
 
 .container__input {
-  width: 100%;
   display: flex;
   position: relative;
   align-items: center;
-}
-
-.eye {
-  position: absolute;
-  right: 20px;
 }
 
 .error__input {

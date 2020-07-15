@@ -1,11 +1,10 @@
 .tabs__container {
-  max-width: 1320px;
-  margin: 50px auto 20px auto;
 }
 
 .tabs__title {
   text-align: center;
   margin-bottom: 10px;
+  margin-top: 50px;
 }
 
 .tabs {
@@ -20,6 +19,7 @@
   padding: 8px 25px;
   font-weight: lighter;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .tab__active {
@@ -32,10 +32,17 @@
   display: flex;
   flex-wrap: wrap;
   flex-flow: row wrap;
-  justify-content: space-around;
+  /* justify-content: space-around; */
 }
 
 .tab__panel::after {
   content: "";
-  flex: 1;
+  flex: auto;
+}
+
+.advantages {
+}
+
+.advantages__title {
+  text-align: center;
 }

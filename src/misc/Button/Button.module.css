@@ -1,0 +1,18 @@
+.button {
+  background: #1970e3;
+  color: #fff;
+  padding: 9px 15px;
+  font-family: Roboto;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.button:hover {
+  background: #1660c2;
+}
+
+.button__round {
+  border-radius: 50%;
+  padding: 13px;
+}

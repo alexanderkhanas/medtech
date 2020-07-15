@@ -20,7 +20,6 @@ const Carousel = ({ images, className }) => {
 
   useEffect(() => {
     setAnimation((prev) => !prev);
-    console.log(activeImageId);
   }, [activeImageId]);
 
   return (

@@ -4,7 +4,7 @@ import Carousel from "../../misc/Carousel/Carousel";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import { connect } from "react-redux";
 import ProductCard from "../../misc/ProductCard/ProductCard";
-
+import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 const Home = ({ bestRatingProducts, featuredProducts, popularProducts }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   return (
@@ -17,7 +17,7 @@ const Home = ({ bestRatingProducts, featuredProducts, popularProducts }) => {
           "https://vsetrts.ru/images/article/1568969241-3.jpg",
         ]}
       />
-      <div className={s.tabs__container}>
+      <FixedWrapper className={s.tabs__container}>
         <h1 className={s.tabs__title}>Обрати по категорії</h1>
         <Tabs>
           <TabList className={s.tabs}>
@@ -51,10 +51,12 @@ const Home = ({ bestRatingProducts, featuredProducts, popularProducts }) => {
             ))}
           </TabPanel>
         </Tabs>
-      </div>
-      <div className={s.advantages}>
-        <h2>Переваги</h2>
-      </div>
+      </FixedWrapper>
+      <FixedWrapper>
+        <div className={s.advantages}>
+          <h2 className={s.advantages__title}>Переваги</h2>
+        </div>
+      </FixedWrapper>
     </div>
   );
 };

@@ -10,8 +10,6 @@ const Button = ({
   size = "md",
 }) => {
   let classes = `${s.button} ${className}`;
-  console.log(`button__${size}`, title);
-
   if (isRound) classes = `${s.button__round} ${classes}`;
 
   return (

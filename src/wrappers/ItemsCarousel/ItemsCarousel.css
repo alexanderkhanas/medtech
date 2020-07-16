@@ -1,0 +1,8 @@
+.BrainhubCarousel__arrows {
+  background-color: #02ab6b;
+}
+
+.BrainhubCarousel__arrows:hover:enabled,
+.BrainhubCarousel__arrows:hover {
+  background-color: #02ab6b;
+}

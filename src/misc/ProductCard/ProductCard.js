@@ -4,11 +4,17 @@ import Button from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingBag, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { CSSTransition } from "react-transition-group";
+import { connect } from "react-redux";
+import { addToCart, removeFromCart } from "../../store/actions/cartActions";
 
-const ProductCard = ({ product }) => {
-  const { gallery, title, price, id } = product;
+const ProductCard = ({ product, addToCart, removeFromCart, cartProducts }) => {
+  const { gallery, title, price, _id } = product;
   const [isAnimation, setAnimation] = useState(false);
-  const [activeCartIcon, setActiveCartIcon] = useState(faShoppingBag);
+  const isInCart = !!cartProducts.filter((product) => product._id === _id)
+    .length;
+  const [activeCartIcon, setActiveCartIcon] = useState(
+    isInCart ? faCheck : faShoppingBag
+  );
 
   const animation = () => {
     setAnimation(true);
@@ -20,25 +26,15 @@ const ProductCard = ({ product }) => {
     }, 500);
   };
 
-  const cart = localStorage.getItem("_cart");
-  const isInCart = cart && cart.includes(id);
-  const addToCartHandler = () => {
-    animation();
-    const cart = localStorage.getItem("_cart");
-    localStorage.setItem("_cart", `${cart} ${id}`);
-  };
-
   const removeFromCartHandler = () => {
     animation();
-    const cart = localStorage.getItem("_cart");
-    console.log(cart);
-    console.log(cart.replace(`${id} `, ""));
-
-    localStorage.setItem("_cart", cart.replace(` ${id}`, ""));
-
-    console.log(isInCart);
+    removeFromCart(product);
   };
-  console.log({ id });
+
+  const addToCartHandler = () => {
+    animation();
+    addToCart(product);
+  };
 
   return (
     <div className={s.card}>
@@ -80,4 +76,17 @@ const ProductCard = ({ product }) => {
   );
 };
 
-export default ProductCard;
+const mapStateToProps = (state) => {
+  return {
+    cartProducts: state.cart.all,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (product) => dispatch(addToCart(product)),
+    removeFromCart: (product) => dispatch(removeFromCart(product)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCard);

@@ -1,5 +1,5 @@
 .button {
-  background: #1970e3;
+  background: #02ab6b;
   color: #fff;
   padding: 9px 15px;
   font-family: Roboto;
@@ -9,7 +9,7 @@
 }
 
 .button:hover {
-  background: #1660c2;
+  background: #009d66;
 }
 
 .button__round {

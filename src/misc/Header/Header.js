@@ -10,15 +10,16 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
     <FixedWrapper>
       <div className={s.header__container}>
         <header className={s.header}>
-          <div className={s.logo}>
+          <Link to="/" className={s.logo}>
             <img src={logo} alt="logo" />
-          </div>
+          </Link>
           <div className={s.contact}>
             <button className={s.header__info__tag}>
               <FontAwesomeIcon icon={faPhone} className={s.header_icon} />

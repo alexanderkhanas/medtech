@@ -21,7 +21,7 @@ const Input = ({
           {...{ placeholder }}
           {...rest}
         />
-        {!!Icon && <Icon className={s.eye} />}
+        {!!Icon && <Icon />}
       </div>
     </div>
   );

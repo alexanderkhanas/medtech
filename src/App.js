@@ -4,6 +4,9 @@ import Home from "./pages/Home/Home";
 import Header from "./misc/Header/Header";
 import Auth from "./pages/Auth/Auth";
 import Register from "./pages/Register/Register";
+import RestorePassord from "./pages/RestorePassword/RestorePassord";
+import NewPassword from "./pages/NewPassword/NewPassword";
+import Footer from "./misc/Footer/Footer";
 
 const App = () => {
   return (
@@ -19,7 +22,14 @@ const App = () => {
         <Route path="/register">
           <Register />
         </Route>
+        <Route path="/restore">
+          <RestorePassord />
+        </Route>
+        <Route path="/new-password">
+          <NewPassword />
+        </Route>
       </Switch>
+      <Footer />
     </Router>
   );
 };

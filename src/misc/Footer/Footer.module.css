@@ -1,0 +1,34 @@
+.footer {
+  padding-top: 25px;
+  background-color: #1b232f;
+}
+.a {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  padding-left: 50px;
+  padding-right: 50px;
+  flex-wrap: wrap;
+}
+.footer button {
+  background: none;
+  border: none;
+}
+
+.bottom__footer {
+  padding-top: 10px;
+  border-top: 1px solid #fff;
+  text-align: center;
+  font-size: 12px;
+}
+
+@media (max-width: 880px) {
+  .a div {
+    width: 50%;
+  }
+}
+@media (max-width: 500px) {
+  .a div {
+    width: 100%;
+  }
+}

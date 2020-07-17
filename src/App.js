@@ -13,6 +13,9 @@ import {
 } from "./store/actions/cartActions";
 import { connect } from "react-redux";
 import { getProducts } from "./store/actions/productsActions";
+import Footer from "./misc/Footer/Footer";
+import RestorePassword from "./pages/RestorePassword/RestorePassword";
+import NewPassword from "./pages/NewPassword/NewPassword";
 
 const App = ({ allProducts, setCart, getProducts }) => {
   const getLocalCart = () => localStorage.getItem("_cart")?.split(" ");
@@ -40,7 +43,10 @@ const App = ({ allProducts, setCart, getProducts }) => {
         <Route path="/register" component={Register} />
         <Route path="/product:id" component={SingleProduct} />
         <Route path="/cart" component={Cart} />
+        <Route path="/restore" component={RestorePassword} />
+        <Route path="/new-password" component={NewPassword} />{" "}
       </Switch>
+      <Footer />
     </Router>
   );
 };

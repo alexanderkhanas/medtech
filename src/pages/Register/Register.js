@@ -81,80 +81,89 @@ const Register = () => {
                   <div className={s.title__container}>
                     <h3 className={s.title}>CREATE ACCOUNT</h3>
                   </div>
-                  <div className={s.input__container}>
-                    <div className={s.login}>
-                      <Input placeholder="Ім’я" />
-                      <Input placeholder="Прізвище" />
-                      <Input placeholder="По-батькові" />
-                    </div>
-                    <div className={s.ph__number}>
-                      <PhoneNumberInput />
-                    </div>
-                    <div className={s.email}>
-                      <Input
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        Icon={!errors.email ? SuccessIcon : ErrorIcon}
-                        name="email"
-                        value={values.email}
-                        type="email"
-                        placeholder="example@gmail.com"
-                      />
-                    </div>
-                    <div className={s.pswd}>
-                      <Input
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        Icon={!errors.password ? SuccessIcon : ErrorIcon}
-                        name="password"
-                        value={values.password}
-                        type="password"
-                        placeholder="Пароль"
-                      />
-                    </div>
-                    <div className={s.pswd}>
-                      <Input
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        Icon={!errors.passwordConfirm ? SuccessIcon : ErrorIcon}
-                        name="passwordConfirm"
-                        value={values.passwordConfirm}
-                        type="password"
-                        placeholder="Підтвердіть пароль"
-                      />
-                    </div>
-                    <div className={s.check_box}>
-                      <p>
-                        <input
-                          type="checkbox"
-                          name="chexbox"
-                          onChange={agreeCheckbox}
-                          chacked={isAgree}
+                  <div className={s.register}>
+                    <div className={s.input__container}>
+                      <div className={s.form}>
+                        <div className={s.login}>
+                          <Input placeholder="Ім’я" />
+                          <Input placeholder="Прізвище" />
+                          <Input placeholder="По-батькові" />
+                        </div>
+                        <div className={s.ph__number}>
+                          <PhoneNumberInput />
+                        </div>
+                        <div className={s.email}>
+                          <Input
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            Icon={!errors.email ? SuccessIcon : ErrorIcon}
+                            name="email"
+                            value={values.email}
+                            type="email"
+                            placeholder="example@gmail.com"
+                          />
+                        </div>
+                        <div className={s.pswd}>
+                          <Input
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            Icon={!errors.password ? SuccessIcon : ErrorIcon}
+                            name="password"
+                            value={values.password}
+                            type="password"
+                            placeholder="Пароль"
+                          />
+                        </div>
+                      </div>
+                      <div className={s.pswd}>
+                        <Input
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          Icon={
+                            !errors.passwordConfirm ? SuccessIcon : ErrorIcon
+                          }
+                          name="passwordConfirm"
+                          value={values.passwordConfirm}
+                          type="password"
+                          placeholder="Підтвердіть пароль"
                         />
-                        Погоджуюся з політикою кофіденційності
-                      </p>
+                      </div>
+                      <div className={s.check_box}>
+                        <p>
+                          <input
+                            type="checkbox"
+                            name="chexbox"
+                            onChange={agreeCheckbox}
+                            chacked={isAgree}
+                          />
+                          Погоджуюся з політикою кофіденційності
+                        </p>
+                      </div>
+                      <div className={s.submit_button}>
+                        <Button title="Зареєструватися" disabled={!isAgree} />
+                      </div>
                     </div>
-                    <Button title="Зареєструватися" disabled={!isAgree} />
-                  </div>
-                  <button
-                    className={s.goback}
-                    className={s.reg}
-                    onClick={() => {
-                      h.goBack();
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faArrowLeft} />
-                    Продовжити покупки
-                  </button>
-                  <div className={s.logwith}>
-                    <FontAwesomeIcon
-                      icon={faGoogle}
-                      className={`${s.logicon} ${s.gl}`}
-                    />
-                    <FontAwesomeIcon
-                      icon={faFacebook}
-                      className={`${s.logicon} ${s.fb} `}
-                    />
+                    <div className={s.fbt}>
+                      <button
+                        className={s.goback}
+                        onClick={() => {
+                          h.goBack();
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                        Продовжити покупки
+                      </button>
+                      <div className={s.logwith}>
+                        <FontAwesomeIcon
+                          icon={faGoogle}
+                          className={`${s.logicon} ${s.gl}`}
+                        />
+                        <FontAwesomeIcon
+                          icon={faFacebook}
+                          className={`${s.logicon} ${s.fb} `}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

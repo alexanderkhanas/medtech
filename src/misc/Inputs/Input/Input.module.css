@@ -4,6 +4,7 @@
   outline: none;
   border: 0.5px solid #7e858037;
   padding: 10px 15px;
+  flex-grow: 1;
 }
 
 .input::placeholder {
@@ -16,8 +17,6 @@
 
 .container {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   margin-top: 15px;
 }
 .container span {
@@ -29,6 +28,7 @@
 .container__input {
   display: flex;
   position: relative;
+  flex: 1;
   align-items: center;
 }
 

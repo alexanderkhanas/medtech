@@ -8,9 +8,10 @@ import {
   faCheckCircle,
   faExclamationCircle,
   faKey,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../misc/Button/Button";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 const Auth = () => {
   const [isRegister, setRegister] = useState(false);
@@ -70,55 +71,63 @@ const Auth = () => {
                   <div className={s.title__container}>
                     <h4 className={s.title}>ACCOUNT</h4>
                   </div>
-                  <div className={s.input__container}>
-                    <div className={s.email}>
-                      <Input
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        Icon={!errors.email ? SuccessIcon : ErrorIcon}
-                        name="email"
-                        value={values.email}
-                        type="email"
-                        placeholder="example@gmail.com"
+                  <div className={s.login}>
+                    <div className={s.input__container}>
+                      <div className={s.email}>
+                        <Input
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          Icon={!errors.email ? SuccessIcon : ErrorIcon}
+                          name="email"
+                          value={values.email}
+                          type="email"
+                          placeholder="example@gmail.com"
+                        />
+                        <div className={s.password}>
+                          <Input
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            type="password"
+                            Icon={!errors.password ? SuccessIcon : ErrorIcon}
+                            name="password"
+                            value={values.password}
+                            placeholder="••••••••"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <Link to="/restore">
+                      <button className={s.restore}>Відновити акаунт</button>
+                    </Link>
+                    <div className={s.submit_button}>
+                      <Button title="Sign in" />
+                    </div>
+
+                    <div className={s.fbt}>
+                      <button className={s.reg}>
+                        Зареєструватись
+                        <FontAwesomeIcon icon={faKey} className={s.faKey} />
+                      </button>
+                      <button
+                        className={s.reg}
+                        onClick={() => {
+                          h.goBack();
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                        Продовжити покупки
+                      </button>
+                    </div>
+                    <div className={s.logwith}>
+                      <FontAwesomeIcon
+                        icon={faGoogle}
+                        className={`${s.logicon} ${s.gl}`}
+                      />
+                      <FontAwesomeIcon
+                        icon={faFacebook}
+                        className={`${s.logicon} ${s.fb} `}
                       />
                     </div>
-                    <div className={s.pswd}>
-                      <Input
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        type="password"
-                        Icon={!errors.password ? SuccessIcon : ErrorIcon}
-                        name="password"
-                        value={values.password}
-                        placeholder="••••••••"
-                      />
-                    </div>
-                    <Button title="123" className={s.submit_button} />
-                  </div>
-                  <div className={s.fbt}>
-                    <button className={s.restore}>Відновити акаунт</button>
-                    <button className={s.reg}>
-                      Зареєструватись
-                      <FontAwesomeIcon icon={faKey} className={s.faKey} />
-                    </button>
-                    <button
-                      className={s.reg}
-                      onClick={() => {
-                        h.goBack();
-                      }}
-                    >
-                      Продовжити покупки
-                    </button>
-                  </div>
-                  <div className={s.logwith}>
-                    <FontAwesomeIcon
-                      icon={faGoogle}
-                      className={`${s.logicon} ${s.gl}`}
-                    />
-                    <FontAwesomeIcon
-                      icon={faFacebook}
-                      className={`${s.logicon} ${s.fb} `}
-                    />
                   </div>
                 </div>
               </div>

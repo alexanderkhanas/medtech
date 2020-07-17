@@ -33,7 +33,7 @@ const ProductCard = ({ product, addToCart, removeFromCart, cartProducts }) => {
 
   const addToCartHandler = () => {
     animation();
-    addToCart(product);
+    addToCart({ ...product, quantity: 1 });
   };
 
   return (

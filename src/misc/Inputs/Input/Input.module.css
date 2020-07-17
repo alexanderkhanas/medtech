@@ -3,7 +3,7 @@
   justify-content: center;
   outline: none;
   border: 0.5px solid #7e858037;
-  padding: 14px 14px;
+  padding: 10px 15px;
   flex-grow: 1;
 }
 
@@ -17,8 +17,6 @@
 
 .container {
   display: flex;
-  flex-direction: column;
-  margin-top: 15px;
 }
 
 .container span {
@@ -30,6 +28,7 @@
 .container__input {
   display: flex;
   position: relative;
+  flex: 1;
   align-items: center;
 }
 

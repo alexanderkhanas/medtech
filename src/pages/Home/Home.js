@@ -6,9 +6,9 @@ import { connect } from "react-redux";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import AdvantagesCard from "../../misc/AdvantagesCard/AdvantagesCard";
-import Carousel from "@brainhubeu/react-carousel";
-import "@brainhubeu/react-carousel/lib/style.css";
+
 import NewsCard from "../../misc/NewsCard/NewsCard";
+import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 
 const Home = ({ products, recentNews }) => {
   const {
@@ -16,8 +16,11 @@ const Home = ({ products, recentNews }) => {
     featuredProducts,
     popularProducts,
     newProducts,
+    allProducts,
   } = products;
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  console.log(allProducts);
+
   return (
     <div>
       <ImageCarousel
@@ -48,47 +51,44 @@ const Home = ({ products, recentNews }) => {
               )}
             </TabList>
             <TabPanel className={s.tab__panel}>
-              <Carousel
+              <ItemsCarousel
                 arrows={true}
                 offset={10}
                 slidesPerPage={Math.floor(window.innerWidth / 350)}
                 infinite
-                className={s.assd}
                 lazyLoad={true}
               >
-                {featuredProducts.map((product, i) => (
+                {allProducts.map((product, i) => (
                   <ProductCard key={i} {...{ product }} />
                 ))}
-              </Carousel>
+              </ItemsCarousel>
             </TabPanel>
             <TabPanel className={s.tab__panel}>
-              <Carousel
+              <ItemsCarousel
                 arrows={true}
                 offset={10}
                 slidesPerPage={Math.floor(window.innerWidth / 350)}
                 infinite
-                className={s.assd}
                 lazyLoad={true}
               >
                 {popularProducts.map((product, i) => (
                   <ProductCard key={i} {...{ product }} />
                 ))}
-              </Carousel>
+              </ItemsCarousel>
             </TabPanel>
 
             <TabPanel className={s.tab__panel}>
-              <Carousel
+              <ItemsCarousel
                 arrows={true}
                 offset={10}
                 slidesPerPage={Math.floor(window.innerWidth / 350)}
                 infinite
-                className={s.assd}
                 lazyLoad={true}
               >
                 {bestRatingProducts.map((product, i) => (
                   <ProductCard key={i} {...{ product }} />
                 ))}
-              </Carousel>
+              </ItemsCarousel>
             </TabPanel>
           </Tabs>
         </div>
@@ -99,31 +99,31 @@ const Home = ({ products, recentNews }) => {
               title="Доставка по всій Україні"
               bodyText="Для доставки використано сервіс Нова Пошта з можливістю оформлення та відстеження замовлень"
               imgSrc={require("../../assets/deliveryIcon.png")}
-              mainColor="#35c7df"
+              mainColor="#019682"
             />
             <AdvantagesCard
               title="Час роботи"
               bodyText="Працюємо з 9-ої до 6-ої з понеділка до п'ятниці"
               imgSrc={require("../../assets/scheduleIcon.png")}
-              mainColor="#076cec"
+              mainColor="#009d66"
             />
             <AdvantagesCard
               title="Час роботи"
               bodyText="Працюємо з 9-ої до 6-ої з понеділка до п'ятниці"
               imgSrc={require("../../assets/scheduleIcon.png")}
-              mainColor="#076cec"
+              mainColor="#009d66"
             />
             <AdvantagesCard
               title="Доставка по всій Україні"
               bodyText="Для доставки використано сервіс Нова Пошта з можливістю оформлення та відстеження замовлень"
               imgSrc={require("../../assets/deliveryIcon.png")}
-              mainColor="#35c7df"
+              mainColor="#019682"
             />
           </div>
         </div>
         <div className={s.section}>
           <h3 className={s.section__title}>Останні товари</h3>
-          <Carousel
+          <ItemsCarousel
             arrows={true}
             slidesPerPage={Math.floor(window.innerWidth / 350)}
             infinite
@@ -132,7 +132,7 @@ const Home = ({ products, recentNews }) => {
             {newProducts.map((product, i) => (
               <ProductCard key={i} {...{ product }} />
             ))}
-          </Carousel>
+          </ItemsCarousel>
         </div>
         <div className={s.section}>
           <h3 className={s.section__title}>Новини</h3>
@@ -160,6 +160,7 @@ const mapStateToProps = (state) => {
       popularProducts: state.products.popular,
       bestRatingProducts: state.products.bestRating,
       newProducts: state.products.new,
+      allProducts: state.products.all,
     },
     recentNews: state.news.recent,
   };

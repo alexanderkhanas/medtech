@@ -4,11 +4,13 @@ import Input from "../../misc/Inputs/Input/Input";
 import { Formik, ErrorMessage } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
+import BreadCrumbs from "./../../misc/BreadCrumbs/BreadCrumbs";
 import {
   faCheckCircle,
   faExclamationCircle,
   faKey,
   faArrowLeft,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../misc/Button/Button";
 import { useHistory, Link } from "react-router-dom";
@@ -18,6 +20,16 @@ const Auth = () => {
   const setFormRegister = () => setRegister(true);
   const setFormLogin = () => setRegister(false);
   const h = useHistory();
+
+  const breadCrumbsItems = [
+    {
+      name: "Головна",
+      path: "/",
+      icon: <FontAwesomeIcon icon={faHome} />,
+    },
+    { name: "Увійти", path: "/login" },
+  ];
+
   return (
     <div>
       <Formik
@@ -70,6 +82,7 @@ const Auth = () => {
                 <div className={s.container}>
                   <div className={s.title__container}>
                     <h4 className={s.title}>ACCOUNT</h4>
+                    <BreadCrumbs items={breadCrumbsItems} />
                   </div>
                   <div className={s.login}>
                     <div className={s.input__container}>

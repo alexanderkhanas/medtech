@@ -10,10 +10,12 @@ import {
   faCheckCircle,
   faExclamationCircle,
   faArrowLeft,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, ErrorMessage } from "formik";
 import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import { useHistory } from "react-router-dom";
+import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 
 const Register = () => {
   const [isRegister, setRegister] = useState(false);
@@ -26,6 +28,15 @@ const Register = () => {
     setIsAgree(checked);
   };
   const h = useHistory();
+
+  const breadCrumbsItems = [
+    {
+      name: "Головна",
+      path: "/",
+      icon: <FontAwesomeIcon icon={faHome} />,
+    },
+    { name: "Реєстрація", path: "/register" },
+  ];
   return (
     <div>
       <Formik
@@ -80,6 +91,7 @@ const Register = () => {
                 <div className={s.container}>
                   <div className={s.title__container}>
                     <h3 className={s.title}>CREATE ACCOUNT</h3>
+                    <BreadCrumbs items={breadCrumbsItems} />
                   </div>
                   <div className={s.register}>
                     <div className={s.input__container}>

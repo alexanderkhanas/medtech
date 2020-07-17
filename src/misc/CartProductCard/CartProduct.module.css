@@ -1,0 +1,46 @@
+.card {
+  display: flex;
+  padding: 25px 0;
+  border: 1px solid #eeeeee;
+}
+
+.card > div {
+  flex: 1;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.card .main {
+  flex: 2;
+  display: flex;
+}
+
+.main__content {
+  text-align: center;
+}
+
+.title {
+  font-size: 20px;
+  margin-bottom: 7px;
+}
+
+.category {
+  color: #ccc;
+}
+
+.img {
+  width: 200px;
+  height: 200px;
+}
+
+.price,
+.fullprice {
+  font-size: 25px;
+  color: #02ab6b;
+}
+
+.remove__icon {
+  font-size: 20px;
+  color: #404040;
+}

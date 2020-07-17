@@ -3,9 +3,16 @@
   margin: 0 auto;
 }
 
+.wrapper {
+  box-sizing: border-box;
+}
+
 @media (max-width: 1370px) {
   .container {
-    /* padding: 0 10px; */
-    box-sizing: border-box;
+    margin: 0;
+  }
+
+  .wrapper > div {
+    padding: 0 5px;
   }
 }

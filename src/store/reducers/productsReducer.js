@@ -1,4 +1,5 @@
 import uuid from "react-uuid";
+import { SET_PRODUCTS } from "../actions/actionTypes";
 
 const initialState = {
   featured: [
@@ -177,10 +178,16 @@ const initialState = {
       id: uuid(),
     },
   ],
+  all: [],
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SET_PRODUCTS:
+      return {
+        ...state,
+        all: action.products,
+      };
     default:
       return state;
   }

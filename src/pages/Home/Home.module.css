@@ -32,7 +32,7 @@
 }
 
 .tab__active {
-  background: #076cec;
+  background: #02ab6b;
   color: #fff;
 }
 
@@ -77,6 +77,16 @@
 @media (min-width: 600px) {
   .news__container {
     padding: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .news__container {
+    width: initial;
+    padding: 0;
+  }
+  .section {
+    margin-top: 55px;
   }
 }
 /* .news__container::after { content: ""; flex: auto; } */

@@ -1,37 +1,67 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./misc/Header/Header";
 import Auth from "./pages/Auth/Auth";
 import Register from "./pages/Register/Register";
-import RestorePassord from "./pages/RestorePassword/RestorePassord";
-import NewPassword from "./pages/NewPassword/NewPassword";
+import SingleProduct from "./pages/SingleProduct/SingleProduct";
+import Cart from "./pages/Cart/Cart";
+import {
+  addToCart,
+  removeFromCart,
+  setCart,
+} from "./store/actions/cartActions";
+import { connect } from "react-redux";
+import { getProducts } from "./store/actions/productsActions";
 import Footer from "./misc/Footer/Footer";
+import RestorePassword from "./pages/RestorePassword/RestorePassword";
+import NewPassword from "./pages/NewPassword/NewPassword";
 
-const App = () => {
+const App = ({ allProducts, setCart, getProducts }) => {
+  const getLocalCart = () => localStorage.getItem("_cart")?.split(" ");
+  useEffect(() => {
+    (async () => {
+      await getProducts();
+    })();
+  }, []);
+  useEffect(() => {
+    const ids = getLocalCart();
+    console.log("ids", ids);
+    console.log(allProducts);
+    if (!ids) return;
+    const cartProducts = allProducts.filter(
+      (product) => ids && ids.includes(product._id)
+    );
+    setCart(cartProducts);
+  }, [allProducts]);
   return (
     <Router>
-      {window.innerWidth > 500 && <Header />}{" "}
+      <Header />
       <Switch>
-        <Route path="/" exact>
-          <Home />
-        </Route>
-        <Route path="/login">
-          <Auth />
-        </Route>
-        <Route path="/register">
-          <Register />
-        </Route>
-        <Route path="/restore">
-          <RestorePassord />
-        </Route>
-        <Route path="/new-password">
-          <NewPassword />
-        </Route>
+        <Route path="/" exact component={Home} />
+        <Route path="/login" component={Auth} />
+        <Route path="/register" component={Register} />
+        <Route path="/product:id" component={SingleProduct} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/restore" component={RestorePassword} />
+        <Route path="/new-password" component={NewPassword} />{" "}
       </Switch>
       <Footer />
     </Router>
   );
 };
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    allProducts: state.products.all,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCart: (cart) => dispatch(setCart(cart)),
+    getProducts: () => dispatch(getProducts()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

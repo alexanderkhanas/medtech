@@ -76,7 +76,9 @@ function Header() {
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
                 <button>My Account</button>
-                <button>Item</button>
+                <Link to="/cart">
+                  <button>Item</button>
+                </Link>
               </div>
               <FontAwesomeIcon icon={faSearch} className={s.navbar__icon} />
             </div>

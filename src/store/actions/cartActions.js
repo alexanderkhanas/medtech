@@ -1,4 +1,10 @@
-import { ADD_TO_CART, REMOVE_FROM_CART, SET_CART } from "./actionTypes";
+import {
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  SET_CART,
+  SET_NUMBER_CART,
+  SET_FULL_PRICE,
+} from "./actionTypes";
 
 export const addToCart = (product) => {
   const cart = localStorage.getItem("_cart");
@@ -14,11 +20,28 @@ export const addToCart = (product) => {
 
 export const removeFromCart = (product) => {
   const cart = localStorage.getItem("_cart");
+  console.log(cart);
+
   if (!cart) return;
   localStorage.setItem("_cart", cart.replace(` ${product._id}`, ""));
   return {
     type: REMOVE_FROM_CART,
-    product: product._id,
+    productId: product._id,
+  };
+};
+
+export const changeNumberInCart = (value, id) => {
+  return {
+    type: SET_NUMBER_CART,
+    value,
+    productId: id,
+  };
+};
+
+export const setFullPrice = (fullPrice) => {
+  return {
+    type: SET_FULL_PRICE,
+    fullPrice,
   };
 };
 

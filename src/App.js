@@ -41,7 +41,7 @@ const App = ({ allProducts, setCart, getProducts }) => {
         <Route path="/" exact component={Home} />
         <Route path="/login" component={Auth} />
         <Route path="/register" component={Register} />
-        <Route path="/product:id" component={SingleProduct} />
+        <Route path="/product/:id" component={SingleProduct} />
         <Route path="/cart" component={Cart} />
         <Route path="/restore" component={RestorePassword} />
         <Route path="/new-password" component={NewPassword} />{" "}

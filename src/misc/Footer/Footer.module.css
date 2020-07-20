@@ -78,6 +78,7 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    align-content: center;
   }
 }
 @media (max-width: 500px) {

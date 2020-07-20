@@ -98,9 +98,14 @@ const Register = () => {
                       <div className={s.form}>
                         <div className={s.login}>
                           <Input placeholder="Ім’я" />
+                        </div>
+                        <div className={s.login}>
                           <Input placeholder="Прізвище" />
+                        </div>
+                        <div className={s.login}>
                           <Input placeholder="По-батькові" />
                         </div>
+
                         <div className={s.ph__number}>
                           <PhoneNumberInput />
                         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Profiler } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./misc/Header/Header";
@@ -6,6 +6,7 @@ import Auth from "./pages/Auth/Auth";
 import Register from "./pages/Register/Register";
 import SingleProduct from "./pages/SingleProduct/SingleProduct";
 import Cart from "./pages/Cart/Cart";
+import Profile from "./pages/Profile/Profile";
 import {
   addToCart,
   removeFromCart,
@@ -14,7 +15,7 @@ import {
 import { connect } from "react-redux";
 import { getProducts } from "./store/actions/productsActions";
 import Footer from "./misc/Footer/Footer";
-import RestorePassword from "./pages/RestorePassword/RestorePassword";
+import RestorePassword from "./pages/RestorePassword/RestorePassord";
 import NewPassword from "./pages/NewPassword/NewPassword";
 
 const App = ({ allProducts, setCart, getProducts }) => {
@@ -44,7 +45,8 @@ const App = ({ allProducts, setCart, getProducts }) => {
         <Route path="/product/:id" component={SingleProduct} />
         <Route path="/cart" component={Cart} />
         <Route path="/restore" component={RestorePassword} />
-        <Route path="/new-password" component={NewPassword} />{" "}
+        <Route path="/new-password" component={NewPassword} />
+        <Route path="/profile/:id" component={Profile} />
       </Switch>
       <Footer />
     </Router>

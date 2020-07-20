@@ -103,13 +103,13 @@ const Footer = () => {
         <div className={s.bottom__footer}>
           <div className={s.bottom__inf}>
             <button>
-              <p>Пошук</p>{" "}
+              <p>Пошук</p>
             </button>
             <button>
               <p>Підтримка</p>
             </button>
             <button>
-              <p>нформація</p>
+              <p>Інформація</p>
             </button>
             <button>
               <p>Політика конфіденційності</p>

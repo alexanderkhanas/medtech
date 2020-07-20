@@ -184,6 +184,8 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_PRODUCTS:
+      console.log(action.products);
+
       return {
         ...state,
         all: action.products,

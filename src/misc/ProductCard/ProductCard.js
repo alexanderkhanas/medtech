@@ -6,10 +6,12 @@ import { faShoppingBag, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
 import { addToCart, removeFromCart } from "../../store/actions/cartActions";
+import { useHistory } from "react-router-dom";
 
 const ProductCard = ({ product, addToCart, removeFromCart, cartProducts }) => {
   const { gallery, title, price, _id } = product;
   const [isAnimation, setAnimation] = useState(false);
+  const history = useHistory();
   const isInCart = !!cartProducts.filter((product) => product._id === _id)
     .length;
   const [activeCartIcon, setActiveCartIcon] = useState(
@@ -33,16 +35,25 @@ const ProductCard = ({ product, addToCart, removeFromCart, cartProducts }) => {
 
   const addToCartHandler = () => {
     animation();
-    addToCart({ ...product, quantity: 1 });
+    addToCart({ ...product, numberInCart: 1 });
   };
+
+  const redirectToSingleProduct = () => history.push(`/product/${_id}`);
 
   return (
     <div className={s.card}>
       <div className={s.card__main}>
-        <img className={s.card__img} src={gallery[0]} alt="" />
+        <img
+          className={s.card__img}
+          onClick={redirectToSingleProduct}
+          src={gallery[0]}
+          alt=""
+        />
       </div>
       <div className={s.card__footer}>
-        <h4 className={s.card__title}>{title}</h4>
+        <h4 className={s.card__title} onClick={redirectToSingleProduct}>
+          {title}
+        </h4>
         <div className={s.card__price__container}>
           <span className={s.card__price}>{price + " "} ₴</span>
           <Button

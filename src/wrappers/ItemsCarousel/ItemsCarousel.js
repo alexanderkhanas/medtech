@@ -1,15 +1,19 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 
-import "./ItemsCarousel.css";
-
-const ItemsCarousel = ({ children }) => {
+const ItemsCarousel = ({
+  children,
+  arrows = true,
+  dots = false,
+  slidesPerPage = Math.floor(window.innerWidth / 350),
+}) => {
   return (
     <Carousel
-      arrows={true}
+      {...{ arrows }}
+      {...{ dots }}
       offset={10}
-      slidesPerPage={Math.floor(window.innerWidth / 350)}
+      {...{ slidesPerPage }}
       infinite
       lazyLoad={true}
     >

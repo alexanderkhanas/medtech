@@ -1,29 +1,50 @@
 import React, { useEffect } from "react";
 import s from "./Cart.module.css";
 import { connect } from "react-redux";
-import { addToCart, removeFromCart } from "../../store/actions/cartActions";
+import {
+  addToCart,
+  removeFromCart,
+  setFullPrice,
+} from "../../store/actions/cartActions";
 import CartProduct from "../../misc/CartProductCard/CartProduct";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
+import Button from "../../misc/Button/Button";
 
-const Cart = ({ cartProducts }) => {
+const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
   useEffect(() => {
     console.log(cartProducts);
-  }, []);
+    setFullPrice(
+      cartProducts.reduce(
+        (acc, product) => acc + product.price * product.numberInCart,
+        0
+      )
+    );
+  }, [cartProducts]);
   return (
-    <div>
+    <div className={s.container}>
       <FixedWrapper>
-        <div className={s.products__container}>
-          <div className={s.products__header}>
-            <span>Товар</span>
-            <span>Ціна</span>
-            <span>Кількість</span>
-            <span>Загальна сума</span>
-            <span>Видалити</span>
-          </div>
-          {cartProducts.map((product, i) => (
-            <CartProduct {...{ product }} key={i} />
-          ))}
-        </div>
+        {!!cartProducts.length ? (
+          <>
+            <div className={s.products__container}>
+              <div className={s.products__header}>
+                <span>Товар</span>
+                <span>Ціна</span>
+                <span>Кількість</span>
+                <span>Загальна сума</span>
+                <span>Видалити</span>
+              </div>
+              {cartProducts.map((product, i) => (
+                <CartProduct {...{ product }} key={i} />
+              ))}
+            </div>
+            <div className={s.actions__container}>
+              <h2 className={s.actions__price}>{`${fullPrice} ₴`}</h2>
+              <Button title="Купити" size="xl" isUppercase />
+            </div>
+          </>
+        ) : (
+          <h1 className={s.empty__cart__msg}>Поки що ваш кошик порожній</h1>
+        )}
       </FixedWrapper>
     </div>
   );
@@ -32,12 +53,14 @@ const Cart = ({ cartProducts }) => {
 const mapStateToProps = (state) => {
   return {
     cartProducts: state.cart.all,
+    fullPrice: state.cart.fullPrice,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     addToCart: (product) => dispatch(addToCart(product)),
     removeFromCart: (product) => dispatch(removeFromCart(product)),
+    setFullPrice: (fullPrice) => dispatch(setFullPrice(fullPrice)),
   };
 };
 

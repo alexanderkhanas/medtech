@@ -21,11 +21,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
 import { useHistory, useParams } from "react-router-dom";
+import _axios from "../../store/api/_axios";
 
 function Profile(props) {
   const { id } = useParams();
-  const [profileInfo, setProfileInfo] = useState(null);
-  const [profileData, setProfileData] = useState();
   const h = useHistory();
   const breadCrumbsItems = [
     {
@@ -40,6 +39,15 @@ function Profile(props) {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const uploadedImage = useRef(null);
   const imageUploader = useRef(null);
+  const [userData, setUserData] = useState({
+    fName: null,
+    sName: null,
+    fatherName: null,
+    email: null,
+    phone: null,
+    password: null,
+    gallery: null,
+  });
 
   const handleImageUpload = (e) => {
     const [file] = e.target.files;
@@ -51,7 +59,18 @@ function Profile(props) {
         current.src = e.target.result;
       };
       reader.readAsDataURL(file);
+      setUserData((prev) => ({ ...prev, gallery: file }));
     }
+  };
+  const handleSubmit = () => {
+    _axios
+      .patch("/user/:id", { userData })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -90,11 +109,7 @@ function Profile(props) {
                             accept="image/*"
                             onChange={handleImageUpload}
                             ref={imageUploader}
-                            style={
-                              {
-                                //   display: "none",
-                              }
-                            }
+                            // onChange={(e) => setUserData(e.target.value.galery)}
                           />
                           <div
                             style={{
@@ -127,26 +142,35 @@ function Profile(props) {
                           label="Ім'я"
                           val={"firstName"}
                           icon={faUser}
-                          //   defaultValue={profileInfo.firstName}
-                          //   onChange={onChange}
+                          onChange={(e) =>
+                            setUserData((prev) => ({
+                              ...prev,
+                              fName: e.target.value,
+                            }))
+                          }
                         />
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Прізвище"
-                          val={"firstName"}
+                          val={"lName"}
                           icon={faAddressCard}
-                          //   defaultValue={profileInfo.lastName}
-                          //   onChange={onChange}
+                          onChange={(e) =>
+                            setUserData((prev) => ({
+                              ...prev,
+                              lName: e.target.value,
+                            }))
+                          }
                         />
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="По-батькові"
-                          val={"lastName"}
+                          val={"fatherName"}
                           icon={faAddressCard}
-                          //   defaultValue={profileInfo.lastName}
-                          //   onChange={onChange}
+                          onChange={(e) =>
+                            setUserData(e.target.value.fatherName)
+                          }
                         />
                       </div>
                       <div className={s.profile__info__field}>
@@ -155,8 +179,12 @@ function Profile(props) {
                           val={"phone"}
                           type={"tel"}
                           icon={faPhoneAlt}
-                          //   defaultValue={profileInfo.phone}
-                          //   onChange={onChange}
+                          onChange={(e) =>
+                            setUserData((prev) => ({
+                              ...prev,
+                              phone: e.target.value,
+                            }))
+                          }
                         />
                       </div>
                       <div className={s.profile__info__field}>
@@ -164,14 +192,18 @@ function Profile(props) {
                           val={"Електронна адреса"}
                           label="E-mail"
                           icon={faEnvelope}
-                          //   defaultValue={profileInfo.email}
-                          //   onChange={onChange}
+                          onChange={(e) =>
+                            setUserData((prev) => ({
+                              ...prev,
+                              email: e.target.value,
+                            }))
+                          }
                         />
                       </div>
 
                       <button
                         className={s.save__profile__btn}
-                        // onClick={editProfile}
+                        onClick={handleSubmit}
                       >
                         Змінити
                         <span className={s.profile__btn__overlay}>

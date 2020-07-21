@@ -55,10 +55,10 @@ const Register = () => {
           } else if (/[0-9._%+-]$/i.test(values.fName)) {
             errors.fName = "Невірно введенe Ім'я";
           }
-          if (values.sName.length <= 3) {
-            errors.sName = "Занадто коротке прізвище";
-          } else if (/[0-9._%+-]$/i.test(values.sName)) {
-            errors.sName = "Невірно введенe прізвище";
+          if (values.lName.length <= 2) {
+            errors.lName = "Занадто коротке прізвище";
+          } else if (/[0-9._%+-]$/i.test(values.lName)) {
+            errors.lName = "Невірно введенe прізвище";
           }
           if (values.fatherName.length <= 3) {
             errors.fatherName = "Занадто коротке по-батькові";
@@ -83,11 +83,11 @@ const Register = () => {
         onSubmit={(values, { setSubmitting }) => {
           alert(JSON.stringify(values));
           prompt("TU Chui?");
-          const { fName, sName, fatherName, phone, password, email } = values;
+          const { fName, lName, fatherName, phone, password, email } = values;
           _axios
             .post("/register", {
               fName,
-              sName,
+              lName,
               fatherName,
               phone,
               email,
@@ -97,11 +97,12 @@ const Register = () => {
             .then((res) => {
               console.log(res);
               res.status === 200
-                ? h.push(`/profile/${res.data.user.userId}`)
+                ? h.push(`/register/${res.data.user.userId}`)
                 : alert("res.status");
+            })
+            .catch(function (error) {
+              console.log(error);
             });
-
-          console.log();
         }}
       >
         {({
@@ -113,7 +114,7 @@ const Register = () => {
           handleSubmit,
           isSubmiting,
         }) => {
-          console.log("values :", values);
+          // console.log("values :", values);
           const SuccessIcon = () => (
             <FontAwesomeIcon
               icon={faCheckCircle}
@@ -150,11 +151,11 @@ const Register = () => {
                         <div className={s.login}>
                           <Input
                             placeholder="Прізвище"
-                            name="sName"
-                            value={values.sName}
+                            name="lName"
+                            value={values.lName}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            Icon={!errors.sName ? SuccessIcon : ErrorIcon}
+                            Icon={!errors.lName ? SuccessIcon : ErrorIcon}
                           />
                         </div>
                         <div className={s.login}>

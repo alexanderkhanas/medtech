@@ -12,7 +12,6 @@ const transitionStyles = {
 
 const Input = ({
   type,
-  onChange,
   label,
   defaultValue,
   val,
@@ -41,7 +40,6 @@ const Input = ({
         onFocus={focusHandler}
         onBlur={blurHandler}
         defaultValue={defaultValue}
-        onChange={({ target }) => onChange(target, val)}
       />
     </div>
   ) : (
@@ -69,7 +67,6 @@ const Input = ({
           onBlur={blurHandler}
           className={`${s.input} ${s.input_with_icon}`}
           defaultValue={defaultValue}
-          onChange={({ target }) => onChange(target, val)}
         />
       </div>
     </div>

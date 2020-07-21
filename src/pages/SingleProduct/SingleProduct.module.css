@@ -1,11 +1,17 @@
+.container {
+  min-height: 100vh;
+}
+
 .desktop__container {
   display: flex;
   justify-content: space-between;
-  padding: 50px 0;
+  padding-top: 50px;
+  flex-wrap: wrap;
 }
 
 .carousel__container {
   width: 600px;
+  position: relative;
 }
 
 .desktop__info__container {
@@ -44,35 +50,71 @@
   margin-top: 40px;
 }
 
-.attribute__item {
-  padding: 12px;
-}
-
-.attribute {
-  padding: 10px;
-}
-
-.attribute__container {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 0;
-}
-
-.attribute__label {
-  font-weight: bold;
-  letter-spacing: 0.8px;
-  font-size: 14px;
-}
-
-.attribute {
-  color: #8e8e8e;
-  font-weight: lighter;
-}
-
-.inStock {
+.attributes__wrapper .inStock {
   color: #009d66;
 }
 
-.lastInStock {
+.attributes__wrapper .lastInStock {
   color: #ffc107;
+}
+
+.full__content {
+  padding: 50px 0;
+}
+
+.tabs__container {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(204, 204, 204, 0.646);
+  margin-bottom: 10px;
+}
+
+.tabs {
+  max-width: 600px;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tab {
+  list-style: none;
+  font-weight: 300;
+  padding: 15px 0;
+  flex: 1;
+  border-bottom: 0px solid #009d66;
+  transition: 0.2s;
+  text-align: center;
+}
+
+.tab__active {
+  border-bottom-width: 2px;
+}
+
+.description {
+  color: gray;
+}
+
+@media (max-width: 900px) {
+  .desktop__info__container {
+    width: initial;
+  }
+  .container {
+    padding: 0 7%;
+  }
+  .desktop__container {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .carousel__container {
+    width: 100%;
+    padding: 0 7%;
+    box-sizing: border-box;
+  }
+  .main__image {
+    width: 100%;
+    height: 250px;
+  }
 }

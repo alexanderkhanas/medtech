@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import s from "./Home.module.css";
 import ImageCarousel from "../../misc/Carousel/Carousel";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
@@ -13,13 +13,15 @@ import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 const Home = ({ products, recentNews }) => {
   const {
     bestRatingProducts,
-    featuredProducts,
+    recommendedProducts,
     popularProducts,
     newProducts,
     allProducts,
   } = products;
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  console.log(allProducts);
+  useEffect(() => {
+    console.log("recommendedProducts ===", recommendedProducts);
+  }, [recommendedProducts]);
 
   return (
     <div>
@@ -58,7 +60,7 @@ const Home = ({ products, recentNews }) => {
                 infinite
                 lazyLoad={true}
               >
-                {allProducts.map((product, i) => (
+                {recommendedProducts.map((product, i) => (
                   <ProductCard key={i} {...{ product }} />
                 ))}
               </ItemsCarousel>
@@ -156,7 +158,7 @@ const Home = ({ products, recentNews }) => {
 const mapStateToProps = (state) => {
   return {
     products: {
-      featuredProducts: state.products.featured,
+      recommendedProducts: state.products.recommended,
       popularProducts: state.products.popular,
       bestRatingProducts: state.products.bestRating,
       newProducts: state.products.new,

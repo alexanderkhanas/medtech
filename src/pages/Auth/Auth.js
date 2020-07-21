@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../misc/Button/Button";
 import { useHistory, Link } from "react-router-dom";
+import _axios from "../../store/api/_axios";
 
 const Auth = () => {
   const [isRegister, setRegister] = useState(false);
@@ -51,6 +52,22 @@ const Auth = () => {
         onSubmit={(values, { setSubmitting }) => {
           alert(JSON.stringify(values));
           prompt("123");
+          const { email, password } = values;
+          _axios
+            .post("/login", {
+              email,
+              password,
+            })
+
+            .then((res) => {
+              console.log(res);
+              res.status === 200
+                ? h.push(`/login/${res.data.user.userId}`)
+                : alert("res.status");
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         }}
       >
         {({

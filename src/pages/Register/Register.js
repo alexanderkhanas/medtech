@@ -16,6 +16,7 @@ import { Formik, ErrorMessage } from "formik";
 import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import { useHistory } from "react-router-dom";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
+import _axios from "../../store/api/_axios";
 
 const Register = () => {
   const [isRegister, setRegister] = useState(false);
@@ -40,9 +41,30 @@ const Register = () => {
   return (
     <div>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{
+          fName: "",
+          sName: "",
+          fatherName: "",
+          email: "",
+          password: "",
+        }}
         validate={(values) => {
           const errors = {};
+          if (values.fName.length <= 1) {
+            errors.fName = "Занадто коротке Ім'я";
+          } else if (/[0-9._%+-]$/i.test(values.fName)) {
+            errors.fName = "Невірно введенe Ім'я";
+          }
+          if (values.sName.length <= 3) {
+            errors.sName = "Занадто коротке прізвище";
+          } else if (/[0-9._%+-]$/i.test(values.sName)) {
+            errors.sName = "Невірно введенe прізвище";
+          }
+          if (values.fatherName.length <= 3) {
+            errors.fatherName = "Занадто коротке по-батькові";
+          } else if (/[0-9._%+-]$/i.test(values.fatherName)) {
+            errors.fatherName = "Невірно введенe по-батькові";
+          }
           if (values.password.length <= 5) {
             errors.password = "Занадто короткий пароль";
           }
@@ -61,6 +83,25 @@ const Register = () => {
         onSubmit={(values, { setSubmitting }) => {
           alert(JSON.stringify(values));
           prompt("TU Chui?");
+          const { fName, sName, fatherName, phone, password, email } = values;
+          _axios
+            .post("/register", {
+              fName,
+              sName,
+              fatherName,
+              phone,
+              email,
+              password,
+            })
+
+            .then((res) => {
+              console.log(res);
+              res.status === 200
+                ? h.push(`/profile/${res.data.user.userId}`)
+                : alert("res.status");
+            });
+
+          console.log();
         }}
       >
         {({
@@ -97,17 +138,38 @@ const Register = () => {
                     <div className={s.input__container}>
                       <div className={s.form}>
                         <div className={s.login}>
-                          <Input placeholder="Ім’я" />
+                          <Input
+                            placeholder="Ім'я"
+                            name="fName"
+                            value={values.fName}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            Icon={!errors.fName ? SuccessIcon : ErrorIcon}
+                          />
                         </div>
                         <div className={s.login}>
-                          <Input placeholder="Прізвище" />
+                          <Input
+                            placeholder="Прізвище"
+                            name="sName"
+                            value={values.sName}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            Icon={!errors.sName ? SuccessIcon : ErrorIcon}
+                          />
                         </div>
                         <div className={s.login}>
-                          <Input placeholder="По-батькові" />
+                          <Input
+                            name="fatherName"
+                            placeholder="По-батькові"
+                            value={values.fatherName}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            Icon={!errors.fatherName ? SuccessIcon : ErrorIcon}
+                          />
                         </div>
 
                         <div className={s.ph__number}>
-                          <PhoneNumberInput />
+                          <PhoneNumberInput value={values.phone} />
                         </div>
                         <div className={s.email}>
                           <Input
@@ -157,7 +219,11 @@ const Register = () => {
                         </p>
                       </div>
                       <div className={s.submit_button}>
-                        <Button title="Зареєструватися" disabled={!isAgree} />
+                        <Button
+                          title="Зареєструватися"
+                          disabled={!isAgree}
+                          onClick={handleSubmit}
+                        />
                       </div>
                     </div>
                     <div className={s.fbt}>

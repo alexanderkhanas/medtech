@@ -1,3 +1,5 @@
 import axios from "axios";
 
-export default axios.create({ baseURL: "http://192.168.0.109:4900/api/v1" });
+export default axios.create({
+  baseURL: "https://medtechnika-te.herokuapp.com/api/v1",
+});

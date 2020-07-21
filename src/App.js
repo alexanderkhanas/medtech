@@ -1,21 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./misc/Header/Header";
-import Auth from "./pages/Auth/Auth";
-import Register from "./pages/Register/Register";
 import SingleProduct from "./pages/SingleProduct/SingleProduct";
 import Cart from "./pages/Cart/Cart";
-import {
-  addToCart,
-  removeFromCart,
-  setCart,
-} from "./store/actions/cartActions";
+import { setCart } from "./store/actions/cartActions";
 import { connect } from "react-redux";
 import { getProducts } from "./store/actions/productsActions";
 import Footer from "./misc/Footer/Footer";
-import RestorePassword from "./pages/RestorePassword/RestorePassword";
-import NewPassword from "./pages/NewPassword/NewPassword";
+import Catalog from "./pages/Catalog/Catalog";
+import _axios from "./store/api/_axios";
+
+const Login = lazy(() => import("./pages/Auth/Auth"));
+const Register = lazy(() => import("./pages/Register/Register"));
+const RestorePassword = lazy(() => import("./pages/Register/Register"));
+const NewPassword = lazy(() => import("./pages/Register/Register"));
 
 const App = ({ allProducts, setCart, getProducts }) => {
   const getLocalCart = () => localStorage.getItem("_cart")?.split(" ");
@@ -37,15 +36,27 @@ const App = ({ allProducts, setCart, getProducts }) => {
   return (
     <Router>
       <Header />
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/login" component={Auth} />
-        <Route path="/register" component={Register} />
-        <Route path="/product/:id" component={SingleProduct} />
-        <Route path="/cart" component={Cart} />
-        <Route path="/restore" component={RestorePassword} />
-        <Route path="/new-password" component={NewPassword} />{" "}
-      </Switch>
+      <Suspense fallback={<div>loading</div>}>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/product/:id" component={SingleProduct} />
+          <Route path="/cart" component={Cart} />
+          <Route path="/catalog" component={Catalog} />
+          <Route path="/login" component={(props) => <Login {...props} />} />
+          <Route
+            path="/register"
+            component={(props) => <Register {...props} />}
+          />
+          <Route
+            path="/restore"
+            component={(props) => <RestorePassword {...props} />}
+          />
+          <Route
+            path="/new-password"
+            component={(props) => <NewPassword {...props} />}
+          />
+        </Switch>
+      </Suspense>
       <Footer />
     </Router>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import s from "./ProductCard.module.css";
 import Button from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,41 +7,23 @@ import { CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
 import { addToCart, removeFromCart } from "../../store/actions/cartActions";
 import { useHistory } from "react-router-dom";
+import classnames from "classnames";
+import CartButton from "../CartButton/CartButton";
 
-const ProductCard = ({ product, addToCart, removeFromCart, cartProducts }) => {
+const ProductCard = ({
+  product,
+  className,
+  addToCart,
+  removeFromCart,
+  cartProducts,
+}) => {
   const { gallery, title, price, _id } = product;
-  const [isAnimation, setAnimation] = useState(false);
   const history = useHistory();
-  const isInCart = !!cartProducts.filter((product) => product._id === _id)
-    .length;
-  const [activeCartIcon, setActiveCartIcon] = useState(
-    isInCart ? faCheck : faShoppingBag
-  );
-
-  const animation = () => {
-    setAnimation(true);
-    setTimeout(() => {
-      setAnimation(false);
-      setActiveCartIcon((prev) =>
-        prev === faShoppingBag ? faCheck : faShoppingBag
-      );
-    }, 500);
-  };
-
-  const removeFromCartHandler = () => {
-    animation();
-    removeFromCart(product);
-  };
-
-  const addToCartHandler = () => {
-    animation();
-    addToCart({ ...product, numberInCart: 1 });
-  };
 
   const redirectToSingleProduct = () => history.push(`/product/${_id}`);
 
   return (
-    <div className={s.card}>
+    <div className={classnames(s.card, className)}>
       <div className={s.card__main}>
         <img
           className={s.card__img}
@@ -56,31 +38,12 @@ const ProductCard = ({ product, addToCart, removeFromCart, cartProducts }) => {
         </h4>
         <div className={s.card__price__container}>
           <span className={s.card__price}>{price + " "} ₴</span>
-          <Button
-            className={
-              isInCart
-                ? `${s.card__button} ${s.active__card__button} `
-                : s.card__button
-            }
-            isRound={true}
-            onClick={isInCart ? removeFromCartHandler : addToCartHandler}
-          >
-            <CSSTransition
-              in={isAnimation}
-              timeout={200}
-              classNames={{
-                enterActive: s.cart__icon__entering,
-                enterDone: s.cart__icon__entered,
-                exitActive: s.cart__icon__exiting,
-                exitDone: s.cart__icon__exited,
-              }}
-            >
-              <FontAwesomeIcon
-                icon={activeCartIcon}
-                className={s.card__cart__icon}
-              />
-            </CSSTransition>
-          </Button>
+          <CartButton
+            {...{ addToCart }}
+            {...{ removeFromCart }}
+            {...{ cartProducts }}
+            {...{ product }}
+          />
         </div>
       </div>
     </div>

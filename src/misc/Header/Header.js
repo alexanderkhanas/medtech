@@ -28,8 +28,6 @@ function Header() {
   const onStateMenuChange = (state) => setBarOpen(state.isOpen);
   useEffect(() => {
     if (typeof isBarOpen !== "boolean") return;
-    console.log("here");
-
     setAnimation((prev) => !prev);
     setTimeout(() => {
       setSidebarIcon((prev) => (prev == faBars ? faTimes : faBars));
@@ -67,7 +65,9 @@ function Header() {
                 <button>Home</button>
               </Link>
               <button>Collection</button>
-              <button>Shop</button>
+              <Link to="/catalog">
+                <button>Shop</button>
+              </Link>
               <button>Biomedical</button>
               <button>Equipment</button>
               <button>Medic Tools</button>
@@ -75,7 +75,9 @@ function Header() {
             </div>
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
-                <button>My Account</button>
+                <Link to="/login">
+                  <button>My Account</button>
+                </Link>
                 <Link to="/cart">
                   <button>Item</button>
                 </Link>
@@ -125,7 +127,7 @@ function Header() {
       >
         <Link to="/">Home</Link>
         <Link to="/">Collection</Link>
-        <Link to="/">Shop</Link>
+        <Link to="/catalog">Shop</Link>
         <Link to="/">Biomedical</Link>
         <Link to="/">Equipment</Link>
         <Link to="/">Medic Tools</Link>

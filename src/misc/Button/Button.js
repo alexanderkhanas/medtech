@@ -1,5 +1,7 @@
 import React from "react";
 import s from "./Button.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import classnames from "classnames";
 
 const Button = ({
   onClick,
@@ -9,12 +11,17 @@ const Button = ({
   children,
   size = "md",
   isUppercase,
+  icon,
+  isSecondary,
 }) => {
-  let classes = `${s.button} ${className}`;
-  if (isRound) classes = `${s.button__round} ${classes}`;
-  if (isUppercase) classes = `${classes} ${s.uppercase}`;
+  let classes = classnames(s.button, className, {
+    [s.button__round]: isRound,
+    [s.uppercase]: isUppercase,
+    [s.secondary]: isSecondary,
+  });
   return (
     <button {...{ onClick }} className={`${classes} ${s[`button__${size}`]}`}>
+      {!!icon && <FontAwesomeIcon className={s.icon} {...{ icon }} />}
       {children}
       {!!title && <span>{title}</span>}
     </button>

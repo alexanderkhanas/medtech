@@ -5,3 +5,6 @@ export const SET_PRODUCTS = "SET_PRODUCTS";
 export const SET_NUMBER_CART = "SET_NUMBER_CART";
 export const SET_FULL_PRICE = "SET_FULL_PRICE";
 export const SET_PRODUCT = "SET_PRODUCT";
+export const SET_RECOMMENDED = "SET_RECOMMENDED";
+export const SET_NEW = "SET_NEW";
+export const SET_FILTERED_PRODUCTS = "SET_FILTERED_PRODUCTS";

@@ -1,0 +1,117 @@
+.title__container {
+  padding: 25px 0;
+  background: rgba(240, 240, 240, 0.632);
+}
+
+.title {
+  text-align: center;
+  font-weight: 300;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sort__container {
+  display: flex;
+  align-items: center;
+}
+
+.sort__container span {
+  margin-right: 15px;
+}
+
+.select {
+  width: 250px;
+}
+
+.filter__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+  margin-right: 20px;
+}
+
+.filter__title {
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: #fff;
+  letter-spacing: 2px;
+  background: #02ab6b;
+  margin-bottom: 20px;
+  box-shadow: -2px 2px 5px 2px #02ab6a3f;
+  color: #ededed;
+}
+
+.main__content {
+  flex: 4;
+}
+
+.actions__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.change__view__container {
+  padding: 20px 5px;
+  width: 110px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.pagination__container {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  padding: 10px 20px;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.pagination__container li {
+  cursor: pointer;
+}
+
+.pagination__container a:focus {
+  outline: none;
+}
+
+.pagination__active__link {
+  border: 1px solid #02ab6b;
+  border-radius: 5px;
+}
+
+.pagination__link {
+  height: 30px;
+
+  width: 30px;
+  display: flex;
+  align-items: center;
+  outline: none;
+  justify-content: center;
+}
+
+.pagination__link a:focus,
+.pagination__active__link:focus {
+  outline: none;
+}
+
+@media (max-width: 550px) {
+  .product__card {
+    flex-grow: 1;
+    height: initial;
+  }
+  .container {
+    flex-direction: column;
+  }
+}

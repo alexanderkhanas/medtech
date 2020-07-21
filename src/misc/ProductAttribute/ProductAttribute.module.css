@@ -1,0 +1,35 @@
+.attribute__item {
+  padding: 12px;
+}
+
+.attribute {
+  padding: 7px 12px;
+  margin-right: 10px;
+  /* width: 50px; */
+}
+
+.attribute:last-child {
+  margin-right: 0px;
+}
+
+.attribute__container {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+}
+
+.attribute__label {
+  font-weight: bold;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.attribute {
+  color: #8e8e8e;
+  font-weight: lighter;
+}
+
+.active {
+  outline: 2px solid #009d66;
+}

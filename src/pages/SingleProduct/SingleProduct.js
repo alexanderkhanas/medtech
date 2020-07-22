@@ -9,6 +9,7 @@ import uuid from "react-uuid";
 import lodash from "lodash";
 import _axios from "../../store/api/_axios";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
+import Stars from "../../misc/Stars/Stars";
 
 const SingleProduct = ({ match, getProduct, product = {} }) => {
   //state
@@ -22,6 +23,7 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
     categories,
     quantity,
     attr: attributes,
+    reviews,
     attrOptions: attributeOptions,
   } = product || {};
 
@@ -130,8 +132,11 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
                     />
                   );
                 })}
-                <ProductAttribute name="Країна виробника" values={[vendorID]} />
-                <ProductAttribute name="Категорія" values={[categoryID]} />
+                <ProductAttribute
+                  name="Країна виробника"
+                  values={[vendorID.title]}
+                />
+                <ProductAttribute name="Категорія" values={[categoryID.desc]} />
                 <ProductAttribute
                   name="Кількість"
                   attributeClasses={qtyClassName}
@@ -162,7 +167,20 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
               <TabPanel className={s.tab__content}>
                 <p className={s.desc}>{desc}</p>
               </TabPanel>
-              <TabPanel className={s.tab__content}></TabPanel>
+              <TabPanel className={s.tab__content}>
+                {reviews.map(({ userID, title, desc, rating }, i) => (
+                  <div key={i} className={s.review}>
+                    <div className={s.review__header}>
+                      <h4 className={s.review__admin}>{userID.fName}</h4>
+
+                      <Stars value={rating} />
+                    </div>
+                    <h5 className={s.review__title}>{title}</h5>
+
+                    <p className={s.review__desc}>{desc}</p>
+                  </div>
+                ))}
+              </TabPanel>
               <TabPanel className={s.tab__content}>
                 <p className={s.desc}>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed

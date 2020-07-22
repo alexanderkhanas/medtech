@@ -35,9 +35,6 @@ const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
     addToCart({ ...product, numberInCart: 1 });
   };
 
-  //   console.log("active cart icon ===", activeCartIcon);
-  console.log("is in cart", isInCart);
-
   let activeCartIcon = isInCart ? faCheck : faShoppingBag;
   if (isAnimation) activeCartIcon = isInCart ? faShoppingBag : faCheck;
 

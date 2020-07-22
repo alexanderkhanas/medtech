@@ -30,19 +30,10 @@ export default (state = initialState, action) => {
       };
 
     case SET_NUMBER_CART:
-      let fullPrice = 0;
-      const editedProducts = state.all.map((product) => {
-        const editedProduct =
-          product._id == action.productId
-            ? { ...product, numberInCart: action.value }
-            : product;
-        fullPrice += product.price * editedProduct.numberInCart;
-        return editedProduct;
-      });
       return {
         ...state,
-        all: editedProducts,
-        fullPrice,
+        all: action.editedProducts,
+        fullPrice: action.fullPrice,
       };
     case SET_FULL_PRICE:
       return {

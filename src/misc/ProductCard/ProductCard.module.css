@@ -5,19 +5,17 @@
   border-radius: 3px;
   margin-bottom: 30px;
   position: relative;
-  padding: 20px 10px;
   margin: 10px;
   transition: 0.15s;
-  width: 300px;
-  height: 360px;
+  width: 310px;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .card__img {
-  width: 60%;
-  margin: 5% 0 0 15%;
+  width: 100%;
 }
 
 .card__title {
@@ -42,5 +40,5 @@
 }
 
 .card__footer {
-  padding: 0 20px;
+  padding: 0px 30px 20px 30px;
 }

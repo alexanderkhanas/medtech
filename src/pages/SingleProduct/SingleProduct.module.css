@@ -84,10 +84,41 @@
   border-bottom: 0px solid #009d66;
   transition: 0.2s;
   text-align: center;
+  cursor: pointer;
 }
 
 .tab__active {
   border-bottom-width: 2px;
+}
+
+.review {
+  padding: 15px 25px;
+  border: 1px solid #ededed;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 1px 9px -2px #63636314;
+  -moz-box-shadow: 0px 1px 9px -2px #63636314;
+  box-shadow: 0px 1px 9px -2px #63636314;
+}
+
+.review__admin {
+  font-size: 16px;
+  color: #a4a4a4;
+  font-weight: lighter;
+}
+
+.review__title {
+  font-size: 19px;
+}
+
+.review__desc {
+  font-size: 14px;
+  font-weight: lighter;
+}
+
+.review__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .description {

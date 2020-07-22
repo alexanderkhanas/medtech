@@ -5,6 +5,7 @@ import {
   SET_NEW,
   SET_FILTERED_PRODUCTS,
 } from "./actionTypes";
+import _axios from "../api/_axios";
 
 export const getProducts = () => {
   return async (dispatch) => {
@@ -40,5 +41,19 @@ export const getProductsByPage = (page) => {
     if (!response.data) return;
     const { products, length } = response.data;
     dispatch({ type: SET_FILTERED_PRODUCTS, products, quantity: length });
+  };
+};
+
+export const getProductsByCategory = (
+  categoryId = "5f16c4066f552fc27192185c"
+) => {
+  return async (dispatch) => {
+    const response = await _axios.get(`/products?category=${categoryId}`);
+    console.log("response ===", response.data);
+
+    dispatch({
+      type: SET_PRODUCTS,
+      products: response.data,
+    });
   };
 };

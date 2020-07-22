@@ -9,9 +9,15 @@ import {
   removeFromCart,
 } from "../../store/actions/cartActions";
 
-const CartProduct = ({ product, changeNumberInCart, removeFromCart }) => {
+const CartProduct = ({
+  product,
+  changeNumberInCart,
+  removeFromCart,
+  allProductsInCart,
+}) => {
   const { gallery, title, price, _id, desc, numberInCart = 1 } = product;
-  const onCounterChange = (value) => changeNumberInCart(value, _id);
+  const onCounterChange = (value) =>
+    changeNumberInCart(value, _id, allProductsInCart);
 
   const removeFromCartHandler = () => removeFromCart(product);
   return (
@@ -46,7 +52,9 @@ const CartProduct = ({ product, changeNumberInCart, removeFromCart }) => {
 };
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    allProductsInCart: state.cart.all,
+  };
 };
 const mapDispatchToProps = (dispatch) => {
   return {

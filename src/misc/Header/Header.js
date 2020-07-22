@@ -4,14 +4,11 @@ import logo from "../../assets/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhone,
-  faMailBulk,
   faEnvelope,
   faLocationArrow,
   faSearch,
-  faHamburger,
   faBars,
   faTimes,
-  faShoppingCart,
   faShoppingBag,
 } from "@fortawesome/free-solid-svg-icons";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
@@ -30,7 +27,7 @@ function Header() {
     if (typeof isBarOpen !== "boolean") return;
     setAnimation((prev) => !prev);
     setTimeout(() => {
-      setSidebarIcon((prev) => (prev == faBars ? faTimes : faBars));
+      setSidebarIcon((prev) => (prev === faBars ? faTimes : faBars));
     }, 200);
   }, [isBarOpen]);
   return (
@@ -62,24 +59,22 @@ function Header() {
           <div className={s.menu_main_wrapper}>
             <div>
               <Link to="/">
-                <button>Home</button>
+                <button>Головна</button>
               </Link>
-              <button>Collection</button>
               <Link to="/catalog">
-                <button>Shop</button>
+                <button>Каталог</button>
               </Link>
-              <button>Biomedical</button>
-              <button>Equipment</button>
-              <button>Medic Tools</button>
-              <button>Pages</button>
+              <Link to="/wishlist">
+                <button>Улюблені</button>
+              </Link>
+              <Link to="/cart">
+                <button>Кошик</button>
+              </Link>
             </div>
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
                 <Link to="/login">
-                  <button>My Account</button>
-                </Link>
-                <Link to="/cart">
-                  <button>Item</button>
+                  <button>Мій профіль</button>
                 </Link>
               </div>
               <FontAwesomeIcon icon={faSearch} className={s.navbar__icon} />
@@ -125,13 +120,10 @@ function Header() {
         itemClassName={s.mobile__nav__item}
         onStateChange={onStateMenuChange}
       >
-        <Link to="/">Home</Link>
-        <Link to="/">Collection</Link>
-        <Link to="/catalog">Shop</Link>
-        <Link to="/">Biomedical</Link>
-        <Link to="/">Equipment</Link>
-        <Link to="/">Medic Tools</Link>
-        <Link to="/">Pages</Link>
+        <Link to="/">Головна</Link>
+        <Link to="/catalog">Каталог</Link>
+        <Link to="/wishlist">Улюблені</Link>
+        <Link to="/cart">Кошик</Link>
       </Menu>
     </>
   );

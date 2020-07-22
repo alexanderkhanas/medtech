@@ -8,10 +8,7 @@ import {
 
 export const addToCart = (product) => {
   const cart = localStorage.getItem("_cart");
-  localStorage.setItem(
-    "_cart",
-    !!cart ? `${cart} ${product._id}` : product._id
-  );
+  localStorage.setItem("_cart", cart ? `${cart} ${product._id}` : product._id);
   return {
     type: ADD_TO_CART,
     product,
@@ -30,11 +27,19 @@ export const removeFromCart = (product) => {
   };
 };
 
-export const changeNumberInCart = (value, id) => {
+export const changeNumberInCart = (value, id, allCartProducts) => {
+  let fullPrice = 0;
+  const editedProducts = allCartProducts.map((product) => {
+    const editedProduct =
+      product._id === id ? { ...product, numberInCart: value } : product;
+    fullPrice += product.price * editedProduct.numberInCart;
+    return editedProduct;
+  });
+
   return {
     type: SET_NUMBER_CART,
-    value,
-    productId: id,
+    editedProducts,
+    fullPrice,
   };
 };
 

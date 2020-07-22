@@ -1,2 +1,40 @@
 .container {
+  display: flex;
+  margin-bottom: 15px;
+  border: 1px solid #e4e4e4;
+}
+
+.img {
+  width: 25%;
+  cursor: pointer;
+}
+
+.main__content {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.info__container {
+}
+
+.title {
+  cursor: pointer;
+}
+
+.price {
+  color: #009d66;
+}
+
+.desc {
+  font-weight: 300;
+  color: #9b9b9b;
+  margin-top: 20px;
+}
+
+.actions__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

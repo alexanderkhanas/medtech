@@ -1,10 +1,13 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import s from "./Catalog.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import ReactPaginate from "react-paginate";
 import HorizontalProductCard from "../../misc/HorizontalProductCard/HorizontalProductCard";
-import { getProductsByPage } from "../../store/actions/productsActions";
+import {
+  getProductsByPage,
+  getProductsByCategory,
+} from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import Category from "../../misc/Category/Category";
 import { scrollToRef } from "../../utils/utils";
@@ -18,13 +21,18 @@ const sortSelectOption = [
   { value: "price to high", label: "За ціною, від більшої до меншої" },
 ];
 
-const Catalog = ({ products, productsQuantity, getProductsByPage }) => {
-  const [productViewType, setProductViewType] = useState("row");
+const Catalog = ({
+  products,
+  productsQuantity,
+  getProductsByPage,
+  getProductsByCategory,
+}) => {
+  const [productViewType, setProductViewType] = useState("column");
   const [sortType, setSortType] = useState(sortSelectOption[0]);
   const containerRef = useRef();
 
   const onPageChange = async ({ selected }) => {
-    getProductsByPage(selected);
+    getProductsByPage(selected + 1);
     scrollToRef(containerRef);
   };
 
@@ -34,6 +42,32 @@ const Catalog = ({ products, productsQuantity, getProductsByPage }) => {
 
   const switchProductViewType = () =>
     setProductViewType((prev) => (prev === "row" ? "column" : "row"));
+
+  useEffect(() => {
+    const obj = {};
+    const parent = [
+      { id: "123" },
+      { id: "122143" },
+      { id: "4444" },
+      { id: "0000" },
+    ];
+    const subparent = [
+      { id: "12___3", parentId: "122143" },
+      { id: "000____", parentId: "122143" },
+      { id: ")()_", parentId: "4444" },
+      { id: "[][]]", parentId: "0000" },
+    ];
+    const child = [
+      { id: "zxvzxv", parentId: "122143", subparentId: "000____" },
+      { id: "xzvasqe", parentId: "122143", subparentId: "000____" },
+      { id: "bzxc", parentId: "4444", subparentId: "000____" },
+      { id: "asdasdas", parentId: "0000", subparentId: "[][]]" },
+    ];
+    Object.keys(parent).forEach((key) => {
+      obj[key] = parent[key];
+      // obj[key]
+    });
+  }, []);
 
   return (
     <div>
@@ -46,7 +80,12 @@ const Catalog = ({ products, productsQuantity, getProductsByPage }) => {
             <h3 className={s.filter__title}>Фільтр</h3>
             <div className={s.filter__categories}>
               {["Support Stick", "Digital Thermometer"].map((category, i) => (
-                <Category {...{ category }} key={i} />
+                <Category
+                  onClick={() => getProductsByCategory()}
+                  {...{ category }}
+                  subcategories={{}}
+                  key={i}
+                />
               ))}
             </div>
           </div>
@@ -114,6 +153,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getProductsByPage: (page) => dispatch(getProductsByPage(page)),
+    getProductsByCategory: (categoryId) =>
+      dispatch(getProductsByCategory(categoryId)),
   };
 };
 

@@ -10,10 +10,13 @@ import {
   faCheckCircle,
   faExclamationCircle,
   faArrowLeft,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, ErrorMessage } from "formik";
 import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import { useHistory } from "react-router-dom";
+import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
+import _axios from "../../store/api/_axios";
 
 const Register = () => {
   const [isRegister, setRegister] = useState(false);
@@ -26,12 +29,42 @@ const Register = () => {
     setIsAgree(checked);
   };
   const h = useHistory();
+
+  const breadCrumbsItems = [
+    {
+      name: "Головна",
+      path: "/",
+      icon: <FontAwesomeIcon icon={faHome} />,
+    },
+    { name: "Реєстрація", path: "/register" },
+  ];
   return (
     <div>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{
+          fName: "",
+          sName: "",
+          fatherName: "",
+          email: "",
+          password: "",
+        }}
         validate={(values) => {
           const errors = {};
+          if (values.fName.length <= 1) {
+            errors.fName = "Занадто коротке Ім'я";
+          } else if (/[0-9._%+-]$/i.test(values.fName)) {
+            errors.fName = "Невірно введенe Ім'я";
+          }
+          if (values.lName.length <= 2) {
+            errors.lName = "Занадто коротке прізвище";
+          } else if (/[0-9._%+-]$/i.test(values.lName)) {
+            errors.lName = "Невірно введенe прізвище";
+          }
+          if (values.fatherName.length <= 3) {
+            errors.fatherName = "Занадто коротке по-батькові";
+          } else if (/[0-9._%+-]$/i.test(values.fatherName)) {
+            errors.fatherName = "Невірно введенe по-батькові";
+          }
           if (values.password.length <= 5) {
             errors.password = "Занадто короткий пароль";
           }
@@ -50,6 +83,26 @@ const Register = () => {
         onSubmit={(values, { setSubmitting }) => {
           alert(JSON.stringify(values));
           prompt("TU Chui?");
+          const { fName, lName, fatherName, phone, password, email } = values;
+          _axios
+            .post("/register", {
+              fName,
+              lName,
+              fatherName,
+              phone,
+              email,
+              password,
+            })
+
+            .then((res) => {
+              console.log(res);
+              res.status === 200
+                ? h.push(`/register/${res.data.user.userId}`)
+                : alert("res.status");
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         }}
       >
         {({
@@ -61,7 +114,7 @@ const Register = () => {
           handleSubmit,
           isSubmiting,
         }) => {
-          console.log("values :", values);
+          // console.log("values :", values);
           const SuccessIcon = () => (
             <FontAwesomeIcon
               icon={faCheckCircle}
@@ -80,17 +133,44 @@ const Register = () => {
                 <div className={s.container}>
                   <div className={s.title__container}>
                     <h3 className={s.title}>CREATE ACCOUNT</h3>
+                    <BreadCrumbs items={breadCrumbsItems} />
                   </div>
                   <div className={s.register}>
                     <div className={s.input__container}>
                       <div className={s.form}>
                         <div className={s.login}>
-                          <Input placeholder="Ім’я" />
-                          <Input placeholder="Прізвище" />
-                          <Input placeholder="По-батькові" />
+                          <Input
+                            placeholder="Ім'я"
+                            name="fName"
+                            value={values.fName}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            Icon={!errors.fName ? SuccessIcon : ErrorIcon}
+                          />
                         </div>
+                        <div className={s.login}>
+                          <Input
+                            placeholder="Прізвище"
+                            name="lName"
+                            value={values.lName}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            Icon={!errors.lName ? SuccessIcon : ErrorIcon}
+                          />
+                        </div>
+                        <div className={s.login}>
+                          <Input
+                            name="fatherName"
+                            placeholder="По-батькові"
+                            value={values.fatherName}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            Icon={!errors.fatherName ? SuccessIcon : ErrorIcon}
+                          />
+                        </div>
+
                         <div className={s.ph__number}>
-                          <PhoneNumberInput />
+                          <PhoneNumberInput value={values.phone} />
                         </div>
                         <div className={s.email}>
                           <Input
@@ -140,7 +220,11 @@ const Register = () => {
                         </p>
                       </div>
                       <div className={s.submit_button}>
-                        <Button title="Зареєструватися" disabled={!isAgree} />
+                        <Button
+                          title="Зареєструватися"
+                          disabled={!isAgree}
+                          onClick={handleSubmit}
+                        />
                       </div>
                     </div>
                     <div className={s.fbt}>

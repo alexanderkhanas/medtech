@@ -17,8 +17,8 @@
 
 .container {
   display: flex;
-  margin-top: 15px;
 }
+
 .container span {
   align-self: start;
   font-family: "Roboto", sans-serif;

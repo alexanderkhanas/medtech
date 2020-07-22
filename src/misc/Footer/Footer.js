@@ -11,6 +11,7 @@ import {
   faClock,
   faCopyright,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -38,12 +39,14 @@ const Footer = () => {
             </p>
             <button>
               <p className={s.social}>
-                <FontAwesomeIcon icon={faInstagram} /> Instagram
+                <FontAwesomeIcon icon={faInstagram} className={s.fainst} />{" "}
+                Instagram
               </p>
             </button>
             <button>
               <p className={s.social}>
-                <FontAwesomeIcon icon={faFacebook} /> Facebook
+                <FontAwesomeIcon icon={faFacebook} className={s.fafb} />{" "}
+                Facebook
               </p>
             </button>
             <p className={s.hours}>
@@ -54,68 +57,75 @@ const Footer = () => {
           <div className={s.navigation}>
             <h4>Навігація по сайту</h4>
             <button>
-              <p>Головна</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Головна</p>
+              </Link>
             </button>
             <button>
-              <p>Про нас</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Про нас</p>
+              </Link>
             </button>
             <button>
-              <p>Новини та акції</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Новини та акції</p>
+              </Link>
             </button>
             <button>
-              <p>Контакти</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Контакти</p>
+              </Link>
             </button>
           </div>
           <div className={s.popular}>
             <h4>Популярні категорії</h4>
             <button>
-              <p>Малюки до року</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Контакти</p>
+              </Link>
             </button>
             <button>
-              <p>Іграшки</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Контакти</p>
+              </Link>
             </button>
             <button>
-              <p>Одяг</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Контакти</p>
+              </Link>
             </button>
             <button>
-              <p>Взуття</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Контакти</p>
+              </Link>
             </button>
           </div>
           <div className={s.inf}>
             <h4>Корисна інформація</h4>
             <button>
-              <p>Доставка і оплата</p>{" "}
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Доставка і оплата</p>
+              </Link>
             </button>
             <button>
-              <p>Часті запитання</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Часті запитання</p>
+              </Link>
             </button>
             <button>
-              <p>Гарантія і повернення</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Гарантія і повернення</p>
+              </Link>
             </button>
             <button>
-              <p>Про бонус систему</p>
+              <Link to="/public-offer" className={s.btn_cl}>
+                <p>Про бонус систему</p>
+              </Link>
             </button>
             <button>
-              <p>Політика конфіденційності</p>
-            </button>
-          </div>
-        </div>
-        <div className={s.bottom__footer}>
-          <div className={s.bottom__inf}>
-            <button>
-              <p>Пошук</p>
-            </button>
-            <button>
-              <p>Підтримка</p>
-            </button>
-            <button>
-              <p>Інформація</p>
-            </button>
-            <button>
-              <p>Політика конфіденційності</p>
-            </button>
-            <button>
-              <p>Політика конфіденційності</p>
+              <Link to="/politics" className={s.btn_cl}>
+                <p>Політика конфіденційності </p>
+              </Link>
             </button>
           </div>
         </div>

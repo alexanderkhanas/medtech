@@ -88,7 +88,7 @@ button {
   background-color: transparent;
 }
 .submit_button {
-  padding: 20px;
+  padding: 20px 0;
   justify-content: center;
 }
 .submit_button > button {

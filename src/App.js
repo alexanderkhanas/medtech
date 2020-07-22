@@ -11,6 +11,9 @@ import Footer from "./misc/Footer/Footer";
 import Catalog from "./pages/Catalog/Catalog";
 import { setWishlist } from "./store/actions/wishlistActions";
 import NoMatchPage from "./pages/404/404";
+import PublicOffer from "./misc/PublicOffer/PublicOffer";
+import Politics from "./misc/Politics/Politics";
+import SingleNews from "./pages/SingleNews/SingleNews";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -53,6 +56,9 @@ const App = ({ allProducts, setCart, getProducts, setWishlist }) => {
           <Route path="/cart" component={Cart} />
           <Route path="/catalog" component={Catalog} />
           <Route path="/login" component={(props) => <Login {...props} />} />
+          <Route path="/public-offer" component={PublicOffer} />
+          <Route path="/politics" component={Politics} />
+          <Route path="/single-news/:id" component={SingleNews} />
           <Route
             path="/register"
             component={(props) => <Register {...props} />}

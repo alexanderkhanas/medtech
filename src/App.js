@@ -12,7 +12,9 @@ import { setWishlist } from "./store/actions/wishlistActions";
 import NoMatchPage from "./pages/404/404";
 import PublicOffer from "./misc/PublicOffer/PublicOffer";
 import Politics from "./misc/Politics/Politics";
+import News from "./pages/News/News";
 import SingleNews from "./pages/SingleNews/SingleNews";
+import { getAllNewsAction } from "./store/actions/newsActions";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -24,13 +26,14 @@ const Profile = lazy(() => import("./pages/Profile/Profile"));
 const Wishlist = lazy(() => import("./pages/Wishlist/Wishlist"));
 const Cart = lazy(() => import("./pages/Cart/Cart"));
 
-const App = ({ allProducts, setCart, getProducts, setWishlist }) => {
+const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
   const getLocalCart = () => localStorage.getItem("_cart")?.split(" ");
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
 
   useEffect(() => {
     (async () => {
-      await getProducts();
+      getNews();
+      getProducts();
     })();
   }, []);
 
@@ -59,6 +62,7 @@ const App = ({ allProducts, setCart, getProducts, setWishlist }) => {
           <Route path="/login" component={(props) => <Login {...props} />} />
           <Route path="/public-offer" component={PublicOffer} />
           <Route path="/politics" component={Politics} />
+          <Route path="/news" component={News} />
           <Route path="/single-news/:id" component={SingleNews} />
           <Route
             path="/register"
@@ -98,6 +102,7 @@ const mapDispatchToProps = (dispatch) => {
     setCart: (cart) => dispatch(setCart(cart)),
     getProducts: () => dispatch(getProducts()),
     setWishlist: (wishlist) => dispatch(setWishlist(wishlist)),
+    getNews: () => dispatch(getAllNewsAction()),
   };
 };
 

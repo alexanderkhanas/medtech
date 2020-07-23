@@ -13,3 +13,5 @@ export const REMOVE_FROM_WISHLIST = "REMOVE_FROM_WISHLIST";
 export const SET_WISHLIST = "SET_WISHLIST";
 export const SET_SEARCH = "SET_SEARCH";
 export const SET_LOADING = "SET_LOADING";
+export const SET_NEWS = "SET_NEWS";
+export const SET_SINGLE_NEWS = "SET_SINGLE_NEWS";

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from "./SingleNews.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
@@ -6,9 +6,12 @@ import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import vadim from "../../assets/vadim.jpg";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import NewsCard from "../../misc/NewsCard/NewsCard";
+import { getSingleNewsAction } from "../../store/actions/newsActions";
 import { connect } from "react-redux";
 
-const SingleNews = ({ recentNews }) => {
+const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
+  const { title } = singleNews;
+  console.log(singleNews);
   const breadCrumbsItems = [
     {
       name: "Головна",
@@ -17,21 +20,26 @@ const SingleNews = ({ recentNews }) => {
     },
     { name: "Новина", path: "/single-news/:id" },
   ];
+  useEffect(() => {
+    getSingleNews(match.params.id);
+  }, []);
+  console.log("singleNews ===", singleNews);
   return (
     <div>
       <div className={s.title__container}>
         <h4 className={s.title}>НОВИНА</h4>
         <BreadCrumbs items={breadCrumbsItems} />
       </div>
-      <FixedWrapper className={s.body}>
+      <FixedWrapper>
         <div className={s.single_new}>
-          <div className={s.image_container}>
-            <img className={s.main__image} src={vadim} alt="loading" />
-          </div>
           <div className={s.main_container}>
             <h4 className={s.news_title}>
-              How to Build a Capsule Wardrobe That Will Last a Lifetime
+              There’s only a week to go before I’m a Celebrity returns to
+              screens
             </h4>
+            <div className={s.image_container}>
+              <img className={s.main__image} src={vadim} alt="loading" />
+            </div>
             <div className={s.news_text}>
               <p>
                 There’s only a week to go before I’m a Celebrity returns to
@@ -55,14 +63,8 @@ const SingleNews = ({ recentNews }) => {
         <div className={s.section}>
           <h3 className={s.section__title}>Популярні новини</h3>
           <div className={s.news__container}>
-            {recentNews.map(({ title, subtitle, bodyText, imgSrc }, i) => (
-              <NewsCard
-                {...{ title }}
-                {...{ imgSrc }}
-                {...{ subtitle }}
-                {...{ bodyText }}
-                key={i}
-              />
+            {recentNews.map((newsItem, i) => (
+              <NewsCard {...{ newsItem }} key={newsItem._id} />
             ))}
           </div>
         </div>
@@ -73,9 +75,12 @@ const SingleNews = ({ recentNews }) => {
 const mapStateToProps = (state) => {
   return {
     recentNews: state.news.recent,
+    singleNews: state.news.single,
   };
 };
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getSingleNews: (id) => dispatch(getSingleNewsAction(id)),
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(SingleNews);

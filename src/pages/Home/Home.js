@@ -8,6 +8,7 @@ import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import AdvantagesCard from "../../misc/AdvantagesCard/AdvantagesCard";
 import NewsCard from "../../misc/NewsCard/NewsCard";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
+import { Link } from "react-router-dom";
 
 const Home = ({ products, recentNews }) => {
   const {
@@ -19,6 +20,8 @@ const Home = ({ products, recentNews }) => {
   } = products;
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  console.log("recent news ===", recentNews);
 
   return (
     <div>
@@ -130,16 +133,12 @@ const Home = ({ products, recentNews }) => {
           </ItemsCarousel>
         </div>
         <div className={s.section}>
-          <h3 className={s.section__title}>Новини</h3>
+          <Link to="/news">
+            <h3 className={s.section__title}>Новини</h3>
+          </Link>
           <div className={s.news__container}>
-            {recentNews.map(({ title, subtitle, bodyText, imgSrc }, i) => (
-              <NewsCard
-                {...{ title }}
-                {...{ imgSrc }}
-                {...{ subtitle }}
-                {...{ bodyText }}
-                key={i}
-              />
+            {recentNews.slice(0, 3).map((newsItem, i) => (
+              <NewsCard {...{ newsItem }} key={newsItem._id} />
             ))}
           </div>
         </div>

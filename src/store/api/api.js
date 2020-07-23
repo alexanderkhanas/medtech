@@ -24,4 +24,8 @@ export const fetchFilteredProducts = (categoryId, searchValue) => {
   return _axios.get(baseUrl);
 };
 
-export const fetchCategories = () => _axios.post("/categories");
+export const fetchCategories = () => _axios.get("/categories");
+
+export const fetchAllNews = () => _axios.get("/news");
+
+export const fetchSingleNews = (id) => _axios.get(`/new/:${id}`);

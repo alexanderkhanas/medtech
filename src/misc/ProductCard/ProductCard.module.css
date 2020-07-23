@@ -8,10 +8,13 @@
   margin: 10px;
   transition: 0.15s;
   width: 310px;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.card:hover {
+  transform: translateY(-5px);
 }
 
 .card__img {
@@ -41,4 +44,18 @@
 
 .card__footer {
   padding: 0px 30px 20px 30px;
+}
+
+.wishlist__button {
+}
+
+.wishlist__container {
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

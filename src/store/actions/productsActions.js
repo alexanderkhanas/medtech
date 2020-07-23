@@ -1,15 +1,24 @@
-import { fetchProducts, fetchProductsByPage } from "../api/api";
+import {
+  fetchProducts,
+  fetchProductsByPage,
+  searchProductsRequest,
+  fetchFilteredProducts,
+} from "../api/api";
 import {
   SET_PRODUCTS,
   SET_RECOMMENDED,
   SET_NEW,
   SET_FILTERED_PRODUCTS,
+  SET_SEARCH,
+  SET_LOADING,
 } from "./actionTypes";
 import _axios from "../api/_axios";
 
 export const getProducts = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchProducts();
+    dispatch({ type: SET_LOADING, isLoading: false });
 
     if (!response.data) return;
     const { products } = response.data;
@@ -44,16 +53,23 @@ export const getProductsByPage = (page) => {
   };
 };
 
-export const getProductsByCategory = (
-  categoryId = "5f16c4066f552fc27192185c"
-) => {
+export const filterProductsAction = (categoryId, searchValue) => {
   return async (dispatch) => {
-    const response = await _axios.get(`/products?category=${categoryId}`);
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await fetchFilteredProducts(categoryId, searchValue);
+    dispatch({ type: SET_LOADING, isLoading: false });
     console.log("response ===", response.data);
-
     dispatch({
-      type: SET_PRODUCTS,
+      type: SET_FILTERED_PRODUCTS,
       products: response.data,
     });
+  };
+};
+
+export const getProductsBySearch = (value) => {
+  return async (dispatch) => {
+    const response = await searchProductsRequest(value);
+    console.log("search response ===", response.data);
+    dispatch({ type: SET_SEARCH, products: response.data });
   };
 };

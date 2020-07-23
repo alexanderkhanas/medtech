@@ -45,7 +45,7 @@ header {
   padding: 30px 0;
   justify-content: space-between;
 }
-.menu_main_wrapper button {
+.nav__link {
   font-size: 18px;
   border: none;
   transition: 0.2s;
@@ -55,7 +55,7 @@ header {
   margin-right: 15px;
 }
 
-.menu_main_wrapper button:hover {
+.nav__link:hover {
   color: #009d66;
 }
 
@@ -63,6 +63,11 @@ header {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.main__nav {
+  display: flex;
+  align-items: center;
 }
 
 .small_menu_item {
@@ -143,6 +148,53 @@ header {
 .burger__icon__entered,
 .burger__icon__exited {
   transform: rotate(0);
+}
+
+.search__container {
+  display: flex;
+  flex: 1;
+  margin: 0 100px;
+  position: relative;
+}
+
+.search__input__container {
+  flex: 10;
+}
+
+.search__dropdown {
+  position: absolute;
+  bottom: -400px;
+  left: 0;
+  height: 400px;
+  width: 100%;
+  z-index: 1;
+  background: #fff;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search__product {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+}
+
+.search__see__more {
+  color: #000;
+  padding: 10px 0;
+  transition: 0.12s;
+}
+
+.search__see__more:hover {
+  color: #545454;
+}
+
+.search__product__img {
+  width: 100px;
+  height: 100px;
 }
 
 @media (max-width: 950px) {

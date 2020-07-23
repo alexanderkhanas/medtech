@@ -4,23 +4,22 @@ import {
   SET_WISHLIST,
 } from "./actionTypes";
 
-export const addToWishlist = (product) => {
+export const addToWishlistAction = (product) => {
   const wishlist = localStorage.getItem("_wishlist");
-  localStorage.setItem(
-    "_wishlist",
-    wishlist ? `${wishlist} ${product._id}` : product._id
-  );
+  const { _id } = product;
+  localStorage.setItem("_wishlist", wishlist ? `${wishlist} ${_id}` : _id);
   return {
     type: ADD_TO_WISHLIST,
     product,
   };
 };
 
-export const removeFromWishlist = (product) => {
+export const removeFromWishlistAction = (product) => {
   const wishlist = localStorage.getItem("_wishlist");
   if (!wishlist) return {};
-  localStorage.setItem("_wishlist", wishlist.replace(` ${product._id}`, ""));
-  localStorage.setItem("_wishlist", wishlist.replace(`${product._id}`, ""));
+  const { _id } = product;
+  localStorage.setItem("_wishlist", wishlist.replace(` ${_id}`, ""));
+  localStorage.setItem("_wishlist", wishlist.replace(`${_id}`, ""));
   return {
     type: REMOVE_FROM_WISHLIST,
     product,

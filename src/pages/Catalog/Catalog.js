@@ -6,7 +6,7 @@ import ReactPaginate from "react-paginate";
 import HorizontalProductCard from "../../misc/HorizontalProductCard/HorizontalProductCard";
 import {
   getProductsByPage,
-  getProductsByCategory,
+  filterProductsAction,
 } from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import Category from "../../misc/Category/Category";
@@ -14,6 +14,8 @@ import { scrollToRef } from "../../utils/utils";
 import Button from "../../misc/Button/Button";
 import { faTh, faList } from "@fortawesome/free-solid-svg-icons";
 import Select from "../../misc/Select/Select";
+import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
+import { setLoadingAction } from "../../store/actions/baseActions";
 
 const sortSelectOption = [
   { value: "recommended", label: "Рекомендовані" },
@@ -22,10 +24,12 @@ const sortSelectOption = [
 ];
 
 const Catalog = ({
-  products,
-  productsQuantity,
+  filteredProducts,
+  filteredProductsQuantity,
   getProductsByPage,
-  getProductsByCategory,
+  recommendedProducts,
+  filterProducts,
+  isLoading,
 }) => {
   const [productViewType, setProductViewType] = useState("column");
   const [sortType, setSortType] = useState(sortSelectOption[0]);
@@ -43,31 +47,13 @@ const Catalog = ({
   const switchProductViewType = () =>
     setProductViewType((prev) => (prev === "row" ? "column" : "row"));
 
-  useEffect(() => {
-    const obj = {};
-    const parent = [
-      { id: "123" },
-      { id: "122143" },
-      { id: "4444" },
-      { id: "0000" },
-    ];
-    const subparent = [
-      { id: "12___3", parentId: "122143" },
-      { id: "000____", parentId: "122143" },
-      { id: ")()_", parentId: "4444" },
-      { id: "[][]]", parentId: "0000" },
-    ];
-    const child = [
-      { id: "zxvzxv", parentId: "122143", subparentId: "000____" },
-      { id: "xzvasqe", parentId: "122143", subparentId: "000____" },
-      { id: "bzxc", parentId: "4444", subparentId: "000____" },
-      { id: "asdasdas", parentId: "0000", subparentId: "[][]]" },
-    ];
-    Object.keys(parent).forEach((key) => {
-      obj[key] = parent[key];
-      // obj[key]
-    });
-  }, []);
+  useEffect(() => {}, []);
+
+  console.log("recommendedProducts ===", recommendedProducts);
+  console.log("filteredProducts ===", filteredProducts);
+  console.log("isLoading", isLoading);
+
+  const isEmptyResults = !filteredProducts.length && !isLoading;
 
   return (
     <div>
@@ -81,7 +67,7 @@ const Catalog = ({
             <div className={s.filter__categories}>
               {["Support Stick", "Digital Thermometer"].map((category, i) => (
                 <Category
-                  onClick={() => getProductsByCategory()}
+                  // onClick={() => filterProducts()}
                   {...{ category }}
                   subcategories={{}}
                   key={i}
@@ -92,16 +78,20 @@ const Catalog = ({
           <div className={s.main__content}>
             <div className={s.actions__container}>
               <div className={s.change__view__container}>
-                <Button
-                  onClick={switchProductViewType}
-                  icon={faTh}
-                  isSecondary={productViewType === "column"}
-                />
-                <Button
-                  onClick={switchProductViewType}
-                  icon={faList}
-                  isSecondary={productViewType === "row"}
-                />
+                <div>
+                  <Button
+                    onClick={switchProductViewType}
+                    icon={faTh}
+                    isSecondary={productViewType === "column"}
+                  />
+                </div>
+                <div>
+                  <Button
+                    onClick={switchProductViewType}
+                    icon={faList}
+                    isSecondary={productViewType === "row"}
+                  />
+                </div>
               </div>
               <div className={s.sort__container}>
                 <span>Тип сортування</span>
@@ -113,30 +103,48 @@ const Catalog = ({
               </div>
             </div>
             <div className={s.products}>
-              {products.map((product, i) =>
+              {filteredProducts.map((product, i) =>
                 productViewType === "row" ? (
                   <ProductCard
                     className={s.product__card}
-                    key={i}
+                    key={product._id}
                     {...{ product }}
                   />
                 ) : (
-                  <HorizontalProductCard {...{ product }} key={i} />
+                  <HorizontalProductCard {...{ product }} key={product._id} />
                 )
               )}
             </div>
+            {isEmptyResults && (
+              <h2 className={s.empty__result__msg}>
+                Нажаль товарів за вашим запитом не знайдено.
+              </h2>
+            )}
+            {isEmptyResults && (
+              <div className={s.carousel__container}>
+                <ItemsCarousel
+                  arrows
+                  slidesPerPage={Math.floor(window.innerWidth / 450)}
+                  infinite
+                >
+                  {recommendedProducts.map((product, i) => (
+                    <ProductCard {...{ product }} key={product._id} />
+                  ))}
+                </ItemsCarousel>
+              </div>
+            )}
           </div>
         </div>
         <ReactPaginate
-          pageCount={productsQuantity / 20}
+          pageCount={filteredProductsQuantity / 20}
           pageRangeDisplayed={5}
           marginPagesDisplayed={1}
           {...{ onPageChange }}
           //   onPageChange={({ selected }) => console.log("e ===", selected)}
           containerClassName={s.pagination__container}
           activeClassName={s.pagination__active__link}
-          previousLabel={"Попередня"}
-          nextLabel="Наступна"
+          previousLabel=""
+          nextLabel=""
           pageClassName={s.pagination__link}
         />
       </FixedWrapper>
@@ -146,15 +154,18 @@ const Catalog = ({
 
 const mapStateToProps = (state) => {
   return {
-    products: state.products.filtered,
-    productsQuantity: state.products.filteredQuantity,
+    filteredProducts: state.products.filtered,
+    filteredProductsQuantity: state.products.filteredQuantity,
+    recommendedProducts: state.products.recommended,
+    isLoading: state.base.isLoading,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     getProductsByPage: (page) => dispatch(getProductsByPage(page)),
-    getProductsByCategory: (categoryId) =>
-      dispatch(getProductsByCategory(categoryId)),
+    filterProducts: (categoryId, searchValue) =>
+      dispatch(filterProductsAction(categoryId, searchValue)),
+    setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
   };
 };
 

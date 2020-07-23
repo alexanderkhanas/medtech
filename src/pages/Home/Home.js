@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import AdvantagesCard from "../../misc/AdvantagesCard/AdvantagesCard";
-
 import NewsCard from "../../misc/NewsCard/NewsCard";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 
@@ -18,10 +17,8 @@ const Home = ({ products, recentNews }) => {
     newProducts,
     allProducts,
   } = products;
+
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  useEffect(() => {
-    console.log("recommendedProducts ===", recommendedProducts);
-  }, [recommendedProducts]);
 
   return (
     <div>
@@ -54,24 +51,22 @@ const Home = ({ products, recentNews }) => {
             </TabList>
             <TabPanel className={s.tab__panel}>
               <ItemsCarousel
-                arrows={true}
+                arrows
                 offset={10}
                 slidesPerPage={Math.floor(window.innerWidth / 350)}
                 infinite
-                lazyLoad={true}
               >
                 {recommendedProducts.map((product, i) => (
-                  <ProductCard key={i} {...{ product }} />
+                  <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
             </TabPanel>
             <TabPanel className={s.tab__panel}>
               <ItemsCarousel
-                arrows={true}
+                arrows
                 offset={10}
                 slidesPerPage={Math.floor(window.innerWidth / 350)}
                 infinite
-                lazyLoad={true}
               >
                 {popularProducts.map((product, i) => (
                   <ProductCard key={i} {...{ product }} />
@@ -81,11 +76,10 @@ const Home = ({ products, recentNews }) => {
 
             <TabPanel className={s.tab__panel}>
               <ItemsCarousel
-                arrows={true}
+                arrows
                 offset={10}
                 slidesPerPage={Math.floor(window.innerWidth / 350)}
                 infinite
-                lazyLoad={true}
               >
                 {bestRatingProducts.map((product, i) => (
                   <ProductCard key={i} {...{ product }} />
@@ -126,13 +120,12 @@ const Home = ({ products, recentNews }) => {
         <div className={s.section}>
           <h3 className={s.section__title}>Останні товари</h3>
           <ItemsCarousel
-            arrows={true}
+            arrows
             slidesPerPage={Math.floor(window.innerWidth / 350)}
             infinite
-            lazyLoad={true}
           >
             {newProducts.map((product, i) => (
-              <ProductCard key={i} {...{ product }} />
+              <ProductCard key={product._id} {...{ product }} />
             ))}
           </ItemsCarousel>
         </div>

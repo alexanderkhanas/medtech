@@ -4,6 +4,7 @@ import newsReducer from "./newsReducer";
 import cartReducer from "./cartReducer";
 import singleProductReducer from "./singleProductReducer";
 import wishlistReducer from "./wishlistReducer";
+import baseReducer from "./baseReducer";
 
 export default combineReducers({
   products: mainReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
   cart: cartReducer,
   single: singleProductReducer,
   wishlist: wishlistReducer,
+  base: baseReducer,
 });

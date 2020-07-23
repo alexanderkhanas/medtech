@@ -25,7 +25,8 @@ li {
 }
 p,
 span,
-input {
+input,
+a {
   font-family: Roboto;
   margin: 0;
 }

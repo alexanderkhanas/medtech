@@ -6,7 +6,7 @@ import {
   SET_FULL_PRICE,
 } from "./actionTypes";
 
-export const addToCart = (product) => {
+export const addToCartAction = (product) => {
   const cart = localStorage.getItem("_cart");
   localStorage.setItem("_cart", cart ? `${cart} ${product._id}` : product._id);
   return {
@@ -15,7 +15,7 @@ export const addToCart = (product) => {
   };
 };
 
-export const removeFromCart = (product) => {
+export const removeFromCartAction = (product) => {
   const cart = localStorage.getItem("_cart");
   console.log(cart);
 
@@ -27,7 +27,7 @@ export const removeFromCart = (product) => {
   };
 };
 
-export const changeNumberInCart = (value, id, allCartProducts) => {
+export const changeNumberInCartAction = (value, id, allCartProducts) => {
   let fullPrice = 0;
   const editedProducts = allCartProducts.map((product) => {
     const editedProduct =
@@ -43,7 +43,7 @@ export const changeNumberInCart = (value, id, allCartProducts) => {
   };
 };
 
-export const setFullPrice = (fullPrice) => {
+export const setFullPriceAction = (fullPrice) => {
   return {
     type: SET_FULL_PRICE,
     fullPrice,

@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./misc/Header/Header";
 import SingleProduct from "./pages/SingleProduct/SingleProduct";
-import Cart from "./pages/Cart/Cart";
 import { setCart } from "./store/actions/cartActions";
 import { connect } from "react-redux";
 import { getProducts } from "./store/actions/productsActions";
@@ -19,6 +18,8 @@ const RestorePassword = lazy(() =>
 );
 const NewPassword = lazy(() => import("./pages/NewPassword/NewPassword"));
 const Profile = lazy(() => import("./pages/Profile/Profile"));
+const Wishlist = lazy(() => import("./pages/Wishlist/Wishlist"));
+const Cart = lazy(() => import("./pages/Cart/Cart"));
 
 const App = ({ allProducts, setCart, getProducts, setWishlist }) => {
   const getLocalCart = () => localStorage.getItem("_cart")?.split(" ");
@@ -65,6 +66,10 @@ const App = ({ allProducts, setCart, getProducts, setWishlist }) => {
           <Route
             path="/new-password"
             component={(props) => <NewPassword {...props} />}
+          />
+          <Route
+            path="/wishlist"
+            component={(props) => <Wishlist {...props} />}
           />
           <Route path="*">
             <NoMatchPage />

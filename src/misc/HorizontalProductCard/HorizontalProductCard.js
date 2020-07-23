@@ -3,13 +3,16 @@ import s from "./HorizontalProductCard.module.css";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { addToCart, removeFromCart } from "../../store/actions/cartActions";
+import {
+  addToCartAction,
+  removeFromCartAction,
+} from "../../store/actions/cartActions";
 import Button from "../Button/Button";
 import CartButton from "../CartButton/CartButton";
 import { useHistory } from "react-router-dom";
 import WishlistButton from "../WishlistButton/WishlistButton";
 
-const HorizontalProductCard = ({ product }) => {
+const HorizontalProductCard = ({ product, isSmall }) => {
   const history = useHistory();
   const { title, gallery, price, desc, _id } = product;
 
@@ -23,13 +26,21 @@ const HorizontalProductCard = ({ product }) => {
         alt="loading"
         className={s.img}
       />
-      <div className={s.main__content}>
+      <div
+        className={
+          isSmall
+            ? `${s.main__content} ${s.main__content__sm}`
+            : s.main__content
+        }
+      >
         <div className={s.info__container}>
           <h3 className={s.title} onClick={redirectToSingle}>
             {title}
           </h3>
           <h2 className={s.price}>{price}₴</h2>
-          <p className={s.desc}>{desc}</p>
+          <p className={s.desc}>
+            {isSmall ? `${desc.slice(0, 15)} ...` : desc}
+          </p>
         </div>
         <div className={s.actions__container}>
           <WishlistButton {...{ product }} />
@@ -39,7 +50,9 @@ const HorizontalProductCard = ({ product }) => {
             {...{ addToCart }}
             {...{ cartProducts }}
           /> */}
-          <Button title="Додати в кошик" size="lg" />
+          <div>
+            <Button title="Додати в кошик" size={isSmall ? "md" : "lg"} />
+          </div>
         </div>
       </div>
     </div>
@@ -52,8 +65,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (product) => dispatch(addToCart(product)),
-    removeFromCart: (product) => dispatch(removeFromCart(product)),
+    addToCart: (product) => dispatch(addToCartAction(product)),
+    removeFromCart: (product) => dispatch(removeFromCartAction(product)),
   };
 };
 

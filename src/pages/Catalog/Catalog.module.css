@@ -29,9 +29,9 @@
 .filter__container {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  width: 23%;
   padding: 20px;
-  margin-right: 20px;
+  margin-right: 2%;
 }
 
 .filter__title {
@@ -46,7 +46,7 @@
 }
 
 .main__content {
-  flex: 4;
+  width: 75%;
 }
 
 .actions__container {
@@ -57,7 +57,7 @@
 
 .change__view__container {
   padding: 20px 5px;
-  width: 110px;
+  width: 120px;
   display: flex;
   justify-content: space-between;
 }
@@ -66,6 +66,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .pagination__container {
@@ -104,6 +105,16 @@
 .pagination__link a:focus,
 .pagination__active__link:focus {
   outline: none;
+}
+
+.carousel__container {
+  overflow: hidden;
+  width: 100%;
+}
+
+.empty__result__msg {
+  padding: 50px 0;
+  text-align: center;
 }
 
 @media (max-width: 550px) {

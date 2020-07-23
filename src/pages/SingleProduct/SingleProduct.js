@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import s from "./SingleProduct.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import { getSingleProduct } from "../../store/actions/singleProductActions";
+import getSingleProductAction from "../../store/actions/singleProductActions";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import ProductAttribute from "../../misc/ProductAttribute/ProductAttribute";
 import uuid from "react-uuid";
@@ -88,14 +88,19 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
   }, [selectedAttributes]);
 
   //other
-  const qtyMessage =
-    quantity >= 5
-      ? "В наявності"
-      : quantity === 0
-      ? "Немає в наявності"
-      : "Залишилось мало";
-  const qtyClassName =
-    quantity >= 5 ? s.inStock : quantity === 0 ? s.notInStock : s.lastInStock;
+  let qtyMessage = "Залишилось мало";
+  if (quantity >= 5) {
+    qtyMessage = "В наявності";
+  } else if (quantity === 0) {
+    qtyMessage = "Немає в наявності";
+  }
+
+  let qtyClassName = s.lastInStock;
+  if (quantity >= 5) {
+    qtyClassName = s.inStock;
+  } else if (quantity === 0) {
+    qtyClassName = s.notInStock;
+  }
 
   return (
     !!product && (
@@ -103,11 +108,11 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
         <div className={s.container}>
           <div className={s.desktop__container}>
             <div className={s.carousel__container}>
-              <ItemsCarousel arrows={false} dots={true} slidesPerPage={1}>
+              <ItemsCarousel arrows={false} dots slidesPerPage={1}>
                 {gallery.map((img, i) => (
                   <img
                     className={s.main__image}
-                    key={i}
+                    key={img}
                     src={img}
                     alt="loading"
                   />
@@ -124,8 +129,8 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
                   const values = attributesObj[1].all;
                   return (
                     <ProductAttribute
-                      key={i}
-                      isClickable={true}
+                      key={name}
+                      isClickable
                       {...{ name }}
                       {...{ values }}
                       {...{ selectAttribute }}
@@ -208,7 +213,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    getProduct: (id) => dispatch(getSingleProduct(id)),
+    getProduct: (id) => dispatch(getSingleProductAction(id)),
   };
 };
 

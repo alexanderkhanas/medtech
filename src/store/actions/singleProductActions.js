@@ -1,12 +1,13 @@
 import { fetchSingleProduct } from "../api/api";
-import { SET_PRODUCT } from "./actionTypes";
+import { SET_PRODUCT, SET_LOADING } from "./actionTypes";
 
-export const getSingleProduct = (id) => {
+export default (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchSingleProduct(id);
-    console.log(response.data);
+    dispatch({ type: SET_LOADING, isLoading: false });
     if (!response.data) return;
-    return dispatch({
+    dispatch({
       type: SET_PRODUCT,
       product: response.data,
     });

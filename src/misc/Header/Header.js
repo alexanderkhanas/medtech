@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import s from "./Header.module.css";
-import logo from "../../assets/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhone,
@@ -11,18 +9,53 @@ import {
   faTimes,
   faShoppingBag,
 } from "@fortawesome/free-solid-svg-icons";
+import logo from "../../assets/logo.svg";
+import s from "./Header.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { stack as Menu } from "react-burger-menu";
 import { CSSTransition } from "react-transition-group";
+import Input from "../Inputs/Input/Input";
+import Button from "../Button/Button";
+import { filterProductsAction } from "../../store/actions/productsActions";
+import { connect } from "react-redux";
+import HorizontalProductCard from "../HorizontalProductCard/HorizontalProductCard";
+// import CartButton from "../CartButton/CartButton";
+// import WishlistButton from "../WishlistButton/WishlistButton";
 
-function Header() {
+const Header = ({ searchProductsByValue, foundProducts, history }) => {
   const [isBarOpen, setBarOpen] = useState(null);
   const [isAnimation, setAnimation] = useState(false);
   const [sidebarIcon, setSidebarIcon] = useState(faBars);
+  const [searchValue, setSearchValue] = useState("");
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [isCatalogPage, setCatalogPage] = useState(false);
+
   const openSidebar = () => setBarOpen(true);
   const closeSidebar = () => setBarOpen(false);
   const onStateMenuChange = (state) => setBarOpen(state.isOpen);
+
+  const onSearchInputChange = ({ target }) => setSearchValue(target.value);
+  const onSearchInputBlur = () => setDropdownVisible(false);
+  const onSearchInputFocus = () => setDropdownVisible(searchValue.length >= 3);
+
+  useEffect(() => {
+    if (searchValue.length >= 3) {
+      setDropdownVisible(true);
+      searchProductsByValue(searchValue);
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
+    history.listen((location, action) => {
+      if (location.pathname.startsWith("/catalog")) {
+        setCatalogPage(true);
+      }
+      console.log("location ===", location);
+      console.log("action ===", action);
+    });
+  }, []);
+
   useEffect(() => {
     if (typeof isBarOpen !== "boolean") return;
     setAnimation((prev) => !prev);
@@ -30,6 +63,7 @@ function Header() {
       setSidebarIcon((prev) => (prev === faBars ? faTimes : faBars));
     }, 200);
   }, [isBarOpen]);
+
   return (
     <>
       <FixedWrapper>
@@ -57,27 +91,58 @@ function Header() {
             </div>
           </header>
           <div className={s.menu_main_wrapper}>
-            <div>
-              <Link to="/">
-                <button>Головна</button>
+            <div className={s.main__nav}>
+              <Link to="/" className={s.nav__link}>
+                Головна
               </Link>
-              <Link to="/catalog">
-                <button>Каталог</button>
+              <Link to="/catalog" className={s.nav__link}>
+                Каталог
               </Link>
-              <Link to="/wishlist">
-                <button>Улюблені</button>
+              <Link to="/wishlist" className={s.nav__link}>
+                Улюблені
               </Link>
-              <Link to="/cart">
-                <button>Кошик</button>
+              <Link to="/cart" className={s.nav__link}>
+                Кошик
               </Link>
+            </div>
+            <div className={s.search__container}>
+              <div className={s.search__overlay} />
+              <Input
+                placeholder="Введіть пошуковий запит"
+                containerClass={s.search__input__container}
+                onChange={onSearchInputChange}
+                onBlur={onSearchInputBlur}
+                onFocus={onSearchInputFocus}
+              />
+              <Button title="Знайти" />
+              {!!foundProducts.length && isDropdownVisible && !isCatalogPage && (
+                <div className={s.search__dropdown}>
+                  {foundProducts.slice(0, 5).map((foundProduct, i) => {
+                    const { title, gallery, _id } = foundProduct;
+                    return (
+                      <HorizontalProductCard
+                        key={_id}
+                        isSmall
+                        product={foundProduct}
+                      />
+                    );
+                  })}
+                  <Link
+                    className={s.search__see__more}
+                    to={{ pathname: "/catalog", state: { query: searchValue } }}
+                  >
+                    Показати ще
+                  </Link>
+                </div>
+              )}
             </div>
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
-                <Link to="/login">
-                  <button>Мій профіль</button>
+                <Link to="/login" className={s.nav__link}>
+                  Мій профіль
                 </Link>
               </div>
-              <FontAwesomeIcon icon={faSearch} className={s.navbar__icon} />
+              {/* <FontAwesomeIcon icon={faSearch} className={s.navbar__icon} /> */}
             </div>
           </div>
         </div>
@@ -108,10 +173,7 @@ function Header() {
         width="70%"
         isOpen={isBarOpen}
         burgerButtonClassName={s.menu_hidden}
-        // noOverlay
-
         menuClassName={s.menu_color}
-        // bodyClassName={isBarOpen ? "" : `${s.display_none}`}
         crossButtonClassName={s.exit_hidden}
         bmMenuWrap={s.menu_width}
         className={!isBarOpen && !isAnimation ? s.display_none : ""}
@@ -127,6 +189,19 @@ function Header() {
       </Menu>
     </>
   );
-}
+};
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    foundProducts: state.products.filtered,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    searchProductsByValue: (value) =>
+      dispatch(filterProductsAction(null, value)),
+  };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

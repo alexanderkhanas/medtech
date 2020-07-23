@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import s from "./Cart.module.css";
 import { connect } from "react-redux";
 import {
-  addToCart,
-  removeFromCart,
-  setFullPrice,
+  addToCartAction,
+  removeFromCartAction,
+  setFullPriceAction,
 } from "../../store/actions/cartActions";
 import CartProduct from "../../misc/CartProductCard/CartProduct";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
@@ -12,7 +12,6 @@ import Button from "../../misc/Button/Button";
 
 const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
   useEffect(() => {
-    console.log(cartProducts);
     setFullPrice(
       cartProducts.reduce(
         (acc, product) => acc + product.price * product.numberInCart,
@@ -23,7 +22,7 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
   return (
     <div className={s.container}>
       <FixedWrapper>
-        {!!cartProducts.length ? (
+        {cartProducts.length ? (
           <>
             <div className={s.products__container}>
               <div className={s.products__header}>
@@ -34,7 +33,7 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
                 <span>Видалити</span>
               </div>
               {cartProducts.map((product, i) => (
-                <CartProduct {...{ product }} key={i} />
+                <CartProduct {...{ product }} key={product._id} />
               ))}
             </div>
             <div className={s.actions__container}>
@@ -58,9 +57,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (product) => dispatch(addToCart(product)),
-    removeFromCart: (product) => dispatch(removeFromCart(product)),
-    setFullPrice: (fullPrice) => dispatch(setFullPrice(fullPrice)),
+    addToCart: (product) => dispatch(addToCartAction(product)),
+    removeFromCart: (product) => dispatch(removeFromCartAction(product)),
+    setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };
 

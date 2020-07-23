@@ -4,12 +4,18 @@ import Button from "../Button/Button";
 import { CSSTransition } from "react-transition-group";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faShoppingBag } from "@fortawesome/free-solid-svg-icons";
+import {
+  addToCartAction,
+  removeFromCartAction,
+} from "../../store/actions/cartActions";
+import { connect } from "react-redux";
 
 const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
   const { _id } = product;
 
   const isInCart = useMemo(
-    () => !!cartProducts.filter((product) => product._id === _id).length,
+    () =>
+      !!cartProducts.filter((cartProduct) => cartProduct._id === _id).length,
     [cartProducts, _id]
   );
 
@@ -45,7 +51,8 @@ const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
           ? `${s.card__button} ${s.active__card__button} `
           : s.card__button
       }
-      isRound={true}
+      isRound
+      size="sm"
       onClick={isInCart ? removeFromCartHandler : addToCartHandler}
     >
       <CSSTransition
@@ -64,4 +71,17 @@ const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
   );
 };
 
-export default CartButton;
+const mapStateToProps = (state) => {
+  return {
+    cartProducts: state.cart.all,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (product) => dispatch(addToCartAction(product)),
+    removeFromCart: (product) => dispatch(removeFromCartAction(product)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CartButton);

@@ -35,6 +35,6 @@
   background: #b3b3b3;
 }
 
-.active__card__button {
+.card__button.active__card__button {
   background: #00e92f;
 }

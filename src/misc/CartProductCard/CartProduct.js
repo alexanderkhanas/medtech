@@ -5,8 +5,8 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Counter from "../Counter/Counter";
 import {
-  changeNumberInCart,
-  removeFromCart,
+  changeNumberInCartAction,
+  removeFromCartAction,
 } from "../../store/actions/cartActions";
 
 const CartProduct = ({
@@ -58,8 +58,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeNumberInCart: (value, id) => dispatch(changeNumberInCart(value, id)),
-    removeFromCart: (product) => dispatch(removeFromCart(product)),
+    changeNumberInCart: (value, id) =>
+      dispatch(changeNumberInCartAction(value, id)),
+    removeFromCart: (product) => dispatch(removeFromCartAction(product)),
   };
 };
 

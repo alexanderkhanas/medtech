@@ -5,6 +5,7 @@
   border: 0.5px solid #7e858037;
   padding: 10px 15px;
   flex-grow: 1;
+  height: 100%;
 }
 
 .input::placeholder {

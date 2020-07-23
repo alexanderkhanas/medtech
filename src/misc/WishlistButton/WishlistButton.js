@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
-import s from "./WishlistButton.module.css";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as fasHeart } from "@fortawesome/free-regular-svg-icons";
+import s from "./WishlistButton.module.css";
 import {
-  addToWishlist,
-  removeFromWishlist,
+  addToWishlistAction,
+  removeFromWishlistAction,
 } from "../../store/actions/wishlistActions";
 
 const WishlistButton = ({
@@ -14,6 +14,8 @@ const WishlistButton = ({
   addToWishlist,
   removeFromWishlist,
   wishlistProducts,
+  className,
+  ...rest
 }) => {
   const { _id } = product;
   const isInWishlist = useMemo(
@@ -21,13 +23,15 @@ const WishlistButton = ({
     [_id, wishlistProducts]
   );
 
-  const switchWishlist = () =>
-    isInWishlist ? removeFromWishlist(product) : addToWishlist(product);
+  const switchWishlist = () => {
+    return isInWishlist ? removeFromWishlist(product) : addToWishlist(product);
+  };
   return (
     <FontAwesomeIcon
       icon={isInWishlist ? faHeart : fasHeart}
       onClick={switchWishlist}
-      className={s.icon}
+      className={`${s.icon} ${className}`}
+      {...rest}
     />
   );
 };
@@ -39,8 +43,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToWishlist: (product) => dispatch(addToWishlist(product)),
-    removeFromWishlist: (product) => dispatch(removeFromWishlist(product)),
+    addToWishlist: (product) => dispatch(addToWishlistAction(product)),
+    removeFromWishlist: (product) =>
+      dispatch(removeFromWishlistAction(product)),
   };
 };
 

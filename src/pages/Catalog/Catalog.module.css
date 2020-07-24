@@ -121,12 +121,36 @@
   text-align: center;
 }
 
+.product__card {
+  width: 47%;
+}
+
 @media (max-width: 550px) {
   .product__card {
-    flex-grow: 1;
     height: initial;
+    width: 100%;
+  }
+  .filter__container {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
   .container {
     flex-direction: column;
+  }
+  .main__content {
+    width: 100%;
+  }
+  .change__view__container {
+    display: none;
+  }
+  .actions__container {
+    margin: 20px 0;
+  }
+  .sort__container {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
 }

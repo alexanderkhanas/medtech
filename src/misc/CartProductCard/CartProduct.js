@@ -21,10 +21,18 @@ const CartProduct = ({
     changeNumberInCart(value, _id, allProductsInCart);
 
   const removeFromCartHandler = () => removeFromCart(product);
+
+  const isBase64 = gallery[0]?.includes("base64");
+  console.log(`data:image/png;base64, ${gallery[0]}`);
+
   return (
     <div className={s.card}>
       <div className={s.main}>
-        <img className={s.img} src={gallery[0]} alt="loading" />
+        <img
+          className={s.img}
+          src="https://i.ibb.co/27WPrWh/i1.png"
+          alt="loading"
+        />
         <div className={s.main__content}>
           <h4 className={s.title}>{title.slice(0, 15)}</h4>
           <p className={s.category}>{desc.slice(0, 20)}</p>
@@ -47,6 +55,15 @@ const CartProduct = ({
           onClick={removeFromCartHandler}
           className={s.remove__icon}
         />
+      </div>
+
+      <div className={s.mobile}>
+        <div className={s.fullprice__container}>
+          <span className={s.fullprice}>{numberInCart * price}₴</span>
+        </div>
+        <div className={s.qty__counter}>
+          <Counter onChange={onCounterChange} initialValue={numberInCart} />
+        </div>
       </div>
     </div>
   );

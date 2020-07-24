@@ -20,6 +20,7 @@ const Input = ({
   onBlur = () => {},
   style = {},
   inputStyle = {},
+  placeholder = "",
 }) => {
   const [isFocused, setFocused] = useState(false);
   const focusHandler = () => {
@@ -39,7 +40,8 @@ const Input = ({
         className={s.input}
         onFocus={focusHandler}
         onBlur={blurHandler}
-        defaultValue={defaultValue}
+        {...{ defaultValue }}
+        {...{ placeholder }}
       />
     </div>
   ) : (
@@ -63,6 +65,7 @@ const Input = ({
           {...{ style }}
           type={type || "text"}
           alt="loading"
+          {...{ placeholder }}
           onFocus={focusHandler}
           onBlur={blurHandler}
           className={`${s.input} ${s.input_with_icon}`}

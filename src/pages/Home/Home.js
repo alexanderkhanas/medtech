@@ -28,10 +28,10 @@ const Home = ({ products, recentNews }) => {
     <div>
       <ImageCarousel
         images={[
-          "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider-sm3_767x.jpg?v=1543380475",
-          "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider01_2000x.jpg?v=1543380436",
           "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider02_2000x.jpg?v=1543380453",
           "https://vsetrts.ru/images/article/1568969241-3.jpg",
+          "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider-sm3_767x.jpg?v=1543380475",
+          "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider01_2000x.jpg?v=1543380436",
         ]}
       />
       <FixedWrapper className={s.tabs__container}>

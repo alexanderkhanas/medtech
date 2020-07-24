@@ -46,7 +46,9 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
             </div>
           </>
         ) : (
-          <h1 className={s.empty__cart__msg}>Поки що ваш кошик порожній</h1>
+          <div className={s.empty__cart__msg__container}>
+            <h1 className={s.empty__cart__msg}>Поки що ваш кошик порожній</h1>
+          </div>
         )}
       </FixedWrapper>
     </div>

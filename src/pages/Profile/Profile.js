@@ -62,13 +62,14 @@ function Profile(props) {
       setUserData((prev) => ({ ...prev, gallery: file }));
     }
   };
+
   const handleSubmit = () => {
     _axios
       .patch("/user/:id", { userData })
       .then((res) => {
         console.log(res);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -87,7 +88,7 @@ function Profile(props) {
                 (item, i) => (
                   <Tab
                     onClick={() => setActiveTabIndex(i)}
-                    key={i}
+                    key={item + i}
                     className={
                       activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
                     }
@@ -120,6 +121,7 @@ function Profile(props) {
                           >
                             <img
                               ref={uploadedImage}
+                              alt=""
                               style={{
                                 width: "100%",
                                 height: "100%",
@@ -140,8 +142,9 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Ім'я"
-                          val={"firstName"}
+                          val="firstName"
                           icon={faUser}
+                          placeholder="John"
                           onChange={(e) =>
                             setUserData((prev) => ({
                               ...prev,
@@ -153,7 +156,8 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Прізвище"
-                          val={"lName"}
+                          val="lName"
+                          placeholder="Doe"
                           icon={faAddressCard}
                           onChange={(e) =>
                             setUserData((prev) => ({
@@ -166,7 +170,8 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="По-батькові"
-                          val={"fatherName"}
+                          val="fatherName"
+                          placeholder="JohnDoevich"
                           icon={faAddressCard}
                           onChange={(e) =>
                             setUserData(e.target.value.fatherName)
@@ -176,8 +181,8 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Номер телефону"
-                          val={"phone"}
-                          type={"tel"}
+                          val="phone"
+                          type="tel"
                           icon={faPhoneAlt}
                           onChange={(e) =>
                             setUserData((prev) => ({
@@ -189,7 +194,7 @@ function Profile(props) {
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
-                          val={"Електронна адреса"}
+                          val="Електронна адреса"
                           label="E-mail"
                           icon={faEnvelope}
                           onChange={(e) =>
@@ -225,7 +230,7 @@ function Profile(props) {
                     <div className={s.profile__info__fields}>
                       <div className={s.profile__info__title}>
                         <div className={s.image_upload}>
-                          <label for="file-input">
+                          <label htmlFor="file-input">
                             <FontAwesomeIcon
                               icon={faUserCircle}
                               className={s.profile__img}
@@ -248,7 +253,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Місто"
-                          val={"city"}
+                          val="city"
                           icon={faCity}
                           //   defaultValue={profileInfo.firstName}
                           //   onChange={onChange}
@@ -257,7 +262,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Вулиця"
-                          val={"street"}
+                          val="street"
                           icon={faStreetView}
                           //   defaultValue={profileInfo.lastName}
                           //   onChange={onChange}
@@ -266,7 +271,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Будинок"
-                          val={"house"}
+                          val="house"
                           icon={faHouseUser}
                           //   defaultValue={profileInfo.lastName}
                           //   onChange={onChange}
@@ -275,7 +280,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Квартира"
-                          val={"apartment"}
+                          val="apartment"
                           icon={faBuilding}
                           //   defaultValue={profileInfo.phone}
                           //   onChange={onChange}
@@ -284,7 +289,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Поштовий індекс"
-                          val={"zip-code"}
+                          val="zip-code"
                           icon={faKeyboard}
                           //   defaultValue={profileInfo.email}
                           //   onChange={onChange}
@@ -293,7 +298,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Склад Нової пошти"
-                          val={"np-number"}
+                          val="np-number"
                           icon={faMailBulk}
                           //   defaultValue={profileInfo.email}
                           //   onChange={onChange}

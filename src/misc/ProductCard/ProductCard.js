@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import s from "./ProductCard.module.css";
 import { connect } from "react-redux";
 import {
@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import classnames from "classnames";
 import CartButton from "../CartButton/CartButton";
 import WishlistButton from "../WishlistButton/WishlistButton";
+import ImageUploader from "react-images-upload";
 
 const ProductCard = ({
   product,
@@ -26,16 +27,20 @@ const ProductCard = ({
 
   const redirectToSingleProduct = () => history.push(`/product/${_id}`);
 
+  const isBase64 = gallery[0]?.includes("base64");
+  console.log("product ===", product);
+  console.log("is base64 ===", isBase64);
+
+  console.log(`data:image/png;base64, ${gallery[0]}`);
+
   return (
     <div className={classnames(s.card, className)}>
-      <div className={s.wishlist__container}>
-        <WishlistButton {...{ product }} className={s.wishlist__button} />
-      </div>
+      <div className={s.wishlist__container}></div>
       <div className={s.card__main}>
         <img
           className={s.card__img}
           onClick={redirectToSingleProduct}
-          src={gallery[0]}
+          src="https://i.ibb.co/27WPrWh/i1.png"
           alt=""
         />
       </div>
@@ -46,7 +51,8 @@ const ProductCard = ({
         <div className={s.card__price__container}>
           <span className={s.card__price}>{`${price} ₴`}</span>
           <div>
-            <CartButton {...{ product }} {...{ showAttributesAlert }} />
+            <WishlistButton {...{ product }} className={s.wishlist__button} />
+            {/* <CartButton {...{ product }} {...{ showAttributesAlert }} /> */}
             {isAttributesAlert && <div className={s.attribute__alert}></div>}
           </div>
         </div>

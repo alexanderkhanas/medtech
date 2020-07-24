@@ -25,7 +25,7 @@
 .actions__container {
   display: flex;
   justify-content: space-between;
-  padding: 30px 0;
+  padding: 30px 2px;
 }
 
 .actions__price {
@@ -33,4 +33,24 @@
   color: #019682;
   font-weight: bold;
   font-family: Roboto;
+  padding: 0;
+}
+
+.empty__cart__msg__container {
+  height: 80vh;
+  width: 100vw;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 575px) {
+  .products__header {
+    display: none;
+  }
+  .actions__container {
+    margin-top: 20px;
+  }
 }

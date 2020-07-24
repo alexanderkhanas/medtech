@@ -11,6 +11,10 @@
   align-items: center;
 }
 
+.mobile {
+  display: none;
+}
+
 .card .main {
   flex: 2;
   display: flex;
@@ -44,4 +48,29 @@
   font-size: 25px;
   color: #404040;
   cursor: pointer;
+}
+
+@media (max-width: 575px) {
+  .card {
+    flex-direction: column;
+  }
+  .actions__container {
+    margin: 15px 0;
+  }
+  .img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .card .price__wrapper,
+  .card .qty__counter__wrapper,
+  .card .fullprice__container,
+  .card .remove__icon__wrapper {
+    display: none;
+  }
+
+  .mobile .qty__counter__wrapper,
+  .mobile .fullprice__container {
+    display: block;
+  }
 }

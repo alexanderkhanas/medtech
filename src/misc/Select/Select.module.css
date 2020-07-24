@@ -36,3 +36,9 @@
 .option__text {
   font-weight: 300;
 }
+
+@media (max-width: 575px) {
+  .container {
+    width: 200px;
+  }
+}

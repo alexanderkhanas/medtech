@@ -11,6 +11,7 @@ import {
   faExclamationCircle,
   faArrowLeft,
   faHome,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, ErrorMessage } from "formik";
 import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
@@ -50,7 +51,9 @@ const Register = () => {
         }}
         validate={(values) => {
           const errors = {};
-          if (values.fName.length <= 1) {
+          console.log(values);
+          if (!values.fName || values.fName.length <= 1) {
+            console.log("here");
             errors.fName = "Занадто коротке Ім'я";
           } else if (/[0-9._%+-]$/i.test(values.fName)) {
             errors.fName = "Невірно введенe Ім'я";
@@ -78,11 +81,12 @@ const Register = () => {
           if (values.password != values.passwordConfirm) {
             errors.passwordConfirm = "ne spivpadae";
           }
+          console.log("errors ===", errors);
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
           alert(JSON.stringify(values));
-          prompt("TU Chui?");
+          // prompt("TU Chui?");
           const { fName, lName, fatherName, phone, password, email } = values;
           _axios
             .post("/register", {
@@ -112,6 +116,7 @@ const Register = () => {
           handleChange,
           handleBlur,
           handleSubmit,
+          handleFocus,
           isSubmiting,
         }) => {
           // console.log("values :", values);
@@ -127,6 +132,7 @@ const Register = () => {
               className={`${s.icon} ${s.error__icon}`}
             />
           );
+          console.log(errors);
           return (
             <form onSubmit={handleSubmit}>
               <div className={s.body}>
@@ -145,7 +151,14 @@ const Register = () => {
                             value={values.fName}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            Icon={!errors.fName ? SuccessIcon : ErrorIcon}
+                            onFocus={handleFocus}
+                            // Icon={
+                            //   !errors.fName && touched.fName
+                            //     ? SuccessIcon
+                            //     : touched.fName && errors.fName
+                            //     ? ErrorIcon
+                            //     : () => <div />
+                            // }
                           />
                         </div>
                         <div className={s.login}>
@@ -155,7 +168,13 @@ const Register = () => {
                             value={values.lName}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            Icon={!errors.lName ? SuccessIcon : ErrorIcon}
+                            // Icon={
+                            //   !errors.lName && touched.lName
+                            //     ? SuccessIcon
+                            //     : touched.lName && errors.lName
+                            //     ? ErrorIcon
+                            //     : () => <div />
+                            // }
                           />
                         </div>
                         <div className={s.login}>
@@ -165,7 +184,13 @@ const Register = () => {
                             value={values.fatherName}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            Icon={!errors.fatherName ? SuccessIcon : ErrorIcon}
+                            // Icon={
+                            //   !errors.fatherName && touched.fatherName
+                            //     ? SuccessIcon
+                            //     : touched.fatherName && errors.fatherName
+                            //     ? ErrorIcon
+                            //     : () => <div />
+                            // }
                           />
                         </div>
 
@@ -176,7 +201,13 @@ const Register = () => {
                           <Input
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            Icon={!errors.email ? SuccessIcon : ErrorIcon}
+                            // Icon={
+                            //   !errors.email && touched.email
+                            //     ? SuccessIcon
+                            //     : touched.email && errors.email
+                            //     ? ErrorIcon
+                            //     : () => <div />
+                            // }
                             name="email"
                             value={values.email}
                             type="email"
@@ -187,7 +218,13 @@ const Register = () => {
                           <Input
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            Icon={!errors.password ? SuccessIcon : ErrorIcon}
+                            // Icon={
+                            //   !errors.password && touched.password
+                            //     ? SuccessIcon
+                            //     : touched.password && errors.password
+                            //     ? ErrorIcon
+                            //     : () => <div />
+                            // }
                             name="password"
                             value={values.password}
                             type="password"
@@ -199,9 +236,14 @@ const Register = () => {
                         <Input
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          Icon={
-                            !errors.passwordConfirm ? SuccessIcon : ErrorIcon
-                          }
+                          // Icon={
+                          //   !errors.passwordConfirm && touched.passwordConfirm
+                          //     ? SuccessIcon
+                          //     : touched.passwordConfirm &&
+                          //       errors.passwordConfirm
+                          //     ? ErrorIcon
+                          //     : () => <div />
+                          // }
                           name="passwordConfirm"
                           value={values.passwordConfirm}
                           type="password"
@@ -211,6 +253,8 @@ const Register = () => {
                       <div className={s.check_box}>
                         <p>
                           <input
+                            icon={faCheck}
+                            className={s.faCheck}
                             type="checkbox"
                             name="chexbox"
                             onChange={agreeCheckbox}
@@ -234,7 +278,10 @@ const Register = () => {
                           h.goBack();
                         }}
                       >
-                        <FontAwesomeIcon icon={faArrowLeft} />
+                        <FontAwesomeIcon
+                          icon={faArrowLeft}
+                          className={s.faArrowLeft}
+                        />
                         Продовжити покупки
                       </button>
                       <div className={s.logwith}>

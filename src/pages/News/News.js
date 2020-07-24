@@ -25,7 +25,7 @@ const News = ({ recentNews }) => {
       </div>
       <FixedWrapper>
         <div className={s.section}>
-          <h3 className={s.section__title}>Новини</h3>
+          {/* <h3 className={s.section__title}>Новини</h3> */}
           <div className={s.news__container}>
             {recentNews.map((newsItem, i) => (
               <NewsCard {...{ newsItem }} key={newsItem._id} />

@@ -131,12 +131,13 @@ p {
 }
 .image_upload > input {
   display: none;
+  color: #02ab6b;
 }
 
 .image_upload {
   font-size: 1.3rem;
   padding: 10px;
-  color: #fff8f8;
+  color: #02ab6b;
   cursor: pointer;
 }
 .tabs {
@@ -165,6 +166,17 @@ p {
   flex-wrap: wrap;
   flex-flow: row wrap;
 }
+
+.container_title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+/* .container_title.mobile {
+  display: none;
+}
+.container_title {
+  display: block;
+} */
 
 @keyframes move {
   0% {
@@ -203,6 +215,12 @@ p {
   .profile__info__field {
     margin-top: 5px;
   }
+  .container_title {
+    font-size: initial;
+  }
+  /* .container_title.mobile {
+    display: block;
+  } */
   .profile__main {
     margin-top: 0px;
   }

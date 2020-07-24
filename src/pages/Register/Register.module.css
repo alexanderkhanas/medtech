@@ -96,9 +96,18 @@ button {
   width: 300px;
 }
 .check_box {
-  padding: 20px;
+  color: gray;
+  padding: 10px;
   font-size: smaller;
+}
+.faCheck {
+  margin-right: 2px;
+  margin-bottom: 2px;
+  zoom: 0.5px;
 }
 .goback {
   color: gray;
+}
+.faArrowLeft {
+  margin-right: 2px;
 }

@@ -56,7 +56,7 @@ const RestorePassord = () => {
                 h.goBack();
               }}
             >
-              <FontAwesomeIcon icon={faArrowLeft} />
+              <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
               Повернутись
             </button>
           </div>

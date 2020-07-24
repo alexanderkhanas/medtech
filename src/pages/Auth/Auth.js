@@ -51,7 +51,7 @@ const Auth = () => {
         }}
         onSubmit={(values, { setSubmitting }) => {
           alert(JSON.stringify(values));
-          prompt("123");
+          // prompt("123");
           const { email, password } = values;
           _axios
             .post("/login", {
@@ -107,7 +107,7 @@ const Auth = () => {
                         <Input
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          Icon={!errors.email ? SuccessIcon : ErrorIcon}
+                          // Icon={!errors.email ? SuccessIcon : ErrorIcon}
                           name="email"
                           value={values.email}
                           type="email"
@@ -118,7 +118,7 @@ const Auth = () => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             type="password"
-                            Icon={!errors.password ? SuccessIcon : ErrorIcon}
+                            // Icon={!errors.password ? SuccessIcon : ErrorIcon}
                             name="password"
                             value={values.password}
                             placeholder="••••••••"

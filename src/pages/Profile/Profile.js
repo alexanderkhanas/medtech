@@ -102,9 +102,13 @@ function Profile(props) {
                 <div className={s.profile__main}>
                   <div className={s.profile__info}>
                     <div className={s.profile__info__fields}>
+                      {/* <span className={s.container_title.mobile}>
+                        Персональні дані
+                      </span> */}
                       <div className={s.profile__info__title}>
                         <div className={s.image_upload}>
                           <input
+                            placeholder="+"
                             type="file"
                             accept="image/*"
                             onChange={handleImageUpload}
@@ -129,7 +133,9 @@ function Profile(props) {
                             />
                           </div>
                         </div>
-                        <span>Персональні дані</span>
+                        <div className={s.container_title}>
+                          Персональні дані
+                        </div>
                         <FontAwesomeIcon
                           icon={faSignOutAlt}
                           //   onClick={logout}

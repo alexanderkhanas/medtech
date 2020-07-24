@@ -53,6 +53,7 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
   return (
     <Router>
       <Header />
+      <div style = {{marginTop: "45px"}}>
       <Suspense fallback={<div>loading</div>}>
         <Switch>
           <Route path="/" exact component={Home} />
@@ -87,6 +88,7 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
         </Switch>
       </Suspense>
       <Footer />
+      </div>
     </Router>
   );
 };

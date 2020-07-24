@@ -16,6 +16,7 @@ const Home = ({ products, recentNews }) => {
     popularProducts,
     newProducts,
     allProducts,
+    cartProducts,
   } = products;
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -52,7 +53,6 @@ const Home = ({ products, recentNews }) => {
             <TabPanel className={s.tab__panel}>
               <ItemsCarousel
                 arrows
-                offset={10}
                 slidesPerPage={Math.floor(window.innerWidth / 350)}
                 infinite
               >
@@ -64,12 +64,11 @@ const Home = ({ products, recentNews }) => {
             <TabPanel className={s.tab__panel}>
               <ItemsCarousel
                 arrows
-                offset={10}
                 slidesPerPage={Math.floor(window.innerWidth / 350)}
                 infinite
               >
                 {popularProducts.map((product, i) => (
-                  <ProductCard key={i} {...{ product }} />
+                  <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
             </TabPanel>
@@ -82,7 +81,7 @@ const Home = ({ products, recentNews }) => {
                 infinite
               >
                 {bestRatingProducts.map((product, i) => (
-                  <ProductCard key={i} {...{ product }} />
+                  <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
             </TabPanel>

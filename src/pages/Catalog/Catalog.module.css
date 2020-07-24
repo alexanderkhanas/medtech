@@ -27,11 +27,15 @@
 }
 
 .filter__container {
-  display: flex;
-  flex-direction: column;
-  width: 23%;
-  padding: 20px;
-  margin-right: 2%;
+  width: 27%;
+  margin-right: 3.5%;
+  margin-top: 20px;
+}
+
+.filter__body {
+  padding: 25px;
+  box-shadow: -2px 2px 5px 2px #6a6a6a3f;
+  border-radius: 10px;
 }
 
 .filter__title {
@@ -46,7 +50,7 @@
 }
 
 .main__content {
-  width: 75%;
+  width: 69.5%;
 }
 
 .actions__container {

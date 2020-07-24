@@ -19,6 +19,8 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
       )
     );
   }, [cartProducts]);
+  console.log("cartProducts ===", cartProducts);
+
   return (
     <div className={s.container}>
       <FixedWrapper>
@@ -38,7 +40,9 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
             </div>
             <div className={s.actions__container}>
               <h2 className={s.actions__price}>{`${fullPrice} ₴`}</h2>
-              <Button title="Купити" size="xl" isUppercase />
+              <div>
+                <Button title="Купити" size="xl" isUppercase />
+              </div>
             </div>
           </>
         ) : (

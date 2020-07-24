@@ -20,7 +20,7 @@
   flex-wrap: wrap;
   justify-content: center;
   font-family: Roboto;
-  margin-bottom: 20px;
+  margin: 20px 0 40px 0;
 }
 
 .tab {

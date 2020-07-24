@@ -7,6 +7,7 @@ import HorizontalProductCard from "../../misc/HorizontalProductCard/HorizontalPr
 import {
   getProductsByPage,
   filterProductsAction,
+  getCategoriesAction,
 } from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import Category from "../../misc/Category/Category";
@@ -16,6 +17,8 @@ import { faTh, faList } from "@fortawesome/free-solid-svg-icons";
 import Select from "../../misc/Select/Select";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import { setLoadingAction } from "../../store/actions/baseActions";
+import { SET_FILTERED_PRODUCTS } from "../../store/actions/actionTypes";
+import CategoryAccordion from "../../misc/CategoryAccordion/CategoryAccordion";
 
 const sortSelectOption = [
   { value: "recommended", label: "Рекомендовані" },
@@ -30,30 +33,92 @@ const Catalog = ({
   recommendedProducts,
   filterProducts,
   isLoading,
+  getCategories,
+  categories,
 }) => {
   const [productViewType, setProductViewType] = useState("column");
   const [sortType, setSortType] = useState(sortSelectOption[0]);
   const containerRef = useRef();
+  const [sortedCategories, setSortedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const onPageChange = async ({ selected }) => {
+  const onPageChange = ({ selected }) => {
     getProductsByPage(selected + 1);
     scrollToRef(containerRef);
   };
 
-  const onSortTypeChange = async (value) => {
+  const onSortTypeChange = (value) => {
     setSortType(value);
+  };
+
+  const selectCategory = (categoryTitle) => {
+    setSelectedCategories((prev) => [...prev, categoryTitle]);
+  };
+
+  const removeCategory = (categoryTitle) => {
+    setSelectedCategories((prev) =>
+      prev.filter((selectedCategory) => selectedCategory !== categoryTitle)
+    );
   };
 
   const switchProductViewType = () =>
     setProductViewType((prev) => (prev === "row" ? "column" : "row"));
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getCategories();
+  }, []);
 
-  console.log("recommendedProducts ===", recommendedProducts);
-  console.log("filteredProducts ===", filteredProducts);
-  console.log("isLoading", isLoading);
+  useEffect(() => {
+    let filtered = categories.map((category) => {
+      const categoryCopy = { ...category };
+      return !category.parent.length && !category.sub.length
+        ? { ...categoryCopy, subchilds: [], childs: {} }
+        : null;
+    });
+
+    filtered = filtered.filter((el) => !!el);
+
+    categories.forEach((category) => {
+      if (category.parent.length && !category.sub.length) {
+        Object.keys(filtered).forEach((key) => {
+          if (filtered[key]._id === category.parent[0]._id) {
+            filtered[key].subchilds = [...filtered[key].subchilds, category];
+          }
+        });
+      }
+    });
+    Object.keys(filtered).forEach((key) => {
+      const parent = filtered[key];
+      parent.subchilds.forEach((subchild) => {
+        categories.forEach((category, i) => {
+          if (category.sub.length) {
+            if (subchild._id === category.sub[0]._id) {
+              let childKey = parent.childs[subchild._id];
+              childKey = parent.childs[subchild._id] || [];
+              parent.childs = {
+                ...parent.childs,
+                [subchild._id]: [...childKey, category],
+              };
+            }
+          }
+        });
+      });
+    });
+    setSortedCategories(filtered);
+  }, [categories]);
 
   const isEmptyResults = !filteredProducts.length && !isLoading;
+
+  useEffect(() => {
+    console.log("selectedCategories ===", selectedCategories);
+  }, [selectedCategories]);
+
+  /*
+  array.map((el) => (
+    <div className = {el.id === "x" ? "lyaps" : "chinanen"}>
+    </div>
+  ))
+  */
 
   return (
     <div>
@@ -63,16 +128,19 @@ const Catalog = ({
       <FixedWrapper>
         <div className={s.container} ref={containerRef}>
           <div className={s.filter__container}>
-            <h3 className={s.filter__title}>Фільтр</h3>
-            <div className={s.filter__categories}>
-              {["Support Stick", "Digital Thermometer"].map((category, i) => (
-                <Category
-                  // onClick={() => filterProducts()}
-                  {...{ category }}
-                  subcategories={{}}
-                  key={i}
-                />
-              ))}
+            <div className={s.filter__body}>
+              <h3 className={s.filter__title}>Фільтр</h3>
+              <div className={s.filter__categories}>
+                {sortedCategories.map((parent) => (
+                  <CategoryAccordion
+                    {...{ selectCategory }}
+                    {...{ removeCategory }}
+                    {...{ selectedCategories }}
+                    {...{ parent }}
+                    key={parent._id}
+                  />
+                ))}
+              </div>
             </div>
           </div>
           <div className={s.main__content}>
@@ -158,6 +226,7 @@ const mapStateToProps = (state) => {
     filteredProductsQuantity: state.products.filteredQuantity,
     recommendedProducts: state.products.recommended,
     isLoading: state.base.isLoading,
+    categories: state.products.categories,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -166,6 +235,7 @@ const mapDispatchToProps = (dispatch) => {
     filterProducts: (categoryId, searchValue) =>
       dispatch(filterProductsAction(categoryId, searchValue)),
     setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
+    getCategories: () => dispatch(getCategoriesAction()),
   };
 };
 

@@ -24,6 +24,12 @@
   padding: 0;
   width: 45px;
   height: 45px;
+  position: relative;
+}
+
+.full__size__button {
+  width: initial;
+  height: initial;
 }
 
 .card__cart__icon {
@@ -37,4 +43,12 @@
 
 .card__button.active__card__button {
   background: #00e92f;
+}
+
+/*alert*/
+.attribute__alert {
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  background: #000;
 }

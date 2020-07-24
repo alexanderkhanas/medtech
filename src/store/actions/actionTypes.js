@@ -13,3 +13,4 @@ export const REMOVE_FROM_WISHLIST = "REMOVE_FROM_WISHLIST";
 export const SET_WISHLIST = "SET_WISHLIST";
 export const SET_SEARCH = "SET_SEARCH";
 export const SET_LOADING = "SET_LOADING";
+export const SET_CATEGORIES = "SET_CATEGORIES";

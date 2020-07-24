@@ -37,6 +37,11 @@
   font-size: initial;
   padding-left: 4px;
 }
+
+.a p {
+  transition: 0.1s;
+}
+
 .a p:hover {
   color: #019682;
 }
@@ -64,6 +69,7 @@ p {
 }
 .bottom__inf p {
   color: white;
+  transition: 0.1s;
 }
 .bottom__inf p:hover {
   color: #019682;

@@ -4,6 +4,7 @@ import {
   SET_RECOMMENDED,
   SET_NEW,
   SET_FILTERED_PRODUCTS,
+  SET_CATEGORIES,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -87,6 +88,7 @@ const initialState = {
   new: [],
   all: [],
   filtered: [],
+  categories: [],
   filteredQuantity: null,
   quantity: null,
 };
@@ -116,6 +118,11 @@ export default (state = initialState, action) => {
         ...state,
         filtered: action.products,
         filteredQuantity: action.quantity,
+      };
+    case SET_CATEGORIES:
+      return {
+        ...state,
+        categories: action.categories,
       };
     default:
       return state;

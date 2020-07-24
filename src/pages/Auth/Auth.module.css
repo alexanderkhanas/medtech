@@ -43,7 +43,7 @@
 }
 
 .password {
-  padding-top: 10px;
+  margin-top: 10px;
 }
 
 .fbt {
@@ -70,7 +70,7 @@
   margin-right: 10px;
 }
 .fakey {
-  margin-left: 5px;
+  padding-right: 5px;
 }
 
 .error__icon {
@@ -89,7 +89,9 @@
   padding: 10px;
   color: gray;
 }
-
+.goBack {
+  margin-right: 2px;
+}
 .reg,
 button {
   border: none;

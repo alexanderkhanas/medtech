@@ -3,6 +3,7 @@ import {
   fetchProductsByPage,
   searchProductsRequest,
   fetchFilteredProducts,
+  fetchCategories,
 } from "../api/api";
 import {
   SET_PRODUCTS,
@@ -11,6 +12,7 @@ import {
   SET_FILTERED_PRODUCTS,
   SET_SEARCH,
   SET_LOADING,
+  SET_CATEGORIES,
 } from "./actionTypes";
 import _axios from "../api/_axios";
 
@@ -71,5 +73,13 @@ export const getProductsBySearch = (value) => {
     const response = await searchProductsRequest(value);
     console.log("search response ===", response.data);
     dispatch({ type: SET_SEARCH, products: response.data });
+  };
+};
+
+export const getCategoriesAction = () => {
+  return async (dispatch) => {
+    const response = await fetchCategories();
+    console.log("categories ===", response.data);
+    dispatch({ type: SET_CATEGORIES, categories: response.data });
   };
 };

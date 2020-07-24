@@ -16,6 +16,7 @@ const CartProduct = ({
   allProductsInCart,
 }) => {
   const { gallery, title, price, _id, desc, numberInCart = 1 } = product;
+
   const onCounterChange = (value) =>
     changeNumberInCart(value, _id, allProductsInCart);
 
@@ -58,8 +59,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeNumberInCart: (value, id) =>
-      dispatch(changeNumberInCartAction(value, id)),
+    changeNumberInCart: (value, id, allProducts) =>
+      dispatch(changeNumberInCartAction(value, id, allProducts)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
   };
 };

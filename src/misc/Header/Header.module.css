@@ -52,11 +52,15 @@ header {
   color: #404040;
   font-family: Roboto;
   font-weight: 300;
-  margin-right: 15px;
+  margin-right: 25px;
+}
+
+.nav__link__active {
+  color: #009d66;
 }
 
 .nav__link:hover {
-  color: #009d66;
+  color: #009d6684;
 }
 
 .site_nav {

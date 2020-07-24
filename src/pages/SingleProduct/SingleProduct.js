@@ -10,8 +10,22 @@ import lodash from "lodash";
 import _axios from "../../store/api/_axios";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import Stars from "../../misc/Stars/Stars";
+import CartButton from "../../misc/CartButton/CartButton";
+import Button from "../../misc/Button/Button";
+import {
+  addToCartAction,
+  removeFromCartAction,
+} from "../../store/actions/cartActions";
+import classnames from "classnames";
 
-const SingleProduct = ({ match, getProduct, product = {} }) => {
+const SingleProduct = ({
+  match,
+  getProduct,
+  product = {},
+  cartProducts,
+  addToCart,
+  removeFromCart,
+}) => {
   //state
   const {
     price,
@@ -24,18 +38,32 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
     quantity,
     attr: attributes,
     reviews,
+    _id,
     attrOptions: attributeOptions,
   } = product || {};
 
   const [filteredAttributes, setFilteredAttributes] = useState({});
   const [selectedAttributes, setSelectedAttributes] = useState({});
-
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [priceInfo, setPriceInfo] = useState({ value: null, string: "" });
+  const [isInCart, setInCart] = useState(false);
 
   //functions
-  const selectAttribute = (name, value) =>
+  const selectAttribute = (name, value) => {
     setSelectedAttributes((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const onCartButtonClick = () => {
+    if (!priceInfo.value) {
+      console.log("ХА КУ");
+      return;
+    }
+    if (isInCart) {
+      removeFromCart(product);
+    } else {
+      addToCart({ ...product, selectedAttributes });
+    }
+  };
 
   //effects
   useEffect(() => {
@@ -43,18 +71,23 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
   }, []);
 
   useEffect(() => {
+    const productFromCart = cartProducts.filter(
+      (cartProduct) => cartProduct._id === _id
+    )[0];
+    console.log("productFromCart ===", productFromCart);
+
+    setInCart(!!productFromCart);
+  }, [cartProducts]);
+
+  useEffect(() => {
     if (attributes) {
       const filteredObject = {};
       let minimumPrice = 0;
-      let maximumPrice = 0;
       Object.values(attributes).forEach((possibleAttribute, index) => {
         const fil = attributeOptions.map((attributesObj, i) => {
           if (index === 0) {
             if (!minimumPrice || minimumPrice > attributesObj.priceAttr) {
               minimumPrice = attributesObj.priceAttr;
-            }
-            if (!maximumPrice || maximumPrice < attributesObj.priceAttr) {
-              maximumPrice = attributesObj.priceAttr;
             }
           }
           return attributesObj[possibleAttribute];
@@ -63,7 +96,7 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
         filteredObject[possibleAttribute] = { all: map, active: null };
       });
       setPriceInfo({
-        string: `Від ${minimumPrice}₴ до ${maximumPrice}₴`,
+        string: `Від ${minimumPrice}₴`,
         value: null,
       });
       setFilteredAttributes(filteredObject);
@@ -102,6 +135,8 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
     qtyClassName = s.notInStock;
   }
 
+  console.log("product ===", product);
+
   return (
     !!product && (
       <FixedWrapper>
@@ -121,7 +156,18 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
             </div>
             <div className={s.desktop__info__container}>
               <h1 className={s.title}>{title}</h1>
-              <h2 className={s.price}>{priceInfo.string}</h2>
+              <div className={s.price__container}>
+                <h2 className={s.price}>{priceInfo.string}</h2>
+                <div>
+                  <Button
+                    title={isInCart ? "В кошику" : "Додати в кошик"}
+                    className={classnames({
+                      [s.active__cart__button]: isInCart,
+                    })}
+                    onClick={onCartButtonClick}
+                  />
+                </div>
+              </div>
               <p className={s.desc}>{desc.slice(0, 400)}</p>
               <div className={s.attributes__wrapper}>
                 {Object.entries(filteredAttributes).map((attributesObj, i) => {
@@ -141,7 +187,12 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
                   name="Країна виробника"
                   values={[vendorID.title]}
                 />
-                <ProductAttribute name="Категорія" values={[categoryID.desc]} />
+                {!!categoryID && (
+                  <ProductAttribute
+                    name="Категорія"
+                    values={[categoryID.desc]}
+                  />
+                )}
                 <ProductAttribute
                   name="Кількість"
                   attributeClasses={qtyClassName}
@@ -209,11 +260,14 @@ const SingleProduct = ({ match, getProduct, product = {} }) => {
 const mapStateToProps = (state) => {
   return {
     product: state.single.product,
+    cartProducts: state.cart.all,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     getProduct: (id) => dispatch(getSingleProductAction(id)),
+    addToCart: (product) => dispatch(addToCartAction(product)),
+    removeFromCart: (product) => dispatch(removeFromCartAction(product)),
   };
 };
 

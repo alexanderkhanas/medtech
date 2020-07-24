@@ -134,17 +134,22 @@ const Auth = () => {
                     </div>
 
                     <div className={s.fbt}>
-                      <button className={s.reg}>
-                        Зареєструватись
-                        <FontAwesomeIcon icon={faKey} className={s.faKey} />
-                      </button>
+                      <Link to="/register">
+                        <button className={s.reg}>
+                          Зареєструватись
+                          {/* <FontAwesomeIcon icon={faKey} className={s.faKey} /> */}
+                        </button>
+                      </Link>
                       <button
                         className={s.reg}
                         onClick={() => {
                           h.goBack();
                         }}
                       >
-                        <FontAwesomeIcon icon={faArrowLeft} />
+                        <FontAwesomeIcon
+                          icon={faArrowLeft}
+                          className={s.goBack}
+                        />
                         Продовжити покупки
                       </button>
                     </div>

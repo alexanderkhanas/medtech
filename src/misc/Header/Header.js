@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhone,
@@ -12,7 +12,7 @@ import {
 import logo from "../../assets/logo.svg";
 import s from "./Header.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, useHistory } from "react-router-dom";
 import { stack as Menu } from "react-burger-menu";
 import { CSSTransition } from "react-transition-group";
 import Input from "../Inputs/Input/Input";
@@ -30,7 +30,7 @@ const Header = ({ searchProductsByValue, foundProducts, history }) => {
   const [searchValue, setSearchValue] = useState("");
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [isCatalogPage, setCatalogPage] = useState(false);
-
+  const [activePath, setActivePath] = useState();
   const openSidebar = () => setBarOpen(true);
   const closeSidebar = () => setBarOpen(false);
   const onStateMenuChange = (state) => setBarOpen(state.isOpen);
@@ -47,22 +47,18 @@ const Header = ({ searchProductsByValue, foundProducts, history }) => {
   }, [searchValue]);
 
   useEffect(() => {
-    history.listen((location, action) => {
-      if (location.pathname.startsWith("/catalog")) {
-        setCatalogPage(true);
-      }
-      console.log("location ===", location);
-      console.log("action ===", action);
-    });
-  }, []);
-
-  useEffect(() => {
     if (typeof isBarOpen !== "boolean") return;
     setAnimation((prev) => !prev);
     setTimeout(() => {
       setSidebarIcon((prev) => (prev === faBars ? faTimes : faBars));
     }, 200);
   }, [isBarOpen]);
+
+  const { pathname } = history.location;
+
+  useEffect(() => {
+    window.scroll({ left: 0, top: 0 });
+  }, [pathname]);
 
   return (
     <>
@@ -92,16 +88,44 @@ const Header = ({ searchProductsByValue, foundProducts, history }) => {
           </header>
           <div className={s.menu_main_wrapper}>
             <div className={s.main__nav}>
-              <Link to="/" className={s.nav__link}>
+              <Link
+                to="/"
+                className={
+                  pathname === "/"
+                    ? `${s.nav__link} ${s.nav__link__active}`
+                    : s.nav__link
+                }
+              >
                 Головна
               </Link>
-              <Link to="/catalog" className={s.nav__link}>
+              <Link
+                to="/catalog"
+                className={
+                  pathname === "/catalog"
+                    ? `${s.nav__link} ${s.nav__link__active}`
+                    : s.nav__link
+                }
+              >
                 Каталог
               </Link>
-              <Link to="/wishlist" className={s.nav__link}>
+              <Link
+                to="/wishlist"
+                className={
+                  pathname === "/wishlist"
+                    ? `${s.nav__link} ${s.nav__link__active}`
+                    : s.nav__link
+                }
+              >
                 Улюблені
               </Link>
-              <Link to="/cart" className={s.nav__link}>
+              <Link
+                to="/cart"
+                className={
+                  pathname === "/cart"
+                    ? `${s.nav__link} ${s.nav__link__active}`
+                    : s.nav__link
+                }
+              >
                 Кошик
               </Link>
             </div>
@@ -115,30 +139,42 @@ const Header = ({ searchProductsByValue, foundProducts, history }) => {
                 onFocus={onSearchInputFocus}
               />
               <Button title="Знайти" />
-              {!!foundProducts.length && isDropdownVisible && !isCatalogPage && (
-                <div className={s.search__dropdown}>
-                  {foundProducts.slice(0, 5).map((foundProduct, i) => {
-                    const { title, gallery, _id } = foundProduct;
-                    return (
-                      <HorizontalProductCard
-                        key={_id}
-                        isSmall
-                        product={foundProduct}
-                      />
-                    );
-                  })}
-                  <Link
-                    className={s.search__see__more}
-                    to={{ pathname: "/catalog", state: { query: searchValue } }}
-                  >
-                    Показати ще
-                  </Link>
-                </div>
-              )}
+              {!!foundProducts.length &&
+                isDropdownVisible &&
+                pathname !== "/catalog" && (
+                  <div className={s.search__dropdown}>
+                    {foundProducts.slice(0, 5).map((foundProduct, i) => {
+                      const { title, gallery, _id } = foundProduct;
+                      return (
+                        <HorizontalProductCard
+                          key={_id}
+                          isSmall
+                          product={foundProduct}
+                        />
+                      );
+                    })}
+                    <Link
+                      className={s.search__see__more}
+                      to={{
+                        pathname: "/catalog",
+                        state: { query: searchValue },
+                      }}
+                    >
+                      Показати ще
+                    </Link>
+                  </div>
+                )}
             </div>
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
-                <Link to="/login" className={s.nav__link}>
+                <Link
+                  to="/login"
+                  className={
+                    pathname === "/catalog"
+                      ? `${s.nav__link} ${s.nav__link__active}`
+                      : s.nav__link
+                  }
+                >
                   Мій профіль
                 </Link>
               </div>

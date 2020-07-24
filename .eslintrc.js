@@ -36,5 +36,8 @@ module.exports = {
     "consistent-return": "off",
     "react/self-closing-comp": "warn",
     "import/prefer-default-export": "warn",
+    "react/jsx-curly-newline": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "react/jsx-equals-spacing": "off",
   },
 };

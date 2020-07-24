@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import s from "./ProductCard.module.css";
 import { connect } from "react-redux";
 import {
@@ -19,6 +19,10 @@ const ProductCard = ({
 }) => {
   const { gallery, title, price, _id } = product;
   const history = useHistory();
+  const [isAnimation, setAnimation] = useState(false);
+  const [isAttributesAlert, setAttributesAlert] = useState(false);
+
+  const showAttributesAlert = () => setAttributesAlert(true);
 
   const redirectToSingleProduct = () => history.push(`/product/${_id}`);
 
@@ -42,7 +46,8 @@ const ProductCard = ({
         <div className={s.card__price__container}>
           <span className={s.card__price}>{`${price} ₴`}</span>
           <div>
-            <CartButton {...{ product }} />
+            <CartButton {...{ product }} {...{ showAttributesAlert }} />
+            {isAttributesAlert && <div className={s.attribute__alert}></div>}
           </div>
         </div>
       </div>

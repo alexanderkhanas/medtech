@@ -18,9 +18,10 @@ export const addToCartAction = (product) => {
 export const removeFromCartAction = (product) => {
   const cart = localStorage.getItem("_cart");
   console.log(cart);
-
-  if (!cart) return;
-  localStorage.setItem("_cart", cart.replace(` ${product._id}`, ""));
+  localStorage.setItem(
+    "_cart",
+    cart ? cart.replace(` ${product._id}`, "") : product._id
+  );
   return {
     type: REMOVE_FROM_CART,
     productId: product._id,

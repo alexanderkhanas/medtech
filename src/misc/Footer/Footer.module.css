@@ -37,6 +37,11 @@
   font-size: initial;
   padding-left: 4px;
 }
+
+.a p {
+  transition: 0.1s;
+}
+
 .a p:hover {
   color: #019682;
 }
@@ -52,6 +57,26 @@ p {
   border: none;
 }
 
+<<<<<<< HEAD
+=======
+.bottom__footer {
+  padding: 40px;
+  border-top: 0.5px solid #3e4240;
+  font-size: 12px;
+}
+.bottom__inf {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.bottom__inf p {
+  color: white;
+  transition: 0.1s;
+}
+.bottom__inf p:hover {
+  color: #019682;
+}
+>>>>>>> origin
 .copyright {
   padding: 10px;
   border-top: 0.5px solid #3e4240;

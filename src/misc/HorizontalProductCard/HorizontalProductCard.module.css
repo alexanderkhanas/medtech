@@ -33,6 +33,10 @@
   font-size: 22px;
 }
 
+.main__content__sm .img {
+  width: 15%;
+}
+
 .price {
   color: #009d66;
 }

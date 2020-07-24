@@ -9,6 +9,7 @@ import {
   removeFromCartAction,
 } from "../../store/actions/cartActions";
 import { connect } from "react-redux";
+import classnames from "classnames";
 
 const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
   const { _id } = product;
@@ -46,11 +47,9 @@ const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
 
   return (
     <Button
-      className={
-        isInCart
-          ? `${s.card__button} ${s.active__card__button} `
-          : s.card__button
-      }
+      className={classnames(s.card__button, {
+        [s.active__card__button]: isInCart,
+      })}
       isRound
       size="sm"
       onClick={isInCart ? removeFromCartHandler : addToCartHandler}

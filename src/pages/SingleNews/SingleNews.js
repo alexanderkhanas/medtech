@@ -63,7 +63,7 @@ const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
         <div className={s.section}>
           <h3 className={s.section__title}>Популярні новини</h3>
           <div className={s.news__container}>
-            {recentNews.map((newsItem, i) => (
+            {recentNews.slice(0, 3).map((newsItem, i) => (
               <NewsCard {...{ newsItem }} key={newsItem._id} />
             ))}
           </div>

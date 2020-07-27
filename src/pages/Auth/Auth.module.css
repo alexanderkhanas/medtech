@@ -98,7 +98,7 @@ button {
   background-color: transparent;
 }
 .submit_button {
-  padding: 20px 0;
+  padding: 0 0 20px 0;
   justify-content: center;
 }
 .submit_button > button {

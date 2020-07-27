@@ -80,6 +80,8 @@ p {
   padding: 10px;
   border-top: 0.5px solid #3e4240;
   text-align: center;
+  color: #fff;
+  font-family: Roboto;
 }
 .btn_cl {
   color: white;

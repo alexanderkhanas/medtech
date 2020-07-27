@@ -17,20 +17,27 @@ import { stack as Menu } from "react-burger-menu";
 import { CSSTransition } from "react-transition-group";
 import Input from "../Inputs/Input/Input";
 import Button from "../Button/Button";
-import { filterProductsAction } from "../../store/actions/productsActions";
+import {
+  filterProductsAction,
+  setSearchValueAction,
+} from "../../store/actions/productsActions";
 import { connect } from "react-redux";
 import HorizontalProductCard from "../HorizontalProductCard/HorizontalProductCard";
 // import CartButton from "../CartButton/CartButton";
 // import WishlistButton from "../WishlistButton/WishlistButton";
 
-const Header = ({ searchProductsByValue, foundProducts, history }) => {
+const Header = ({
+  searchProductsByValue,
+  foundProducts,
+  history,
+  setSearchValue,
+  searchValue,
+}) => {
   const [isBarOpen, setBarOpen] = useState(null);
   const [isAnimation, setAnimation] = useState(false);
   const [sidebarIcon, setSidebarIcon] = useState(faBars);
-  const [searchValue, setSearchValue] = useState("");
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const [isCatalogPage, setCatalogPage] = useState(false);
-  const [activePath, setActivePath] = useState();
+
   const openSidebar = () => setBarOpen(true);
   const closeSidebar = () => setBarOpen(false);
   const onStateMenuChange = (state) => setBarOpen(state.isOpen);
@@ -171,9 +178,10 @@ const Header = ({ searchProductsByValue, foundProducts, history }) => {
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
                 <Link
-                  to="/login"
+                  to="/profile/2"
+                  style={{ marginRight: 0 }}
                   className={
-                    pathname === "/catalog"
+                    pathname.startsWith("/profile")
                       ? `${s.nav__link} ${s.nav__link__active}`
                       : s.nav__link
                   }
@@ -234,6 +242,7 @@ const Header = ({ searchProductsByValue, foundProducts, history }) => {
 const mapStateToProps = (state) => {
   return {
     foundProducts: state.products.filtered,
+    searchValue: state.products.searchValue,
   };
 };
 
@@ -241,6 +250,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     searchProductsByValue: (value) =>
       dispatch(filterProductsAction(null, value)),
+    setSearchValue: (value) => dispatch(setSearchValueAction(value)),
   };
 };
 

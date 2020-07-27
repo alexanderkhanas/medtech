@@ -56,7 +56,11 @@ const Home = ({ products, recentNews }) => {
             <TabPanel className={s.tab__panel}>
               <ItemsCarousel
                 arrows
-                slidesPerPage={Math.floor(window.innerWidth / 350)}
+                slidesPerPage={
+                  Math.floor(window.innerWidth / 350) > 4
+                    ? 4
+                    : Math.floor(window.innerWidth / 350)
+                }
                 infinite
               >
                 {recommendedProducts.map((product, i) => (
@@ -67,7 +71,11 @@ const Home = ({ products, recentNews }) => {
             <TabPanel className={s.tab__panel}>
               <ItemsCarousel
                 arrows
-                slidesPerPage={Math.floor(window.innerWidth / 350)}
+                slidesPerPage={
+                  Math.floor(window.innerWidth / 350) > 4
+                    ? 4
+                    : Math.floor(window.innerWidth / 350)
+                }
                 infinite
               >
                 {popularProducts.map((product, i) => (
@@ -80,7 +88,11 @@ const Home = ({ products, recentNews }) => {
               <ItemsCarousel
                 arrows
                 offset={10}
-                slidesPerPage={Math.floor(window.innerWidth / 350)}
+                slidesPerPage={
+                  Math.floor(window.innerWidth / 350) > 4
+                    ? 4
+                    : Math.floor(window.innerWidth / 350)
+                }
                 infinite
               >
                 {bestRatingProducts.map((product, i) => (
@@ -123,7 +135,11 @@ const Home = ({ products, recentNews }) => {
           <h3 className={s.section__title}>Останні товари</h3>
           <ItemsCarousel
             arrows
-            slidesPerPage={Math.floor(window.innerWidth / 350)}
+            slidesPerPage={
+              Math.floor(window.innerWidth / 350) > 4
+                ? 4
+                : Math.floor(window.innerWidth / 350)
+            }
             infinite
           >
             {newProducts.map((product, i) => (

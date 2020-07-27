@@ -40,5 +40,6 @@ module.exports = {
     "jsx-a11y/no-static-element-interactions": "off",
     "react/jsx-equals-spacing": "off",
     "react/jsx-curly-brace-presence": "warn",
+    "react/no-unescaped-entities": "off",
   },
 };

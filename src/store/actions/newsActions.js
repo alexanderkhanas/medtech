@@ -4,8 +4,17 @@ import { SET_NEWS, SET_SINGLE_NEWS } from "./actionTypes";
 export const getAllNewsAction = () => {
   return async (dispatch) => {
     const response = await fetchAllNews();
-    console.log("response ===", response.data);
-    dispatch({ type: SET_NEWS, news: response.data, recent: response.data });
+    if (response?.data) {
+      const sortedRecent = response.data.sort(
+        (news, nextNews) =>
+          new Date(nextNews.createdAt) - new Date(news.createdAt)
+      );
+      dispatch({
+        type: SET_NEWS,
+        news: response.data,
+        recent: sortedRecent,
+      });
+    }
   };
 };
 

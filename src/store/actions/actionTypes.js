@@ -16,3 +16,7 @@ export const SET_LOADING = "SET_LOADING";
 export const SET_NEWS = "SET_NEWS";
 export const SET_SINGLE_NEWS = "SET_SINGLE_NEWS";
 export const SET_CATEGORIES = "SET_CATEGORIES";
+export const SHOW_ALERT = "SHOW_ALERT";
+export const HIDE_ALERT = "HIDE_ALERT";
+export const SET_USER_DATA = "SET_USER_DATA";
+export const SET_SEARCH_VALUE = "SET_SEARCH_VALUE";

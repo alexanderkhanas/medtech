@@ -20,22 +20,27 @@ const CategoryAccordion = ({
   const { childs } = parent;
   const { subchilds } = parent;
 
-  const onCategoryClick = (name, isActive) => {
+  const onCategoryClick = (name, id, isActive) => {
     if (!isActive) {
-      selectCategory(name);
+      selectCategory(name, id);
     } else {
       removeCategory(name);
     }
   };
 
-  const isParentActive = selectedCategories.includes(parent.title);
+  const isSelected = (name) =>
+    !!selectedCategories.filter((category) => category.name === name).length;
+
+  const isParentActive = isSelected(parent.title);
 
   return (
     <div className={s.accordion__container}>
       {/* parent */}
       <div className={`${s.category__item} ${s.parent__category__item}`}>
         <p
-          onClick={() => onCategoryClick(parent.title, isParentActive)}
+          onClick={() =>
+            onCategoryClick(parent.title, parent._id, isParentActive)
+          }
           className={
             isParentActive
               ? `${s.category__text} ${s.category__text__active}`
@@ -59,7 +64,7 @@ const CategoryAccordion = ({
       >
         {/*subchilds*/}
         {subchilds.map((subchild) => {
-          const isSubchildActive = selectedCategories.includes(subchild.title);
+          const isSubchildActive = isSelected(subchild.title);
           return (
             <div
               key={subchild._id}
@@ -68,7 +73,11 @@ const CategoryAccordion = ({
               <div className={s.category__item}>
                 <p
                   onClick={() =>
-                    onCategoryClick(subchild.title, isSubchildActive)
+                    onCategoryClick(
+                      subchild.title,
+                      subchild._id,
+                      isSubchildActive
+                    )
                   }
                   className={
                     isSubchildActive
@@ -98,15 +107,13 @@ const CategoryAccordion = ({
                 }
               >
                 {childs[subchild._id].map((child) => {
-                  const isChildActive = selectedCategories.includes(
-                    child.title
-                  );
+                  const isChildActive = isSelected(child.title);
                   return (
                     <div
                       key={child._id}
                       className={s.category__item}
                       onClick={() =>
-                        onCategoryClick(child.title, isChildActive)
+                        onCategoryClick(child.title, child._id, isChildActive)
                       }
                     >
                       <p

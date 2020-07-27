@@ -22,8 +22,9 @@ import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
 import { useHistory, useParams } from "react-router-dom";
 import _axios from "../../store/api/_axios";
+import { connect } from "react-redux";
 
-function Profile(props) {
+const Profile = ({ user }) => {
   const { id } = useParams();
   const h = useHistory();
   const breadCrumbsItems = [
@@ -39,15 +40,7 @@ function Profile(props) {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const uploadedImage = useRef(null);
   const imageUploader = useRef(null);
-  const [userData, setUserData] = useState({
-    fName: null,
-    sName: null,
-    fatherName: null,
-    email: null,
-    phone: null,
-    password: null,
-    gallery: null,
-  });
+  const [userData, setUserData] = useState({ ...user });
 
   const handleImageUpload = (e) => {
     const [file] = e.target.files;
@@ -150,6 +143,7 @@ function Profile(props) {
                           label="Ім'я"
                           val="firstName"
                           icon={faUser}
+                          value={userData.fName}
                           placeholder="John"
                           onChange={(e) =>
                             setUserData((prev) => ({
@@ -165,6 +159,7 @@ function Profile(props) {
                           val="lName"
                           placeholder="Doe"
                           icon={faAddressCard}
+                          value={userData.lName}
                           onChange={(e) =>
                             setUserData((prev) => ({
                               ...prev,
@@ -178,6 +173,7 @@ function Profile(props) {
                           label="По-батькові"
                           val="fatherName"
                           placeholder="JohnDoevich"
+                          value={userData.fatherName}
                           icon={faAddressCard}
                           onChange={(e) =>
                             setUserData(e.target.value.fatherName)
@@ -190,6 +186,7 @@ function Profile(props) {
                           val="phone"
                           placeholder="+380991234567"
                           type="tel"
+                          value={userData.phone}
                           icon={faPhoneAlt}
                           onChange={(e) =>
                             setUserData((prev) => ({
@@ -204,6 +201,7 @@ function Profile(props) {
                           val="Електронна адреса"
                           label="E-mail"
                           placeholder="johndoe@gmail.com"
+                          value={userData.email}
                           icon={faEnvelope}
                           onChange={(e) =>
                             setUserData((prev) => ({
@@ -357,6 +355,16 @@ function Profile(props) {
       </div>
     </div>
   );
-}
+};
 
-export default Profile;
+const mapStateToProps = (state) => {
+  return {
+    user: state.profile,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

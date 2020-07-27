@@ -16,6 +16,13 @@ import {
 } from "../../store/actions/cartActions";
 import classnames from "classnames";
 import { scrollToRef } from "../../utils/utils";
+import {
+  showAlertAction,
+  hideAlertAction,
+} from "../../store/actions/alertActions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import ScrollListener from "react-scroll-listener";
 
 const SingleProduct = ({
   match,
@@ -24,6 +31,8 @@ const SingleProduct = ({
   cartProducts,
   addToCart,
   removeFromCart,
+  showAlert,
+  hideAlert,
 }) => {
   //state
   const {
@@ -46,22 +55,31 @@ const SingleProduct = ({
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [priceInfo, setPriceInfo] = useState({ value: null, string: "" });
   const [isInCart, setInCart] = useState(false);
-  const [isAlertVisible, setAlertVisible] = useState(false);
+  const [isTopButtonVisible, setTopButtonVisible] = useState(false);
+
   const mainContentRef = useRef();
+  const attributesRef = useRef();
 
   //functions
+  const scrollTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
+
   const selectAttribute = (name, value) => {
     setSelectedAttributes((prev) => ({ ...prev, [name]: value }));
   };
 
   const onCartButtonClick = () => {
-    if (!priceInfo.value && attributeOptions[0].priceAttr) {
-      setAlertVisible(true);
-      setTimeout(() => {
-        setAlertVisible(false);
-      }, 5000);
-      return;
-    }
+    // if (!priceInfo.value) {
+    //   showAlert("Перед додаванням у корзину оберіть атрибути");
+    //   if (window.innerWidth <= 575) {
+    //     scrollToRef(attributesRef, -120);
+    //   }
+    //   setTimeout(() => {
+    //     hideAlert();
+    //   }, 5000);
+    //   return;
+    // }
     if (isInCart) {
       removeFromCart(product);
     } else {
@@ -74,6 +92,16 @@ const SingleProduct = ({
     setActiveTabIndex(0);
   };
 
+  const onScroll = () => {
+    const scrollTopValue = window.pageYOffset;
+    // itemTranslate = Math.min(0, scrollTop / 3 - 60);
+    if (scrollTopValue >= 600) {
+      setTopButtonVisible(true);
+    } else if (scrollTopValue < 600) {
+      setTopButtonVisible(false);
+    }
+  };
+
   //effects
   useEffect(() => {
     getProduct(match.params.id);
@@ -83,7 +111,6 @@ const SingleProduct = ({
     const productFromCart = cartProducts.filter(
       (cartProduct) => cartProduct._id === _id
     )[0];
-    console.log("productFromCart ===", productFromCart);
 
     setInCart(!!productFromCart);
   }, [cartProducts]);
@@ -125,9 +152,16 @@ const SingleProduct = ({
           value: attributeFound.priceAttr,
           string: `${attributeFound.priceAttr}₴`,
         });
+
+        setSelectedAttributes((prev) => ({ ...prev, _id: attributeFound._id }));
       }
     }
   }, [selectedAttributes]);
+
+  useEffect(() => {
+    const scrollListener = new ScrollListener();
+    scrollListener.addScrollHandler("1", onScroll);
+  }, []);
 
   //other
   let qtyMessage = "Залишилось мало";
@@ -143,8 +177,6 @@ const SingleProduct = ({
   } else if (quantity === 0) {
     qtyClassName = s.notInStock;
   }
-
-  console.log("product ===", product);
 
   return (
     !!product && (
@@ -174,13 +206,6 @@ const SingleProduct = ({
                   {priceInfo.value ? priceInfo.string : `${price}₴`}
                 </h2>
                 <div className={s.button__container}>
-                  <div
-                    className={classnames(s.alert, {
-                      [s.hidden]: !isAlertVisible,
-                    })}
-                  >
-                    <p>Перед додаванням в кошик оберіть атрибути</p>
-                  </div>
                   <Button
                     title={isInCart ? "В кошику" : "Додати в кошик"}
                     className={classnames({
@@ -194,7 +219,7 @@ const SingleProduct = ({
                 {desc.slice(0, 300)}
                 <button onClick={scrollToDescription}>Більше</button>
               </p>
-              <div className={s.attributes__wrapper}>
+              <div className={s.attributes__wrapper} ref={attributesRef}>
                 {Object.entries(filteredAttributes).map((attributesObj, i) => {
                   const name = attributesObj[0];
                   const values = attributesObj[1].all;
@@ -212,7 +237,7 @@ const SingleProduct = ({
                   name="Країна виробника"
                   values={[vendorID.title]}
                 />
-                {!!categoryID && (
+                {!!categoryID && !!categoryID.desc && (
                   <ProductAttribute
                     name="Категорія"
                     values={[categoryID.desc]}
@@ -279,6 +304,15 @@ const SingleProduct = ({
             </Tabs>
           </div>
         </div>
+
+        {isTopButtonVisible && (
+          <Button className={s.arrow__button} onClick={scrollTop}>
+            <FontAwesomeIcon
+              icon={faArrowUp}
+              className={s.arrow__button__icon}
+            />
+          </Button>
+        )}
       </FixedWrapper>
     )
   );
@@ -295,6 +329,8 @@ const mapDispatchToProps = (dispatch) => {
     getProduct: (id) => dispatch(getSingleProductAction(id)),
     addToCart: (product) => dispatch(addToCartAction(product)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
+    showAlert: (text) => dispatch(showAlertAction(text)),
+    hideAlert: () => dispatch(hideAlertAction()),
   };
 };
 

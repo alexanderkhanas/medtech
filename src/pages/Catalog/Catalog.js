@@ -35,6 +35,7 @@ const Catalog = ({
   isLoading,
   getCategories,
   categories,
+  searchValue,
 }) => {
   const [productViewType, setProductViewType] = useState("row");
   const [sortType, setSortType] = useState(sortSelectOption[0]);
@@ -51,13 +52,16 @@ const Catalog = ({
     setSortType(value);
   };
 
-  const selectCategory = (categoryTitle) => {
-    setSelectedCategories((prev) => [...prev, categoryTitle]);
+  const selectCategory = (categoryTitle, categoryId) => {
+    setSelectedCategories((prev) => [
+      ...prev,
+      { name: categoryTitle, id: categoryId },
+    ]);
   };
 
   const removeCategory = (categoryTitle) => {
     setSelectedCategories((prev) =>
-      prev.filter((selectedCategory) => selectedCategory !== categoryTitle)
+      prev.filter((selectedCategory) => selectedCategory.name !== categoryTitle)
     );
   };
 
@@ -67,6 +71,12 @@ const Catalog = ({
   useEffect(() => {
     getCategories();
   }, []);
+
+  useEffect(() => {
+    if (selectedCategories.length) {
+      filterProducts(selectedCategories, searchValue);
+    }
+  }, [selectedCategories]);
 
   useEffect(() => {
     let filtered = categories.map((category) => {
@@ -227,6 +237,7 @@ const mapStateToProps = (state) => {
     recommendedProducts: state.products.recommended,
     isLoading: state.base.isLoading,
     categories: state.products.categories,
+    searchValue: state.products.searchValue,
   };
 };
 const mapDispatchToProps = (dispatch) => {

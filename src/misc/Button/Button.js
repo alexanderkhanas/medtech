@@ -13,6 +13,7 @@ const Button = ({
   isUppercase,
   icon,
   isSecondary,
+  ...rest
 }) => {
   let classes = classnames(s.button, className, {
     [s.button__round]: isRound,
@@ -20,7 +21,11 @@ const Button = ({
     [s.secondary]: isSecondary,
   });
   return (
-    <button {...{ onClick }} className={`${classes} ${s[`button__${size}`]}`}>
+    <button
+      {...rest}
+      {...{ onClick }}
+      className={`${classes} ${s[`button__${size}`]}`}
+    >
       {!!icon && <FontAwesomeIcon className={s.icon} {...{ icon }} />}
       {children}
       {!!title && <span>{title}</span>}

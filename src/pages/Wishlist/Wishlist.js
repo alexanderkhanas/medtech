@@ -11,9 +11,17 @@ const Wishlist = ({ products }) => {
       <div className={s.container}>
         <h1 className={s.title}>Улюблені</h1>
         <div className={s.products__container}>
-          {products.map((product, i) => (
-            <HorizontalProductCard {...{ product }} key={product._id} />
-          ))}
+          {products.map((product, i) =>
+            window.innerWidth >= 800 ? (
+              <HorizontalProductCard {...{ product }} key={product._id} />
+            ) : (
+              <ProductCard
+                {...{ product }}
+                className={s.mobile__card}
+                key={product._id}
+              />
+            )
+          )}
         </div>
       </div>
     </FixedWrapper>

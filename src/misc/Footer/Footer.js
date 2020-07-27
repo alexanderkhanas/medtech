@@ -17,47 +17,31 @@ const Footer = () => {
   return (
     <footer className={s.footer}>
       <FixedWrapper>
-        <div className={s.top_footer}>
-          <div className={s.logo}>
-            <img src={logo} alt="logo" />
-          </div>
-          <div className={s.input_footer}>
-            <Input placeholder="example@gmail.com" />
-            <Button title="Підписатись" className={s.submit_button} />
-          </div>
-          <div className={s.social}>
-            <FontAwesomeIcon icon={faFacebook} />
-            <FontAwesomeIcon icon={faFacebook} />
-            <FontAwesomeIcon icon={faFacebook} />
-          </div>
-        </div>
         <div className={s.a}>
           <div className={s.contact}>
             <h4>Зв'язатися з нами</h4>
             <p className={s.phone}>
-              <FontAwesomeIcon icon={faPhone} /> + 38 (067) 208 81 45
+              <FontAwesomeIcon icon={faPhone} className={s.icon_ft} /> + 38
+              (067) 208 81 45
             </p>
-            <button>
-              <p className={s.social}>
-                <FontAwesomeIcon icon={faInstagram} className={s.fainst} />{" "}
-                Instagram
-              </p>
-            </button>
-            <button>
-              <p className={s.social}>
-                <FontAwesomeIcon icon={faFacebook} className={s.fafb} />{" "}
-                Facebook
-              </p>
-            </button>
+            <p className={s.social}>
+              <FontAwesomeIcon icon={faInstagram} className={s.icon_ft} />{" "}
+              Instagram
+            </p>
+            <p className={s.social}>
+              <FontAwesomeIcon icon={faFacebook} className={s.icon_ft} />{" "}
+              Facebook
+            </p>
             <p className={s.hours}>
-              <FontAwesomeIcon icon={faClock} /> Пн-Пт: 09:00 - 19:00 <br />
+              <FontAwesomeIcon icon={faClock} className={s.icon_ft} /> Пн-Пт:
+              09:00 - 19:00 <br />
               <span style={{ paddingLeft: "20px" }}> Сб-Нд: 10:00 -17:00</span>
             </p>
           </div>
           <div className={s.navigation}>
             <h4>Навігація по сайту</h4>
             <button>
-              <Link to="/public-offer" className={s.btn_cl}>
+              <Link to="/" className={s.btn_cl}>
                 <p>Головна</p>
               </Link>
             </button>
@@ -67,8 +51,8 @@ const Footer = () => {
               </Link>
             </button>
             <button>
-              <Link to="/public-offer" className={s.btn_cl}>
-                <p>Новини та акції</p>
+              <Link to="/news" className={s.btn_cl}>
+                <p>Новини</p>
               </Link>
             </button>
             <button>
@@ -77,7 +61,7 @@ const Footer = () => {
               </Link>
             </button>
           </div>
-          <div className={s.popular}>
+          {/* <div className={s.popular}>
             <h4>Популярні категорії</h4>
             <button>
               <Link to="/public-offer" className={s.btn_cl}>
@@ -99,7 +83,7 @@ const Footer = () => {
                 <p>Контакти</p>
               </Link>
             </button>
-          </div>
+          </div> */}
           <div className={s.inf}>
             <h4>Корисна інформація</h4>
             <button>
@@ -117,11 +101,11 @@ const Footer = () => {
                 <p>Гарантія і повернення</p>
               </Link>
             </button>
-            <button>
+            {/* <button>
               <Link to="/public-offer" className={s.btn_cl}>
                 <p>Про бонус систему</p>
               </Link>
-            </button>
+            </button> */}
             <button>
               <Link to="/politics" className={s.btn_cl}>
                 <p>Політика конфіденційності </p>

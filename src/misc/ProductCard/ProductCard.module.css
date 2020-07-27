@@ -8,6 +8,7 @@
   margin: 10px;
   transition: 0.15s;
   width: 310px;
+  min-height: 420px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -40,6 +41,7 @@
 .card__price__container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .card__footer {

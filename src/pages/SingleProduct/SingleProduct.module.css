@@ -1,5 +1,6 @@
 .container {
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .desktop__container {
@@ -40,6 +41,7 @@
   font-weight: bold;
   color: #009d66;
   font-size: 25px;
+  padding: 0;
 }
 
 .desc {
@@ -52,6 +54,10 @@
 
 .attributes {
   margin-top: 40px;
+}
+
+.attributes__wrapper {
+  padding: 0 10px;
 }
 
 .attributes__wrapper .inStock {
@@ -131,6 +137,45 @@
 
 .description {
   color: gray;
+}
+
+.button__container {
+  position: relative;
+}
+
+.alert {
+  position: absolute;
+  width: 250px;
+  padding: 13px 15px;
+  top: -90px;
+  box-sizing: border-box;
+  border: 1px solid red;
+  color: red;
+  opacity: 1;
+  transition: 0.2s;
+  border-radius: 10px;
+  z-index: 2;
+  background: #fff;
+}
+
+.alert::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  bottom: -12px;
+  left: 30px;
+  transform: rotate(45deg);
+  border-bottom: 1px solid red;
+  border-right: 1px solid red;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  background: #fff;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
 }
 
 @media (max-width: 900px) {

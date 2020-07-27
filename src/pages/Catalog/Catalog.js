@@ -36,7 +36,7 @@ const Catalog = ({
   getCategories,
   categories,
 }) => {
-  const [productViewType, setProductViewType] = useState("column");
+  const [productViewType, setProductViewType] = useState("row");
   const [sortType, setSortType] = useState(sortSelectOption[0]);
   const containerRef = useRef();
   const [sortedCategories, setSortedCategories] = useState([]);

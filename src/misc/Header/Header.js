@@ -58,6 +58,7 @@ const Header = ({ searchProductsByValue, foundProducts, history }) => {
 
   useEffect(() => {
     window.scroll({ left: 0, top: 0 });
+    setBarOpen(null);
   }, [pathname]);
 
   return (
@@ -224,6 +225,7 @@ const Header = ({ searchProductsByValue, foundProducts, history }) => {
         <Link to="/catalog">Каталог</Link>
         <Link to="/wishlist">Улюблені</Link>
         <Link to="/cart">Кошик</Link>
+        <Link to="/profile/2">Профіль</Link>
       </Menu>
     </>
   );

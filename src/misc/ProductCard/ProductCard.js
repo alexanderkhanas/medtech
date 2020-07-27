@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import s from "./ProductCard.module.css";
 import { connect } from "react-redux";
 import {
@@ -9,33 +9,19 @@ import { useHistory } from "react-router-dom";
 import classnames from "classnames";
 import CartButton from "../CartButton/CartButton";
 import WishlistButton from "../WishlistButton/WishlistButton";
+import ImageUploader from "react-images-upload";
 
-const ProductCard = ({
-  product,
-  className,
-  addToCart,
-  removeFromCart,
-  cartProducts,
-}) => {
+const ProductCard = ({ product, className }) => {
   const { gallery, title, price, _id } = product;
   const history = useHistory();
-  const [isAnimation, setAnimation] = useState(false);
-  const [isAttributesAlert, setAttributesAlert] = useState(false);
-
-  const showAttributesAlert = () => setAttributesAlert(true);
-
   const redirectToSingleProduct = () => history.push(`/product/${_id}`);
-
   return (
     <div className={classnames(s.card, className)}>
-      <div className={s.wishlist__container}>
-        <WishlistButton {...{ product }} className={s.wishlist__button} />
-      </div>
       <div className={s.card__main}>
         <img
           className={s.card__img}
           onClick={redirectToSingleProduct}
-          src={gallery[0]}
+          src="https://i.ibb.co/27WPrWh/i1.png"
           alt=""
         />
       </div>
@@ -46,8 +32,8 @@ const ProductCard = ({
         <div className={s.card__price__container}>
           <span className={s.card__price}>{`${price} ₴`}</span>
           <div>
-            <CartButton {...{ product }} {...{ showAttributesAlert }} />
-            {isAttributesAlert && <div className={s.attribute__alert}></div>}
+            <WishlistButton {...{ product }} className={s.wishlist__button} />
+            {/* <CartButton {...{ product }} {...{ showAttributesAlert }} /> */}
           </div>
         </div>
       </div>

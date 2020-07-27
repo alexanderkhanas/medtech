@@ -48,3 +48,7 @@
 .secondary {
   background: #009d66a8;
 }
+
+.capitalize {
+  text-transform: capitalize;
+}

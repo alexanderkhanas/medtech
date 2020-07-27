@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import s from "./SingleProduct.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import getSingleProductAction from "../../store/actions/singleProductActions";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import ProductAttribute from "../../misc/ProductAttribute/ProductAttribute";
-import uuid from "react-uuid";
 import lodash from "lodash";
 import _axios from "../../store/api/_axios";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import Stars from "../../misc/Stars/Stars";
-import CartButton from "../../misc/CartButton/CartButton";
 import Button from "../../misc/Button/Button";
 import {
   addToCartAction,
   removeFromCartAction,
 } from "../../store/actions/cartActions";
 import classnames from "classnames";
+import { scrollToRef } from "../../utils/utils";
 
 const SingleProduct = ({
   match,
@@ -47,6 +46,8 @@ const SingleProduct = ({
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [priceInfo, setPriceInfo] = useState({ value: null, string: "" });
   const [isInCart, setInCart] = useState(false);
+  const [isAlertVisible, setAlertVisible] = useState(false);
+  const mainContentRef = useRef();
 
   //functions
   const selectAttribute = (name, value) => {
@@ -54,8 +55,11 @@ const SingleProduct = ({
   };
 
   const onCartButtonClick = () => {
-    if (!priceInfo.value) {
-      console.log("ХА КУ");
+    if (!priceInfo.value && attributeOptions[0].priceAttr) {
+      setAlertVisible(true);
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, 5000);
       return;
     }
     if (isInCart) {
@@ -63,6 +67,11 @@ const SingleProduct = ({
     } else {
       addToCart({ ...product, selectedAttributes });
     }
+  };
+
+  const scrollToDescription = () => {
+    scrollToRef(mainContentRef);
+    setActiveTabIndex(0);
   };
 
   //effects
@@ -144,11 +153,15 @@ const SingleProduct = ({
           <div className={s.desktop__container}>
             <div className={s.carousel__container}>
               <ItemsCarousel arrows={false} dots slidesPerPage={1}>
-                {gallery.map((img, i) => (
+                {[
+                  "https://i.ibb.co/rxSTJfz/img2.png",
+                  "https://i.ibb.co/dMsk2PN/img1.png",
+                  "https://i.ibb.co/kgmN7bf/img3.png",
+                ].map((img, i) => (
                   <img
                     className={s.main__image}
                     key={img}
-                    src={img}
+                    src={`${img}.png`}
                     alt="loading"
                   />
                 ))}
@@ -157,8 +170,17 @@ const SingleProduct = ({
             <div className={s.desktop__info__container}>
               <h1 className={s.title}>{title}</h1>
               <div className={s.price__container}>
-                <h2 className={s.price}>{priceInfo.string}</h2>
-                <div>
+                <h2 className={s.price}>
+                  {priceInfo.value ? priceInfo.string : `${price}₴`}
+                </h2>
+                <div className={s.button__container}>
+                  <div
+                    className={classnames(s.alert, {
+                      [s.hidden]: !isAlertVisible,
+                    })}
+                  >
+                    <p>Перед додаванням в кошик оберіть атрибути</p>
+                  </div>
                   <Button
                     title={isInCart ? "В кошику" : "Додати в кошик"}
                     className={classnames({
@@ -168,7 +190,10 @@ const SingleProduct = ({
                   />
                 </div>
               </div>
-              <p className={s.desc}>{desc.slice(0, 400)}</p>
+              <p className={s.desc}>
+                {desc.slice(0, 300)}
+                <button onClick={scrollToDescription}>Більше</button>
+              </p>
               <div className={s.attributes__wrapper}>
                 {Object.entries(filteredAttributes).map((attributesObj, i) => {
                   const name = attributesObj[0];
@@ -201,7 +226,7 @@ const SingleProduct = ({
               </div>
             </div>
           </div>
-          <div className={s.full__content}>
+          <div className={s.full__content} ref={mainContentRef}>
             <Tabs>
               <div className={s.tabs__container}>
                 <TabList className={s.tabs}>
@@ -224,18 +249,20 @@ const SingleProduct = ({
                 <p className={s.desc}>{desc}</p>
               </TabPanel>
               <TabPanel className={s.tab__content}>
-                {reviews.map(({ userID, title, desc, rating }, i) => (
-                  <div key={i} className={s.review}>
-                    <div className={s.review__header}>
-                      <h4 className={s.review__admin}>{userID.fName}</h4>
+                {reviews.map(
+                  ({ userID, reviewTitle, reviewDesc, reviewrating }, i) => (
+                    <div key={i} className={s.review}>
+                      <div className={s.review__header}>
+                        <h4 className={s.review__admin}>{userID.fName}</h4>
 
-                      <Stars value={rating} />
+                        <Stars value={reviewrating} />
+                      </div>
+                      <h5 className={s.review__title}>{reviewTitle}</h5>
+
+                      <p className={s.review__desc}>{reviewDesc}</p>
                     </div>
-                    <h5 className={s.review__title}>{title}</h5>
-
-                    <p className={s.review__desc}>{desc}</p>
-                  </div>
-                ))}
+                  )
+                )}
               </TabPanel>
               <TabPanel className={s.tab__content}>
                 <p className={s.desc}>

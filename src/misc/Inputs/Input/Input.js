@@ -9,6 +9,7 @@ const Input = ({
   label,
   containerClass,
   isError,
+  children,
   ...rest
 }) => {
   return (
@@ -21,7 +22,7 @@ const Input = ({
           {...{ placeholder }}
           {...rest}
         />
-        {!!Icon && <Icon />}
+        {children}
       </div>
     </div>
   );

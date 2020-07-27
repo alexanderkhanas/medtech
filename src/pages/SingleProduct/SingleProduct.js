@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import s from "./SingleProduct.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import getSingleProductAction from "../../store/actions/singleProductActions";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import ProductAttribute from "../../misc/ProductAttribute/ProductAttribute";
-import uuid from "react-uuid";
 import lodash from "lodash";
 import _axios from "../../store/api/_axios";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import Stars from "../../misc/Stars/Stars";
-import CartButton from "../../misc/CartButton/CartButton";
 import Button from "../../misc/Button/Button";
 import {
   addToCartAction,
   removeFromCartAction,
 } from "../../store/actions/cartActions";
 import classnames from "classnames";
+import { scrollToRef } from "../../utils/utils";
 
 const SingleProduct = ({
   match,
@@ -48,6 +47,7 @@ const SingleProduct = ({
   const [priceInfo, setPriceInfo] = useState({ value: null, string: "" });
   const [isInCart, setInCart] = useState(false);
   const [isAlertVisible, setAlertVisible] = useState(false);
+  const mainContentRef = useRef();
 
   //functions
   const selectAttribute = (name, value) => {
@@ -67,6 +67,11 @@ const SingleProduct = ({
     } else {
       addToCart({ ...product, selectedAttributes });
     }
+  };
+
+  const scrollToDescription = () => {
+    scrollToRef(mainContentRef);
+    setActiveTabIndex(0);
   };
 
   //effects
@@ -185,7 +190,10 @@ const SingleProduct = ({
                   />
                 </div>
               </div>
-              <p className={s.desc}>{desc.slice(0, 400)}</p>
+              <p className={s.desc}>
+                {desc.slice(0, 300)}
+                <button onClick={scrollToDescription}>Більше</button>
+              </p>
               <div className={s.attributes__wrapper}>
                 {Object.entries(filteredAttributes).map((attributesObj, i) => {
                   const name = attributesObj[0];
@@ -218,7 +226,7 @@ const SingleProduct = ({
               </div>
             </div>
           </div>
-          <div className={s.full__content}>
+          <div className={s.full__content} ref={mainContentRef}>
             <Tabs>
               <div className={s.tabs__container}>
                 <TabList className={s.tabs}>

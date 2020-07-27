@@ -13,7 +13,11 @@ const Wishlist = ({ products }) => {
         <div className={s.products__container}>
           {products.map((product, i) =>
             window.innerWidth >= 800 ? (
-              <HorizontalProductCard {...{ product }} key={product._id} />
+              <HorizontalProductCard
+                {...{ product }}
+                className={s.desktop__card}
+                key={product._id}
+              />
             ) : (
               <ProductCard
                 {...{ product }}

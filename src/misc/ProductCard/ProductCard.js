@@ -11,31 +11,12 @@ import CartButton from "../CartButton/CartButton";
 import WishlistButton from "../WishlistButton/WishlistButton";
 import ImageUploader from "react-images-upload";
 
-const ProductCard = ({
-  product,
-  className,
-  addToCart,
-  removeFromCart,
-  cartProducts,
-}) => {
+const ProductCard = ({ product, className }) => {
   const { gallery, title, price, _id } = product;
   const history = useHistory();
-  const [isAnimation, setAnimation] = useState(false);
-  const [isAttributesAlert, setAttributesAlert] = useState(false);
-
-  const showAttributesAlert = () => setAttributesAlert(true);
-
   const redirectToSingleProduct = () => history.push(`/product/${_id}`);
-
-  const isBase64 = gallery[0]?.includes("base64");
-  console.log("product ===", product);
-  console.log("is base64 ===", isBase64);
-
-  console.log(`data:image/png;base64, ${gallery[0]}`);
-
   return (
     <div className={classnames(s.card, className)}>
-      <div className={s.wishlist__container}></div>
       <div className={s.card__main}>
         <img
           className={s.card__img}
@@ -53,7 +34,6 @@ const ProductCard = ({
           <div>
             <WishlistButton {...{ product }} className={s.wishlist__button} />
             {/* <CartButton {...{ product }} {...{ showAttributesAlert }} /> */}
-            {isAttributesAlert && <div className={s.attribute__alert}></div>}
           </div>
         </div>
       </div>

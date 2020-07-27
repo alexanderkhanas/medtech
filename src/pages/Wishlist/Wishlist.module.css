@@ -11,3 +11,7 @@
 .mobile__card {
   flex-grow: 1;
 }
+
+.desktop__card {
+  width: 100%;
+}

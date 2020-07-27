@@ -13,12 +13,14 @@ const Button = ({
   isUppercase,
   icon,
   isSecondary,
+  isCapitalize,
   ...rest
 }) => {
-  let classes = classnames(s.button, className, {
+  const classes = classnames(s.button, className, {
     [s.button__round]: isRound,
     [s.uppercase]: isUppercase,
     [s.secondary]: isSecondary,
+    [s.capitalize]: isCapitalize,
   });
   return (
     <button

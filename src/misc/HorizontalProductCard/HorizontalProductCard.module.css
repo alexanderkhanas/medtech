@@ -24,6 +24,10 @@
 .info__container {
 }
 
+.title {
+  cursor: pointer;
+}
+
 .main__content__sm .title {
   cursor: pointer;
   font-size: 18px;

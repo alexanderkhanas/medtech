@@ -12,17 +12,18 @@ import CartButton from "../CartButton/CartButton";
 import { useHistory } from "react-router-dom";
 import WishlistButton from "../WishlistButton/WishlistButton";
 
-const HorizontalProductCard = ({ product, isSmall }) => {
+const HorizontalProductCard = ({ product, isSmall, className }) => {
   const history = useHistory();
   const { title, gallery, price, desc, _id } = product;
 
   const redirectToSingle = () => history.push(`/product/${_id}`);
 
   return (
-    <div className={s.container}>
+    <div className={`${s.container} ${className}`}>
       <img
         onClick={redirectToSingle}
-        src={gallery[0]}
+        // src={gallery[0]}
+        src="https://i.ibb.co/27WPrWh/i1.png"
         alt="loading"
         className={s.img}
       />
@@ -49,7 +50,11 @@ const HorizontalProductCard = ({ product, isSmall }) => {
             {...{ cartProducts }}
           /> */}
           <div>
-            <Button title="Додати в кошик" size={isSmall ? "md" : "lg"} />
+            <Button
+              title="Купити"
+              onClick={redirectToSingle}
+              size={isSmall ? "md" : "lg"}
+            />
           </div>
         </div>
       </div>

@@ -136,6 +136,7 @@ p {
 .image_upload > input {
   display: none;
   color: #02ab6b;
+  background: url("//src/assets/vadim.jpg") no-repeat center left;
 }
 
 .image_upload {
@@ -144,6 +145,12 @@ p {
   color: #02ab6b;
   cursor: pointer;
 }
+/* .image1 {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 50px;
+} */
 .tabs {
   display: flex;
   flex-wrap: wrap;
@@ -241,4 +248,16 @@ p {
     width: 100%;
     /* display: block; */
   }
+}
+
+/* .show {
+  display: block;
+}
+
+.hide {
+  display: none;
+} */
+.modal_container {
+  display: flex;
+  justify-content: center;
 }

@@ -22,6 +22,7 @@ import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
 import { useHistory, useParams } from "react-router-dom";
 import _axios from "../../store/api/_axios";
+import Modal from "../../misc/Modal/Modal";
 
 function Profile(props) {
   const { id } = useParams();
@@ -62,17 +63,19 @@ function Profile(props) {
       setUserData((prev) => ({ ...prev, gallery: file }));
     }
   };
-
   const handleSubmit = () => {
     _axios
       .patch("/user/:id", { userData })
       .then((res) => {
         console.log(res);
       })
-      .catch((error) => {
+      .catch(function (error) {
         console.log(error);
       });
   };
+  const [show, setShow] = useState(false);
+  const openModal = () => setShow(true);
+  const closeModal = () => setShow(false);
 
   return (
     <div className={s.body}>
@@ -84,26 +87,25 @@ function Profile(props) {
         <div>
           <Tabs>
             <TabList className={s.tabs}>
-              {["Ваші дані", "Ваша адреса"].map((item, i) => (
-                <Tab
-                  onClick={() => setActiveTabIndex(i)}
-                  key={item + i}
-                  className={
-                    activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
-                  }
-                >
-                  {item}
-                </Tab>
-              ))}
+              {["Ваші дані", "Ваша адреса", "Історія Замовлень"].map(
+                (item, i) => (
+                  <Tab
+                    onClick={() => setActiveTabIndex(i)}
+                    key={i}
+                    className={
+                      activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
+                    }
+                  >
+                    {item}
+                  </Tab>
+                )
+              )}
             </TabList>
             <TabPanel>
               <div className={`${s.profile} container cont__margin`}>
                 <div className={s.profile__main}>
                   <div className={s.profile__info}>
                     <div className={s.profile__info__fields}>
-                      {/* <span className={s.container_title.mobile}>
-                        Персональні дані
-                      </span> */}
                       <div className={s.profile__info__title}>
                         <div className={s.image_upload}>
                           <input
@@ -123,34 +125,32 @@ function Profile(props) {
                           >
                             <img
                               ref={uploadedImage}
-                              alt=""
                               style={{
                                 width: "100%",
                                 height: "100%",
                                 position: "acsolute",
                                 borderRadius: "50px",
+                                backgroundColor: "gray",
                               }}
                             />
                           </div>
                         </div>
-                        <div>
-                          <h5 className={s.container_title}>
-                            Персональні дані
-                          </h5>
+                        <div className={s.container_title}>
+                          Персональні дані
                         </div>
                         <FontAwesomeIcon
                           icon={faSignOutAlt}
                           //   onClick={logout}
+                          onClick={openModal}
                           className={s.profile__info__icon}
                         />
+                        {show && <Modal closeModal={closeModal} show={show} />}
                       </div>
-
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Ім'я"
-                          val="firstName"
+                          val={"firstName"}
                           icon={faUser}
-                          placeholder="John"
                           onChange={(e) =>
                             setUserData((prev) => ({
                               ...prev,
@@ -162,8 +162,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Прізвище"
-                          val="lName"
-                          placeholder="Doe"
+                          val={"lName"}
                           icon={faAddressCard}
                           onChange={(e) =>
                             setUserData((prev) => ({
@@ -176,8 +175,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="По-батькові"
-                          val="fatherName"
-                          placeholder="JohnDoevich"
+                          val={"fatherName"}
                           icon={faAddressCard}
                           onChange={(e) =>
                             setUserData(e.target.value.fatherName)
@@ -187,9 +185,8 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Номер телефону"
-                          val="phone"
-                          placeholder="+380991234567"
-                          type="tel"
+                          val={"phone"}
+                          type={"tel"}
                           icon={faPhoneAlt}
                           onChange={(e) =>
                             setUserData((prev) => ({
@@ -201,9 +198,8 @@ function Profile(props) {
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
-                          val="Електронна адреса"
+                          val={"Електронна адреса"}
                           label="E-mail"
-                          placeholder="johndoe@gmail.com"
                           icon={faEnvelope}
                           onChange={(e) =>
                             setUserData((prev) => ({
@@ -238,34 +234,19 @@ function Profile(props) {
                     <div className={s.profile__info__fields}>
                       <div className={s.profile__info__title}>
                         <div className={s.image_upload}>
-                          <input
-                            placeholder="+"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            ref={imageUploader}
-                            // onChange={(e) => setUserData(e.target.value.galery)}
-                          />
-                          <div
-                            style={{
-                              height: "100px",
-                              width: "100px",
-                            }}
-                            onClick={() => imageUploader.current.click()}
-                          >
-                            <img
-                              ref={uploadedImage}
-                              alt=""
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                position: "acsolute",
-                                borderRadius: "50px",
-                              }}
+                          <label for="file-input">
+                            <FontAwesomeIcon
+                              icon={faUserCircle}
+                              className={s.profile__img}
                             />
-                          </div>
+                          </label>
+                          <input
+                            id="file-input"
+                            type="file"
+                            accept="image/*,image/jpeg"
+                          />
                         </div>
-                        <h5 className={s.container_title}>Ваша адреса</h5>
+                        <span>Ваша адреса</span>
                         <FontAwesomeIcon
                           icon={faSignOutAlt}
                           //   onClick={logout}
@@ -276,8 +257,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Місто"
-                          val="city"
-                          placeholder="Тернопіль"
+                          val={"city"}
                           icon={faCity}
                           //   defaultValue={profileInfo.firstName}
                           //   onChange={onChange}
@@ -286,8 +266,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Вулиця"
-                          val="street"
-                          placeholder="Грушевського"
+                          val={"street"}
                           icon={faStreetView}
                           //   defaultValue={profileInfo.lastName}
                           //   onChange={onChange}
@@ -296,8 +275,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Будинок"
-                          val="house"
-                          placeholder="23"
+                          val={"house"}
                           icon={faHouseUser}
                           //   defaultValue={profileInfo.lastName}
                           //   onChange={onChange}
@@ -306,19 +284,16 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Квартира"
-                          val="apartment"
-                          placeholder="421"
+                          val={"apartment"}
                           icon={faBuilding}
                           //   defaultValue={profileInfo.phone}
                           //   onChange={onChange}
                         />
                       </div>
-
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Поштовий індекс"
-                          val="zip-code"
-                          placeholder="46000"
+                          val={"zip-code"}
                           icon={faKeyboard}
                           //   defaultValue={profileInfo.email}
                           //   onChange={onChange}
@@ -327,8 +302,7 @@ function Profile(props) {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Склад Нової пошти"
-                          val="np-number"
-                          placeholder="2"
+                          val={"np-number"}
                           icon={faMailBulk}
                           //   defaultValue={profileInfo.email}
                           //   onChange={onChange}

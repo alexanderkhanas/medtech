@@ -2,9 +2,6 @@
   min-height: 100vh;
 }
 
-.products__container {
-}
-
 .products__header {
   display: flex;
   padding: 15px 0;
@@ -42,7 +39,8 @@
   box-sizing: border-box;
   text-align: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  /* justify-content: space-between; */
   align-items: center;
 }
 

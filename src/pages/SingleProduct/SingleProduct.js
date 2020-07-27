@@ -16,6 +16,7 @@ import {
 } from "../../store/actions/cartActions";
 import classnames from "classnames";
 import { scrollToRef } from "../../utils/utils";
+import ProductCard from "../../misc/ProductCard/ProductCard";
 
 const SingleProduct = ({
   match,
@@ -24,6 +25,7 @@ const SingleProduct = ({
   cartProducts,
   addToCart,
   removeFromCart,
+  popularProducts,
 }) => {
   //state
   const {
@@ -278,6 +280,20 @@ const SingleProduct = ({
               </TabPanel>
             </Tabs>
           </div>
+          <div className={s.title__container}>
+            <h4 className={s.title}>ПОПУЛЯРНІ ПРОДУКТИ</h4>
+          </div>
+          <div className={s.popular__carousel}>
+            <ItemsCarousel
+              arrows
+              slidesPerPage={Math.floor(window.innerWidth / 350)}
+              infinite
+            >
+              {popularProducts.map((product, i) => (
+                <ProductCard key={product._id} {...{ product }} />
+              ))}
+            </ItemsCarousel>
+          </div>
         </div>
       </FixedWrapper>
     )
@@ -288,6 +304,7 @@ const mapStateToProps = (state) => {
   return {
     product: state.single.product,
     cartProducts: state.cart.all,
+    popularProducts: state.products.popular,
   };
 };
 const mapDispatchToProps = (dispatch) => {

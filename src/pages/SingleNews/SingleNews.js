@@ -10,7 +10,7 @@ import { getSingleNewsAction } from "../../store/actions/newsActions";
 import { connect } from "react-redux";
 
 const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
-  const { title } = singleNews;
+  const { title, gallery, desc, createdAt, _id } = singleNews;
   console.log(singleNews);
   const breadCrumbsItems = [
     {
@@ -33,10 +33,7 @@ const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
       <FixedWrapper>
         <div className={s.single_new}>
           <div className={s.main_container}>
-            <h4 className={s.news_title}>
-              There’s only a week to go before I’m a Celebrity returns to
-              screens
-            </h4>
+            <h4 className={s.news_title}>{title}</h4>
             <div className={s.image_container}>
               <img className={s.main__image} src={vadim} alt="loading" />
             </div>

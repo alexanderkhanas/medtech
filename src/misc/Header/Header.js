@@ -65,9 +65,11 @@ const Header = ({ searchProductsByValue, foundProducts, history }) => {
       <FixedWrapper>
         <div className={s.header__container}>
           <header className={s.header}>
-            <div className={s.logo}>
-              <img src={logo} alt="logo" />
-            </div>
+            <Link to="/">
+              <div className={s.logo}>
+                <img src={logo} alt="logo" />
+              </div>
+            </Link>
             <div className={s.contact}>
               <button className={s.header__info__tag}>
                 <FontAwesomeIcon icon={faPhone} className={s.header_icon} />

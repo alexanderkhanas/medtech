@@ -152,13 +152,13 @@ const Register = () => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             onFocus={handleFocus}
-                            // Icon={
-                            //   !errors.fName && touched.fName
-                            //     ? SuccessIcon
-                            //     : touched.fName && errors.fName
-                            //     ? ErrorIcon
-                            //     : () => <div />
-                            // }
+                            Icon={
+                              !errors.fName && touched.fName
+                                ? SuccessIcon
+                                : touched.fName && errors.fName
+                                ? ErrorIcon
+                                : () => <div />
+                            }
                           />
                         </div>
                         <div className={s.login}>
@@ -168,13 +168,13 @@ const Register = () => {
                             value={values.lName}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            // Icon={
-                            //   !errors.lName && touched.lName
-                            //     ? SuccessIcon
-                            //     : touched.lName && errors.lName
-                            //     ? ErrorIcon
-                            //     : () => <div />
-                            // }
+                            Icon={
+                              !errors.lName && touched.lName
+                                ? SuccessIcon
+                                : touched.lName && errors.lName
+                                ? ErrorIcon
+                                : () => <div />
+                            }
                           />
                         </div>
                         <div className={s.login}>
@@ -184,13 +184,13 @@ const Register = () => {
                             value={values.fatherName}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            // Icon={
-                            //   !errors.fatherName && touched.fatherName
-                            //     ? SuccessIcon
-                            //     : touched.fatherName && errors.fatherName
-                            //     ? ErrorIcon
-                            //     : () => <div />
-                            // }
+                            Icon={
+                              !errors.fatherName && touched.fatherName
+                                ? SuccessIcon
+                                : touched.fatherName && errors.fatherName
+                                ? ErrorIcon
+                                : () => <div />
+                            }
                           />
                         </div>
 
@@ -201,13 +201,13 @@ const Register = () => {
                           <Input
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            // Icon={
-                            //   !errors.email && touched.email
-                            //     ? SuccessIcon
-                            //     : touched.email && errors.email
-                            //     ? ErrorIcon
-                            //     : () => <div />
-                            // }
+                            Icon={
+                              !errors.email && touched.email
+                                ? SuccessIcon
+                                : touched.email && errors.email
+                                ? ErrorIcon
+                                : () => <div />
+                            }
                             name="email"
                             value={values.email}
                             type="email"
@@ -218,13 +218,13 @@ const Register = () => {
                           <Input
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            // Icon={
-                            //   !errors.password && touched.password
-                            //     ? SuccessIcon
-                            //     : touched.password && errors.password
-                            //     ? ErrorIcon
-                            //     : () => <div />
-                            // }
+                            Icon={
+                              !errors.password && touched.password
+                                ? SuccessIcon
+                                : touched.password && errors.password
+                                ? ErrorIcon
+                                : () => <div />
+                            }
                             name="password"
                             value={values.password}
                             type="password"
@@ -236,14 +236,14 @@ const Register = () => {
                         <Input
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          // Icon={
-                          //   !errors.passwordConfirm && touched.passwordConfirm
-                          //     ? SuccessIcon
-                          //     : touched.passwordConfirm &&
-                          //       errors.passwordConfirm
-                          //     ? ErrorIcon
-                          //     : () => <div />
-                          // }
+                          Icon={
+                            !errors.passwordConfirm && touched.passwordConfirm
+                              ? SuccessIcon
+                              : touched.passwordConfirm &&
+                                errors.passwordConfirm
+                              ? ErrorIcon
+                              : () => <div />
+                          }
                           name="passwordConfirm"
                           value={values.passwordConfirm}
                           type="password"

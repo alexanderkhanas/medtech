@@ -56,11 +56,13 @@
   max-width: 1370px;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding: 20px;
+  padding: 20px 0;
   box-sizing: border-box;
 }
 .createdAt {
   color: #888888;
+  /* margin-left: 600px; */
+  padding: 10px 0;
 }
 
 @media (max-width: 900px) {
@@ -79,6 +81,10 @@
   .news_text {
     font-size: 12px;
     padding: 0 20px;
+    line-height: 20px;
+  }
+  .createdAt {
+    font-size: 12px;
   }
   .news_title {
     font-size: 24px;

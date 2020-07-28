@@ -186,6 +186,12 @@
   padding-bottom: 30px;
 }
 
+.arrow__button {
+  position: fixed;
+  bottom: 50px;
+  right: 10px;
+}
+
 @media (max-width: 900px) {
   .desktop__info__container {
     width: initial;
@@ -208,5 +214,8 @@
   .main__image {
     width: 100%;
     height: 250px;
+  }
+  .attributes__wrapper {
+    padding: 20px 0;
   }
 }

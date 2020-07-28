@@ -5,6 +5,7 @@ import {
   SET_NEW,
   SET_FILTERED_PRODUCTS,
   SET_CATEGORIES,
+  SET_SEARCH_VALUE,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -91,6 +92,7 @@ const initialState = {
   categories: [],
   filteredQuantity: null,
   quantity: null,
+  searchValue: "",
 };
 
 export default (state = initialState, action) => {
@@ -123,6 +125,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         categories: action.categories,
+      };
+    case SET_SEARCH_VALUE:
+      return {
+        ...state,
+        searchValue: action.searchValue,
       };
     default:
       return state;

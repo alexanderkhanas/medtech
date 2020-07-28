@@ -13,10 +13,15 @@ export const searchProductsRequest = async (value) => {
   return _axios.get(`/products?search=${value}`);
 };
 
-export const fetchFilteredProducts = (categoryId, searchValue) => {
+export const fetchFilteredProducts = (categoriesArray, searchValue) => {
   let baseUrl = "/products?";
-  if (categoryId) {
-    baseUrl += `category=${categoryId}&`;
+  if (categoriesArray) {
+    baseUrl += "category=";
+    console.log("categoryIdsArray ===", categoriesArray);
+
+    categoriesArray.forEach((category) => {
+      baseUrl += `${category.id}&`;
+    });
   }
   if (searchValue) {
     baseUrl += `search=${searchValue}`;
@@ -29,3 +34,23 @@ export const fetchCategories = () => _axios.get("/categories");
 export const fetchAllNews = () => _axios.get("/news");
 
 export const fetchSingleNews = (id) => _axios.get(`/new/${id}`);
+
+export const registerRequest = (data) =>
+  _axios.post(
+    "/register",
+    data
+    // , {
+    //   withCredentials: true,
+    // }
+  );
+
+export const loginRequest = (data) =>
+  _axios
+    .post(
+      "/login",
+      data
+      //  {
+      //   withCredentials: true,
+      // }
+    )
+    .catch((e) => console.log(e));

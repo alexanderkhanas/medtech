@@ -182,12 +182,10 @@ p {
   font-weight: bold;
   font-size: 1.5rem;
 }
-/* .container_title.mobile {
-  display: none;
+.delete__photo {
+  position: absolute;
+  margin-left: 35px;
 }
-.container_title {
-  display: block;
-} */
 
 @keyframes move {
   0% {

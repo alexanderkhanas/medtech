@@ -18,8 +18,10 @@ import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInpu
 import { useHistory, Link } from "react-router-dom";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import _axios from "../../store/api/_axios";
+import { registerAction } from "../../store/actions/profileActions";
+import { connect } from "react-redux";
 
-const Register = () => {
+const Register = ({ register }) => {
   const [isRegister, setRegister] = useState(false);
   const setFormRegister = () => setRegister(true);
   const setFormLogin = () => setRegister(false);
@@ -49,6 +51,7 @@ const Register = () => {
           email: "",
           password: "",
           passwordConfirm: "",
+          phone: "",
         }}
         validate={(values) => {
           const errors = {};
@@ -57,19 +60,27 @@ const Register = () => {
           } else if (/[0-9._%+-]$/i.test(values.fName)) {
             errors.fName = "Невірно введенe Ім'я";
           }
-          if (values.lName.length <= 2) {
+
+          if (!values.lName || values.lName.length <= 2) {
             errors.lName = "Занадто коротке прізвище";
           } else if (/[0-9._%+-]$/i.test(values.lName)) {
             errors.lName = "Невірно введенe прізвище";
           }
+
+          if (!values.phone || values.phone.length <= 10) {
+            errors.phone = "Невірно введений номер";
+          }
+
           if (values.fatherName.length <= 3) {
             errors.fatherName = "Занадто коротке по-батькові";
           } else if (/[0-9._%+-]$/i.test(values.fatherName)) {
             errors.fatherName = "Невірно введенe по-батькові";
           }
+
           if (values.password.length <= 5) {
             errors.password = "Занадто короткий пароль";
           }
+
           if (!values.email) {
             errors.email = "Введіть електронну пошту";
           } else if (
@@ -77,6 +88,7 @@ const Register = () => {
           ) {
             errors.email = "Невірно введена електронна пошта";
           }
+
           if (values.password !== values.passwordConfirm) {
             errors.passwordConfirm = "ne spivpadae";
           }
@@ -84,25 +96,7 @@ const Register = () => {
         }}
         onSubmit={(values, { setSubmitting }) => {
           const { fName, lName, fatherName, phone, password, email } = values;
-          _axios
-            .post("/register", {
-              fName,
-              lName,
-              fatherName,
-              phone,
-              email,
-              password,
-            })
-
-            .then((res) => {
-              console.log(res);
-              if (res.status === 200) {
-                h.push(`/register/${res.data.user.userId}`);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          register({ fName, lName, fatherName, phone, password, email });
         }}
       >
         {({
@@ -114,8 +108,8 @@ const Register = () => {
           handleSubmit,
           handleFocus,
           isSubmiting,
+          validateOnBlur,
         }) => {
-          // console.log("values :", values);
           const SuccessIcon = () => (
             <FontAwesomeIcon
               icon={faCheckCircle}
@@ -128,7 +122,6 @@ const Register = () => {
               className={`${s.icon} ${s.error__icon}`}
             />
           );
-          console.log(errors);
           return (
             <form onSubmit={handleSubmit}>
               <div className={s.body}>
@@ -149,9 +142,12 @@ const Register = () => {
                             onBlur={handleBlur}
                             onFocus={handleFocus}
                           >
-                            {!errors.fName && touched.fName && <SuccessIcon />}
+                            {!errors.fName &&
+                              touched.fName &&
+                              !!values.fName && <SuccessIcon />}
 
-                            {errors.fName && touched.fName && <ErrorIcon />}
+                            {(errors.fName || !values.fName) &&
+                              touched.fName && <ErrorIcon />}
                           </Input>
                         </div>
                         <div className={s.login}>
@@ -162,9 +158,12 @@ const Register = () => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                           >
-                            {!errors.lName && touched.lName && <SuccessIcon />}
+                            {!errors.lName &&
+                              touched.lName &&
+                              !!values.lName && <SuccessIcon />}
 
-                            {errors.lName && touched.lName && <ErrorIcon />}
+                            {(errors.lName || !values.lName) &&
+                              touched.lName && <ErrorIcon />}
                           </Input>
                         </div>
                         <div className={s.login}>
@@ -175,18 +174,29 @@ const Register = () => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                           >
-                            {!errors.fatherName && touched.fatherName && (
-                              <SuccessIcon />
-                            )}
+                            {!errors.fatherName &&
+                              touched.fatherName &&
+                              !!values.fatherName && <SuccessIcon />}
 
-                            {errors.fatherName && touched.fatherName && (
-                              <ErrorIcon />
-                            )}
+                            {(errors.fatherName || !values.fatherName) &&
+                              touched.fatherName && <ErrorIcon />}
                           </Input>
                         </div>
 
                         <div className={s.ph__number}>
-                          <PhoneNumberInput value={values.phone} />
+                          <PhoneNumberInput
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            name="phone"
+                            value={values.phone}
+                          >
+                            {!errors.phone &&
+                              touched.phone &&
+                              !!values.phone && <SuccessIcon />}
+
+                            {(errors.phone || !values.phone) &&
+                              touched.phone && <ErrorIcon />}
+                          </PhoneNumberInput>
                         </div>
                         <div className={s.email}>
                           <Input
@@ -197,9 +207,12 @@ const Register = () => {
                             type="email"
                             placeholder="example@gmail.com"
                           >
-                            {!errors.email && touched.email && <SuccessIcon />}
+                            {!errors.email &&
+                              touched.email &&
+                              !!values.email && <SuccessIcon />}
 
-                            {errors.email && touched.email && <ErrorIcon />}
+                            {(errors.email || !values.email) &&
+                              touched.email && <ErrorIcon />}
                           </Input>
                         </div>
                         <div className={s.pswd}>
@@ -211,13 +224,12 @@ const Register = () => {
                             type="password"
                             placeholder="Пароль"
                           >
-                            {!errors.password && touched.password && (
-                              <SuccessIcon />
-                            )}
+                            {!errors.password &&
+                              touched.password &&
+                              !!values.password && <SuccessIcon />}
 
-                            {errors.password && touched.password && (
-                              <ErrorIcon />
-                            )}
+                            {(errors.password || !values.password) &&
+                              touched.password && <ErrorIcon />}
                           </Input>
                         </div>
                       </div>
@@ -231,9 +243,11 @@ const Register = () => {
                           placeholder="Підтвердіть пароль"
                         >
                           {!errors.passwordConfirm &&
-                            touched.passwordConfirm && <SuccessIcon />}
+                            touched.passwordConfirm &&
+                            !!values.passwordConfirm && <SuccessIcon />}
 
-                          {errors.passwordConfirm &&
+                          {(errors.passwordConfirm ||
+                            !values.passwordConfirm) &&
                             touched.passwordConfirm && <ErrorIcon />}
                         </Input>
                       </div>
@@ -298,4 +312,14 @@ const Register = () => {
   );
 };
 
-export default Register;
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    register: (data) => dispatch(registerAction(data)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

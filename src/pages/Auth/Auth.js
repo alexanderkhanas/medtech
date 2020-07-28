@@ -4,7 +4,7 @@ import Input from "../../misc/Inputs/Input/Input";
 import { Formik, ErrorMessage } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
-import BreadCrumbs from "./../../misc/BreadCrumbs/BreadCrumbs";
+import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import {
   faCheckCircle,
   faExclamationCircle,
@@ -15,13 +15,15 @@ import {
 import Button from "../../misc/Button/Button";
 import { useHistory, Link } from "react-router-dom";
 import _axios from "../../store/api/_axios";
+import { loginAction } from "../../store/actions/profileActions";
+import { connect } from "react-redux";
+import {
+  showAlertAction,
+  hideAlertAction,
+} from "../../store/actions/alertActions";
 
-const Auth = () => {
-  const [isRegister, setRegister] = useState(false);
-  const setFormRegister = () => setRegister(true);
-  const setFormLogin = () => setRegister(false);
+const Auth = ({ login, hideAlert, showAlert }) => {
   const h = useHistory();
-
   const breadCrumbsItems = [
     {
       name: "Головна",
@@ -49,25 +51,33 @@ const Auth = () => {
           }
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
-          alert(JSON.stringify(values));
-          // prompt("123");
+        onSubmit={async (values, { setSubmitting }) => {
           const { email, password } = values;
-          _axios
-            .post("/login", {
-              email,
-              password,
-            })
+          const loginResponse = await login({ email, password });
+          console.log("login response ===", loginResponse);
 
-            .then((res) => {
-              console.log(res);
-              res.status === 200
-                ? h.push(`/login/${res.data.user.userId}`)
-                : alert("res.status");
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+          if (loginResponse) {
+            h.push(`/profile/${loginResponse._id}`);
+          } else {
+            showAlert("Помилка при авторизації. Невірно введені дані.");
+            setTimeout(() => {
+              hideAlert();
+            }, 5000);
+          }
+
+          // _axios
+          //   .post("/login", {
+          //     email,
+          //     password,
+          //   })
+
+          //   .then((res) => {
+          //     console.log(res);
+          //     if (res.status === 200) {
+          //       h.push(`/login/${res.data.user.userId}`);
+          //     }
+          //   })
+          //   .catch(console.log);
         }}
       >
         {({
@@ -79,8 +89,6 @@ const Auth = () => {
           handleSubmit,
           isSubmiting,
         }) => {
-          console.log("values :", values);
-
           const SuccessIcon = () => (
             <FontAwesomeIcon
               icon={faCheckCircle}
@@ -98,7 +106,7 @@ const Auth = () => {
               <div className={s.body}>
                 <div className={s.container}>
                   <div className={s.title__container}>
-                    <h4 className={s.title}>ACCOUNT</h4>
+                    <h4 className={s.title}>Увійти</h4>
                     <BreadCrumbs items={breadCrumbsItems} />
                   </div>
                   <div className={s.login}>
@@ -112,7 +120,15 @@ const Auth = () => {
                           value={values.email}
                           type="email"
                           placeholder="example@gmail.com"
-                        />
+                        >
+                          {!errors.email && touched.email && !!values.email && (
+                            <SuccessIcon />
+                          )}
+
+                          {(errors.email || !values.email) && touched.email && (
+                            <ErrorIcon />
+                          )}
+                        </Input>
                         <div className={s.password}>
                           <Input
                             onChange={handleChange}
@@ -122,7 +138,10 @@ const Auth = () => {
                             name="password"
                             value={values.password}
                             placeholder="••••••••"
-                          />
+                          >
+                            {(errors.email || !values.email) &&
+                              touched.email && <ErrorIcon />}
+                          </Input>
                         </div>
                       </div>
                     </div>
@@ -130,7 +149,7 @@ const Auth = () => {
                       <button className={s.restore}>Відновити акаунт</button>
                     </Link>
                     <div className={s.submit_button}>
-                      <Button title="Sign in" />
+                      <Button title="Підтвердити" />
                     </div>
 
                     <div className={s.fbt}>
@@ -174,4 +193,16 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (data) => dispatch(loginAction(data)),
+    showAlert: (content) => dispatch(showAlertAction(content)),
+    hideAlert: () => dispatch(hideAlertAction()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

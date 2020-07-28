@@ -15,6 +15,7 @@ import Politics from "./misc/Politics/Politics";
 import News from "./pages/News/News";
 import SingleNews from "./pages/SingleNews/SingleNews";
 import { getAllNewsAction } from "./store/actions/newsActions";
+import Alert from "./misc/Alert/Alert";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -53,41 +54,42 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
   return (
     <Router>
       <Header />
-      <div style = {{marginTop: "45px"}}>
-      <Suspense fallback={<div>loading</div>}>
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/product/:id" component={SingleProduct} />
-          <Route path="/cart" component={Cart} />
-          <Route path="/catalog" component={Catalog} />
-          <Route path="/login" component={(props) => <Login {...props} />} />
-          <Route path="/public-offer" component={PublicOffer} />
-          <Route path="/politics" component={Politics} />
-          <Route path="/news" component={News} />
-          <Route path="/single-news/:id" component={SingleNews} />
-          <Route
-            path="/register"
-            component={(props) => <Register {...props} />}
-          />
-          <Route path="/profile/:id" component={Profile} />
-          <Route
-            path="/restore"
-            component={(props) => <RestorePassword {...props} />}
-          />
-          <Route
-            path="/new-password"
-            component={(props) => <NewPassword {...props} />}
-          />
-          <Route
-            path="/wishlist"
-            component={(props) => <Wishlist {...props} />}
-          />
-          <Route path="*">
-            <NoMatchPage />
-          </Route>
-        </Switch>
-      </Suspense>
-      <Footer />
+      <Alert />
+      <div style={{ marginTop: "45px" }}>
+        <Suspense fallback={<div>loading</div>}>
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/product/:id" component={SingleProduct} />
+            <Route path="/cart" component={Cart} />
+            <Route path="/catalog" component={Catalog} />
+            <Route path="/login" component={(props) => <Login {...props} />} />
+            <Route path="/public-offer" component={PublicOffer} />
+            <Route path="/politics" component={Politics} />
+            <Route path="/news" component={News} />
+            <Route path="/single-news/:id" component={SingleNews} />
+            <Route
+              path="/register"
+              component={(props) => <Register {...props} />}
+            />
+            <Route path="/profile/:id" component={Profile} />
+            <Route
+              path="/restore"
+              component={(props) => <RestorePassword {...props} />}
+            />
+            <Route
+              path="/new-password"
+              component={(props) => <NewPassword {...props} />}
+            />
+            <Route
+              path="/wishlist"
+              component={(props) => <Wishlist {...props} />}
+            />
+            <Route path="*">
+              <NoMatchPage />
+            </Route>
+          </Switch>
+        </Suspense>
+        <Footer />
       </div>
     </Router>
   );

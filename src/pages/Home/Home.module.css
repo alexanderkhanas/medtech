@@ -65,13 +65,13 @@
   justify-content: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding: 0 50px;
+  padding: 0 50px 100px 50px;
   box-sizing: border-box;
 }
 
 @media (min-width: 600px) {
   .news__container {
-    padding: 0;
+    padding: 0 0 100px 0;
   }
 }
 

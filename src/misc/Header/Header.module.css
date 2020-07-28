@@ -36,10 +36,6 @@ header {
   transition: 0.2s;
 }
 
-.header_icon:hover {
-  color: aqua;
-}
-
 .menu_main_wrapper {
   display: flex;
   padding: 30px 0;
@@ -53,6 +49,7 @@ header {
   font-family: Roboto;
   font-weight: 300;
   margin-right: 25px;
+  font-weight: 500;
 }
 
 .nav__link__active {
@@ -202,6 +199,12 @@ header {
   height: 100px;
 }
 
+@media (max-width: 1300px) {
+  .header__container {
+    padding: 0 20px;
+  }
+}
+
 @media (max-width: 950px) {
   .header__container {
     display: none;
@@ -211,7 +214,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 9;
     background-color: #fff;
     display: flex;
   }

@@ -5,6 +5,8 @@ import cartReducer from "./cartReducer";
 import singleProductReducer from "./singleProductReducer";
 import wishlistReducer from "./wishlistReducer";
 import baseReducer from "./baseReducer";
+import alertReducer from "./alertReducer";
+import profileReducer from "./profileReducer";
 
 export default combineReducers({
   products: mainReducer,
@@ -13,4 +15,6 @@ export default combineReducers({
   single: singleProductReducer,
   wishlist: wishlistReducer,
   base: baseReducer,
+  alert: alertReducer,
+  profile: profileReducer,
 });

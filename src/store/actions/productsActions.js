@@ -13,6 +13,7 @@ import {
   SET_SEARCH,
   SET_LOADING,
   SET_CATEGORIES,
+  SET_SEARCH_VALUE,
 } from "./actionTypes";
 import _axios from "../api/_axios";
 
@@ -55,10 +56,10 @@ export const getProductsByPage = (page) => {
   };
 };
 
-export const filterProductsAction = (categoryId, searchValue) => {
+export const filterProductsAction = (categoryIdsArray, searchValue) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING, isLoading: true });
-    const response = await fetchFilteredProducts(categoryId, searchValue);
+    const response = await fetchFilteredProducts(categoryIdsArray, searchValue);
     dispatch({ type: SET_LOADING, isLoading: false });
     console.log("response ===", response.data);
     dispatch({
@@ -81,5 +82,12 @@ export const getCategoriesAction = () => {
     const response = await fetchCategories();
     console.log("categories ===", response.data);
     dispatch({ type: SET_CATEGORIES, categories: response.data });
+  };
+};
+
+export const setSearchValueAction = (searchValue) => {
+  return {
+    type: SET_SEARCH_VALUE,
+    searchValue,
   };
 };

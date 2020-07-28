@@ -8,6 +8,7 @@ import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import NewsCard from "../../misc/NewsCard/NewsCard";
 import { getSingleNewsAction } from "../../store/actions/newsActions";
 import { connect } from "react-redux";
+import Moment from "react-moment";
 
 const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
   const { title, gallery, desc, createdAt, _id } = singleNews;
@@ -27,7 +28,7 @@ const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
   return (
     <div>
       <div className={s.title__container}>
-        <h4 className={s.title}>НОВИНА</h4>
+        <h4 className={s.title}>{title}</h4>
         <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
@@ -35,26 +36,14 @@ const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
           <div className={s.main_container}>
             <h4 className={s.news_title}>{title}</h4>
             <div className={s.image_container}>
-              <img className={s.main__image} src={vadim} alt="loading" />
+              <img className={s.main__image} src={gallery} alt="loading" />
             </div>
             <div className={s.news_text}>
-              <p>
-                There’s only a week to go before I’m a Celebrity returns to
-                screens, and ahead of the launch, show’s leading ladies have
-                been enjoying some downtime together. Presenter Holly
-                Willoughby, who has stepped in for Ant McPartlin this year, was
-                pictured having a laugh with Scarlett Moffatt, who co-hosts the
-                spin-off show, I’m a Celebrity: Extra Camp. The TV stars were
-                joined by Declan Donnelly’s wife Ali Astall on their day out in
-                New South Wales, Australia. Photographed in a suitably verdant
-                setting alongside her co-presenter, Holly looked ready to take
-                on anything with a retro Cowgirl-esque outfit. Dressed in the
-                supercool Danish brand Ganni, a.k.a the go-to designer for
-                influencers worldwide, Holly wore the ultra cute ‘Salvia’ suede
-                mini skirt in dark camel with frill detailing that buttoned all
-                the way up at the front.
-              </p>
+              <p>{desc}</p>
             </div>
+            <Moment format="DD/MM/YYYY" className={s.createdAt}>
+              {createdAt}
+            </Moment>
           </div>
         </div>
         <div className={s.section}>

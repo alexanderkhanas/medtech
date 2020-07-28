@@ -59,6 +59,9 @@
   padding: 20px;
   box-sizing: border-box;
 }
+.createdAt {
+  color: #888888;
+}
 
 @media (max-width: 900px) {
 }

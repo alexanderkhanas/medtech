@@ -5,10 +5,16 @@ import {
   SET_NUMBER_CART,
   SET_FULL_PRICE,
 } from "./actionTypes";
+import { getLocalCart } from "../../utils/utils";
 
-export const addToCartAction = (product) => {
-  const cart = localStorage.getItem("_cart");
-  localStorage.setItem("_cart", cart ? `${cart} ${product._id}` : product._id);
+export const addToCartAction = (product, attributes) => {
+  const localCart = getLocalCart();
+  console.log("add to localCart ===", localCart);
+
+  localStorage.setItem(
+    "_cart",
+    JSON.stringify([...localCart, { _id: product._id, attributes }])
+  );
   return {
     type: ADD_TO_CART,
     product,
@@ -16,11 +22,11 @@ export const addToCartAction = (product) => {
 };
 
 export const removeFromCartAction = (product) => {
-  const cart = localStorage.getItem("_cart");
-  console.log(cart);
+  const localCart = getLocalCart();
+  console.log("remove from localCart ===", localCart);
   localStorage.setItem(
     "_cart",
-    cart ? cart.replace(` ${product._id}`, "") : product._id
+    localCart.filter((cartProduct) => cartProduct._id !== product._id)
   );
   return {
     type: REMOVE_FROM_CART,

@@ -48,7 +48,7 @@ header {
   color: #404040;
   font-family: Roboto;
   font-weight: 300;
-  margin-right: 25px;
+  margin-right: 30px;
   font-weight: 500;
 }
 
@@ -74,6 +74,7 @@ header {
 .small_menu_item {
   display: flex;
   align-items: center;
+  position: relative;
 }
 .small_menu_item button:hover {
   color: #009d66;
@@ -155,15 +156,34 @@ header {
 .search__container {
   display: flex;
   flex: 1;
-  margin: 0 100px;
+  margin: 0 50px;
   position: relative;
+}
+
+.search__overlay {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background: #40404020;
+  z-index: 1;
 }
 
 .search__input__container {
   flex: 10;
+  z-index: 3;
+}
+
+.search__button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 37px;
+  z-index: 3;
 }
 
 .search__dropdown {
+  z-index: 3;
   position: absolute;
   bottom: -400px;
   left: 0;
@@ -184,6 +204,19 @@ header {
   border-bottom: 1px solid #ccc;
 }
 
+.search__container .mobile__search__product h3 {
+  font-size: 15px;
+  padding: 0;
+}
+
+.search__container .mobile__search__product h2 {
+  padding: 7px 0;
+}
+
+.search__container .mobile__search__product img {
+  width: 35%;
+}
+
 .search__see__more {
   color: #000;
   padding: 10px 0;
@@ -199,9 +232,10 @@ header {
   height: 100px;
 }
 
-@media (max-width: 1300px) {
-  .header__container {
-    padding: 0 20px;
+@media (max-width: 1200px) {
+  .nav__link {
+    font-size: 16px;
+    margin-right: 23px;
   }
 }
 
@@ -217,5 +251,11 @@ header {
     z-index: 9;
     background-color: #fff;
     display: flex;
+  }
+  .search__container {
+    margin: 0 25px;
+  }
+  .search__button {
+    flex: 0.5;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import s from "./Cart.module.css";
 import { connect } from "react-redux";
 import {
@@ -9,20 +9,38 @@ import {
 import CartProduct from "../../misc/CartProductCard/CartProduct";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import Button from "../../misc/Button/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
+import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 
 const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
   useEffect(() => {
     setFullPrice(
       cartProducts.reduce(
-        (acc, product) => acc + product.price * product.numberInCart,
+        (acc, { price, numberInCart = 1, selectedAttributesPrice }) => {
+          const productPrice = +selectedAttributesPrice || price;
+          return acc + productPrice * numberInCart;
+        },
         0
       )
     );
   }, [cartProducts]);
-  console.log("cartProducts ===", cartProducts);
+
+  const breadCrumbsItems = [
+    {
+      name: "Головна",
+      path: "/",
+      icon: <FontAwesomeIcon icon={faHome} />,
+    },
+    { name: "Кошик", path: "/cart" },
+  ];
 
   return (
     <div className={s.container}>
+      <div className={s.title__container}>
+        <h1 className={s.title}>Кошик</h1>
+        <BreadCrumbs items={breadCrumbsItems} />
+      </div>
       <FixedWrapper>
         {cartProducts.length ? (
           <>
@@ -39,7 +57,7 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
               ))}
             </div>
             <div className={s.actions__container}>
-              <h2 className={s.actions__price}>{`${fullPrice} ₴`}</h2>
+              <h2 className={s.actions__price}>{`${fullPrice || 0} ₴`}</h2>
               <div>
                 <Button title="Купити" size="xl" isUppercase />
               </div>

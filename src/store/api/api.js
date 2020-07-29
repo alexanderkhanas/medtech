@@ -19,9 +19,10 @@ export const fetchFilteredProducts = (categoriesArray, searchValue) => {
     baseUrl += "category=";
     console.log("categoryIdsArray ===", categoriesArray);
 
-    categoriesArray.forEach((category) => {
-      baseUrl += `${category.id}&`;
-    });
+    baseUrl += categoriesArray.map((category) => category.id).join(",");
+    // categoriesArray.forEach((category) => {
+    //   baseUrl += `${category.id}&`;
+    // });
   }
   if (searchValue) {
     baseUrl += `search=${searchValue}`;

@@ -28,6 +28,7 @@
 .title {
   font-size: 20px;
   margin-bottom: 7px;
+  color: #000;
 }
 
 .category {
@@ -49,6 +50,10 @@
   font-size: 25px;
   color: #404040;
   cursor: pointer;
+}
+
+.icon_ft {
+  margin-right: 10px;
 }
 
 @media (max-width: 575px) {

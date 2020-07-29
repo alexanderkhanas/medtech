@@ -26,6 +26,7 @@
 
 .title {
   cursor: pointer;
+  color: #000;
 }
 
 .main__content__sm .title {

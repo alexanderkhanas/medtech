@@ -4,3 +4,6 @@ export const scrollToRef = (ref, range = 0) =>
     left: 0,
     behavior: "smooth",
   });
+
+export const getLocalCart = () =>
+  JSON.parse(localStorage.getItem("_cart") || "[]");

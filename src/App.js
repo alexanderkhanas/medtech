@@ -16,6 +16,8 @@ import News from "./pages/News/News";
 import SingleNews from "./pages/SingleNews/SingleNews";
 import { getAllNewsAction } from "./store/actions/newsActions";
 import Alert from "./misc/Alert/Alert";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { getLocalCart } from "./utils/utils";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -28,7 +30,6 @@ const Wishlist = lazy(() => import("./pages/Wishlist/Wishlist"));
 const Cart = lazy(() => import("./pages/Cart/Cart"));
 
 const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
-  const getLocalCart = () => localStorage.getItem("_cart")?.split(" ");
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
 
   useEffect(() => {
@@ -39,10 +40,24 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
   }, []);
 
   useEffect(() => {
-    const cartIds = getLocalCart();
-    const cartProducts = cartIds
-      ? allProducts.filter((product) => cartIds.includes(product._id))
-      : [];
+    const localCart = getLocalCart();
+    // const cartProducts = cartIds
+    //   ? allProducts.filter((product) => cartIds.includes(product._id))
+    //   : [];
+    const cartProducts = [];
+    allProducts.forEach((product) => {
+      localCart.forEach((cartProduct) => {
+        if (product._id === cartProduct._id) {
+          cartProducts.push({
+            ...product,
+            selectedAttributesId: cartProduct.attributes._id,
+            selectedAttributesPrice: cartProduct.attributes.priceAttr,
+          });
+        }
+      });
+    });
+    console.log("cart products ===", cartProducts);
+
     setCart(cartProducts);
 
     const wishlistIds = getLocalWishlist();

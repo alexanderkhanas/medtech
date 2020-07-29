@@ -58,6 +58,7 @@ const SingleProduct = ({
   const [priceInfo, setPriceInfo] = useState({ value: null, string: "" });
   const [isInCart, setInCart] = useState(false);
   const [isTopButtonVisible, setTopButtonVisible] = useState(false);
+  const [foundAttributes, setFoundAttributes] = useState({});
 
   const mainContentRef = useRef();
   const attributesRef = useRef();
@@ -72,20 +73,20 @@ const SingleProduct = ({
   };
 
   const onCartButtonClick = () => {
-    // if (!priceInfo.value) {
-    //   showAlert("Перед додаванням у корзину оберіть атрибути");
-    //   if (window.innerWidth <= 575) {
-    //     scrollToRef(attributesRef, -120);
-    //   }
-    //   setTimeout(() => {
-    //     hideAlert();
-    //   }, 5000);
-    //   return;
-    // }
+    if (!foundAttributes._id) {
+      showAlert("Перед додаванням у корзину оберіть атрибути");
+      if (window.innerWidth <= 575) {
+        scrollToRef(attributesRef, -120);
+      }
+      setTimeout(() => {
+        hideAlert();
+      }, 5000);
+      return;
+    }
     if (isInCart) {
       removeFromCart(product);
     } else {
-      addToCart({ ...product, selectedAttributes });
+      addToCart(product, foundAttributes);
     }
   };
 
@@ -104,6 +105,10 @@ const SingleProduct = ({
     }
   };
 
+  useEffect(() => {
+    console.log("price ===", priceInfo);
+  }, [priceInfo]);
+
   //effects
   useEffect(() => {
     getProduct(match.params.id);
@@ -114,8 +119,10 @@ const SingleProduct = ({
       (cartProduct) => cartProduct._id === _id
     )[0];
 
+    console.log("iproductFromCart ===", productFromCart);
+
     setInCart(!!productFromCart);
-  }, [cartProducts]);
+  }, [cartProducts, _id]);
 
   useEffect(() => {
     if (attributes) {
@@ -145,8 +152,8 @@ const SingleProduct = ({
     if (attributeOptions) {
       const attributeFound = attributeOptions.find((attributeObj) =>
         lodash.isEqual(
-          { ...attributeObj, priceAttr: null },
-          { ...selectedAttributes, priceAttr: null }
+          { ...attributeObj, priceAttr: null, _id: null },
+          { ...selectedAttributes, priceAttr: null, _id: null }
         )
       );
       if (attributeFound) {
@@ -154,11 +161,15 @@ const SingleProduct = ({
           value: attributeFound.priceAttr,
           string: `${attributeFound.priceAttr}₴`,
         });
-
-        setSelectedAttributes((prev) => ({ ...prev, _id: attributeFound._id }));
       }
+      setFoundAttributes(attributeFound || {});
     }
   }, [selectedAttributes]);
+
+  useEffect(() => {
+    console.log("foundAttribute ===", foundAttributes);
+    console.log("product ===", product);
+  }, [foundAttributes]);
 
   useEffect(() => {
     const scrollListener = new ScrollListener();
@@ -180,157 +191,132 @@ const SingleProduct = ({
     qtyClassName = s.notInStock;
   }
 
-  return (
-    !!product && (
-      <FixedWrapper>
-        <div className={s.container}>
-          <div className={s.desktop__container}>
-            <div className={s.carousel__container}>
-              <ItemsCarousel arrows={false} dots slidesPerPage={1}>
-                {[
-                  "https://i.ibb.co/rxSTJfz/img2.png",
-                  "https://i.ibb.co/dMsk2PN/img1.png",
-                  "https://i.ibb.co/kgmN7bf/img3.png",
-                ].map((img, i) => (
-                  <img
-                    className={s.main__image}
-                    key={img}
-                    src={`${img}.png`}
-                    alt="loading"
-                  />
-                ))}
-              </ItemsCarousel>
-            </div>
-            <div className={s.desktop__info__container}>
-              <h1 className={s.title}>{title}</h1>
-              <div className={s.price__container}>
-                <h2 className={s.price}>
-                  {priceInfo.value ? priceInfo.string : `${price}₴`}
-                </h2>
-                <div className={s.button__container}>
-                  <Button
-                    title={isInCart ? "В кошику" : "Додати в кошик"}
-                    className={classnames({
-                      [s.active__cart__button]: isInCart,
-                    })}
-                    onClick={onCartButtonClick}
-                  />
-                </div>
-              </div>
-              <p className={s.desc}>
-                {desc.slice(0, 300)}
-                <button onClick={scrollToDescription}>Більше</button>
-              </p>
-              <div className={s.attributes__wrapper} ref={attributesRef}>
-                {Object.entries(filteredAttributes).map((attributesObj, i) => {
-                  const name = attributesObj[0];
-                  const values = attributesObj[1].all;
-                  return (
-                    <ProductAttribute
-                      key={name}
-                      isClickable
-                      {...{ name }}
-                      {...{ values }}
-                      {...{ selectAttribute }}
-                    />
-                  );
-                })}
-                <ProductAttribute
-                  name="Країна виробника"
-                  values={[vendorID.title]}
+  return product ? (
+    <FixedWrapper>
+      <div className={s.container}>
+        <div className={s.desktop__container}>
+          <div className={s.carousel__container}>
+            <ItemsCarousel arrows={false} dots slidesPerPage={1}>
+              {[
+                "https://i.ibb.co/rxSTJfz/img2.png",
+                "https://i.ibb.co/dMsk2PN/img1.png",
+                "https://i.ibb.co/kgmN7bf/img3.png",
+              ].map((img, i) => (
+                <img
+                  className={s.main__image}
+                  key={img}
+                  src={`${img}.png`}
+                  alt="loading"
                 />
-                {!!categoryID && !!categoryID.desc && (
-                  <ProductAttribute
-                    name="Категорія"
-                    values={[categoryID.desc]}
-                  />
-                )}
-                <ProductAttribute
-                  name="Кількість"
-                  attributeClasses={qtyClassName}
-                  values={[qtyMessage]}
-                />
-              </div>
-            </div>
-          </div>
-          <div className={s.full__content} ref={mainContentRef}>
-            <Tabs>
-              <div className={s.tabs__container}>
-                <TabList className={s.tabs}>
-                  {["Опис товару", "Відгуки", "Доставка"].map((tab, i) => (
-                    <Tab
-                      onClick={() => setActiveTabIndex(i)}
-                      className={
-                        activeTabIndex === i
-                          ? `${s.tab} ${s.tab__active}`
-                          : s.tab
-                      }
-                      key={i}
-                    >
-                      {tab}
-                    </Tab>
-                  ))}
-                </TabList>
-              </div>
-              <TabPanel className={s.tab__content}>
-                <p className={s.desc}>{desc}</p>
-              </TabPanel>
-              <TabPanel className={s.tab__content}>
-                {reviews.map(
-                  ({ userID, reviewTitle, reviewDesc, reviewrating }, i) => (
-                    <div key={i} className={s.review}>
-                      <div className={s.review__header}>
-                        <h4 className={s.review__admin}>{userID.fName}</h4>
-
-                        <Stars value={reviewrating} />
-                      </div>
-                      <h5 className={s.review__title}>{reviewTitle}</h5>
-
-                      <p className={s.review__desc}>{reviewDesc}</p>
-                    </div>
-                  )
-                )}
-              </TabPanel>
-              <TabPanel className={s.tab__content}>
-                <p className={s.desc}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
-                </p>
-              </TabPanel>
-            </Tabs>
-          </div>
-          <div className={s.title__container}>
-            <h4 className={s.title}>ПОПУЛЯРНІ ПРОДУКТИ</h4>
-          </div>
-          <div className={s.popular__carousel}>
-            <ItemsCarousel
-              arrows
-              slidesPerPage={Math.floor(window.innerWidth / 350)}
-              infinite
-            >
-              {popularProducts.map((product, i) => (
-                <ProductCard key={product._id} {...{ product }} />
               ))}
             </ItemsCarousel>
           </div>
+          <div className={s.desktop__info__container}>
+            <h1 className={s.title}>{title}</h1>
+            <div className={s.price__container}>
+              <h2 className={s.price}>{priceInfo.string || `${price}₴`}</h2>
+              <div className={s.button__container}>
+                <Button
+                  title={isInCart ? "В кошику" : "Додати в кошик"}
+                  className={classnames({
+                    [s.active__cart__button]: isInCart,
+                  })}
+                  onClick={onCartButtonClick}
+                />
+              </div>
+            </div>
+            <p className={s.desc}>
+              {desc.slice(0, 300)}
+              <button onClick={scrollToDescription}>Більше</button>
+            </p>
+            <div className={s.attributes__wrapper} ref={attributesRef}>
+              {Object.entries(filteredAttributes).map((attributesObj, i) => {
+                const name = attributesObj[0];
+                const values = attributesObj[1].all;
+                return (
+                  <ProductAttribute
+                    key={name}
+                    isClickable
+                    {...{ name }}
+                    {...{ values }}
+                    {...{ selectAttribute }}
+                  />
+                );
+              })}
+              <ProductAttribute
+                name="Країна виробника"
+                values={[vendorID.title]}
+              />
+              {!!categoryID && !!categoryID.desc && (
+                <ProductAttribute name="Категорія" values={[categoryID.desc]} />
+              )}
+              <ProductAttribute
+                name="Кількість"
+                attributeClasses={qtyClassName}
+                values={[qtyMessage]}
+              />
+            </div>
+          </div>
         </div>
+        <div className={s.full__content} ref={mainContentRef}>
+          <Tabs>
+            <div className={s.tabs__container}>
+              <TabList className={s.tabs}>
+                {["Опис товару", "Відгуки", "Доставка"].map((tab, i) => (
+                  <Tab
+                    onClick={() => setActiveTabIndex(i)}
+                    className={
+                      activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
+                    }
+                    key={i}
+                  >
+                    {tab}
+                  </Tab>
+                ))}
+              </TabList>
+            </div>
+            <TabPanel className={s.tab__content}>
+              <p className={s.desc}>{desc}</p>
+            </TabPanel>
+            <TabPanel className={s.tab__content}>
+              {reviews.map(
+                ({ userID, reviewTitle, reviewDesc, reviewrating }, i) => (
+                  <div key={i} className={s.review}>
+                    <div className={s.review__header}>
+                      <h4 className={s.review__admin}>{userID.fName}</h4>
 
-        {isTopButtonVisible && (
-          <Button className={s.arrow__button} onClick={scrollTop}>
-            <FontAwesomeIcon
-              icon={faArrowUp}
-              className={s.arrow__button__icon}
-            />
-          </Button>
-        )}
-      </FixedWrapper>
-    )
+                      <Stars value={reviewrating} />
+                    </div>
+                    <h5 className={s.review__title}>{reviewTitle}</h5>
+
+                    <p className={s.review__desc}>{reviewDesc}</p>
+                  </div>
+                )
+              )}
+            </TabPanel>
+            <TabPanel className={s.tab__content}>
+              <p className={s.desc}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+            </TabPanel>
+          </Tabs>
+        </div>
+      </div>
+
+      {isTopButtonVisible && (
+        <Button className={s.arrow__button} onClick={scrollTop}>
+          <FontAwesomeIcon icon={faArrowUp} className={s.arrow__button__icon} />
+        </Button>
+      )}
+    </FixedWrapper>
+  ) : (
+    <div className={s.container} />
   );
 };
 
@@ -344,7 +330,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getProduct: (id) => dispatch(getSingleProductAction(id)),
-    addToCart: (product) => dispatch(addToCartAction(product)),
+    addToCart: (product, attributes) =>
+      dispatch(addToCartAction(product, attributes)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
     showAlert: (text) => dispatch(showAlertAction(text)),
     hideAlert: () => dispatch(hideAlertAction()),

@@ -13,12 +13,14 @@ import ProductCard from "../../misc/ProductCard/ProductCard";
 import Category from "../../misc/Category/Category";
 import { scrollToRef } from "../../utils/utils";
 import Button from "../../misc/Button/Button";
-import { faTh, faList } from "@fortawesome/free-solid-svg-icons";
+import { faTh, faList, faHome } from "@fortawesome/free-solid-svg-icons";
 import Select from "../../misc/Select/Select";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import { setLoadingAction } from "../../store/actions/baseActions";
 import { SET_FILTERED_PRODUCTS } from "../../store/actions/actionTypes";
 import CategoryAccordion from "../../misc/CategoryAccordion/CategoryAccordion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 
 const sortSelectOption = [
   { value: "recommended", label: "Рекомендовані" },
@@ -130,10 +132,20 @@ const Catalog = ({
   ))
   */
 
+  const breadCrumbsItems = [
+    {
+      name: "Головна",
+      path: "/",
+      icon: <FontAwesomeIcon icon={faHome} />,
+    },
+    { name: "Каталог", path: "/catalog" },
+  ];
+
   return (
     <div>
       <div className={s.title__container}>
-        <h1 className={s.title}>Products</h1>
+        <h1 className={s.title}>Товари</h1>
+        <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
         <div className={s.container} ref={containerRef}>

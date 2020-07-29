@@ -39,7 +39,7 @@ const HorizontalProductCard = ({ product, isSmall, className }) => {
             {title}
           </h3>
           <h2 className={s.price}>{price}₴</h2>
-          <p className={s.desc}>{desc.slice(0, 40)}</p>
+          {!isSmall && <p className={s.desc}>{desc.slice(0, 40)}</p>}
         </div>
         <div className={s.actions__container}>
           <WishlistButton {...{ product }} />

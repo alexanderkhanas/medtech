@@ -8,6 +8,7 @@ import {
   changeNumberInCartAction,
   removeFromCartAction,
 } from "../../store/actions/cartActions";
+import { Link } from "react-router-dom";
 
 const CartProduct = ({
   product,
@@ -15,31 +16,43 @@ const CartProduct = ({
   removeFromCart,
   allProductsInCart,
 }) => {
-  const { gallery, title, price, _id, desc, numberInCart = 1 } = product;
+  const {
+    gallery,
+    title,
+    price,
+    _id,
+    desc,
+    numberInCart = 1,
+    selectedAttributesId,
+    selectedAttributesPrice,
+  } = product;
+
+  const productPrice = selectedAttributesPrice || price;
 
   const onCounterChange = (value) =>
     changeNumberInCart(value, _id, allProductsInCart);
 
   const removeFromCartHandler = () => removeFromCart(product);
 
-  const isBase64 = gallery[0]?.includes("base64");
-  console.log(`data:image/png;base64, ${gallery[0]}`);
-
   return (
     <div className={s.card}>
       <div className={s.main}>
-        <img
-          className={s.img}
-          src="https://i.ibb.co/27WPrWh/i1.png"
-          alt="loading"
-        />
+        <Link to={`product/${_id}`}>
+          <img
+            className={s.img}
+            src="https://i.ibb.co/27WPrWh/i1.png"
+            alt="loading"
+          />
+        </Link>
         <div className={s.main__content}>
-          <h4 className={s.title}>{title.slice(0, 15)}</h4>
+          <Link to={`product/${_id}`}>
+            <h4 className={s.title}>{title.slice(0, 15)}</h4>
+          </Link>
           <p className={s.category}>{desc.slice(0, 20)}</p>
         </div>
       </div>
       <div className={s.price__wrapper}>
-        <span className={s.price}>{price}₴</span>
+        <span className={s.price}>{productPrice}₴</span>
       </div>
       <div className={s.qty__counter__wrapper}>
         <div className={s.qty__counter}>
@@ -47,7 +60,7 @@ const CartProduct = ({
         </div>
       </div>
       <div className={s.fullprice__container}>
-        <span className={s.fullprice}>{numberInCart * price}₴</span>
+        <span className={s.fullprice}>{numberInCart * productPrice || 0}₴</span>
       </div>
       <div className={s.remove__icon__wrapper}>
         <FontAwesomeIcon
@@ -59,7 +72,7 @@ const CartProduct = ({
 
       <div className={s.mobile}>
         <div className={s.fullprice__container}>
-          <span className={s.fullprice}>{numberInCart * price}₴</span>
+          <span className={s.fullprice}>{numberInCart * price || 0}₴</span>
         </div>
         <div className={s.qty__counter}>
           <Counter onChange={onCounterChange} initialValue={numberInCart} />

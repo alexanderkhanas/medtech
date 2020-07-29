@@ -20,6 +20,7 @@
 
 .card__img {
   width: 100%;
+  cursor: pointer;
 }
 
 .card__title {
@@ -28,6 +29,7 @@
   font-weight: bold;
   margin: 15px 0;
   font-size: 1.3rem;
+  cursor: pointer;
 }
 
 .card__price {

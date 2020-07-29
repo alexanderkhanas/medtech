@@ -23,8 +23,8 @@ import {
 } from "../../store/actions/productsActions";
 import { connect } from "react-redux";
 import HorizontalProductCard from "../HorizontalProductCard/HorizontalProductCard";
-// import CartButton from "../CartButton/CartButton";
-// import WishlistButton from "../WishlistButton/WishlistButton";
+import classnames from "classnames";
+import ProfileModal from "../ProfileModal/ProfileModal";
 
 const Header = ({
   searchProductsByValue,
@@ -38,12 +38,16 @@ const Header = ({
   const [sidebarIcon, setSidebarIcon] = useState(faBars);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
+  const [isProfileModalVisible, setProfileModalVisible] = useState(false);
+  const showProfileModal = () => setProfileModalVisible(true);
+  const hideProfileModal = () => setProfileModalVisible(false);
+
   const openSidebar = () => setBarOpen(true);
   const closeSidebar = () => setBarOpen(false);
   const onStateMenuChange = (state) => setBarOpen(state.isOpen);
 
   const onSearchInputChange = ({ target }) => setSearchValue(target.value);
-  const onSearchInputBlur = () => setDropdownVisible(false);
+  const hideDropdown = () => setDropdownVisible(false);
   const onSearchInputFocus = () => setDropdownVisible(searchValue.length >= 3);
 
   useEffect(() => {
@@ -71,7 +75,7 @@ const Header = ({
   return (
     <>
       <FixedWrapper>
-        <div className={s.header__container}>
+        <div className={s.header__container} onMouseLeave={hideProfileModal}>
           <header className={s.header}>
             <Link to="/">
               <div className={s.logo}>
@@ -92,7 +96,7 @@ const Header = ({
                   icon={faLocationArrow}
                   className={s.header_icon}
                 />
-                Store Location
+                Розташування магазину
               </button>
             </div>
           </header>
@@ -128,6 +132,7 @@ const Header = ({
               >
                 Улюблені
               </Link>
+
               <Link
                 to="/cart"
                 className={
@@ -138,33 +143,47 @@ const Header = ({
               >
                 Кошик
               </Link>
+              <Link
+                to="/news"
+                className={
+                  pathname === "/news"
+                    ? `${s.nav__link} ${s.nav__link__active}`
+                    : s.nav__link
+                }
+              >
+                Новини
+              </Link>
             </div>
             <div className={s.search__container}>
-              <div className={s.search__overlay} />
+              {isDropdownVisible && pathname !== "/catalog" && (
+                <div onClick={hideDropdown} className={s.search__overlay} />
+              )}
               <Input
                 placeholder="Введіть пошуковий запит"
                 containerClass={s.search__input__container}
                 onChange={onSearchInputChange}
-                onBlur={onSearchInputBlur}
                 onFocus={onSearchInputFocus}
               />
-              <Button title="Знайти" />
+              <Button className={s.search__button} title="Знайти" />
               {!!foundProducts.length &&
                 isDropdownVisible &&
                 pathname !== "/catalog" && (
                   <div className={s.search__dropdown}>
-                    {foundProducts.slice(0, 5).map((foundProduct, i) => {
-                      const { title, gallery, _id } = foundProduct;
-                      return (
+                    {foundProducts.slice(0, 5).map((foundProduct) => (
+                      <Link
+                        to={`product/${foundProduct._id}`}
+                        onClick={hideDropdown}
+                      >
                         <HorizontalProductCard
-                          key={_id}
+                          key={foundProduct._id}
                           isSmall
                           product={foundProduct}
                         />
-                      );
-                    })}
+                      </Link>
+                    ))}
                     <Link
                       className={s.search__see__more}
+                      onClick={hideDropdown}
                       to={{
                         pathname: "/catalog",
                         state: { query: searchValue },
@@ -180,14 +199,17 @@ const Header = ({
                 <Link
                   to="/profile/2"
                   style={{ marginRight: 0 }}
-                  className={
-                    pathname.startsWith("/profile")
-                      ? `${s.nav__link} ${s.nav__link__active}`
-                      : s.nav__link
-                  }
+                  onMouseOver={showProfileModal}
+                  className={classnames(s.nav__link, s.profile__nav__link, {
+                    [s.nav__link__active]: pathname.startsWith("/profile"),
+                  })}
                 >
                   Мій профіль
                 </Link>
+                <ProfileModal
+                  isVisible={isProfileModalVisible}
+                  hide={hideProfileModal}
+                />
               </div>
               {/* <FontAwesomeIcon icon={faSearch} className={s.navbar__icon} /> */}
             </div>
@@ -211,6 +233,49 @@ const Header = ({
               onClick={isBarOpen ? closeSidebar : openSidebar}
             />
           </CSSTransition>
+          <div className={s.search__container}>
+            {isDropdownVisible && pathname !== "/catalog" && (
+              <div onClick={hideDropdown} className={s.search__overlay} />
+            )}
+            <Input
+              placeholder="Введіть пошуковий запит"
+              containerClass={s.search__input__container}
+              onChange={onSearchInputChange}
+              onFocus={onSearchInputFocus}
+            />
+            <Button className={s.search__button}>
+              <FontAwesomeIcon icon={faSearch} />
+            </Button>
+            {!!foundProducts.length &&
+              isDropdownVisible &&
+              pathname !== "/catalog" && (
+                <div className={s.search__dropdown}>
+                  {foundProducts.slice(0, 5).map((foundProduct) => (
+                    <Link
+                      to={`product/${foundProduct._id}`}
+                      onClick={hideDropdown}
+                    >
+                      <HorizontalProductCard
+                        key={foundProduct._id}
+                        isSmall
+                        className={s.mobile__search__product}
+                        product={foundProduct}
+                      />
+                    </Link>
+                  ))}
+                  <Link
+                    className={s.search__see__more}
+                    onClick={hideDropdown}
+                    to={{
+                      pathname: "/catalog",
+                      state: { query: searchValue },
+                    }}
+                  >
+                    Показати ще
+                  </Link>
+                </div>
+              )}
+          </div>
           <Link to="/cart">
             <FontAwesomeIcon icon={faShoppingBag} className={s.cart__icon} />
           </Link>

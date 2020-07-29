@@ -2,6 +2,24 @@
   min-height: 100vh;
 }
 
+.title__container {
+  padding: 35px 0;
+  background: rgba(240, 240, 240, 0.632);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  text-align: center;
+  font-weight: 300;
+  padding: 0 0 10px 0;
+}
+
+.products__container {
+  margin-top: 10px;
+}
+
 .products__header {
   display: flex;
   padding: 15px 0;

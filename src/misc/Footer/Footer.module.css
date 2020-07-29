@@ -11,6 +11,9 @@
   color: white;
   font-size: initial;
 }
+.row {
+  flex-direction: row;
+}
 .icon_ft {
   margin-right: 2px;
 }

@@ -22,8 +22,6 @@ const Home = ({ products, recentNews }) => {
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  console.log("recent news ===", recentNews);
-
   return (
     <div>
       <ImageCarousel

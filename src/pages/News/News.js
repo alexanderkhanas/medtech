@@ -20,7 +20,7 @@ const News = ({ recentNews }) => {
   return (
     <div>
       <div className={s.title__container}>
-        <h4 className={s.title}>НОВИНИ</h4>
+        <h1 className={s.title}>Новини</h1>
         <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>

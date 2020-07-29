@@ -1,9 +1,9 @@
 import React from "react";
-import s from "./OrderCart.module.css";
+import s from "./OrderCard.module.css";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const OrderCart = () => {
+const OrderCard = () => {
   return (
     <div className={s.card}>
       <div className={s.card__atrbutes}>
@@ -19,4 +19,4 @@ const OrderCart = () => {
   );
 };
 
-export default OrderCart;
+export default OrderCard;

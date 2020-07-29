@@ -5,7 +5,7 @@ import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import { faHome, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { TabList, Tabs, Tab, TabPanel } from "react-tabs";
-import OrderCart from "../../misc/OrderCart/OrderCart";
+import OrderCard from "../../misc/Admin/OrderCard/OrderCard";
 import { Link } from "react-router-dom";
 import Cart from "../Cart/Cart";
 import NewsCard from "../../misc/NewsCard/NewsCard";
@@ -63,12 +63,12 @@ const Admin = ({ recentNews }) => {
               <span>Загальна сума</span>
             </div>
             <Link to="/edit-order/:id">
-              <OrderCart />
+              <OrderCard />
             </Link>
-            <OrderCart />
-            <OrderCart />
-            <OrderCart />
-            <OrderCart />
+            <OrderCard />
+            <OrderCard />
+            <OrderCard />
+            <OrderCard />
           </TabPanel>
           <TabPanel>123</TabPanel>
           <TabPanel>123</TabPanel>
@@ -77,13 +77,7 @@ const Admin = ({ recentNews }) => {
           <TabPanel>123</TabPanel>
           <TabPanel>123</TabPanel>
           <TabPanel>
-            <div className={s.section}>
-              <div className={s.news__container}>
-                {recentNews.map((newsItem, i) => (
-                  <NewsCard {...{ newsItem }} key={newsItem._id} />
-                ))}
-              </div>
-            </div>
+            <div className={s.news}></div>
           </TabPanel>
           <TabPanel>123</TabPanel>
         </Tabs>

@@ -20,7 +20,8 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
         (acc, { price, numberInCart = 1, selectedAttributesPrice }) => {
           const productPrice = +selectedAttributesPrice || price;
           return acc + productPrice * numberInCart;
-        }
+        },
+        0
       )
     );
   }, [cartProducts]);

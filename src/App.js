@@ -20,6 +20,7 @@ import { getAllNewsAction } from "./store/actions/newsActions";
 import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart } from "./utils/utils";
+import EditNews from "./pages/EditNews/EditNews";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -86,6 +87,7 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
             <Route path="/single-news/:id" component={SingleNews} />
             <Route path="/admin" component={Admin} />
             <Route path="/edit-order/:id" component={EditOrder} />
+            <Route path="/edit-news/:id" component={EditNews} />
             <Route
               path="/register"
               component={(props) => <Register {...props} />}

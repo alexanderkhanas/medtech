@@ -8,8 +8,8 @@ import { TabList, Tabs, Tab, TabPanel } from "react-tabs";
 import OrderCard from "../../misc/Admin/OrderCard/OrderCard";
 import { Link } from "react-router-dom";
 import Cart from "../Cart/Cart";
-import NewsCard from "../../misc/NewsCard/NewsCard";
 import { connect } from "react-redux";
+import NewsAdminCard from "../../misc/Admin/NewsAdminCard/NewsAdminCard";
 
 const Admin = ({ recentNews }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -77,7 +77,19 @@ const Admin = ({ recentNews }) => {
           <TabPanel>123</TabPanel>
           <TabPanel>123</TabPanel>
           <TabPanel>
-            <div className={s.news}></div>
+            <div className={s.order__header}>
+              <span>Заголовок</span>
+              <span>Текст</span>
+              <span>Дата створення</span>
+            </div>
+            <div className={s.section}>
+              {/* <h3 className={s.section__title}>Новини</h3> */}
+              <div className={s.news__container}>
+                {recentNews.map((newsItem, i) => (
+                  <NewsAdminCard {...{ newsItem }} key={newsItem._id} />
+                ))}
+              </div>
+            </div>
           </TabPanel>
           <TabPanel>123</TabPanel>
         </Tabs>

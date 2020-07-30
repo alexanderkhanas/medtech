@@ -1,0 +1,48 @@
+.card {
+  display: flex;
+  padding: 15px 0;
+  border: 5px solid #eeeeee;
+  width: 100%;
+}
+
+.card__atrbutes {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+}
+.card__title {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+}
+.card__subtitle {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+}
+.table__container {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* margin-left: 20px; */
+}
+
+.buttons {
+  margin-left: 10px;
+  display: flex;
+}
+.delete__btn {
+  background-color: #b82c43;
+  margin-left: 5px;
+}
+/* .delete__btn :hover {
+  color: red;
+} */
+.delete__container :hover {
+  background-color: red;
+  transition: 0.5s;
+}

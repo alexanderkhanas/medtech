@@ -253,7 +253,7 @@ header {
     display: flex;
   }
   .search__container {
-    margin: 0 25px;
+    margin: 0 5%;
   }
   .search__button {
     flex: 0.5;

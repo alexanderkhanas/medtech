@@ -47,6 +47,7 @@ const SingleProduct = ({
     attr: attributes,
     reviews,
     _id,
+    article,
     attrOptions: attributeOptions,
   } = product || {};
 
@@ -164,10 +165,7 @@ const SingleProduct = ({
     }
   }, [selectedAttributes]);
 
-  useEffect(() => {
-    console.log("foundAttribute ===", foundAttributes);
-    console.log("product ===", product);
-  }, [foundAttributes]);
+  console.log("product ===", product);
 
   useEffect(() => {
     const scrollListener = new ScrollListener();
@@ -312,6 +310,62 @@ const SingleProduct = ({
           <FontAwesomeIcon icon={faArrowUp} className={s.arrow__button__icon} />
         </Button>
       )}
+      <div>
+        <div itemType="http://schema.org/Product" itemScope>
+          <meta itemProp="name" content={title} />
+          <link itemProp="image" href={gallery[0]} />
+          <link itemProp="image" href={gallery[1]} />
+          <link itemProp="image" href={gallery[2]} />
+          <meta itemProp="description" content={desc} />
+          <div itemProp="offers" itemType="http://schema.org/Offer" itemScope>
+            <link itemProp="url" href={window.location.href} />
+            <meta itemProp="priceCurrency" content="UAH" />
+            <meta itemProp="price" content={price} />
+            <div
+              itemProp="seller"
+              itemType="http://schema.org/Organization"
+              itemScope
+            >
+              <meta itemProp="name" content={vendorID.title} />
+            </div>
+          </div>
+          <div
+            itemProp="aggregateRating"
+            itemType="http://schema.org/AggregateRating"
+            itemScope
+          >
+            <meta itemProp="reviewCount" content="89" />
+            <meta
+              itemProp="ratingValue"
+              content={
+                reviews.reduce((prev, curr) => prev + curr.rating, 0) /
+                reviews.length
+              }
+            />
+          </div>
+          <div itemProp="review" itemType="http://schema.org/Review" itemScope>
+            <div
+              itemProp="author"
+              itemType="http://schema.org/Person"
+              itemScope
+            >
+              <meta itemProp="name" content={reviews[0].userID.fName} />
+            </div>
+            <div
+              itemProp="reviewRating"
+              itemType="http://schema.org/Rating"
+              itemScope
+            >
+              <meta itemProp="ratingValue" content={reviews[0].rating} />
+              <meta
+                itemProp="bestRating"
+                content={Math.max(reviews.map((review) => review.rating))}
+              />
+            </div>
+          </div>
+          <meta itemProp="sku" content={article} />
+        </div>
+      </div>
     </FixedWrapper>
   ) : (
     <div className={s.container} />

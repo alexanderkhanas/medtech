@@ -14,3 +14,8 @@ h1 {
   text-align: center;
   padding: 50px 0;
 }
+
+.public__offer p {
+  color: #7b7b7b;
+  font-weight: 300;
+}

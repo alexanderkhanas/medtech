@@ -48,7 +48,6 @@
   color: #fff;
   letter-spacing: 2px;
   background: #02ab6b;
-  margin-bottom: 20px;
   box-shadow: -2px 2px 5px 2px #02ab6a3f;
   color: #ededed;
 }
@@ -127,6 +126,38 @@
 
 .product__card {
   width: 47%;
+}
+
+.filter__categories {
+  transition: 0.3s;
+  max-height: 1000px;
+  margin-top: 20px;
+}
+
+.filter__categories > div:last-child {
+  margin-bottom: 0;
+}
+
+.filter__exiting {
+  opacity: 0;
+  transform: translateY(-50px);
+  max-height: 0px;
+  margin-top: 0;
+}
+.filter__exited {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50px);
+  max-height: 0px;
+  margin-top: 0;
+}
+
+.filter__entering {
+  opacity: 1;
+}
+.filter__entered {
+  opacity: 1;
+  visibility: initial;
 }
 
 @media (max-width: 550px) {

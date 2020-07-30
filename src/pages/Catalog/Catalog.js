@@ -21,6 +21,7 @@ import { SET_FILTERED_PRODUCTS } from "../../store/actions/actionTypes";
 import CategoryAccordion from "../../misc/CategoryAccordion/CategoryAccordion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
+import { CSSTransition } from "react-transition-group";
 
 const sortSelectOption = [
   { value: "recommended", label: "Рекомендовані" },
@@ -38,12 +39,14 @@ const Catalog = ({
   getCategories,
   categories,
   searchValue,
+  windowWidth,
 }) => {
   const [productViewType, setProductViewType] = useState("row");
   const [sortType, setSortType] = useState(sortSelectOption[0]);
   const containerRef = useRef();
   const [sortedCategories, setSortedCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [isFilterAnimation, setFilterAnimation] = useState(true);
 
   const onPageChange = ({ selected }) => {
     getProductsByPage(selected + 1);
@@ -151,18 +154,48 @@ const Catalog = ({
         <div className={s.container} ref={containerRef}>
           <div className={s.filter__container}>
             <div className={s.filter__body}>
-              <h3 className={s.filter__title}>Фільтр</h3>
-              <div className={s.filter__categories}>
-                {sortedCategories.map((parent) => (
-                  <CategoryAccordion
-                    {...{ selectCategory }}
-                    {...{ removeCategory }}
-                    {...{ selectedCategories }}
-                    {...{ parent }}
-                    key={parent._id}
-                  />
-                ))}
-              </div>
+              <h3
+                className={s.filter__title}
+                onClick={() => setFilterAnimation((prev) => !prev)}
+              >
+                Фільтр
+              </h3>
+              {windowWidth >= 600 ? (
+                <div className={s.filter__categories}>
+                  {sortedCategories.map((parent) => (
+                    <CategoryAccordion
+                      {...{ selectCategory }}
+                      {...{ removeCategory }}
+                      {...{ selectedCategories }}
+                      {...{ parent }}
+                      key={parent._id}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <CSSTransition
+                  in={isFilterAnimation}
+                  timeout={600}
+                  classNames={{
+                    exitActive: s.filter__exiting,
+                    exitDone: s.filter__exited,
+                    enterActive: s.filter__entering,
+                    enterDone: s.filter__entered,
+                  }}
+                >
+                  <div className={s.filter__categories}>
+                    {sortedCategories.map((parent) => (
+                      <CategoryAccordion
+                        {...{ selectCategory }}
+                        {...{ removeCategory }}
+                        {...{ selectedCategories }}
+                        {...{ parent }}
+                        key={parent._id}
+                      />
+                    ))}
+                  </div>
+                </CSSTransition>
+              )}
             </div>
           </div>
           <div className={s.main__content}>
@@ -214,7 +247,7 @@ const Catalog = ({
               <div className={s.carousel__container}>
                 <ItemsCarousel
                   arrows
-                  slidesPerPage={Math.floor(window.innerWidth / 450)}
+                  slidesPerPage={Math.floor(windowWidth / 450)}
                   infinite
                 >
                   {recommendedProducts.map((product, i) => (

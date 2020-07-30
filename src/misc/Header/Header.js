@@ -37,14 +37,21 @@ const Header = ({
   const [isAnimation, setAnimation] = useState(false);
   const [sidebarIcon, setSidebarIcon] = useState(faBars);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [isFirstLoad, setFirstLoad] = useState(false);
 
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
   const showProfileModal = () => setProfileModalVisible(true);
   const hideProfileModal = () => setProfileModalVisible(false);
 
-  const openSidebar = () => setBarOpen(true);
+  const openSidebar = () => {
+    console.log("open");
+
+    setBarOpen(true);
+  };
   const closeSidebar = () => setBarOpen(false);
-  const onStateMenuChange = (state) => setBarOpen(state.isOpen);
+  const onStateMenuChange = (state) => {
+    setBarOpen(state.isOpen);
+  };
 
   const onSearchInputChange = ({ target }) => setSearchValue(target.value);
   const hideDropdown = () => setDropdownVisible(false);
@@ -58,6 +65,8 @@ const Header = ({
   }, [searchValue]);
 
   useEffect(() => {
+    console.log("is bar open ===", isBarOpen);
+
     if (typeof isBarOpen !== "boolean") return;
     setAnimation((prev) => !prev);
     setTimeout(() => {
@@ -69,7 +78,13 @@ const Header = ({
 
   useEffect(() => {
     window.scroll({ left: 0, top: 0 });
-    setBarOpen(null);
+    if (!isFirstLoad) {
+      setFirstLoad(true);
+      return;
+    }
+    if (isBarOpen) {
+      setBarOpen(false);
+    }
   }, [pathname]);
 
   return (
@@ -282,13 +297,13 @@ const Header = ({
         </div>
       </FixedWrapper>
       <Menu
-        width="70%"
+        width="300px"
         isOpen={isBarOpen}
         burgerButtonClassName={s.menu_hidden}
         menuClassName={s.menu_color}
         crossButtonClassName={s.exit_hidden}
         bmMenuWrap={s.menu_width}
-        className={!isBarOpen && !isAnimation ? s.display_none : ""}
+        className={isBarOpen === null ? s.display_none : ""}
         disableAutoFocus
         itemListClassName={s.mobile__nav}
         itemClassName={s.mobile__nav__item}

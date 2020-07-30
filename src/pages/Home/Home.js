@@ -10,7 +10,7 @@ import NewsCard from "../../misc/NewsCard/NewsCard";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import { Link } from "react-router-dom";
 
-const Home = ({ products, recentNews }) => {
+const Home = ({ products, recentNews, windowWidth }) => {
   const {
     bestRatingProducts,
     recommendedProducts,
@@ -55,9 +55,9 @@ const Home = ({ products, recentNews }) => {
               <ItemsCarousel
                 arrows
                 slidesPerPage={
-                  Math.floor(window.innerWidth / 350) > 4
+                  Math.floor(windowWidth / 350) > 4
                     ? 4
-                    : Math.floor(window.innerWidth / 350)
+                    : Math.floor(windowWidth / 350)
                 }
                 infinite
               >
@@ -70,9 +70,9 @@ const Home = ({ products, recentNews }) => {
               <ItemsCarousel
                 arrows
                 slidesPerPage={
-                  Math.floor(window.innerWidth / 350) > 4
+                  Math.floor(windowWidth / 350) > 4
                     ? 4
-                    : Math.floor(window.innerWidth / 350)
+                    : Math.floor(windowWidth / 350)
                 }
                 infinite
               >
@@ -87,9 +87,9 @@ const Home = ({ products, recentNews }) => {
                 arrows
                 offset={10}
                 slidesPerPage={
-                  Math.floor(window.innerWidth / 350) > 4
+                  Math.floor(windowWidth / 350) > 4
                     ? 4
-                    : Math.floor(window.innerWidth / 350)
+                    : Math.floor(windowWidth / 350)
                 }
                 infinite
               >
@@ -134,9 +134,9 @@ const Home = ({ products, recentNews }) => {
           <ItemsCarousel
             arrows
             slidesPerPage={
-              Math.floor(window.innerWidth / 350) > 4
+              Math.floor(windowWidth / 350) > 4
                 ? 4
-                : Math.floor(window.innerWidth / 350)
+                : Math.floor(windowWidth / 350)
             }
             infinite
           >

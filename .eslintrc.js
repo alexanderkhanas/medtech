@@ -41,5 +41,6 @@ module.exports = {
     "react/jsx-equals-spacing": "off",
     "react/jsx-curly-brace-presence": "warn",
     "react/no-unescaped-entities": "off",
+    "react/jsx-indent-props": "off",
   },
 };

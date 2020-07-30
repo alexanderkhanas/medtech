@@ -10,14 +10,10 @@ import Footer from "./misc/Footer/Footer";
 import Catalog from "./pages/Catalog/Catalog";
 import { setWishlist } from "./store/actions/wishlistActions";
 import NoMatchPage from "./pages/404/404";
-import PublicOffer from "./misc/PublicOffer/PublicOffer";
-import Politics from "./misc/Politics/Politics";
-import News from "./pages/News/News";
-import SingleNews from "./pages/SingleNews/SingleNews";
 import { getAllNewsAction } from "./store/actions/newsActions";
 import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { getLocalCart } from "./utils/utils";
+import { getLocalCart, debounce } from "./utils/utils";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -28,9 +24,27 @@ const NewPassword = lazy(() => import("./pages/NewPassword/NewPassword"));
 const Profile = lazy(() => import("./pages/Profile/Profile"));
 const Wishlist = lazy(() => import("./pages/Wishlist/Wishlist"));
 const Cart = lazy(() => import("./pages/Cart/Cart"));
+const News = lazy(() => import("./pages/News/News"));
+const SingleNews = lazy(() => import("./pages/SingleNews/SingleNews"));
+const Politics = lazy(() => import("./misc/Politics/Politics"));
+const PublicOffer = lazy(() => import("./misc/PublicOffer/PublicOffer"));
 
 const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
+
+  const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+
+  useEffect(() => {
+    const debouncedHandleResize = debounce(() => {
+      setWindowWidth(window.innerWidth);
+    }, 200);
+
+    window.addEventListener("resize", debouncedHandleResize);
+
+    return () => {
+      window.removeEventListener("resize", debouncedHandleResize);
+    };
+  });
 
   useEffect(() => {
     (async () => {
@@ -71,17 +85,33 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
       <Header />
       <Alert />
       <div style={{ marginTop: "45px" }}>
-        <Suspense fallback={<div>loading</div>}>
+        <Suspense fallback={<div className="fallback" />}>
           <Switch>
-            <Route path="/" exact component={Home} />
+            <Route
+              path="/"
+              exact
+              component={() => <Home {...{ windowWidth }} />}
+            />
             <Route path="/product/:id" component={SingleProduct} />
             <Route path="/cart" component={Cart} />
-            <Route path="/catalog" component={Catalog} />
+            <Route
+              path="/catalog"
+              component={() => <Catalog {...{ windowWidth }} />}
+            />
             <Route path="/login" component={(props) => <Login {...props} />} />
-            <Route path="/public-offer" component={PublicOffer} />
-            <Route path="/politics" component={Politics} />
-            <Route path="/news" component={News} />
-            <Route path="/single-news/:id" component={SingleNews} />
+            <Route
+              path="/public-offer"
+              component={(props) => <PublicOffer {...props} />}
+            />
+            <Route
+              path="/politics"
+              component={(props) => <Politics {...props} />}
+            />
+            <Route
+              path="/single-news/:id"
+              component={(props) => <SingleNews {...props} />}
+            />
+            <Route path="/news" component={(props) => <News {...props} />} />
             <Route
               path="/register"
               component={(props) => <Register {...props} />}

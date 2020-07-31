@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import Cart from "../Cart/Cart";
 import { connect } from "react-redux";
 import NewsAdminCard from "../../misc/Admin/NewsAdminCard/NewsAdminCard";
+import ProductCardAdmin from "../../misc/Admin/ProductCardAdmin/ProductCardAdmin";
+import Button from "../../misc/Button/Button";
 
 const Admin = ({ recentNews }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -70,7 +72,19 @@ const Admin = ({ recentNews }) => {
             <OrderCard />
             <OrderCard />
           </TabPanel>
-          <TabPanel>123</TabPanel>
+          <TabPanel>
+            <div className={s.order__header}>
+              <span>Назва</span>
+              <span>Опис</span>
+              <span>Артикул</span>
+              <span>Категорія</span>
+              <span>Кількість</span>
+              <span>Ціна</span>
+            </div>
+            <div className={s.section}>
+              <ProductCardAdmin />
+            </div>
+          </TabPanel>
           <TabPanel>123</TabPanel>
           <TabPanel>123</TabPanel>
           <TabPanel>123</TabPanel>
@@ -81,6 +95,11 @@ const Admin = ({ recentNews }) => {
               <span>Заголовок</span>
               <span>Текст</span>
               <span>Дата створення</span>
+            </div>
+            <div className={s.create__container}>
+              <Link to="edit-news/:id">
+                <Button title="Створити новину" className={s.create__btn} />
+              </Link>
             </div>
             <div className={s.section}>
               {/* <h3 className={s.section__title}>Новини</h3> */}

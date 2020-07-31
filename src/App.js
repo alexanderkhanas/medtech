@@ -21,6 +21,7 @@ import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart } from "./utils/utils";
 import EditNews from "./pages/EditNews/EditNews";
+// import AboutUs from "./pages/AboutUs/AboutUs";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -31,6 +32,7 @@ const NewPassword = lazy(() => import("./pages/NewPassword/NewPassword"));
 const Profile = lazy(() => import("./pages/Profile/Profile"));
 const Wishlist = lazy(() => import("./pages/Wishlist/Wishlist"));
 const Cart = lazy(() => import("./pages/Cart/Cart"));
+const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
 const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
@@ -88,6 +90,7 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
             <Route path="/admin" component={Admin} />
             <Route path="/edit-order/:id" component={EditOrder} />
             <Route path="/edit-news/:id" component={EditNews} />
+            <Route path="/about-us" component={AboutUs} />
             <Route
               path="/register"
               component={(props) => <Register {...props} />}

@@ -86,8 +86,11 @@
   flex-wrap: wrap;
   box-sizing: border-box;
 }
+.create__container {
+  padding: 10px 0;
+}
 
-/* @media (max-width: 575px) {
+@media (max-width: 575px) {
   .order__header {
     display: none;
   }
@@ -95,4 +98,4 @@
     display: flex;
     flex-direction: row;
   }
-} */
+}

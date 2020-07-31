@@ -112,7 +112,6 @@ const Profile = ({ user }) => {
                             accept="image/*"
                             onChange={handleImageUpload}
                             ref={imageUploader}
-                            // onChange={(e) => setUserData(e.target.value.galery)}
                           />
                           {!!userData.gallery.length && (
                             <button

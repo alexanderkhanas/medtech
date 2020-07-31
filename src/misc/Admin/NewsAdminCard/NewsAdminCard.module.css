@@ -46,3 +46,12 @@
   background-color: red;
   transition: 0.5s;
 }
+@media (max-width: 575px) {
+  .card__atrbutes {
+    justify-content: space-around;
+  }
+  .card__subtitle,
+  .createdAt {
+    display: none;
+  }
+}

@@ -46,7 +46,7 @@ const Footer = () => {
               </Link>
             </button>
             <button>
-              <Link to="/public-offer" className={s.btn_cl}>
+              <Link to="/about-us" className={s.btn_cl}>
                 <p>Про нас</p>
               </Link>
             </button>

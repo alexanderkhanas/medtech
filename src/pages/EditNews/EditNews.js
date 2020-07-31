@@ -1,11 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
 import s from "./EditNews.module.css";
-<<<<<<< HEAD
-
-function EditNews() {
-  return <div>123123123</div>;
-}
-=======
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
 import Button from "../../misc/Button/Button";
@@ -14,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { getSingleNewsAction } from "../../store/actions/newsActions";
+
 const EditNews = ({ getSingleNews, match, singleNews }) => {
   const { title, gallery, desc, createdAt, _id } = singleNews;
   console.log(singleNews);
@@ -21,7 +16,6 @@ const EditNews = ({ getSingleNews, match, singleNews }) => {
     getSingleNews(match.params.id);
   }, []);
   console.log("singleNews ===", singleNews);
->>>>>>> origin/andriy
 
   const uploadedImage = useRef(null);
   const imageUploader = useRef(null);
@@ -83,6 +77,7 @@ const EditNews = ({ getSingleNews, match, singleNews }) => {
               onClick={() => imageUploader.current.click()}
             >
               <img
+                alt="loading"
                 defaultValue={gallery}
                 ref={uploadedImage}
                 src={gallery}

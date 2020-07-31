@@ -108,6 +108,10 @@ button {
 .goback {
   color: gray;
 }
+.go__login {
+  color: gray;
+  padding-bottom: 10px;
+}
 .faArrowLeft {
   margin-right: 2px;
 }

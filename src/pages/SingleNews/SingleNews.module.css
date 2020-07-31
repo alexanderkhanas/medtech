@@ -27,8 +27,9 @@
   padding-top: 10px;
   max-width: 800px;
   line-height: 30px;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 300;
+  color: #888888;
 }
 .image_container {
   justify-content: center;
@@ -59,6 +60,11 @@
   padding: 20px 0;
   box-sizing: border-box;
 }
+.createdAt {
+  color: #888888;
+  /* margin-left: 600px; */
+  padding: 10px 0;
+}
 
 @media (max-width: 900px) {
 }
@@ -76,6 +82,10 @@
   .news_text {
     font-size: 12px;
     padding: 0 20px;
+    line-height: 20px;
+  }
+  .createdAt {
+    font-size: 12px;
   }
   .news_title {
     font-size: 24px;

@@ -87,6 +87,7 @@ header {
   font-size: 25px;
   transition: 0.2s;
   cursor: pointer;
+  color: #575757;
 }
 
 .mobile__header {
@@ -97,7 +98,8 @@ header {
 }
 
 .cart__icon {
-  color: #000;
+  font-size: 24px;
+  color: #575757;
 }
 
 .menu_color {

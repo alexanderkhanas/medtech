@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import s from "./Profile.module.css";
 import {
@@ -9,7 +9,6 @@ import {
   faPhoneAlt,
   faPencilAlt,
   faUser,
-  faUserCircle,
   faCity,
   faStreetView,
   faHouseUser,
@@ -22,9 +21,15 @@ import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
 import { useHistory, useParams } from "react-router-dom";
 import _axios from "../../store/api/_axios";
+import Modal from "../../misc/Modal/Modal";
 import { connect } from "react-redux";
+import userPhotoIcon from "../../assets/profile.png";
+import {
+  getUserByIdAction,
+  patchUserAction,
+} from "../../store/actions/profileActions";
 
-const Profile = ({ user }) => {
+const Profile = ({ user, getUser, patchUser }) => {
   const { id } = useParams();
   const h = useHistory();
   const breadCrumbsItems = [
@@ -35,6 +40,13 @@ const Profile = ({ user }) => {
     },
     { name: "Профіль", path: "/profile" },
   ];
+
+  const token = useMemo(() => {
+    return document.cookie
+      .split("; ")
+      .filter((value) => value.startsWith("token"))[0]
+      .split("=")[1];
+  }, [document.cookie]);
 
   //   const { oderData, oderAddress, oderHistory } = userData;
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -48,24 +60,52 @@ const Profile = ({ user }) => {
       const reader = new FileReader();
       const { current } = uploadedImage;
       current.file = file;
-      reader.onload = (e) => {
-        current.src = e.target.result;
+      reader.onload = (event) => {
+        const img = event.target.result;
+        current.src = img;
+        console.log("photo ===", img);
+        patchUser({ ...userData, gallery: img }, token);
+        setUserData((prev) => ({ ...prev, gallery: img }));
       };
       reader.readAsDataURL(file);
-      setUserData((prev) => ({ ...prev, gallery: file }));
+      // setUserData((prev) => ({ ...prev, gallery: file }));
     }
   };
-
   const handleSubmit = () => {
-    _axios
-      .patch("/user/:id", { userData })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    console.log({ phone: parseInt("0", 10) });
+
+    patchUser({ ...userData, phone: +userData.phone }, token);
   };
+  const [show, setShow] = useState(false);
+  const openModal = () => setShow(true);
+  const closeModal = () => setShow(false);
+  const handleRemovePhoto = (e) => {
+    setUserData((prev) => ({ ...prev, gallery: [] }));
+  };
+
+  const onInputChange = (e) => {
+    const { value, name } = e.target;
+    console.log(name, ":", value);
+
+    setUserData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  useEffect(() => {
+    if (document.cookie.includes("token")) {
+      getUser(token);
+      console.log("token ===", token);
+    } else {
+      h.push("/login");
+    }
+  }, []);
+
+  useEffect(() => {
+    setUserData(user);
+  }, [user]);
+
+  useEffect(() => {
+    console.log("user data ===", userData);
+  }, [userData]);
 
   return (
     <div className={s.body}>
@@ -77,26 +117,25 @@ const Profile = ({ user }) => {
         <div>
           <Tabs>
             <TabList className={s.tabs}>
-              {["Ваші дані", "Ваша адреса"].map((item, i) => (
-                <Tab
-                  onClick={() => setActiveTabIndex(i)}
-                  key={item + i}
-                  className={
-                    activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
-                  }
-                >
-                  {item}
-                </Tab>
-              ))}
+              {["Ваші дані", "Ваша адреса", "Історія Замовлень"].map(
+                (item, i) => (
+                  <Tab
+                    onClick={() => setActiveTabIndex(i)}
+                    key={item}
+                    className={
+                      activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
+                    }
+                  >
+                    {item}
+                  </Tab>
+                )
+              )}
             </TabList>
             <TabPanel>
               <div className={`${s.profile} container cont__margin`}>
                 <div className={s.profile__main}>
                   <div className={s.profile__info}>
                     <div className={s.profile__info__fields}>
-                      {/* <span className={s.container_title.mobile}>
-                        Персональні дані
-                      </span> */}
                       <div className={s.profile__info__title}>
                         <div className={s.image_upload}>
                           <input
@@ -107,6 +146,16 @@ const Profile = ({ user }) => {
                             ref={imageUploader}
                             // onChange={(e) => setUserData(e.target.value.galery)}
                           />
+                          {!!userData.gallery?.length && (
+                            <button
+                              className={s.delete__photo}
+                              onClick={handleRemovePhoto}
+                              title="Видалити фотографію"
+                            >
+                              x
+                            </button>
+                          )}
+
                           <div
                             style={{
                               height: "100px",
@@ -116,56 +165,51 @@ const Profile = ({ user }) => {
                           >
                             <img
                               ref={uploadedImage}
-                              alt=""
+                              src={
+                                userData.gallery?.length
+                                  ? userData.gallery
+                                  : userPhotoIcon
+                              }
                               style={{
                                 width: "100%",
                                 height: "100%",
-                                position: "acsolute",
                                 borderRadius: "50px",
                               }}
+                              alt=""
                             />
                           </div>
                         </div>
-                        <div>
-                          <h5 className={s.container_title}>
-                            Персональні дані
-                          </h5>
+                        <div className={s.container_title}>
+                          <h4>Персональні дані</h4>
                         </div>
                         <FontAwesomeIcon
                           icon={faSignOutAlt}
                           //   onClick={logout}
+                          onClick={openModal}
                           className={s.profile__info__icon}
                         />
+                        {show && <Modal closeModal={closeModal} show={show} />}
                       </div>
-
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Ім'я"
                           val="firstName"
                           icon={faUser}
+                          name="fName"
                           value={userData.fName}
                           placeholder="John"
-                          onChange={(e) =>
-                            setUserData((prev) => ({
-                              ...prev,
-                              fName: e.target.value,
-                            }))
-                          }
+                          onChange={onInputChange}
                         />
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Прізвище"
                           val="lName"
-                          placeholder="Doe"
+                          placeholder="Smith"
                           icon={faAddressCard}
+                          name="lName"
                           value={userData.lName}
-                          onChange={(e) =>
-                            setUserData((prev) => ({
-                              ...prev,
-                              lName: e.target.value,
-                            }))
-                          }
+                          onChange={onInputChange}
                         />
                       </div>
                       <div className={s.profile__info__field}>
@@ -175,9 +219,8 @@ const Profile = ({ user }) => {
                           placeholder="JohnDoevich"
                           value={userData.fatherName}
                           icon={faAddressCard}
-                          onChange={(e) =>
-                            setUserData(e.target.value.fatherName)
-                          }
+                          name="fatherName"
+                          onChange={onInputChange}
                         />
                       </div>
                       <div className={s.profile__info__field}>
@@ -188,12 +231,8 @@ const Profile = ({ user }) => {
                           type="tel"
                           value={userData.phone}
                           icon={faPhoneAlt}
-                          onChange={(e) =>
-                            setUserData((prev) => ({
-                              ...prev,
-                              phone: e.target.value,
-                            }))
-                          }
+                          name="phone"
+                          onChange={onInputChange}
                         />
                       </div>
                       <div className={s.profile__info__field}>
@@ -201,14 +240,10 @@ const Profile = ({ user }) => {
                           val="Електронна адреса"
                           label="E-mail"
                           placeholder="johndoe@gmail.com"
+                          name="email"
                           value={userData.email}
                           icon={faEnvelope}
-                          onChange={(e) =>
-                            setUserData((prev) => ({
-                              ...prev,
-                              email: e.target.value,
-                            }))
-                          }
+                          onChange={onInputChange}
                         />
                       </div>
 
@@ -235,35 +270,30 @@ const Profile = ({ user }) => {
                   <div className={s.profile__info}>
                     <div className={s.profile__info__fields}>
                       <div className={s.profile__info__title}>
-                        <div className={s.image_upload}>
-                          <input
-                            placeholder="+"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            ref={imageUploader}
-                            // onChange={(e) => setUserData(e.target.value.galery)}
-                          />
-                          <div
+                        <div
+                          style={{
+                            height: "100px",
+                            width: "100px",
+                          }}
+                          onClick={() => imageUploader.current.click()}
+                        >
+                          <img
+                            ref={uploadedImage}
+                            src={
+                              userData.gallery?.length
+                                ? userData.gallery
+                                : userPhotoIcon
+                            }
                             style={{
-                              height: "100px",
-                              width: "100px",
+                              width: "100%",
+                              height: "100%",
+                              borderRadius: "50px",
+                              // backgroundColor: "gray",
                             }}
-                            onClick={() => imageUploader.current.click()}
-                          >
-                            <img
-                              ref={uploadedImage}
-                              alt=""
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                position: "acsolute",
-                                borderRadius: "50px",
-                              }}
-                            />
-                          </div>
+                            alt=""
+                          />
                         </div>
-                        <h5 className={s.container_title}>Ваша адреса</h5>
+                        <h4 className={s.container_title}>Ваша адреса</h4>
                         <FontAwesomeIcon
                           icon={faSignOutAlt}
                           //   onClick={logout}
@@ -275,7 +305,6 @@ const Profile = ({ user }) => {
                         <ProfileInput
                           label="Місто"
                           val="city"
-                          placeholder="Тернопіль"
                           icon={faCity}
                           //   defaultValue={profileInfo.firstName}
                           //   onChange={onChange}
@@ -285,7 +314,6 @@ const Profile = ({ user }) => {
                         <ProfileInput
                           label="Вулиця"
                           val="street"
-                          placeholder="Грушевського"
                           icon={faStreetView}
                           //   defaultValue={profileInfo.lastName}
                           //   onChange={onChange}
@@ -295,7 +323,6 @@ const Profile = ({ user }) => {
                         <ProfileInput
                           label="Будинок"
                           val="house"
-                          placeholder="23"
                           icon={faHouseUser}
                           //   defaultValue={profileInfo.lastName}
                           //   onChange={onChange}
@@ -305,18 +332,15 @@ const Profile = ({ user }) => {
                         <ProfileInput
                           label="Квартира"
                           val="apartment"
-                          placeholder="421"
                           icon={faBuilding}
                           //   defaultValue={profileInfo.phone}
                           //   onChange={onChange}
                         />
                       </div>
-
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Поштовий індекс"
                           val="zip-code"
-                          placeholder="46000"
                           icon={faKeyboard}
                           //   defaultValue={profileInfo.email}
                           //   onChange={onChange}
@@ -326,7 +350,6 @@ const Profile = ({ user }) => {
                         <ProfileInput
                           label="Склад Нової пошти"
                           val="np-number"
-                          placeholder="2"
                           icon={faMailBulk}
                           //   defaultValue={profileInfo.email}
                           //   onChange={onChange}
@@ -350,6 +373,7 @@ const Profile = ({ user }) => {
                 </div>
               </div>
             </TabPanel>
+            <TabPanel></TabPanel>
           </Tabs>
         </div>
       </div>
@@ -364,7 +388,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getUser: (id) => dispatch(getUserByIdAction(id)),
+    patchUser: (user, token) => dispatch(patchUserAction(user, token)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

@@ -42,5 +42,6 @@ module.exports = {
     "react/jsx-curly-brace-presence": "warn",
     "react/no-unescaped-entities": "off",
     "react/jsx-indent-props": "off",
+    "react/jsx-props-no-multi-spaces": "off",
   },
 };

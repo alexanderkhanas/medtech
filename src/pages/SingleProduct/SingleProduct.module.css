@@ -177,6 +177,14 @@
   visibility: hidden;
   opacity: 0;
 }
+.title__container {
+  background-color: #f4f4f4;
+  text-align: center;
+  padding: 50px 0;
+}
+.popular__carousel {
+  padding-bottom: 30px;
+}
 
 .arrow__button {
   position: fixed;

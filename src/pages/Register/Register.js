@@ -15,7 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, ErrorMessage } from "formik";
 import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import _axios from "../../store/api/_axios";
 import { registerAction } from "../../store/actions/profileActions";
@@ -273,6 +273,11 @@ const Register = ({ register }) => {
                       </div>
                     </div>
                     <div className={s.fbt}>
+                      <div>
+                        <Link to="/login">
+                          <button className={s.go__login}>Увійти</button>
+                        </Link>
+                      </div>
                       <button
                         className={s.goback}
                         onClick={() => {

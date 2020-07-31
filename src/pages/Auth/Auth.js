@@ -57,27 +57,19 @@ const Auth = ({ login, hideAlert, showAlert }) => {
           console.log("login response ===", loginResponse);
 
           if (loginResponse) {
-            h.push(`/profile/${loginResponse._id}`);
+            const { _id } = loginResponse.user;
+            const { token } = loginResponse;
+            if (token) {
+              document.cookie = `token=${token}`;
+            }
+            document.cookie = `userId=${_id}`;
+            h.push(`/profile/${_id}`);
           } else {
             showAlert("Помилка при авторизації. Невірно введені дані.");
             setTimeout(() => {
               hideAlert();
             }, 5000);
           }
-
-          // _axios
-          //   .post("/login", {
-          //     email,
-          //     password,
-          //   })
-
-          //   .then((res) => {
-          //     console.log(res);
-          //     if (res.status === 200) {
-          //       h.push(`/login/${res.data.user.userId}`);
-          //     }
-          //   })
-          //   .catch(console.log);
         }}
       >
         {({

@@ -60,7 +60,9 @@ const CartProduct = ({
         </div>
       </div>
       <div className={s.fullprice__container}>
-        <span className={s.fullprice}>{numberInCart * productPrice || 0}₴</span>
+        <span className={s.fullprice}>
+          {+numberInCart * +productPrice || 0}₴
+        </span>
       </div>
       <div className={s.remove__icon__wrapper}>
         <FontAwesomeIcon

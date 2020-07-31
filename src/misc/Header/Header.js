@@ -87,6 +87,10 @@ const Header = ({
     }
   }, [pathname]);
 
+  const isLogged = document.cookie.includes("token");
+
+  console.log("isLogged ===", isLogged);
+
   return (
     <>
       <FixedWrapper>
@@ -212,14 +216,14 @@ const Header = ({
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
                 <Link
-                  to="/profile/2"
+                  to={isLogged ? "/profile/2" : "/login"}
                   style={{ marginRight: 0 }}
                   onMouseOver={showProfileModal}
                   className={classnames(s.nav__link, s.profile__nav__link, {
                     [s.nav__link__active]: pathname.startsWith("/profile"),
                   })}
                 >
-                  Мій профіль
+                  {isLogged ? "Мій профіль" : "Увійти"}
                 </Link>
                 <ProfileModal
                   isVisible={isProfileModalVisible}

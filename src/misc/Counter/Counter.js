@@ -9,7 +9,7 @@ const Counter = ({ onChange, initialValue }) => {
 
   const onInputChange = ({ target }) => setValue(target.value);
 
-  const onPlusClick = () => setValue((prev) => prev + 1);
+  const onPlusClick = () => setValue((prev) => +prev + 1);
   const onMinusClick = () =>
     setValue((prev) => (prev - 1 > 0 ? prev - 1 : prev));
 

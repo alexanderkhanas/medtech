@@ -1,4 +1,9 @@
-import { registerRequest, loginRequest } from "../api/api";
+import {
+  registerRequest,
+  loginRequest,
+  fetchUserData,
+  patchUser,
+} from "../api/api";
 import { SET_USER_DATA } from "./actionTypes";
 
 export const registerAction = (data) => {
@@ -16,5 +21,22 @@ export const loginAction = (data) => {
       dispatch({ type: SET_USER_DATA, user: response.data });
     }
     return response?.data;
+  };
+};
+
+export const getUserByIdAction = (id) => {
+  return async (dispatch) => {
+    const response = await fetchUserData(id);
+    if (response?.data) {
+      console.log("get user res ===", response?.data);
+      dispatch({ type: SET_USER_DATA, user: response.data });
+    }
+  };
+};
+
+export const patchUserAction = (user, token) => {
+  return async () => {
+    const response = await patchUser(user, token);
+    console.log("patch response", response.data);
   };
 };

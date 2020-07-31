@@ -36,22 +36,29 @@ export const fetchAllNews = () => _axios.get("/news");
 
 export const fetchSingleNews = (id) => _axios.get(`/new/${id}`);
 
-export const registerRequest = (data) =>
-  _axios.post(
-    "/register",
-    data
-    // , {
-    //   withCredentials: true,
-    // }
-  );
-
-export const loginRequest = (data) =>
-  _axios
-    .post(
-      "/login",
-      data
-      //  {
-      //   withCredentials: true,
-      // }
-    )
-    .catch((e) => console.log(e));
+export const fetchUserData = (token) => {
+  return _axios.get(`/user`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+export const registerRequest = (data) => {
+  return _axios.post("/register", data, {
+    withCredentials: true,
+  });
+};
+export const loginRequest = (data) => {
+  return _axios
+    .post("/login", data, {
+      // withCredentials: true,
+    })
+    .catch((e) => console.error(e));
+};
+export const patchUser = (user, token) => {
+  return _axios.patch("/user", user, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

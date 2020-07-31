@@ -28,6 +28,9 @@ const News = lazy(() => import("./pages/News/News"));
 const SingleNews = lazy(() => import("./pages/SingleNews/SingleNews"));
 const Politics = lazy(() => import("./misc/Politics/Politics"));
 const PublicOffer = lazy(() => import("./misc/PublicOffer/PublicOffer"));
+const Admin = lazy(() => import("./pages/Admin/Admin"));
+const EditOrder = lazy(() => import("./pages/EditOrder/EditOrder"));
+const EditNews = lazy(() => import("./pages/EditNews/EditNews"));
 
 const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
@@ -111,7 +114,8 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
               path="/single-news/:id"
               component={(props) => <SingleNews {...props} />}
             />
-            <Route path="/news" component={(props) => <News {...props} />} />
+            <Route path="/news" component={News} />
+            <Route path="/single-news/:id" component={SingleNews} />
             <Route
               path="/register"
               component={(props) => <Register {...props} />}
@@ -120,6 +124,23 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
             <Route
               path="/restore"
               component={(props) => <RestorePassword {...props} />}
+            />
+
+            <Route
+              path="/admin"
+              render={({ match: { url } }) => (
+                <>
+                  <Route path={`${url}/`} component={() => <Admin />} exact />
+                  <Route
+                    path={`${url}/edit-order/:id`}
+                    component={() => <EditOrder />}
+                  />
+                  <Route
+                    path={`${url}/edit-news/:id`}
+                    component={() => <EditNews />}
+                  />
+                </>
+              )}
             />
             <Route
               path="/new-password"

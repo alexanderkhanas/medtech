@@ -52,12 +52,12 @@
 }
 
 .empty__cart__msg__container {
-  height: 80vh;
-  width: 100vw;
+  height: 50vh;
   box-sizing: border-box;
   text-align: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  /* justify-content: space-between; */
   align-items: center;
 }
 

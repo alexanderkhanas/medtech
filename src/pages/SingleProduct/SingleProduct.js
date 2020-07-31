@@ -16,6 +16,7 @@ import {
 } from "../../store/actions/cartActions";
 import classnames from "classnames";
 import { scrollToRef } from "../../utils/utils";
+import ProductCard from "../../misc/ProductCard/ProductCard";
 import {
   showAlertAction,
   hideAlertAction,
@@ -31,6 +32,7 @@ const SingleProduct = ({
   cartProducts,
   addToCart,
   removeFromCart,
+  popularProducts,
   showAlert,
   hideAlert,
 }) => {
@@ -376,6 +378,7 @@ const mapStateToProps = (state) => {
   return {
     product: state.single.product,
     cartProducts: state.cart.all,
+    popularProducts: state.products.popular,
   };
 };
 const mapDispatchToProps = (dispatch) => {

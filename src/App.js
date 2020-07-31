@@ -31,6 +31,7 @@ const PublicOffer = lazy(() => import("./misc/PublicOffer/PublicOffer"));
 const Admin = lazy(() => import("./pages/Admin/Admin"));
 const EditOrder = lazy(() => import("./pages/EditOrder/EditOrder"));
 const EditNews = lazy(() => import("./pages/EditNews/EditNews"));
+const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
 const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");

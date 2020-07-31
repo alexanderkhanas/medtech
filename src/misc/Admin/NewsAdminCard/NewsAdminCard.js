@@ -6,6 +6,7 @@ import Moment from "react-moment";
 import Button from "../../Button/Button";
 import Modal from "../../Modal/Modal";
 import _axios from "../../../store/api/_axios";
+import { Link } from "react-router-dom";
 
 const NewsAdminCard = ({ newsItem }) => {
   const { title, desc, bodyText, _id, createdAt } = newsItem;
@@ -23,7 +24,9 @@ const NewsAdminCard = ({ newsItem }) => {
             <Moment format="DD/MM/YYYY">{createdAt}</Moment>
           </div>
           <div className={s.buttons}>
-            <Button className={s.edit__btn} size="sm" title="Редагувати" />
+            <Link to={`/edit-news/${_id}`}>
+              <Button className={s.edit__btn} size="sm" title="Редагувати" />
+            </Link>
             <div className={s.delete__container}>
               <Button
                 size="sm"

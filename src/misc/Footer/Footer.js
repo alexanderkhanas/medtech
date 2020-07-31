@@ -63,7 +63,7 @@ const Footer = () => {
               </Link>
             </button>
           </div>
-          {/* <div className={s.popular}>
+          <div className={s.popular}>
             <h4>Популярні категорії</h4>
             <button>
               <Link to="/public-offer" className={s.btn_cl}>
@@ -85,7 +85,7 @@ const Footer = () => {
                 <p>Контакти</p>
               </Link>
             </button>
-          </div> */}
+          </div>
           <div className={s.inf}>
             <h4>Корисна інформація</h4>
             <button>
@@ -103,11 +103,11 @@ const Footer = () => {
                 <p>Гарантія і повернення</p>
               </Link>
             </button>
-            {/* <button>
+            <button>
               <Link to="/public-offer" className={s.btn_cl}>
                 <p>Про бонус систему</p>
               </Link>
-            </button> */}
+            </button>
             <button>
               <Link to="/politics" className={s.btn_cl}>
                 <p>Політика конфіденційності </p>

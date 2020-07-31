@@ -2,9 +2,9 @@ import React from "react";
 import s from "./CreateOrder.module.css";
 import { connect } from "react-redux";
 
-const CreateOrder = (props) => {
+const CreateOrder = () => {
   return (
-    <div>
+    <div className={s.container}>
       <div />
     </div>
   );

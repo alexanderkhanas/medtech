@@ -24,7 +24,7 @@ const NewsAdminCard = ({ newsItem }) => {
             <Moment format="DD/MM/YYYY">{createdAt}</Moment>
           </div>
           <div className={s.buttons}>
-            <Link to={`/edit-news/${_id}`}>
+            <Link to={`/admin/edit-news/${_id}`}>
               <Button className={s.edit__btn} size="sm" title="Редагувати" />
             </Link>
             <div className={s.delete__container}>

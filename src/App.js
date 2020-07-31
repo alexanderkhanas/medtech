@@ -131,14 +131,18 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
               path="/admin"
               render={({ match: { url } }) => (
                 <>
-                  <Route path={`${url}/`} component={() => <Admin />} exact />
+                  <Route
+                    path={`${url}/`}
+                    component={(props) => <Admin {...props} />}
+                    exact
+                  />
                   <Route
                     path={`${url}/edit-order/:id`}
-                    component={() => <EditOrder />}
+                    component={(props) => <EditOrder {...props} />}
                   />
                   <Route
                     path={`${url}/edit-news/:id`}
-                    component={() => <EditNews />}
+                    component={(props) => <EditNews {...props} />}
                   />
                 </>
               )}

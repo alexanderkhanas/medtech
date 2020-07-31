@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import s from "./Admin.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
@@ -12,8 +12,13 @@ import { connect } from "react-redux";
 import NewsAdminCard from "../../misc/Admin/NewsAdminCard/NewsAdminCard";
 import ProductCardAdmin from "../../misc/Admin/ProductCardAdmin/ProductCardAdmin";
 import Button from "../../misc/Button/Button";
+import {
+  getProductsByPage,
+  filterProductsAction,
+} from "../../store/actions/productsActions";
+import ProductCard from "../../misc/ProductCard/ProductCard";
 
-const Admin = ({ recentNews }) => {
+const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const breadCrumbsItems = [
     {
@@ -23,7 +28,10 @@ const Admin = ({ recentNews }) => {
     },
     { name: "Адмін", path: "/admin" },
   ];
-
+  useEffect(() => {
+    filterProducts();
+  }, []);
+  console.log("filteredProducts ===", filteredProducts);
   return (
     <div className={s.container}>
       <div className={s.title__container}>
@@ -82,7 +90,14 @@ const Admin = ({ recentNews }) => {
               <span>Ціна</span>
             </div>
             <div className={s.section}>
-              <ProductCardAdmin />
+              {/* {!!filteredProducts &&
+                filteredProducts.map((product, i) => (
+                  <ProductCard
+                    className={s.product__card}
+                    key={product._id}
+                    {...{ product }}
+                  />
+                ))} */}
             </div>
           </TabPanel>
           <TabPanel>123</TabPanel>
@@ -119,11 +134,15 @@ const Admin = ({ recentNews }) => {
 const mapStateToProps = (state) => {
   return {
     recentNews: state.news.recent,
+    filteredProducts: state.products.filtered,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    filterProducts: () => dispatch(filterProductsAction()),
+    getProductsByPage: (page) => dispatch(getProductsByPage(page)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Admin);

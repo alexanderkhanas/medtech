@@ -20,10 +20,14 @@ const Footer = () => {
         <div className={s.a}>
           <div className={s.contact}>
             <h4>Зв'язатися з нами</h4>
-            <div className={s.row}>
+            {/* <div className={s.row}>
               <FontAwesomeIcon icon={faPhone} className={s.icon_ft} />
               <p className={s.phone}>+ 38 (067) 208 81 45</p>
-            </div>
+            </div> */}
+            <p className={s.phone}>
+              <FontAwesomeIcon icon={faPhone} className={s.icon_ft} />+ 38 (067)
+              208 81 45
+            </p>
             <p className={s.social}>
               <FontAwesomeIcon icon={faInstagram} className={s.icon_ft} />{" "}
               Instagram

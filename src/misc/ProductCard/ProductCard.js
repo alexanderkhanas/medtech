@@ -22,7 +22,7 @@ const ProductCard = ({ product, className }) => {
           className={s.card__img}
           onClick={redirectToSingleProduct}
           src="https://i.ibb.co/27WPrWh/i1.png"
-          alt=""
+          alt="loading..."
         />
       </div>
       <div className={s.card__footer}>

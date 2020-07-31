@@ -7,6 +7,7 @@ const initialState = {
   gallery: [],
   lName: "",
   token: "",
+  _id: "",
 };
 
 export default (state = initialState, action) => {
@@ -19,6 +20,7 @@ export default (state = initialState, action) => {
         fatherName: action.user.fatherName,
         gallery: action.user.gallery,
         lName: action.user.lName,
+        _id: action.user._id,
       };
     default:
       return state;

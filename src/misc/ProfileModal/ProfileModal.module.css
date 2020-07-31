@@ -1,7 +1,7 @@
 .modal__container {
   position: absolute;
   z-index: 10;
-  width: 300px;
+  width: 350px;
   top: 50px;
   right: 0;
   display: flex;
@@ -52,6 +52,8 @@
 
 .modal__footer__value {
   padding: 10px 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
   border-bottom: 1px solid #ccc;
 }
 

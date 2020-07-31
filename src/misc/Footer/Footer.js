@@ -22,21 +22,23 @@ const Footer = () => {
             <h4>Зв'язатися з нами</h4>
             <div className={s.row}>
               <FontAwesomeIcon icon={faPhone} className={s.icon_ft} />
-              <p className={s.phone}>+ 38 (067) 208 81 45</p>
+              <span className={s.phone}>+ 38 (067) 208 81 45</span>
             </div>
-            <p className={s.social}>
-              <FontAwesomeIcon icon={faInstagram} className={s.icon_ft} />{" "}
-              Instagram
-            </p>
-            <p className={s.social}>
-              <FontAwesomeIcon icon={faFacebook} className={s.icon_ft} />{" "}
-              Facebook
-            </p>
-            <p className={s.hours}>
-              <FontAwesomeIcon icon={faClock} className={s.icon_ft} /> Пн-Пт:
-              09:00 - 19:00 <br />
-              <span style={{ paddingLeft: "20px" }}> Сб-Нд: 10:00 -17:00</span>
-            </p>
+            <div className={s.row}>
+              <FontAwesomeIcon icon={faInstagram} className={s.icon_ft} />
+              <span className={s.social}>Instagram</span>
+            </div>
+            <div className={s.row}>
+              <FontAwesomeIcon icon={faFacebook} className={s.icon_ft} />
+              <span className={s.social}>Facebook</span>
+            </div>
+            <div className={s.row}>
+              <FontAwesomeIcon icon={faClock} className={s.icon_ft} />
+              <div className={s.hours__container}>
+                <p className={s.hours}>Пн-Пт: 09:00 - 19:00</p>
+                <p className={s.hours}> Сб-Нд: 10:00 -17:00</p>
+              </div>
+            </div>
           </div>
           <div className={s.navigation}>
             <h4>Навігація по сайту</h4>

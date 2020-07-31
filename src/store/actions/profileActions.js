@@ -4,7 +4,7 @@ import {
   fetchUserData,
   patchUser,
 } from "../api/api";
-import { SET_USER_DATA } from "./actionTypes";
+import { SET_USER_DATA, SET_LOADING } from "./actionTypes";
 
 export const registerAction = (data) => {
   return async (dispatch) => {
@@ -18,7 +18,7 @@ export const loginAction = (data) => {
     const response = await loginRequest(data);
     // console.log("login response ===", response.data);
     if (response) {
-      dispatch({ type: SET_USER_DATA, user: response.data });
+      dispatch({ type: SET_USER_DATA, user: response.data.user });
     }
     return response?.data;
   };
@@ -26,11 +26,15 @@ export const loginAction = (data) => {
 
 export const getUserByIdAction = (id) => {
   return async (dispatch) => {
-    const response = await fetchUserData(id);
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await fetchUserData(id).catch((e) => {
+      console.log("get user err", e.response);
+    });
     if (response?.data) {
       console.log("get user res ===", response?.data);
       dispatch({ type: SET_USER_DATA, user: response.data });
     }
+    dispatch({ type: SET_LOADING, isLoading: false });
   };
 };
 

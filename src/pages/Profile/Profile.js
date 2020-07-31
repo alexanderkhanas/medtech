@@ -28,8 +28,9 @@ import {
   getUserByIdAction,
   patchUserAction,
 } from "../../store/actions/profileActions";
+import { showAlertAction } from "../../store/actions/alertActions";
 
-const Profile = ({ user, getUser, patchUser }) => {
+const Profile = ({ user, getUser, patchUser, showAlert, isLoading }) => {
   const { id } = useParams();
   const h = useHistory();
   const breadCrumbsItems = [
@@ -43,7 +44,7 @@ const Profile = ({ user, getUser, patchUser }) => {
 
   const token = useMemo(() => {
     return document.cookie
-      .split("; ")
+      ?.split("; ")
       .filter((value) => value.startsWith("token"))[0]
       .split("=")[1];
   }, [document.cookie]);
@@ -73,8 +74,15 @@ const Profile = ({ user, getUser, patchUser }) => {
   };
   const handleSubmit = () => {
     console.log({ phone: parseInt("0", 10) });
-
-    patchUser({ ...userData, phone: +userData.phone }, token);
+    const submitData = { ...userData };
+    if (!Number.isNaN(submitData.phone)) {
+      if (submitData.phone.startsWith("0")) {
+        submitData.phone = +`38${submitData.phone}`;
+      } else {
+        submitData.phone = +submitData.phone;
+      }
+    }
+    patchUser(submitData, token);
   };
   const [show, setShow] = useState(false);
   const openModal = () => setShow(true);
@@ -91,15 +99,6 @@ const Profile = ({ user, getUser, patchUser }) => {
   };
 
   useEffect(() => {
-    if (document.cookie.includes("token")) {
-      getUser(token);
-      console.log("token ===", token);
-    } else {
-      h.push("/login");
-    }
-  }, []);
-
-  useEffect(() => {
     setUserData(user);
   }, [user]);
 
@@ -107,7 +106,7 @@ const Profile = ({ user, getUser, patchUser }) => {
     console.log("user data ===", userData);
   }, [userData]);
 
-  return (
+  return !isLoading ? (
     <div className={s.body}>
       <div className={s.container}>
         <div className={s.title__container}>
@@ -377,19 +376,26 @@ const Profile = ({ user, getUser, patchUser }) => {
         </div>
       </div>
     </div>
+  ) : (
+    <div className={s.body}>
+      <div className={s.container} />
+    </div>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
     user: state.profile,
+    isLoading: state.base.isLoading,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUser: (id) => dispatch(getUserByIdAction(id)),
+    getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
     patchUser: (user, token) => dispatch(patchUserAction(user, token)),
+    showAlert: (content, timeout) =>
+      dispatch(showAlertAction(content, timeout)),
   };
 };
 

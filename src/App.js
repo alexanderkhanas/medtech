@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, lazy } from "react";
+import React, { useEffect, Suspense, lazy, useMemo } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./misc/Header/Header";
@@ -14,6 +14,7 @@ import { getAllNewsAction } from "./store/actions/newsActions";
 import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
+import { getUserByIdAction } from "./store/actions/profileActions";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -33,7 +34,14 @@ const EditOrder = lazy(() => import("./pages/EditOrder/EditOrder"));
 const EditNews = lazy(() => import("./pages/EditNews/EditNews"));
 const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
-const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
+const App = ({
+  allProducts,
+  setCart,
+  getProducts,
+  setWishlist,
+  getNews,
+  getUser,
+}) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
 
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
@@ -50,10 +58,23 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
     };
   });
 
+  const token = useMemo(() => {
+    return document.cookie.includes("token")
+      ? document.cookie
+          .split("; ")
+          .filter((value) => value.startsWith("token"))[0]
+          .split("=")[1]
+      : null;
+  }, [document.cookie]);
+
   useEffect(() => {
     (async () => {
       getNews();
       getProducts();
+      if (token) {
+        getUser(token);
+        console.log("token ===", token);
+      }
     })();
   }, []);
 
@@ -121,11 +142,12 @@ const App = ({ allProducts, setCart, getProducts, setWishlist, getNews }) => {
               path="/register"
               component={(props) => <Register {...props} />}
             />
-            <Route path="/profile/:id" component={Profile} />
+            <Route path="/profile" component={Profile} />
             <Route
               path="/restore"
               component={(props) => <RestorePassword {...props} />}
             />
+            <Route path="/create-order" />
 
             <Route
               path="/admin"
@@ -174,6 +196,7 @@ const mapDispatchToProps = (dispatch) => {
     getProducts: () => dispatch(getProducts()),
     setWishlist: (wishlist) => dispatch(setWishlist(wishlist)),
     getNews: () => dispatch(getAllNewsAction()),
+    getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
   };
 };
 

@@ -32,6 +32,7 @@ const Header = ({
   history,
   setSearchValue,
   searchValue,
+  user,
 }) => {
   const [isBarOpen, setBarOpen] = useState(null);
   const [isAnimation, setAnimation] = useState(false);
@@ -216,17 +217,17 @@ const Header = ({
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
                 <Link
-                  to={isLogged ? "/profile/2" : "/login"}
+                  to={user._id ? "/profile" : "/login"}
                   style={{ marginRight: 0 }}
                   onMouseOver={showProfileModal}
                   className={classnames(s.nav__link, s.profile__nav__link, {
                     [s.nav__link__active]: pathname.startsWith("/profile"),
                   })}
                 >
-                  {isLogged ? "Мій профіль" : "Увійти"}
+                  {user._id ? "Мій профіль" : "Увійти"}
                 </Link>
                 <ProfileModal
-                  isVisible={isProfileModalVisible}
+                  isVisible={user._id && isProfileModalVisible}
                   hide={hideProfileModal}
                 />
               </div>
@@ -327,6 +328,7 @@ const mapStateToProps = (state) => {
   return {
     foundProducts: state.products.filtered,
     searchValue: state.products.searchValue,
+    user: state.profile,
   };
 };
 

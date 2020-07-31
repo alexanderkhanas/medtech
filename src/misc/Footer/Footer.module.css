@@ -11,11 +11,17 @@
   color: white;
   font-size: initial;
 }
-.row {
+.a div.hours__container {
+  padding: 0;
+}
+.a .row {
+  display: flex;
+  padding: 0;
   flex-direction: row;
+  margin-bottom: 10px;
 }
 .icon_ft {
-  margin-right: 2px;
+  margin-right: 10px;
 }
 .a div {
   padding: 10px;

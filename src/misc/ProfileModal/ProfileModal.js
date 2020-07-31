@@ -5,10 +5,10 @@ import Button from "../Button/Button";
 import { Link } from "react-router-dom";
 
 const ProfileModal = ({ isVisible, hide, user }) => {
-  const { email, phone, fName, lName } = user;
+  const { email, phone, fName, lName, _id } = user;
   return isVisible ? (
     <div className={s.modal__container}>
-      <Link to="/profile/2" onClick={hide}>
+      <Link to="/profile" onClick={hide}>
         <div className={s.modal__header}>
           <img
             src={require("../../assets/profile.png")}

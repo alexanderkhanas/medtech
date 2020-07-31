@@ -12,8 +12,15 @@ import Button from "../../misc/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
+import { useHistory } from "react-router-dom";
 
 const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
+  const h = useHistory();
+
+  const onSubmit = () => {
+    h.push("/create-order");
+  };
+
   useEffect(() => {
     setFullPrice(
       cartProducts.reduce(
@@ -59,7 +66,12 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
             <div className={s.actions__container}>
               <h2 className={s.actions__price}>{`${fullPrice || 0} ₴`}</h2>
               <div>
-                <Button title="Купити" size="xl" isUppercase />
+                <Button
+                  title="Купити"
+                  onClick={onSubmit}
+                  size="xl"
+                  isUppercase
+                />
               </div>
             </div>
           </>

@@ -18,11 +18,13 @@
 
 .menu {
   position: absolute;
-  width: 100%;
+  width: 105%;
   top: 45px;
-  z-index: 1;
+  margin-left: -2.5%;
+  z-index: 20;
   max-height: 300px;
   overflow: auto;
+  background: #fff;
 }
 
 .option {
@@ -45,7 +47,7 @@
   height: 100%;
   width: 100%;
   background: none;
-  padding: 0 0 0 20px;
+  padding: 0 20px;
   box-sizing: border-box;
   font-size: 15px;
   color: #484848;
@@ -63,6 +65,15 @@
   font-weight: 300;
   margin-bottom: 4px;
   color: rgb(123, 123, 123);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* background: #000; */
+  width: 100vw;
+  height: 100vh;
 }
 
 @media (max-width: 575px) {

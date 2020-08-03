@@ -19,6 +19,8 @@ import Input from "../../misc/Inputs/Input/Input";
 import {
   getCitiesAction,
   getWarehousesAction,
+  setSelectedCityAction,
+  setSelectedWarehouseAction,
 } from "../../store/actions/orderActions";
 
 const CreateOrder = ({
@@ -29,6 +31,10 @@ const CreateOrder = ({
   getWarehouses,
   cities,
   filterCities,
+  setSelectedWarehouse,
+  setSelectedCity,
+  warehouses,
+  filterWarehouses,
 }) => {
   const deliveryOptions = [
     { value: "self-pickup", label: "Самовивіз" },
@@ -52,18 +58,57 @@ const CreateOrder = ({
 
   const [deliveryType, setDeliveryType] = useState(deliveryOptions[0]);
   const [paymentType, setPaymentType] = useState(payOptions[0]);
-  const [citiesSearchValue, setCitiesSearchValue] = useState("");
 
-  const onCitiesScroll = ({ target }) => {
-    console.log("e ===", target.scrollHeight, target.scrollTop);
+  const onCitiesScroll = ({ target }, searchValue) => {
     if (
       target.scrollHeight - target.scrollTop < 400 &&
       cities.length % 20 === 0
     ) {
-      filterCities(citiesSearchValue, cities.length + 20);
+      filterCities(searchValue, cities.length + 20);
     }
   };
-  const onWarehousesScroll = ({ target }) => {};
+
+  const onCitySearchChange = (value) => {
+    console.log("value ===", value);
+    console.log("cities length ===", cities.length);
+    console.log("city description ===", cities[0]?.Description);
+    console.log(
+      "condition ===",
+      cities.length === 1 && value === cities[0].Description
+    );
+
+    if (cities.length === 1 && value === cities[0].Description) {
+      setSelectedCity(value);
+      getWarehouses(value);
+    }
+    filterCities(value);
+  };
+
+  const onCitySelect = (option) => {
+    setSelectedCity(option.label);
+    getWarehouses(option.label);
+  };
+
+  const onWarehousesScroll = ({ target }, searchValue) => {
+    if (
+      target.scrollHeight - target.scrollTop < 400 &&
+      warehouses.length % 20 === 0
+    ) {
+      filterWarehouses(searchValue, warehouses.length + 20);
+    }
+  };
+
+  const onWarehouseSearchChange = (value) => {
+    // setWarehouseSearchValue(value);
+    // if (warehouses.length === 1 && value === warehouses[0].Description) {
+    //   setSelectedWarehouse(value);
+    // }
+    // filterWarehouses(value);
+  };
+
+  const onWarehouseSelect = (option) => {
+    setSelectedWarehouse(option.label);
+  };
 
   const h = useHistory();
 
@@ -80,7 +125,6 @@ const CreateOrder = ({
   }, [cartProducts]);
 
   useEffect(() => {
-    getWarehouses();
     getCities();
   }, []);
 
@@ -107,88 +151,80 @@ const CreateOrder = ({
             ))}
           </div>
           <div className={s.submit__container_all}>
-            <Formik
-              initialValues={{
-                fName: "",
-                sName: "",
-                city: "",
-                street: "",
-                house: "",
-              }}
-              validate={(values) => {
-                const errors = "";
-                return errors;
-              }}
-              onSubmit={(values, { setSubmitting }) => {
-                const { deliveryType, city, street, house } = values;
-              }}
-            >
-              {({ handleChange }) => (
-                <div className={s.submit__container}>
-                  <div className={s.input__row}>
-                    <Input
-                      name="fName"
-                      onChange={handleChange}
-                      label="Ім'я"
-                      placeholder="John"
-                      containerClass={s.input__container}
-                    />
-                    <Input
-                      placeholder="Doe"
-                      name="sName"
-                      containerClass={s.input__container}
-                      onChange={handleChange}
-                      label="Прізвище"
-                    />
-                  </div>
-                  <Select
-                    containerClass={s.section}
-                    options={payOptions}
-                    onSelect={setPaymentType}
-                    label="Тип оплати"
-                    value={paymentType.label}
-                  />
-                  <Select
-                    containerClass={s.section}
-                    options={deliveryOptions}
-                    onSelect={setDeliveryType}
-                    label="Тип доставки"
-                    value={deliveryType.label}
-                  />
-                  {cities.length && (
-                    <Select
-                      containerClass={s.section}
-                      withSearch
-                      onMenuScroll={onCitiesScroll}
-                      options={cities.map((city) => ({
-                        value: city.Description,
-                        label: city.Description,
-                      }))}
-                      onSearchValueChange={(value) => {
-                        filterCities(value);
-                      }}
-                      label="Місто"
-                    />
-                  )}
-                  <span className={s.price}>Ціна: {`${fullPrice || 0} ₴`}</span>
-                  <div className={s.submit__btn__container}>
-                    <Button
-                      title="Підтвердити замовлення"
-                      className={s.submit__btn}
-                    />
-                  </div>
-                  <button
-                    className={s.goBack__but}
-                    onClick={() => {
-                      h.goBack();
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
-                    Повернутися
-                  </button>
-                </div>
-              )}
-            </Formik>
+            <div className={s.submit__container}>
+              <div className={s.input__row}>
+                <Input
+                  name="fName"
+                  label="Ім'я"
+                  placeholder="John"
+                  containerClass={s.input__container}
+                />
+                <Input
+                  placeholder="Doe"
+                  name="sName"
+                  containerClass={s.input__container}
+                  label="Прізвище"
+                />
+              </div>
+              <Select
+                containerClass={s.section}
+                options={payOptions}
+                onSelect={setPaymentType}
+                label="Тип оплати"
+                value={paymentType.label}
+              />
+              <Select
+                containerClass={s.section}
+                options={deliveryOptions}
+                onSelect={setDeliveryType}
+                label="Тип доставки"
+                value={deliveryType.label}
+              />
+              <Select
+                containerClass={s.section}
+                withSearch
+                noDefaultValue
+                onMenuScroll={onCitiesScroll}
+                menuClass={s.select__menu}
+                options={cities.map((city) => ({
+                  value: city.Description,
+                  label: city.Description,
+                }))}
+                onSelect={onCitySelect}
+                onSearchValueChange={onCitySearchChange}
+                label="Місто"
+              />
+              <Select
+                containerClass={s.section}
+                withSearch
+                noDefaultValue
+                onMenuScroll={onWarehousesScroll}
+                menuClass={s.select__menu}
+                options={warehouses.map((warehouse) => ({
+                  value: warehouse.Description,
+                  label: warehouse.Description,
+                }))}
+                onSelect={onWarehouseSelect}
+                onSearchValueChange={onWarehouseSearchChange}
+                label="Номер відділення"
+              />
+              <span className={s.price}>Ціна: {`${fullPrice || 0} ₴`}</span>
+              <div className={s.submit__btn__container}>
+                <Button
+                  title="Підтвердити замовлення"
+                  className={s.submit__btn}
+                />
+              </div>
+              <button
+                className={s.goBack__but}
+                onClick={() => {
+                  h.goBack();
+                }}
+              >
+                <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
+                Повернутися
+              </button>
+            </div>
           </div>
         </div>
       </FixedWrapper>
@@ -201,6 +237,7 @@ const mapStateToProps = (state) => {
     cartProducts: state.cart.all,
     fullPrice: state.cart.fullPrice,
     cities: state.order.cities,
+    warehouses: state.order.warehouses,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -211,9 +248,12 @@ const mapDispatchToProps = (dispatch) => {
     getCities: () => dispatch(getCitiesAction()),
     filterCities: (filterValue, limit) =>
       dispatch(getCitiesAction(filterValue, limit)),
-    getWarehouses: () => dispatch(getWarehousesAction()),
+    getWarehouses: (city) => dispatch(getWarehousesAction(city)),
     filterWarehouses: (filterValue) =>
       dispatch(getWarehousesAction(filterValue)),
+    setSelectedCity: (city) => dispatch(setSelectedCityAction(city)),
+    setSelectedWarehouse: (warehouse) =>
+      dispatch(setSelectedWarehouseAction(warehouse)),
   };
 };
 

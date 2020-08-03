@@ -53,11 +53,12 @@
   width: 100%;
   height: 100px;
 }
-.delete__photo {
+
+/* .delete__photo {
   color: hotpink;
   border: none;
   margin-left: 300px;
-}
+} */
 .goBack__but {
   color: gray;
   padding-top: 10px;

@@ -17,6 +17,7 @@ import {
   filterProductsAction,
 } from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
+import UserCard from "../../misc/Admin/UserCard/UserCard";
 
 const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -47,7 +48,6 @@ const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
               "Категорії",
               "Атрибути",
               "Продавці",
-              "Купони",
               "Користувачі",
               "Новини",
               "Контактна форма",
@@ -89,22 +89,42 @@ const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
               <span>Кількість</span>
               <span>Ціна</span>
             </div>
-            <div className={s.section}>
-              {/* {!!filteredProducts &&
+            {/* <div className={s.section}>
+              {!!filteredProducts &&
                 filteredProducts.map((product, i) => (
                   <ProductCard
                     className={s.product__card}
                     key={product._id}
                     {...{ product }}
                   />
-                ))} */}
-            </div>
+                ))}
+            </div> */}
           </TabPanel>
           <TabPanel>123</TabPanel>
+          <TabPanel>1231</TabPanel>
           <TabPanel>123</TabPanel>
-          <TabPanel>123</TabPanel>
-          <TabPanel>123</TabPanel>
-          <TabPanel>123</TabPanel>
+          <TabPanel>
+            <div className={s.order__header}>
+              <span>Ім'я</span>
+              <span>Прізвище</span>
+              <span>Пошта</span>
+              <span>Номер телефону</span>
+              <span>Кількість замовлень</span>
+            </div>
+            <div className={s.create__container}>
+              <Link to="edit-user">
+                <Button
+                  title="Створити користувача"
+                  className={s.create__btn}
+                />
+              </Link>
+            </div>
+            <UserCard />
+            <UserCard />
+            <UserCard />
+            <UserCard />
+          </TabPanel>
+          {/* <TabPanel>123</TabPanel> */}
           <TabPanel>
             <div className={s.order__header}>
               <span>Заголовок</span>

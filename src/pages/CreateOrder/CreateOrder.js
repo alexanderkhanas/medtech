@@ -36,10 +36,10 @@ const CreateOrder = ({ cartProducts, fullPrice, setFullPrice }) => {
     { value: "cash", label: "Наложений платіж" },
     { value: "card", label: "Картою" },
   ];
-  const [sortType, setSortType] = useState(deliveryOptions[0]);
+  const [sortDeliveryType, setSortDeliveryType] = useState(deliveryOptions[0]);
   const [sortPayType, setPayType] = useState(payOptions[0]);
-  const onSortTypeChange = (value) => {
-    setSortType(value);
+  const onSortDeliveryChange = (value) => {
+    setSortDeliveryType(value);
   };
   const onSortPayChange = (value) => {
     setPayType(value);
@@ -87,8 +87,8 @@ const CreateOrder = ({ cartProducts, fullPrice, setFullPrice }) => {
               <div className={s.sort__container}>
                 <span>Тип доставки</span>
                 <Select
-                  onSelect={onSortTypeChange}
-                  value={sortType.label}
+                  onSelect={onSortDeliveryChange}
+                  value={sortDeliveryType.label}
                   options={deliveryOptions}
                 />
               </div>

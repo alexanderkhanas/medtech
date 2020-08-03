@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import s from "./NewsAdminCard.module.css";
-import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Moment from "react-moment";
+import s from "./UserCard.module.css";
 import Button from "../../Button/Button";
 import Modal from "../../Modal/Modal";
-import _axios from "../../../store/api/_axios";
 import { Link } from "react-router-dom";
+import _axios from "../../../store/api/_axios";
 
-const NewsAdminCard = ({ newsItem }) => {
-  const { title, desc, bodyText, _id, createdAt } = newsItem;
+const UserCard = (props) => {
   const [show, setShow] = useState(false);
   const openModal = () => setShow(true);
   const closeModal = () => setShow(false);
@@ -17,14 +13,14 @@ const NewsAdminCard = ({ newsItem }) => {
   return (
     <div className={s.card}>
       <div className={s.card__atrbutes}>
-        <p className={s.card__title}>{title.substr(0, 10)}</p>
-        <p className={s.card__subtitle}>{desc.substr(0, 20)}...</p>
-        <div className={s.table__container}>
-          <div className={s.createdAt}>
-            <Moment format="DD/MM/YYYY">{createdAt}</Moment>
-          </div>
+        <span className={s.fname}>Хасан</span>
+        <span className={s.lname}>Підр</span>
+        <span className={s.mail}>agrinkiv74@gmail.com</span>
+        <span className={s.phone__number}>+380686358298</span>
+        <div className={s.delivery}>
+          <span>11</span>
           <div className={s.buttons}>
-            <Link to={`/admin/edit-news/${_id}`}>
+            <Link to="/admin/edit-user">
               <Button className={s.edit__btn} size="sm" title="Редагувати" />
             </Link>
             <div className={s.delete__container}>
@@ -43,4 +39,4 @@ const NewsAdminCard = ({ newsItem }) => {
   );
 };
 
-export default NewsAdminCard;
+export default UserCard;

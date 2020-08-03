@@ -16,6 +16,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
 import { getUserByIdAction } from "./store/actions/profileActions";
 import CreateOrder from "./pages/CreateOrder/CreateOrder";
+import EditUser from "./pages/EditUser/EditUser";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -166,6 +167,10 @@ const App = ({
                   <Route
                     path={`${url}/edit-news/:id`}
                     component={(props) => <EditNews {...props} />}
+                  />
+                  <Route
+                    path={`${url}/edit-user/`}
+                    component={(props) => <EditUser {...props} />}
                   />
                 </>
               )}

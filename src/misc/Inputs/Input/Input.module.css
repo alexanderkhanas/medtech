@@ -13,10 +13,12 @@
 
 .label {
   margin-bottom: 10px;
+  color: gray;
 }
 
 .container {
   display: flex;
+  flex-direction: column;
 }
 
 .container span {

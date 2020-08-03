@@ -14,8 +14,105 @@ import {
   setFullPriceAction,
 } from "../../store/actions/cartActions";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
+import { Formik } from "formik";
+import Input from "../../misc/Inputs/Input/Input";
+import {
+  getCitiesAction,
+  getWarehousesAction,
+  setSelectedCityAction,
+  setSelectedWarehouseAction,
+} from "../../store/actions/orderActions";
+import OrderProductCard from "../../misc/OrderProductCard/OrderProductCard";
 
-const CreateOrder = ({ cartProducts, fullPrice, setFullPrice }) => {
+const CreateOrder = ({
+  cartProducts,
+  fullPrice,
+  setFullPrice,
+  getCities,
+  getWarehouses,
+  cities,
+  filterCities,
+  setSelectedWarehouse,
+  setSelectedCity,
+  warehouses,
+  filterWarehouses,
+}) => {
+  const deliveryOptions = [
+    { value: "self-pickup", label: "Самовивіз" },
+    { value: "np", label: "Нова пошта" },
+    { value: "up", label: "Укр пошта" },
+  ];
+
+  const payOptions = [
+    { value: "cash", label: "Наложений платіж" },
+    { value: "card", label: "Картою" },
+  ];
+
+  const breadCrumbsItems = [
+    {
+      name: "Кошик",
+      path: "/cart",
+      icon: <FontAwesomeIcon icon={faShoppingCart} />,
+    },
+    { name: "Замовлення", path: "/create-order" },
+  ];
+
+  const [deliveryType, setDeliveryType] = useState(deliveryOptions[0]);
+  const [paymentType, setPaymentType] = useState(payOptions[0]);
+
+  const onCitiesScroll = ({ target }, searchValue) => {
+    if (
+      target.scrollHeight - target.scrollTop < 400 &&
+      cities.length % 20 === 0
+    ) {
+      filterCities(searchValue, cities.length + 20);
+    }
+  };
+
+  const onCitySearchChange = (value) => {
+    console.log("value ===", value);
+    console.log("cities length ===", cities.length);
+    console.log("city description ===", cities[0]?.Description);
+    console.log(
+      "condition ===",
+      cities.length === 1 && value === cities[0].Description
+    );
+
+    if (cities.length === 1 && value === cities[0].Description) {
+      setSelectedCity(value);
+      getWarehouses(value);
+    }
+    filterCities(value);
+  };
+
+  const onCitySelect = (option) => {
+    setSelectedCity(option.label);
+    getWarehouses(option.label);
+  };
+
+  const onWarehousesScroll = ({ target }, searchValue) => {
+    if (
+      target.scrollHeight - target.scrollTop < 400 &&
+      warehouses.length % 20 === 0
+    ) {
+      filterWarehouses(searchValue, warehouses.length + 20);
+    }
+  };
+
+  const onWarehouseSearchChange = (value) => {
+    // setWarehouseSearchValue(value);
+    // if (warehouses.length === 1 && value === warehouses[0].Description) {
+    //   setSelectedWarehouse(value);
+    // }
+    // filterWarehouses(value);
+  };
+
+  const onWarehouseSelect = (option) => {
+    setSelectedWarehouse(option.label);
+  };
+
+  const h = useHistory();
+
   useEffect(() => {
     setFullPrice(
       cartProducts.reduce(
@@ -27,32 +124,13 @@ const CreateOrder = ({ cartProducts, fullPrice, setFullPrice }) => {
       )
     );
   }, [cartProducts]);
-  const deliveryOptions = [
-    { value: "self-pickup", label: "Самовивіз" },
-    { value: "np", label: "Нова пошта" },
-    { value: "up", label: "Укр пошта" },
-  ];
-  const payOptions = [
-    { value: "cash", label: "Наложений платіж" },
-    { value: "card", label: "Картою" },
-  ];
-  const [sortDeliveryType, setSortDeliveryType] = useState(deliveryOptions[0]);
-  const [sortPayType, setPayType] = useState(payOptions[0]);
-  const onSortDeliveryChange = (value) => {
-    setSortDeliveryType(value);
-  };
-  const onSortPayChange = (value) => {
-    setPayType(value);
-  };
-  const breadCrumbsItems = [
-    {
-      name: "Кошик",
-      path: "/cart",
-      icon: <FontAwesomeIcon icon={faShoppingCart} />,
-    },
-    { name: "Замовлення", path: "/create-order" },
-  ];
-  const h = useHistory();
+
+  useEffect(() => {
+    getCities();
+  }, []);
+
+  console.log("cities ===", cities);
+
   return (
     <div className={s.container}>
       <div className={s.title__container}>
@@ -62,38 +140,73 @@ const CreateOrder = ({ cartProducts, fullPrice, setFullPrice }) => {
       <FixedWrapper>
         <div className={s.order__container}>
           <div className={s.products__container}>
-            <div className={s.products__header}>
-              <span>Товар</span>
-              <span>Ціна</span>
-              <span>Кількість</span>
-              <span>Загальна сума</span>
-              <span>Видалити</span>
-            </div>
             {cartProducts.map((product, i) => (
-              <CartProduct {...{ product }} key={product._id} />
+              <OrderProductCard isSmall {...{ product }} key={product._id} />
             ))}
+            <div className={s.subtotal__container}>
+              <div className={s.subtotal__title}>Ціна:</div>
+              <div className={s.subtotal__price}>5438 грн.</div>
+            </div>
           </div>
           <div className={s.submit__container_all}>
             <div className={s.submit__container}>
-              <div className={s.select_container}></div>
-              <div className={s.sort__container}>
-                <span>Тип оплати</span>
-                <Select
-                  onSelect={onSortPayChange}
-                  value={sortPayType.label}
-                  options={payOptions}
+              <div className={s.input__row}>
+                <Input
+                  name="fName"
+                  label="Ім'я"
+                  placeholder="John"
+                  containerClass={s.input__container}
+                />
+                <Input
+                  placeholder="Doe"
+                  name="sName"
+                  containerClass={s.input__container}
+                  label="Прізвище"
                 />
               </div>
-              <div className={s.sort__container}>
-                <span>Тип доставки</span>
-                <Select
-                  onSelect={onSortDeliveryChange}
-                  value={sortDeliveryType.label}
-                  options={deliveryOptions}
-                />
-              </div>
+              <Select
+                containerClass={s.section}
+                options={payOptions}
+                onSelect={setPaymentType}
+                label="Тип оплати"
+                value={paymentType.label}
+              />
+              <Select
+                containerClass={s.section}
+                options={deliveryOptions}
+                onSelect={setDeliveryType}
+                label="Тип доставки"
+                value={deliveryType.label}
+              />
+              <Select
+                containerClass={s.section}
+                withSearch
+                noDefaultValue
+                onMenuScroll={onCitiesScroll}
+                menuClass={s.select__menu}
+                options={cities.map((city) => ({
+                  value: city.Description,
+                  label: city.Description,
+                }))}
+                onSelect={onCitySelect}
+                onSearchValueChange={onCitySearchChange}
+                label="Місто"
+              />
+              <Select
+                containerClass={s.section}
+                withSearch
+                noDefaultValue
+                onMenuScroll={onWarehousesScroll}
+                menuClass={s.select__menu}
+                options={warehouses.map((warehouse) => ({
+                  value: warehouse.Description,
+                  label: warehouse.Description,
+                }))}
+                onSelect={onWarehouseSelect}
+                onSearchValueChange={onWarehouseSearchChange}
+                label="Номер відділення"
+              />
               <span className={s.price}>Ціна: {`${fullPrice || 0} ₴`}</span>
-              <span className={s.status}>Створений</span>
               <div className={s.submit__btn__container}>
                 <Button
                   title="Підтвердити замовлення"
@@ -118,13 +231,27 @@ const CreateOrder = ({ cartProducts, fullPrice, setFullPrice }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { cartProducts: state.cart.all, fullPrice: state.cart.fullPrice };
+  return {
+    cartProducts: state.cart.all,
+    fullPrice: state.cart.fullPrice,
+    cities: state.order.cities,
+    warehouses: state.order.warehouses,
+  };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     addToCart: (product) => dispatch(addToCartAction(product)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
     setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
+    getCities: () => dispatch(getCitiesAction()),
+    filterCities: (filterValue, limit) =>
+      dispatch(getCitiesAction(filterValue, limit)),
+    getWarehouses: (city) => dispatch(getWarehousesAction(city)),
+    filterWarehouses: (filterValue) =>
+      dispatch(getWarehousesAction(filterValue)),
+    setSelectedCity: (city) => dispatch(setSelectedCityAction(city)),
+    setSelectedWarehouse: (warehouse) =>
+      dispatch(setSelectedWarehouseAction(warehouse)),
   };
 };
 

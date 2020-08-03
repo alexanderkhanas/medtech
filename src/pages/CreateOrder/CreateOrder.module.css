@@ -6,6 +6,10 @@
   align-items: center;
 }
 
+.section {
+  margin-top: 20px;
+}
+
 .title {
   text-align: center;
   font-weight: 300;
@@ -22,13 +26,12 @@
 .submit__container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   background-color: rgba(240, 240, 240, 0.632);
   border-radius: 20px;
-  height: 55vh;
-  width: 400px;
   margin-top: 20px;
+  box-sizing: border-box;
+  padding: 30px 40px;
 }
 
 .price {
@@ -41,7 +44,6 @@
 .price,
 .status {
   display: flex;
-  justify-content: center;
   padding: 10px 0;
 }
 .products__container {
@@ -66,7 +68,6 @@
 }
 .sort__container {
   display: flex;
-  align-items: center;
   flex-direction: column;
   padding: 10px 0;
 }
@@ -88,6 +89,36 @@
   padding: 10px 0;
   text-align: center;
 }
+
+.input__row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input__container:last-child {
+  margin-left: 10px;
+}
+
+.subtotal__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-top: 2px solid rgba(240, 240, 240, 1);
+  color: #404040;
+}
+
+.subtotal__title {
+  font-size: 20px;
+  font-weight: 500;
+  font-family: 'Nunito';
+}
+
+.subtotal__price {
+  font-size: 25px;
+}
+
+
 @media (max-width: 1350px) {
   .order__container {
     flex-direction: column;
@@ -113,5 +144,8 @@
   }
   .products__header {
     display: none;
+  }
+  .order__container {
+    padding: 0;
   }
 }

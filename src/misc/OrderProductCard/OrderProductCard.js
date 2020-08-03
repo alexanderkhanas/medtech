@@ -10,7 +10,7 @@ import {
 } from "../../store/actions/cartActions";
 import { Link } from "react-router-dom";
 
-const CartProduct = ({
+const OrderProductCard = ({
   product,
   changeNumberInCart,
   removeFromCart,
@@ -48,40 +48,40 @@ const CartProduct = ({
         </Link>
         <div className={s.main__content}>
           <Link to={`product/${_id}`}>
-            <h4 className={s.title}>{title.slice(0, 15)}</h4>
+            <span className={s.title}>{title.slice(0, 15)}</span>
           </Link>
           <p className={s.category}>{desc.slice(0, 20)}</p>
         </div>
       </div>
-      <div className={s.price__wrapper}>
+      {/* <div className={s.price__wrapper}>
         <span className={s.price}>{productPrice}₴</span>
-      </div>
-      <div className={s.qty__counter__wrapper}>
+      </div> */}
+      {/* <div className={s.qty__counter__wrapper}>
         <div className={s.qty__counter}>
           <Counter onChange={onCounterChange} initialValue={numberInCart} />
         </div>
-      </div>
+      </div> */}
       <div className={s.fullprice__container}>
         <span className={s.fullprice}>
           {+numberInCart * +productPrice || 0}₴
         </span>
       </div>
-      <div className={s.remove__icon__wrapper}>
+      {/* <div className={s.remove__icon__wrapper}>
         <FontAwesomeIcon
           icon={faTimes}
           onClick={removeFromCartHandler}
           className={s.remove__icon}
         />
-      </div>
+      </div> */}
 
-      <div className={s.mobile}>
+      {/* <div className={s.mobile}>
         <div className={s.fullprice__container}>
           <span className={s.fullprice}>{numberInCart * price || 0}₴</span>
         </div>
         <div className={s.qty__counter}>
           <Counter onChange={onCounterChange} initialValue={numberInCart} />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -99,4 +99,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CartProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderProductCard);

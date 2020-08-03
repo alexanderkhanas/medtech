@@ -13,7 +13,10 @@ export const addToCartAction = (product, attributes) => {
 
   localStorage.setItem(
     "_cart",
-    JSON.stringify([...localCart, { _id: product._id, attributes }])
+    JSON.stringify([
+      ...localCart,
+      { _id: product._id, attributes, numberInCart: 1 },
+    ])
   );
   return {
     type: ADD_TO_CART,
@@ -42,6 +45,19 @@ export const changeNumberInCartAction = (value, id, allCartProducts) => {
     fullPrice += product.price * editedProduct.numberInCart;
     return editedProduct;
   });
+  console.log("edited products ===", editedProducts);
+
+  const localCart = getLocalCart();
+  console.log("local cart", localCart);
+
+  const editedCart = localCart.map((item) => {
+    const { _id } = item;
+    return _id === id ? { ...item, numberInCart: value } : item;
+  });
+
+  localStorage.setItem("_cart", JSON.stringify(editedCart));
+
+  console.log("edit cart", editedCart);
 
   return {
     type: SET_NUMBER_CART,

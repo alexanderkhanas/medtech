@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./misc/Header/Header";
 import SingleProduct from "./pages/SingleProduct/SingleProduct";
-import { setCart } from "./store/actions/cartActions";
+import { setCart, setFullPriceAction } from "./store/actions/cartActions";
 import { connect } from "react-redux";
 import { getProducts } from "./store/actions/productsActions";
 import Footer from "./misc/Footer/Footer";
@@ -40,6 +40,7 @@ const App = ({
   getProducts,
   setWishlist,
   getNews,
+  setFullPrice,
   getUser,
 }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
@@ -84,6 +85,7 @@ const App = ({
     //   ? allProducts.filter((product) => cartIds.includes(product._id))
     //   : [];
     const cartProducts = [];
+    let fullPrice = 0;
     allProducts.forEach((product) => {
       localCart.forEach((cartProduct) => {
         if (product._id === cartProduct._id) {
@@ -91,7 +93,11 @@ const App = ({
             ...product,
             selectedAttributesId: cartProduct.attributes._id,
             selectedAttributesPrice: cartProduct.attributes.priceAttr,
+            numberInCart: cartProduct.numberInCart,
           });
+          fullPrice +=
+            cartProduct.numberInCart * cartProduct.attributes.priceAttr ||
+            product.price;
         }
       });
     });
@@ -201,6 +207,7 @@ const mapDispatchToProps = (dispatch) => {
     setWishlist: (wishlist) => dispatch(setWishlist(wishlist)),
     getNews: () => dispatch(getAllNewsAction()),
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
+    setFullPrice: (price) => dispatch(setFullPriceAction(price)),
   };
 };
 

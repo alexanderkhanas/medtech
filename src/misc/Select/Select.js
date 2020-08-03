@@ -5,18 +5,29 @@ const Select = ({
   options = [],
   withSearch,
   label,
+  noDefaultValue = false,
   containerClass = "",
+  menuClass = "",
   onMenuScroll = () => {},
   onSearchValueChange = () => {},
   onSelect = () => {},
-  value = "Select value",
+  value = "Оберіть значення",
 }) => {
   const [isMenuOpened, setMenuOpened] = useState(false);
-  const [searchValue, setSearchValue] = useState(options[0].label);
+  const [searchValue, setSearchValue] = useState(
+    noDefaultValue ? "" : options[0].label
+  );
 
   const switchMenuOpened = () => setMenuOpened((prev) => !prev);
+  const closeMenu = () => setMenuOpened(false);
 
   const selectHandler = (option) => {
+    onSelect(option);
+    setMenuOpened(false);
+  };
+
+  const selectSearchHandler = (option) => {
+    setSearchValue(option.label);
     onSelect(option);
     setMenuOpened(false);
   };
@@ -33,12 +44,12 @@ const Select = ({
     <div className={containerClass}>
       {!!label && <p className={s.label}>{label}</p>}
       {!withSearch ? (
-        <div className={s.container}>
+        <div className={s.container} onBlur={switchMenuOpened}>
           <div className={s.value__container} onClick={switchMenuOpened}>
             <span className={s.value__text}>{value}</span>
           </div>
           {isMenuOpened && (
-            <div className={s.menu} onScroll={(e) => console.log("e ===", e)}>
+            <div className={s.menu}>
               {options.map((option, i) => (
                 <div
                   key={i}
@@ -56,18 +67,22 @@ const Select = ({
           {/* <div className={s.value__container} */}
           <input
             value={searchValue}
+            placeholder="Оберіть значення"
             className={s.search__input}
             onChange={onSearchInputChange}
             onClick={switchMenuOpened}
           />
           {/* </div> */}
           {isMenuOpened && (
-            <div className={s.menu} onScroll={onMenuScroll}>
+            <div
+              className={`${s.menu} ${menuClass}`}
+              onScroll={(e) => onMenuScroll(e, searchValue)}
+            >
               {options.map((option, i) => (
                 <div
                   key={i}
                   className={s.option}
-                  onClick={() => selectHandler(option)}
+                  onClick={() => selectSearchHandler(option)}
                 >
                   <span className={s.option__text}>{option.label}</span>
                 </div>
@@ -76,6 +91,7 @@ const Select = ({
           )}
         </div>
       )}
+      {isMenuOpened && <div className={s.overlay} onClick={closeMenu} />}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import s from "./CartProduct.module.css";
+import s from "./OrderProductCard.module.css";
 import { connect } from "react-redux";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

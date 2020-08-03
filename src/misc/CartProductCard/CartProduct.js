@@ -34,6 +34,8 @@ const CartProduct = ({
 
   const removeFromCartHandler = () => removeFromCart(product);
 
+  useEffect(() => {}, []);
+
   return (
     <div className={s.card}>
       <div className={s.main}>

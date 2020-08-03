@@ -15,6 +15,7 @@ import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
 import { getUserByIdAction } from "./store/actions/profileActions";
+import CreateOrder from "./pages/CreateOrder/CreateOrder";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -153,7 +154,7 @@ const App = ({
               path="/restore"
               component={(props) => <RestorePassword {...props} />}
             />
-            <Route path="/create-order" />
+            <Route path="/create-order" component={CreateOrder} />
 
             <Route
               path="/admin"

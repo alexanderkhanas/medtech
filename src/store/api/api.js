@@ -1,4 +1,5 @@
 import _axios from "./_axios";
+import axios from "axios";
 
 export const fetchProducts = async () => _axios.get("/products");
 
@@ -55,10 +56,34 @@ export const loginRequest = (data) => {
     })
     .catch((e) => console.error(e));
 };
+
 export const patchUser = (user, token) => {
   return _axios.patch("/user", user, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  });
+};
+
+export const fetchCities = (filterValue, limit = 20) => {
+  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
+    modelName: "AddressGeneral",
+    calledMethod: "getCities",
+    methodProperties: {
+      FindByString: filterValue,
+      Limit: limit,
+    },
+    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
+  });
+};
+
+export const fetchWarehousesByCity = (CityName) => {
+  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
+    modelName: "AddressGeneral",
+    calledMethod: "getWarehouses",
+    methodProperties: {
+      CityName,
+    },
+    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
   });
 };

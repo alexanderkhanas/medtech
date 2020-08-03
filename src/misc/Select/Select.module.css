@@ -1,9 +1,11 @@
 .container {
-  width: 300px;
+  /* width: 300px; */
   height: 40px;
+  flex-grow: 1;
   border-radius: 10px;
   position: relative;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 .value__container {
@@ -17,8 +19,10 @@
 .menu {
   position: absolute;
   width: 100%;
-  top: 60px;
+  top: 45px;
   z-index: 1;
+  max-height: 300px;
+  overflow: auto;
 }
 
 .option {
@@ -35,6 +39,30 @@
 
 .option__text {
   font-weight: 300;
+}
+
+.search__input {
+  height: 100%;
+  width: 100%;
+  background: none;
+  padding: 0 0 0 20px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #484848;
+  font-family: Nunito;
+  border: none;
+}
+
+.value__text {
+  color: #484848;
+  font-size: 15px;
+  font-family: Nunito;
+}
+
+.label {
+  font-weight: 300;
+  margin-bottom: 4px;
+  color: rgb(123, 123, 123);
 }
 
 @media (max-width: 575px) {

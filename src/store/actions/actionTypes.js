@@ -20,3 +20,5 @@ export const SHOW_ALERT = "SHOW_ALERT";
 export const HIDE_ALERT = "HIDE_ALERT";
 export const SET_USER_DATA = "SET_USER_DATA";
 export const SET_SEARCH_VALUE = "SET_SEARCH_VALUE";
+export const SET_WAREHOUSES = "SET_WAREHOUSES";
+export const SET_CITIES = "SET_CITIES";

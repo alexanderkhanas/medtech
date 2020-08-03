@@ -7,6 +7,7 @@ const Input = ({
   type = "text",
   placeholder,
   label,
+  onChange,
   containerClass,
   isError,
   children,
@@ -18,6 +19,7 @@ const Input = ({
       <div className={s.container__input}>
         <input
           {...{ type }}
+          {...{ onChange }}
           className={isError ? `${s.input} ${s.error__input}` : s.input}
           {...{ placeholder }}
           {...rest}

@@ -50,13 +50,13 @@
   padding: 0 20px;
   box-sizing: border-box;
   font-size: 15px;
-  color: #484848;
+  color: #999;
   font-family: Nunito;
   border: none;
 }
 
 .value__text {
-  color: #484848;
+  color: #999;
   font-size: 15px;
   font-family: Nunito;
 }

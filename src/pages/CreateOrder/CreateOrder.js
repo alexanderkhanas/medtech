@@ -22,6 +22,7 @@ import {
   setSelectedCityAction,
   setSelectedWarehouseAction,
 } from "../../store/actions/orderActions";
+import OrderProductCard from "../../misc/OrderProductCard/OrderProductCard";
 
 const CreateOrder = ({
   cartProducts,
@@ -139,16 +140,13 @@ const CreateOrder = ({
       <FixedWrapper>
         <div className={s.order__container}>
           <div className={s.products__container}>
-            <div className={s.products__header}>
-              <span>Товар</span>
-              {/* <span>Ціна</span> */}
-              <span>Кількість</span>
-              <span>Загальна сума</span>
-              <span>Видалити</span>
-            </div>
             {cartProducts.map((product, i) => (
-              <CartProduct isSmall {...{ product }} key={product._id} />
+              <OrderProductCard isSmall {...{ product }} key={product._id} />
             ))}
+            <div className={s.subtotal__container}>
+              <div className={s.subtotal__title}>Ціна:</div>
+              <div className={s.subtotal__price}>5438 грн.</div>
+            </div>
           </div>
           <div className={s.submit__container_all}>
             <div className={s.submit__container}>

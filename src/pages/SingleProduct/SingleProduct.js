@@ -103,14 +103,18 @@ const SingleProduct = ({
     }
   };
 
-  useEffect(() => {
-    console.log("price ===", priceInfo);
-  }, [priceInfo]);
-
   //effects
   useEffect(() => {
     getProduct(match.params.id);
   }, []);
+
+  useEffect(() => {
+    console.log("price ===", priceInfo);
+  }, [priceInfo]);
+
+  useEffect(() => {
+    console.log("product ===", product);
+  }, [product]);
 
   useEffect(() => {
     const productFromCart = cartProducts.filter(

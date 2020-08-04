@@ -20,10 +20,7 @@ import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
 import { getUserByIdAction } from "./store/actions/profileActions";
-import CreateOrder from "./pages/Admin/pages/CreateOrder/CreateOrder";
 import Modal from "./misc/Modal/Modal";
-import EditUser from "./pages/Admin/pages/EditUser/EditUser";
-import EditProduct from "./pages/Admin/pages/EditProduct/EditProduct";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -39,8 +36,18 @@ const SingleNews = lazy(() => import("./pages/SingleNews/SingleNews"));
 const Politics = lazy(() => import("./misc/Politics/Politics"));
 const PublicOffer = lazy(() => import("./misc/PublicOffer/PublicOffer"));
 const Admin = lazy(() => import("./pages/Admin/Admin"));
-const EditOrder = lazy(() => import("./pages/EditOrder/EditOrder"));
-const EditNews = lazy(() => import("./pages/EditNews/EditNews"));
+const EditOrder = lazy(() => import("./pages/Admin/pages/EditOrder/EditOrder"));
+const EditNews = lazy(() => import("./pages/Admin/pages/EditNews/EditNews"));
+const EditUser = lazy(() => import("./pages/Admin/pages/EditUser/EditUser"));
+const EditProduct = lazy(() =>
+  import("./pages/Admin/pages/EditProduct/EditProduct")
+);
+const CreateOrder = lazy(() =>
+  import("./pages/Admin/pages/CreateOrder/CreateOrder")
+);
+const CreateProduct = lazy(() =>
+  import("./pages/Admin/pages/CreateProduct/CreateProduct")
+);
 const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
 const PrivateRoute = ({
@@ -224,6 +231,10 @@ const App = ({
                   <Route
                     path={`${url}/edit-product/`}
                     component={(props) => <EditProduct {...props} />}
+                  />
+                  <Route
+                    path={`${url}/create-product/`}
+                    component={(props) => <CreateProduct {...props} />}
                   />
                 </>
               )}

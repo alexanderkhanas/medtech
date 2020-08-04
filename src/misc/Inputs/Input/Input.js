@@ -13,21 +13,34 @@ const Input = ({
   inputClass,
   isError,
   children,
+  isTextarea,
   ...rest
 }) => {
   return (
     <div className={`${s.container} ${containerClass}`}>
       {!!label && <span className={s.label}>{label}</span>}
       <div className={s.container__input}>
-        <input
-          {...{ type }}
-          {...{ onChange }}
-          className={classnames(s.input, inputClass, {
-            isError: s.error__input,
-          })}
-          {...{ placeholder }}
-          {...rest}
-        />
+        {!isTextarea ? (
+          <input
+            {...{ type }}
+            {...{ onChange }}
+            className={classnames(s.input, inputClass, {
+              isError: s.error__input,
+            })}
+            {...{ placeholder }}
+            {...rest}
+          />
+        ) : (
+          <textarea
+            {...{ type }}
+            {...{ onChange }}
+            className={classnames(s.input, inputClass, {
+              isError: s.error__input,
+            })}
+            {...{ placeholder }}
+            {...rest}
+          />
+        )}
         {children}
       </div>
     </div>

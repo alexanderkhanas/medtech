@@ -17,21 +17,32 @@
 }
 .order__container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: row;
   margin: 0 auto;
   /* width: 300px; */
-  padding: 30px;
+  margin-top: 20px;
+  padding: 0 0 30px 0;
+  box-sizing: border-box;
 }
 .submit__container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   background-color: rgba(240, 240, 240, 0.632);
-  border-radius: 20px;
-  margin-top: 20px;
   box-sizing: border-box;
-  padding: 30px 40px;
+  border-radius: 10px;
+  padding: 50px;
+}
+
+.submit__title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.submit__container_all {
+  flex-grow: 2;
+  max-width: 650px;
 }
 
 .price {
@@ -48,6 +59,8 @@
 }
 .products__container {
   margin-top: 10px;
+  flex-grow: 1.7;
+  margin-right: 50px;
 }
 
 .products__header {
@@ -77,6 +90,13 @@
   color: gray;
 }
 
+.actions__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
 .goBack__but {
   color: gray;
   padding-top: 10px;
@@ -93,10 +113,23 @@
 .input__row {
   display: flex;
   justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.input__container {
+  flex-grow: 1;
 }
 
 .input__container:last-child {
-  margin-left: 10px;
+  margin-left: 30px;
+}
+
+.input {
+  background: none;
+  border-radius: 10px;
+
+  border: 1px solid #ccc;
+  color: #404040;
 }
 
 .subtotal__container {
@@ -111,28 +144,45 @@
 .subtotal__title {
   font-size: 20px;
   font-weight: 500;
-  font-family: 'Nunito';
+  font-family: "Nunito";
 }
 
 .subtotal__price {
   font-size: 25px;
 }
 
+.save__user__container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
 
-@media (max-width: 1350px) {
+.save__user__desc {
+  font-weight: 300;
+  cursor: pointer;
+  color: #404040;
+}
+
+.save__user__checkbox {
+  margin-right: 10px;
+}
+
+@media (max-width: 1000px) {
   .order__container {
     flex-direction: column;
     justify-content: center;
   }
-  .submit__container {
-    width: 100%;
-    height: 45vh;
-  }
+
   .submit__container_all {
     padding: 10px 0;
+    flex: 1;
+    max-width: initial;
   }
   .submit__btn__container {
     flex-wrap: wrap;
+  }
+  .products__container {
+    margin-right: 0;
   }
 }
 @media (max-width: 550px) {
@@ -147,5 +197,15 @@
   }
   .order__container {
     padding: 0;
+  }
+  .input__row {
+    flex-direction: column;
+  }
+  .input__container:last-child {
+    margin-left: 0;
+    margin-top: 20px;
+  }
+  .submit__container {
+    padding: 7vw;
   }
 }

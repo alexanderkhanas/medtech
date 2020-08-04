@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import s from "./CreateOrder.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
@@ -23,6 +23,7 @@ import {
   setSelectedWarehouseAction,
 } from "../../store/actions/orderActions";
 import OrderProductCard from "../../misc/OrderProductCard/OrderProductCard";
+import { patchUserAction } from "../../store/actions/profileActions";
 
 const CreateOrder = ({
   cartProducts,
@@ -36,6 +37,10 @@ const CreateOrder = ({
   setSelectedCity,
   warehouses,
   filterWarehouses,
+  selectedWarehouse,
+  selectedCity,
+  user,
+  patchUser,
 }) => {
   const deliveryOptions = [
     { value: "self-pickup", label: "Самовивіз" },
@@ -54,11 +59,20 @@ const CreateOrder = ({
       path: "/cart",
       icon: <FontAwesomeIcon icon={faShoppingCart} />,
     },
-    { name: "Замовлення", path: "/create-order" },
+    { name: "Замовлення", path: "/order" },
   ];
 
+  const [name, setName] = useState(user.fName);
+  const [surname, setSurname] = useState(user.lName);
+  const [isSaveUser, setSaveUser] = useState(false);
   const [deliveryType, setDeliveryType] = useState(deliveryOptions[0]);
   const [paymentType, setPaymentType] = useState(payOptions[0]);
+
+  const onNameInputChange = ({ target }) => setName(target.value);
+  const onSurnameInputChange = ({ target }) => setSurname(target.value);
+
+  const onSaveUserCheckboxChange = ({ target }) => setSaveUser(target.value);
+  const switchSaveUser = () => setSaveUser((prev) => !prev);
 
   const onCitiesScroll = ({ target }, searchValue) => {
     if (
@@ -70,14 +84,6 @@ const CreateOrder = ({
   };
 
   const onCitySearchChange = (value) => {
-    console.log("value ===", value);
-    console.log("cities length ===", cities.length);
-    console.log("city description ===", cities[0]?.Description);
-    console.log(
-      "condition ===",
-      cities.length === 1 && value === cities[0].Description
-    );
-
     if (cities.length === 1 && value === cities[0].Description) {
       setSelectedCity(value);
       getWarehouses(value);
@@ -113,6 +119,12 @@ const CreateOrder = ({
 
   const h = useHistory();
 
+  const submit = () => {
+    if (isSaveUser) {
+      patchUser({ ...user, fName: name, lName: surname });
+    }
+  };
+
   useEffect(() => {
     setFullPrice(
       cartProducts.reduce(
@@ -129,8 +141,6 @@ const CreateOrder = ({
     getCities();
   }, []);
 
-  console.log("cities ===", cities);
-
   return (
     <div className={s.container}>
       <div className={s.title__container}>
@@ -140,27 +150,34 @@ const CreateOrder = ({
       <FixedWrapper>
         <div className={s.order__container}>
           <div className={s.products__container}>
-            {cartProducts.map((product, i) => (
+            {cartProducts.map((product) => (
               <OrderProductCard isSmall {...{ product }} key={product._id} />
             ))}
             <div className={s.subtotal__container}>
               <div className={s.subtotal__title}>Ціна:</div>
-              <div className={s.subtotal__price}>5438 грн.</div>
+              <div className={s.subtotal__price}>{fullPrice}₴</div>
             </div>
           </div>
           <div className={s.submit__container_all}>
             <div className={s.submit__container}>
+              <h2 className={s.submit__title}>Оформити замовлення</h2>
               <div className={s.input__row}>
                 <Input
                   name="fName"
+                  inputClass={s.input}
+                  containerClass={s.input__container}
+                  value={name}
+                  onChange={onNameInputChange}
                   label="Ім'я"
                   placeholder="John"
-                  containerClass={s.input__container}
                 />
                 <Input
                   placeholder="Doe"
                   name="sName"
+                  inputClass={s.input}
                   containerClass={s.input__container}
+                  value={surname}
+                  onChange={onSurnameInputChange}
                   label="Прізвище"
                 />
               </div>
@@ -206,22 +223,37 @@ const CreateOrder = ({
                 onSearchValueChange={onWarehouseSearchChange}
                 label="Номер відділення"
               />
-              <span className={s.price}>Ціна: {`${fullPrice || 0} ₴`}</span>
-              <div className={s.submit__btn__container}>
-                <Button
-                  title="Підтвердити замовлення"
-                  className={s.submit__btn}
-                />
+              <div className={s.actions__container}>
+                <div className={s.save__user__container}>
+                  <input
+                    type="checkbox"
+                    onChange={onSaveUserCheckboxChange}
+                    checked={isSaveUser}
+                    className={s.save__user__checkbox}
+                  />
+                  <p className={s.save__user__desc} onClick={switchSaveUser}>
+                    Оновити мій профіль
+                  </p>
+                </div>
+                <div className={s.submit__btn__container}>
+                  <Button
+                    title="Підтвердити замовлення"
+                    onClick={submit}
+                    isDisabled={!selectedCity || !selectedWarehouse}
+                    disabled={!selectedCity || !selectedWarehouse}
+                    className={s.submit__btn}
+                  />
+                </div>
+                <button
+                  className={s.goBack__but}
+                  onClick={() => {
+                    h.goBack();
+                  }}
+                >
+                  <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
+                  Повернутися
+                </button>
               </div>
-              <button
-                className={s.goBack__but}
-                onClick={() => {
-                  h.goBack();
-                }}
-              >
-                <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
-                Повернутися
-              </button>
             </div>
           </div>
         </div>
@@ -236,6 +268,9 @@ const mapStateToProps = (state) => {
     fullPrice: state.cart.fullPrice,
     cities: state.order.cities,
     warehouses: state.order.warehouses,
+    selectedWarehouse: state.order.selectedWarehouse,
+    selectedCity: state.order.selectedCity,
+    user: state.profile,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -252,6 +287,7 @@ const mapDispatchToProps = (dispatch) => {
     setSelectedCity: (city) => dispatch(setSelectedCityAction(city)),
     setSelectedWarehouse: (warehouse) =>
       dispatch(setSelectedWarehouseAction(warehouse)),
+    patchUser: (user, token) => dispatch(patchUserAction(user, token)),
   };
 };
 

@@ -79,9 +79,6 @@ const SingleProduct = ({
       if (window.innerWidth <= 575) {
         scrollToRef(attributesRef, -120);
       }
-      setTimeout(() => {
-        hideAlert();
-      }, 5000);
       return;
     }
     if (isInCart) {

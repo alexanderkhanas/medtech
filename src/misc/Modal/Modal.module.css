@@ -1,20 +1,14 @@
 .show {
   display: block;
+  opacity: 1;
+  visibility: collapse;
 }
 
 .hide {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
 }
 
-/* .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #0000003a;
-  transition: opacity 0.2s ease;
-} */
 .modal__container {
   position: fixed;
   top: 0;
@@ -27,33 +21,27 @@
   justify-content: center;
   align-items: center;
 }
+
 .modal {
   width: 500;
   position: fixed;
   margin: 0px auto;
-  padding: 20px;
+  padding: 40px 30px;
   background-color: #fff;
   border-radius: 2px;
+  transition: 0.2s;
   box-shadow: 0 2px 8px 3px;
+  max-width: 400px;
 }
 
-/* .x {
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
-  width: 2rem;
-  height: 2rem;
-  padding: 0.5rem;
-  margin: 0 auto;
-  border-radius: 50%;
-  box-shadow: 1px 1px 1px #0000003a;
-  cursor: pointer;
-  border: 1px solid rgba(0, 0, 0, 0.562);
-} */
+.title {
+  text-align: center;
+}
+
 .buttons {
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* justify-content: space-around; */
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
 }
 .plus {
   margin-right: 20px;
@@ -61,6 +49,11 @@
   color: black;
   background: none;
 }
+
+.plus:hover {
+  color: #fff;
+}
+
 .minus {
   margin-left: 20px;
   /* padding: 10px; */

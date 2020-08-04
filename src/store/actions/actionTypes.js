@@ -24,3 +24,6 @@ export const SET_WAREHOUSES = "SET_WAREHOUSES";
 export const SET_CITIES = "SET_CITIES";
 export const SET_SELECTED_CITY = "SET_SELECTED_CITY";
 export const SET_SELECTED_WAREHOUSE = "SET_SELECTED_WAREHOUSE";
+export const HIDE_MODAL = "HIDE_MODAL";
+export const SHOW_MODAL = "SHOW_MODAL";
+export const LOGOUT = "LOGOUT";

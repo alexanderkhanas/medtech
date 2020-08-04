@@ -14,6 +14,7 @@ const Button = ({
   icon,
   isSecondary,
   isCapitalize,
+  isDisabled,
   ...rest
 }) => {
   const classes = classnames(s.button, className, {
@@ -21,6 +22,7 @@ const Button = ({
     [s.uppercase]: isUppercase,
     [s.secondary]: isSecondary,
     [s.capitalize]: isCapitalize,
+    [s.disabled]: isDisabled,
   });
   return (
     <button

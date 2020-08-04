@@ -5,10 +5,11 @@ import Modal from "../../Modal/Modal";
 import { Link } from "react-router-dom";
 import _axios from "../../../store/api/_axios";
 
-const UserCard = (props) => {
+const UserCard = () => {
   const [show, setShow] = useState(false);
   const openModal = () => setShow(true);
   const closeModal = () => setShow(false);
+  // const [userData, setUserData] = useState({ ...user });
 
   return (
     <div className={s.card}>

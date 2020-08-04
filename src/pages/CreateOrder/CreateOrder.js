@@ -145,7 +145,7 @@ const CreateOrder = ({
             ))}
             <div className={s.subtotal__container}>
               <div className={s.subtotal__title}>Ціна:</div>
-              <div className={s.subtotal__price}>5438 грн.</div>
+              <div className={s.subtotal__price}>{`${fullPrice || 0} ₴`}</div>
             </div>
           </div>
           <div className={s.submit__container_all}>

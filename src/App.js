@@ -17,6 +17,7 @@ import { getLocalCart, debounce } from "./utils/utils";
 import { getUserByIdAction } from "./store/actions/profileActions";
 import CreateOrder from "./pages/CreateOrder/CreateOrder";
 import EditUser from "./pages/EditUser/EditUser";
+import EditProduct from "./pages/EditProduct/EditProduct";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -177,6 +178,10 @@ const App = ({
                   <Route
                     path={`${url}/edit-user/`}
                     component={(props) => <EditUser {...props} />}
+                  />
+                  <Route
+                    path={`${url}/edit-product/`}
+                    component={(props) => <EditProduct {...props} />}
                   />
                 </>
               )}

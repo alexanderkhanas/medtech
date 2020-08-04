@@ -4,15 +4,11 @@ import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Moment from "react-moment";
 import Button from "../../Button/Button";
-import Modal from "../../Modal/Modal";
 import _axios from "../../../store/api/_axios";
 import { Link } from "react-router-dom";
 
-const NewsAdminCard = ({ newsItem }) => {
+const NewsAdminCard = ({ newsItem, showModal }) => {
   const { title, desc, bodyText, _id, createdAt } = newsItem;
-  const [show, setShow] = useState(false);
-  const openModal = () => setShow(true);
-  const closeModal = () => setShow(false);
 
   return (
     <div className={s.card}>
@@ -32,13 +28,12 @@ const NewsAdminCard = ({ newsItem }) => {
                 size="sm"
                 title="Видалити"
                 className={s.delete__btn}
-                onClick={openModal}
+                // onClick={showDeleteModal}
               />
             </div>
           </div>
         </div>
       </div>
-      {show && <Modal closeModal={closeModal} show={show} />}
     </div>
   );
 };

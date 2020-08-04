@@ -32,7 +32,7 @@
 }
 
 .buttons {
-  margin-left: 10px;
+  margin-left: 2px;
   display: flex;
 }
 .delete__btn {
@@ -53,5 +53,8 @@
   .card__subtitle,
   .createdAt {
     display: none;
+  }
+  .buttons {
+    margin-right: 30px;
   }
 }

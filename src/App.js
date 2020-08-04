@@ -39,8 +39,8 @@ const SingleNews = lazy(() => import("./pages/SingleNews/SingleNews"));
 const Politics = lazy(() => import("./misc/Politics/Politics"));
 const PublicOffer = lazy(() => import("./misc/PublicOffer/PublicOffer"));
 const Admin = lazy(() => import("./pages/Admin/Admin"));
-const EditOrder = lazy(() => import("./pages/EditOrder/EditOrder"));
-const EditNews = lazy(() => import("./pages/EditNews/EditNews"));
+const EditOrder = lazy(() => import("./pages/Admin/pages/EditOrder/EditOrder"));
+const EditNews = lazy(() => import("./pages/Admin/pages/EditNews/EditNews"));
 const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
 const PrivateRoute = ({
@@ -162,6 +162,10 @@ const App = ({
             <Route
               path="/politics"
               component={(props) => <Politics {...props} />}
+            />
+            <Route
+              path="/about-us"
+              component={(props) => <AboutUs {...props} />}
             />
             <Route
               path="/single-news/:id"

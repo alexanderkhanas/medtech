@@ -1,5 +1,10 @@
 import React, { useEffect, Suspense, lazy, useMemo } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./misc/Header/Header";
 import SingleProduct from "./pages/SingleProduct/SingleProduct";
@@ -15,9 +20,10 @@ import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
 import { getUserByIdAction } from "./store/actions/profileActions";
-import CreateOrder from "./pages/CreateOrder/CreateOrder";
-import EditUser from "./pages/EditUser/EditUser";
-import EditProduct from "./pages/EditProduct/EditProduct";
+import CreateOrder from "./pages/Admin/pages/CreateOrder/CreateOrder";
+import Modal from "./misc/Modal/Modal";
+import EditUser from "./pages/Admin/pages/EditUser/EditUser";
+import EditProduct from "./pages/Admin/pages/EditProduct/EditProduct";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -37,14 +43,30 @@ const EditOrder = lazy(() => import("./pages/EditOrder/EditOrder"));
 const EditNews = lazy(() => import("./pages/EditNews/EditNews"));
 const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
+const PrivateRoute = ({
+  redirectTo,
+  component: Component,
+  condition,
+  state = {},
+  ...rest
+}) => (
+  <Route {...rest}>
+    {condition ? (
+      <Component />
+    ) : (
+      <Redirect to={{ pathname: redirectTo, state }} />
+    )}
+  </Route>
+);
+
 const App = ({
   allProducts,
   setCart,
   getProducts,
   setWishlist,
   getNews,
-  setFullPrice,
   getUser,
+  user,
 }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
 
@@ -118,6 +140,7 @@ const App = ({
     <Router>
       <Header />
       <Alert />
+      <Modal />
       <div style={{ marginTop: "45px" }}>
         <Suspense fallback={<div className="fallback" />}>
           <Switch>
@@ -132,7 +155,6 @@ const App = ({
               path="/catalog"
               component={() => <Catalog {...{ windowWidth }} />}
             />
-            <Route path="/login" component={(props) => <Login {...props} />} />
             <Route
               path="/public-offer"
               component={(props) => <PublicOffer {...props} />}
@@ -147,16 +169,36 @@ const App = ({
             />
             <Route path="/news" component={News} />
             <Route path="/single-news/:id" component={SingleNews} />
-            <Route
+            <PrivateRoute
+              path="/login"
+              condition={!user._id}
+              redirectTo={`profile/${user._id}`}
+              component={(props) => <Login {...props} />}
+            />
+            <PrivateRoute
               path="/register"
+              redirectTo={`profile/${user._id}`}
+              condition={!user._id}
               component={(props) => <Register {...props} />}
             />
-            <Route path="/profile" component={Profile} />
-            <Route
+            <PrivateRoute
+              condition={!!user._id}
+              path="/profile"
+              component={Profile}
+            />
+            <PrivateRoute
+              condition={!user._id}
               path="/restore"
+              redirectTo={`profile/${user._id}`}
               component={(props) => <RestorePassword {...props} />}
             />
-            <Route path="/create-order" component={CreateOrder} />
+            <PrivateRoute
+              condition={!!user._id}
+              path="/order"
+              redirectTo="/login"
+              state={{ redirectTo: "/order" }}
+              component={CreateOrder}
+            />
 
             <Route
               path="/admin"
@@ -208,6 +250,7 @@ const App = ({
 const mapStateToProps = (state) => {
   return {
     allProducts: state.products.all,
+    user: state.profile,
   };
 };
 

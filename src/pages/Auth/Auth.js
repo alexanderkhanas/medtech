@@ -22,7 +22,7 @@ import {
   hideAlertAction,
 } from "../../store/actions/alertActions";
 
-const Auth = ({ login, hideAlert, showAlert }) => {
+const Auth = ({ login, hideAlert, showAlert, location }) => {
   const h = useHistory();
   const breadCrumbsItems = [
     {
@@ -32,6 +32,8 @@ const Auth = ({ login, hideAlert, showAlert }) => {
     },
     { name: "Увійти", path: "/login" },
   ];
+
+  console.log("location ===", location?.state);
 
   return (
     <div>
@@ -62,13 +64,13 @@ const Auth = ({ login, hideAlert, showAlert }) => {
             if (token) {
               document.cookie = `token=${token}`;
             }
-            document.cookie = `userId=${_id}`;
-            h.push(`/profile/${_id}`);
+            if (location?.state?.redirectTo) {
+              h.push(location.state.redirectTo);
+            } else {
+              h.push(`/profile/${_id}`);
+            }
           } else {
             showAlert("Помилка при авторизації. Невірно введені дані.");
-            setTimeout(() => {
-              hideAlert();
-            }, 5000);
           }
         }}
       >

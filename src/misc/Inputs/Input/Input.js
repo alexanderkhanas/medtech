@@ -1,5 +1,6 @@
 import React from "react";
 import s from "./Input.module.css";
+import classnames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Input = ({
@@ -9,6 +10,7 @@ const Input = ({
   label,
   onChange,
   containerClass,
+  inputClass,
   isError,
   children,
   ...rest
@@ -20,7 +22,9 @@ const Input = ({
         <input
           {...{ type }}
           {...{ onChange }}
-          className={isError ? `${s.input} ${s.error__input}` : s.input}
+          className={classnames(s.input, inputClass, {
+            isError: s.error__input,
+          })}
           {...{ placeholder }}
           {...rest}
         />

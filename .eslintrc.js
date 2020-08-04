@@ -43,5 +43,6 @@ module.exports = {
     "react/no-unescaped-entities": "off",
     "react/jsx-indent-props": "off",
     "react/jsx-props-no-multi-spaces": "off",
+    "react/jsx-indent": "off",
   },
 };

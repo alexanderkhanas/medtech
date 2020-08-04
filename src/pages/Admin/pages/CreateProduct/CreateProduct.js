@@ -1,11 +1,12 @@
-import React, { useRef, useState } from "react";
-import s from "./EditProduct.module.css";
-import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import Select from "../../misc/Select/Select";
-import Input from "../../misc/Inputs/Input/Input";
-import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
+import React, { useState, useRef } from "react";
+import s from "./CreateProduct.module.css";
+import { connect } from "react-redux";
+import Select from "../../../../misc/Select/Select";
+import Input from "../../../../misc/Inputs/Input/Input";
+import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
+import ProfileInput from "../../../../misc/Inputs/ProfileInput/ProfileInput";
 
-const EditProduct = (props) => {
+const CreateProduct = (props) => {
   const uploadedImage = useRef(null);
   const imageUploader = useRef(null);
 
@@ -41,9 +42,9 @@ const EditProduct = (props) => {
             <ProfileInput label="Назва продукту" className={s.product__title} />
           </div>
           <div className={s.input__image__container}>
-            <label className={s.label}>
+            <span className={s.label}>
               Нажміть на картинку щоб вибрати нову
-            </label>
+            </span>
             <input
               type="file"
               accept="image/*"
@@ -86,7 +87,7 @@ const EditProduct = (props) => {
             options={quantityOptions}
           />
           <div className={s.news__content}>
-            <label className={s.label}>Текст новини</label>
+            <span className={s.label}>Текст новини</span>
             <textarea className={s.textarea} />
           </div>
           <div className={s.recommend__container}>
@@ -99,4 +100,11 @@ const EditProduct = (props) => {
   );
 };
 
-export default EditProduct;
+const mapStateToProps = (state) => {
+  return {};
+};
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateProduct);

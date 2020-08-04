@@ -29,23 +29,20 @@ const OrderProductCard = ({
 
   const productPrice = selectedAttributesPrice || price;
 
-  const onCounterChange = (value) =>
-    changeNumberInCart(value, _id, allProductsInCart);
-
-  const removeFromCartHandler = () => removeFromCart(product);
-
-  useEffect(() => {}, []);
-
   return (
     <div className={s.card}>
       <div className={s.main}>
-        <Link to={`product/${_id}`}>
+        <Link to={`product/${_id}`} style={{ position: "relative" }}>
           <img
             className={s.img}
             src="https://i.ibb.co/27WPrWh/i1.png"
             alt="loading"
           />
+          <div className={s.number__tag}>
+            <span className={s.number}>{numberInCart}</span>
+          </div>
         </Link>
+
         <div className={s.main__content}>
           <Link to={`product/${_id}`}>
             <span className={s.title}>{title.slice(0, 15)}</span>
@@ -53,35 +50,7 @@ const OrderProductCard = ({
           <p className={s.category}>{desc.slice(0, 20)}</p>
         </div>
       </div>
-      {/* <div className={s.price__wrapper}>
-        <span className={s.price}>{productPrice}₴</span>
-      </div> */}
-      {/* <div className={s.qty__counter__wrapper}>
-        <div className={s.qty__counter}>
-          <Counter onChange={onCounterChange} initialValue={numberInCart} />
-        </div>
-      </div> */}
-      <div className={s.fullprice__container}>
-        <span className={s.fullprice}>
-          {+numberInCart * +productPrice || 0}₴
-        </span>
-      </div>
-      {/* <div className={s.remove__icon__wrapper}>
-        <FontAwesomeIcon
-          icon={faTimes}
-          onClick={removeFromCartHandler}
-          className={s.remove__icon}
-        />
-      </div> */}
-
-      {/* <div className={s.mobile}>
-        <div className={s.fullprice__container}>
-          <span className={s.fullprice}>{numberInCart * price || 0}₴</span>
-        </div>
-        <div className={s.qty__counter}>
-          <Counter onChange={onCounterChange} initialValue={numberInCart} />
-        </div>
-      </div> */}
+      <span className={s.fullprice}>{+numberInCart * +productPrice || 0}₴</span>
     </div>
   );
 };

@@ -27,10 +27,20 @@ import userPhotoIcon from "../../assets/profile.png";
 import {
   getUserByIdAction,
   patchUserAction,
+  logoutAction,
 } from "../../store/actions/profileActions";
 import { showAlertAction } from "../../store/actions/alertActions";
+import { showModalAction } from "../../store/actions/baseActions";
 
-const Profile = ({ user, getUser, patchUser, showAlert, isLoading }) => {
+const Profile = ({
+  user,
+  getUser,
+  patchUser,
+  showAlert,
+  isLoading,
+  showModal,
+  logout,
+}) => {
   const { id } = useParams();
   const h = useHistory();
   const breadCrumbsItems = [
@@ -64,7 +74,6 @@ const Profile = ({ user, getUser, patchUser, showAlert, isLoading }) => {
       reader.onload = (event) => {
         const img = event.target.result;
         current.src = img;
-        console.log("photo ===", img);
         patchUser({ ...userData, gallery: img }, token);
         setUserData((prev) => ({ ...prev, gallery: img }));
       };
@@ -73,7 +82,6 @@ const Profile = ({ user, getUser, patchUser, showAlert, isLoading }) => {
     }
   };
   const handleSubmit = () => {
-    console.log({ phone: parseInt("0", 10) });
     const submitData = { ...userData };
     if (!Number.isNaN(submitData.phone)) {
       if (submitData.phone.startsWith("0")) {
@@ -84,27 +92,23 @@ const Profile = ({ user, getUser, patchUser, showAlert, isLoading }) => {
     }
     patchUser(submitData, token);
   };
-  const [show, setShow] = useState(false);
-  const openModal = () => setShow(true);
-  const closeModal = () => setShow(false);
+
+  const showLogoutModal = () => {
+    showModal("Ви дійсно хочете вийти зі свого акаунту?", logout);
+  };
+
   const handleRemovePhoto = (e) => {
     setUserData((prev) => ({ ...prev, gallery: [] }));
   };
 
   const onInputChange = (e) => {
     const { value, name } = e.target;
-    console.log(name, ":", value);
-
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
   useEffect(() => {
     setUserData(user);
   }, [user]);
-
-  useEffect(() => {
-    console.log("user data ===", userData);
-  }, [userData]);
 
   return !isLoading ? (
     <div className={s.body}>
@@ -183,10 +187,9 @@ const Profile = ({ user, getUser, patchUser, showAlert, isLoading }) => {
                         <FontAwesomeIcon
                           icon={faSignOutAlt}
                           //   onClick={logout}
-                          onClick={openModal}
+                          onClick={showLogoutModal}
                           className={s.profile__info__icon}
                         />
-                        {show && <Modal closeModal={closeModal} show={show} />}
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
@@ -394,8 +397,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
     patchUser: (user, token) => dispatch(patchUserAction(user, token)),
-    showAlert: (content, timeout) =>
-      dispatch(showAlertAction(content, timeout)),
+    showAlert: (content) => dispatch(showAlertAction(content)),
+    showModal: (content, onSubmit, onReject) =>
+      dispatch(showModalAction(content, onSubmit, onReject)),
+    logout: () => dispatch(logoutAction()),
   };
 };
 

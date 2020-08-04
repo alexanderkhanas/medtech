@@ -13,12 +13,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import { useHistory } from "react-router-dom";
+import { showAlertAction } from "../../store/actions/alertActions";
 
-const Cart = ({ cartProducts, fullPrice, setFullPrice }) => {
+const Cart = ({ cartProducts, fullPrice, setFullPrice, showAlert, user }) => {
   const h = useHistory();
 
   const onSubmit = () => {
-    h.push("/create-order");
+    if (!user?._id) {
+      showAlert("Увійдіть, щоб зробити замовлення", "warning");
+      h.push({ pathname: "/login", state: { redirectTo: "/order" } });
+    } else {
+      h.push("/order");
+    }
   };
 
   useEffect(() => {
@@ -89,6 +95,7 @@ const mapStateToProps = (state) => {
   return {
     cartProducts: state.cart.all,
     fullPrice: state.cart.fullPrice,
+    user: state.profile,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -96,6 +103,8 @@ const mapDispatchToProps = (dispatch) => {
     addToCart: (product) => dispatch(addToCartAction(product)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
     setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
+    showAlert: (content, type, timeout = 5000) =>
+      dispatch(showAlertAction(content, type, timeout)),
   };
 };
 

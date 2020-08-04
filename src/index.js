@@ -33,6 +33,7 @@ import "./fonts/Roboto/Roboto-MediumItalic.ttf";
 import "./fonts/Roboto/Roboto-Regular.ttf";
 import "./fonts/Roboto/Roboto-Thin.ttf";
 import "./fonts/Roboto/Roboto-ThinItalic.ttf";
+
 const composeEnhancers = composeWithDevTools({});
 
 const store = createStore(

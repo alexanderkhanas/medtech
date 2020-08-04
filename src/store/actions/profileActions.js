@@ -4,7 +4,7 @@ import {
   fetchUserData,
   patchUser,
 } from "../api/api";
-import { SET_USER_DATA, SET_LOADING } from "./actionTypes";
+import { SET_USER_DATA, SET_LOADING, LOGOUT } from "./actionTypes";
 
 export const registerAction = (data) => {
   return async (dispatch) => {
@@ -38,9 +38,22 @@ export const getUserByIdAction = (id) => {
   };
 };
 
-export const patchUserAction = (user, token) => {
+export const patchUserAction = (user) => {
   return async () => {
+    const token = document.cookie.includes("token")
+      ? document.cookie
+          .split("; ")
+          .filter((value) => value.startsWith("token"))[0]
+          .split("=")[1]
+      : null;
     const response = await patchUser(user, token);
     console.log("patch response", response.data);
+  };
+};
+
+export const logoutAction = () => {
+  document.cookie = "token=''; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+  return {
+    type: LOGOUT,
   };
 };

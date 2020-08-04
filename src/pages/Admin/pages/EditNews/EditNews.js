@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import s from "./EditNews.module.css";
-import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
-import Button from "../../misc/Button/Button";
+import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
+import ProfileInput from "../../../../misc/Inputs/ProfileInput/ProfileInput";
+import Button from "../../../../misc/Button/Button";
 import { useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
-import { getSingleNewsAction } from "../../store/actions/newsActions";
+import { getSingleNewsAction } from "../../../../store/actions/newsActions";
 
 const EditNews = ({ getSingleNews, match, singleNews }) => {
   const { title, gallery, desc, createdAt, _id } = singleNews;
@@ -51,13 +51,13 @@ const EditNews = ({ getSingleNews, match, singleNews }) => {
       <FixedWrapper>
         <div className={s.input__container}>
           <div className={s.title__input}>
-            <label className={s.label}>Заголовок</label>
+            <span className={s.label}>Заголовок</span>
             <input defaultValue={title} className={s.input} />
           </div>
           <div className={s.image__input}>
-            <label className={s.label}>
+            <span className={s.label}>
               Нажміть на картинку щоб вибрати нову
-            </label>
+            </span>
             <input
               type="file"
               accept="image/*"
@@ -89,7 +89,7 @@ const EditNews = ({ getSingleNews, match, singleNews }) => {
             </div>
           </div>
           <div className={s.news__content}>
-            <label className={s.label}>Текст новини</label>
+            <span className={s.label}>Текст новини</span>
             <textarea className={s.textarea} defaultValue={desc} />
           </div>
           <Button title="Зберегти зміни" />

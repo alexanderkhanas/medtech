@@ -50,13 +50,14 @@
   padding: 0 20px;
   box-sizing: border-box;
   font-size: 15px;
-  color: #999;
+  color: #404040;
+
   font-family: Nunito;
   border: none;
 }
 
 .value__text {
-  color: #999;
+  color: #404040;
   font-size: 15px;
   font-family: Nunito;
 }
@@ -64,7 +65,7 @@
 .label {
   font-weight: 300;
   margin-bottom: 4px;
-  color: rgb(123, 123, 123);
+  color: #7b7b7b;
 }
 
 .overlay {
@@ -76,8 +77,8 @@
   height: 100vh;
 }
 
-@media (max-width: 575px) {
+/* @media (max-width: 575px) {
   .container {
     width: 200px;
   }
-}
+} */

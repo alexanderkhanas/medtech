@@ -1,4 +1,4 @@
-import { SET_USER_DATA } from "../actions/actionTypes";
+import { SET_USER_DATA, LOGOUT } from "../actions/actionTypes";
 
 const initialState = {
   email: "",
@@ -21,6 +21,10 @@ export default (state = initialState, action) => {
         gallery: action.user.gallery,
         lName: action.user.lName,
         _id: action.user._id,
+      };
+    case LOGOUT:
+      return {
+        initialState,
       };
     default:
       return state;

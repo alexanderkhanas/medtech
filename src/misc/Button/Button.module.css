@@ -49,6 +49,15 @@
   background: #009d66a8;
 }
 
+.disabled {
+  background: #009d66a8;
+  cursor: default;
+}
+
+.disabled:hover {
+  background: #009d66a8;
+}
+
 .capitalize {
   text-transform: capitalize;
 }

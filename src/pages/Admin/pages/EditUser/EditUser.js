@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
 import s from "./EditUser.module.css";
-import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import Input from "../../misc/Inputs/Input/Input";
-import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
+import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
+import Input from "../../../../misc/Inputs/Input/Input";
+import PhoneNumberInput from "../../../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import { Link, useHistory } from "react-router-dom";
-import Button from "../../misc/Button/Button";
+import Button from "../../../../misc/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 

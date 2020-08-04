@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import s from "./Admin.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
-import { faHome, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faPencilAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { TabList, Tabs, Tab, TabPanel } from "react-tabs";
 import OrderCard from "../../misc/Admin/OrderCard/OrderCard";
@@ -84,14 +84,11 @@ const Admin = ({ recentNews, cartProducts, allProducts, _id, getUser }) => {
             <OrderCard />
           </TabPanel>
           <TabPanel>
-            {/* <div className={s.order__header}>
-              <span>Назва</span>
-              <span>Опис</span>
-              <span>Артикул</span>
-              <span>Категорія</span>
-              <span>Кількість</span>
-              <span>Ціна</span>
-            </div> */}
+            <Link to="/admin/edit-product">
+              <Button title="Додати ще">
+                <FontAwesomeIcon icon={faPlus} className={s.add__more__icon} />
+              </Button>
+            </Link>
             <div className={s.products__container}>
               {allProducts.map((product, i) => (
                 <Link to={`/admin/edit-product/${_id}`}>

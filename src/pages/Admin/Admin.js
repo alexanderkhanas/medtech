@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import s from "./Admin.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
-import { faHome, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faPencilAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { TabList, Tabs, Tab, TabPanel } from "react-tabs";
 import OrderCard from "../../misc/Admin/OrderCard/OrderCard";
@@ -17,8 +17,16 @@ import {
   filterProductsAction,
 } from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
+import UserCard from "../../misc/Admin/UserCard/UserCard";
+import OrderProductCard from "../../misc/OrderProductCard/OrderProductCard";
+import {
+  addToCartAction,
+  removeFromCartAction,
+  setFullPriceAction,
+} from "../../store/actions/cartActions";
+import { getUserByIdAction } from "../../store/actions/profileActions";
 
-const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
+const Admin = ({ recentNews, cartProducts, allProducts, _id, getUser }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const breadCrumbsItems = [
     {
@@ -28,10 +36,6 @@ const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
     },
     { name: "Адмін", path: "/admin" },
   ];
-  useEffect(() => {
-    filterProducts();
-  }, []);
-  console.log("filteredProducts ===", filteredProducts);
   return (
     <div className={s.container}>
       <div className={s.title__container}>
@@ -47,7 +51,6 @@ const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
               "Категорії",
               "Атрибути",
               "Продавці",
-              "Купони",
               "Користувачі",
               "Новини",
               "Контактна форма",
@@ -81,30 +84,56 @@ const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
             <OrderCard />
           </TabPanel>
           <TabPanel>
-            <div className={s.order__header}>
-              <span>Назва</span>
-              <span>Опис</span>
-              <span>Артикул</span>
-              <span>Категорія</span>
-              <span>Кількість</span>
-              <span>Ціна</span>
-            </div>
-            <div className={s.section}>
-              {/* {!!filteredProducts &&
-                filteredProducts.map((product, i) => (
-                  <ProductCard
-                    className={s.product__card}
-                    key={product._id}
+            <Link to="/admin/edit-product">
+              <Button title="Додати ще">
+                <FontAwesomeIcon icon={faPlus} className={s.add__more__icon} />
+              </Button>
+            </Link>
+            <div className={s.products__container}>
+              {allProducts.map((product, i) => (
+                <Link to={`/admin/edit-product/${_id}`}>
+                  <OrderProductCard
+                    isSmall
                     {...{ product }}
+                    key={product._id}
+                    className={s.container__}
                   />
-                ))} */}
+                </Link>
+              ))}
+              <div className={s.subtotal__container}>
+                <div className={s.subtotal__title}>Ціна:</div>
+                {/* <div className={s.subtotal__price}>{`${fullPrice || 0} ₴`}</div> */}
+              </div>
             </div>
           </TabPanel>
+          <TabPanel></TabPanel>
+          <TabPanel>1231</TabPanel>
           <TabPanel>123</TabPanel>
-          <TabPanel>123</TabPanel>
-          <TabPanel>123</TabPanel>
-          <TabPanel>123</TabPanel>
-          <TabPanel>123</TabPanel>
+          <TabPanel>
+            <div className={s.order__header}>
+              <span>Ім'я</span>
+              <span>Прізвище</span>
+              <span>Пошта</span>
+              <span>Номер телефону</span>
+              <span>Кількість замовлень</span>
+            </div>
+            <div className={s.create__container}>
+              <Link to="/admin/edit-user">
+                <Button
+                  title="Створити користувача"
+                  className={s.create__btn}
+                />
+              </Link>
+            </div>
+            {/* {recentNews.map((newsItem, i) => (
+              <NewsAdminCard {...{ newsItem }} key={newsItem._id} />
+            ))} */}
+            <UserCard />
+            <UserCard />
+            <UserCard />
+            <UserCard />
+          </TabPanel>
+          {/* <TabPanel>123</TabPanel> */}
           <TabPanel>
             <div className={s.order__header}>
               <span>Заголовок</span>
@@ -112,7 +141,7 @@ const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
               <span>Дата створення</span>
             </div>
             <div className={s.create__container}>
-              <Link to="edit-news/:id">
+              <Link to="/admin/edit-news/:id">
                 <Button title="Створити новину" className={s.create__btn} />
               </Link>
             </div>
@@ -133,15 +162,19 @@ const Admin = ({ recentNews, filterProducts, filteredProducts }) => {
 };
 const mapStateToProps = (state) => {
   return {
+    allProducts: state.products.all,
     recentNews: state.news.recent,
-    filteredProducts: state.products.filtered,
+    cartProducts: state.cart.all,
+    // fullPrice: state.cart.fullPrice,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    filterProducts: () => dispatch(filterProductsAction()),
-    getProductsByPage: (page) => dispatch(getProductsByPage(page)),
+    addToCart: (product) => dispatch(addToCartAction(product)),
+    removeFromCart: (product) => dispatch(removeFromCartAction(product)),
+    getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
+    // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };
 

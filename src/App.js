@@ -20,8 +20,10 @@ import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
 import { getUserByIdAction } from "./store/actions/profileActions";
-import CreateOrder from "./pages/CreateOrder/CreateOrder";
+import CreateOrder from "./pages/Admin/pages/CreateOrder/CreateOrder";
 import Modal from "./misc/Modal/Modal";
+import EditUser from "./pages/Admin/pages/EditUser/EditUser";
+import EditProduct from "./pages/Admin/pages/EditProduct/EditProduct";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -214,6 +216,14 @@ const App = ({
                   <Route
                     path={`${url}/edit-news/:id`}
                     component={(props) => <EditNews {...props} />}
+                  />
+                  <Route
+                    path={`${url}/edit-user/`}
+                    component={(props) => <EditUser {...props} />}
+                  />
+                  <Route
+                    path={`${url}/edit-product/`}
+                    component={(props) => <EditProduct {...props} />}
                   />
                 </>
               )}

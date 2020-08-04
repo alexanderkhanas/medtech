@@ -94,6 +94,10 @@
   padding: 10px 0;
 }
 
+.add__more__icon {
+  margin-right: 5px;
+}
+
 @media (max-width: 575px) {
   .order__header {
     display: none;

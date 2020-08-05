@@ -20,7 +20,7 @@ const Input = ({
   onBlur = () => {},
   style = {},
   inputStyle = {},
-  onChange,
+  onChange = () => {},
   placeholder = "",
   ...rest
 }) => {
@@ -42,6 +42,7 @@ const Input = ({
         className={s.input}
         onFocus={focusHandler}
         onBlur={blurHandler}
+        {...{ onChange }}
         {...{ defaultValue }}
         {...{ value }}
         {...rest}

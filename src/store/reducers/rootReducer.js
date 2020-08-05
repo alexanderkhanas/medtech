@@ -8,6 +8,7 @@ import baseReducer from "./baseReducer";
 import alertReducer from "./alertReducer";
 import profileReducer from "./profileReducer";
 import orderReducer from "./orderReducer";
+import adminReducer from "./adminReducer";
 
 export default combineReducers({
   products: mainReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   alert: alertReducer,
   profile: profileReducer,
   order: orderReducer,
+  admin: adminReducer,
 });

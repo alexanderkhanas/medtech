@@ -7,22 +7,14 @@ import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { TabList, Tabs, Tab, TabPanel } from "react-tabs";
 import OrderCard from "../../misc/Admin/OrderCard/OrderCard";
 import { Link } from "react-router-dom";
-import Cart from "../Cart/Cart";
 import { connect } from "react-redux";
 import NewsAdminCard from "../../misc/Admin/NewsAdminCard/NewsAdminCard";
-import ProductCardAdmin from "../../misc/Admin/ProductCardAdmin/ProductCardAdmin";
 import Button from "../../misc/Button/Button";
-import {
-  getProductsByPage,
-  filterProductsAction,
-} from "../../store/actions/productsActions";
-import ProductCard from "../../misc/ProductCard/ProductCard";
 import UserCard from "../../misc/Admin/UserCard/UserCard";
 import OrderProductCard from "../../misc/OrderProductCard/OrderProductCard";
 import {
   addToCartAction,
   removeFromCartAction,
-  setFullPriceAction,
 } from "../../store/actions/cartActions";
 import { getUserByIdAction } from "../../store/actions/profileActions";
 
@@ -84,7 +76,7 @@ const Admin = ({ recentNews, cartProducts, allProducts, _id, getUser }) => {
             <OrderCard />
           </TabPanel>
           <TabPanel>
-            <Link to="/admin/edit-product">
+            <Link to="/admin/create-product">
               <Button title="Додати ще">
                 <FontAwesomeIcon icon={faPlus} className={s.add__more__icon} />
               </Button>

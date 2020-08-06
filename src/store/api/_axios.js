@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://medtechnika-te.herokuapp.com/api/v1",
+  baseURL: "https://medtechnika.te.ua/api/v1",
 });

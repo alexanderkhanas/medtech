@@ -7,17 +7,14 @@ import HorizontalProductCard from "../../misc/HorizontalProductCard/HorizontalPr
 import {
   getProductsByPage,
   filterProductsAction,
-  getCategoriesAction,
 } from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
-import Category from "../../misc/Category/Category";
 import { scrollToRef } from "../../utils/utils";
 import Button from "../../misc/Button/Button";
 import { faTh, faList, faHome } from "@fortawesome/free-solid-svg-icons";
 import Select from "../../misc/Select/Select";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import { setLoadingAction } from "../../store/actions/baseActions";
-import { SET_FILTERED_PRODUCTS } from "../../store/actions/actionTypes";
 import CategoryAccordion from "../../misc/CategoryAccordion/CategoryAccordion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
@@ -36,7 +33,6 @@ const Catalog = ({
   recommendedProducts,
   filterProducts,
   isLoading,
-  getCategories,
   categories,
   searchValue,
   windowWidth,
@@ -72,10 +68,6 @@ const Catalog = ({
 
   const switchProductViewType = () =>
     setProductViewType((prev) => (prev === "row" ? "column" : "row"));
-
-  useEffect(() => {
-    getCategories();
-  }, []);
 
   useEffect(() => {
     if (selectedCategories.length) {
@@ -291,7 +283,6 @@ const mapDispatchToProps = (dispatch) => {
     filterProducts: (categoryId, searchValue) =>
       dispatch(filterProductsAction(categoryId, searchValue)),
     setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
-    getCategories: () => dispatch(getCategoriesAction()),
   };
 };
 

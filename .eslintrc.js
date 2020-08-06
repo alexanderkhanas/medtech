@@ -44,5 +44,6 @@ module.exports = {
     "react/jsx-indent-props": "off",
     "react/jsx-props-no-multi-spaces": "off",
     "react/jsx-indent": "off",
+    "react/jsx-tag-spacing": "off",
   },
 };

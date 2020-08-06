@@ -34,7 +34,7 @@
 
 .card__price {
   color: #009d66;
-  font-family: Roboto;
+  font-family: "Roboto", sans-serif;
   font-size: 25px;
   text-align: center;
   font-weight: bold;

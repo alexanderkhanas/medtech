@@ -9,7 +9,7 @@ import {
   faTimes,
   faShoppingBag,
 } from "@fortawesome/free-solid-svg-icons";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo.jpg";
 import s from "./Header.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { Link, withRouter, useHistory } from "react-router-dom";
@@ -98,9 +98,7 @@ const Header = ({
         <div className={s.header__container} onMouseLeave={hideProfileModal}>
           <header className={s.header}>
             <Link to="/">
-              <div className={s.logo}>
-                <img src={logo} alt="logo" />
-              </div>
+              <img src={logo} className={s.logo} alt="logo" />
             </Link>
             <div className={s.contact}>
               <button className={s.header__info__tag}>

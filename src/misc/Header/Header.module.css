@@ -46,10 +46,8 @@ header {
   border: none;
   transition: 0.2s;
   color: #404040;
-  font-family: Roboto;
-  font-weight: 300;
+  font-family: "Roboto", sans-serif;
   margin-right: 30px;
-  font-weight: 500;
 }
 
 .nav__link__active {
@@ -90,6 +88,11 @@ header {
   color: #575757;
 }
 
+.logo {
+  width: 80px;
+  height: 44px;
+}
+
 .mobile__header {
   padding: 10px 20px;
   display: none;
@@ -127,7 +130,7 @@ header {
   border: none;
   transition: 0.2s;
   color: gray;
-  font-family: Roboto;
+  font-family: "Roboto", sans-serif;
   font-weight: 200;
   padding: 15px 25px;
   border-bottom: 1px solid #ccc;

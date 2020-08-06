@@ -17,8 +17,17 @@ import {
   removeFromCartAction,
 } from "../../store/actions/cartActions";
 import { getUserByIdAction } from "../../store/actions/profileActions";
+import Input from "../../misc/Inputs/Input/Input";
+import { Formik } from "formik";
+import Select from "../../misc/Select/Select";
 
-const Admin = ({ recentNews, cartProducts, allProducts, _id, getUser }) => {
+const Admin = ({
+  recentNews,
+  cartProducts,
+  allProducts,
+  getUser,
+  categories,
+}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const breadCrumbsItems = [
     {
@@ -28,6 +37,9 @@ const Admin = ({ recentNews, cartProducts, allProducts, _id, getUser }) => {
     },
     { name: "Адмін", path: "/admin" },
   ];
+
+  console.log("categories ===", categories);
+
   return (
     <div className={s.container}>
       <div className={s.title__container}>
@@ -77,13 +89,16 @@ const Admin = ({ recentNews, cartProducts, allProducts, _id, getUser }) => {
           </TabPanel>
           <TabPanel>
             <Link to="/admin/create-product">
-              <Button title="Додати ще">
+              <Button title="Додати товар">
                 <FontAwesomeIcon icon={faPlus} className={s.add__more__icon} />
               </Button>
             </Link>
             <div className={s.products__container}>
-              {allProducts.map((product, i) => (
-                <Link to={`/admin/edit-product/${_id}`}>
+              {allProducts.map((product) => (
+                <Link
+                  key={product._id}
+                  to={`/admin/edit-product/${product._id}`}
+                >
                   <OrderProductCard
                     isSmall
                     {...{ product }}
@@ -98,7 +113,101 @@ const Admin = ({ recentNews, cartProducts, allProducts, _id, getUser }) => {
               </div>
             </div>
           </TabPanel>
-          <TabPanel></TabPanel>
+          <TabPanel>
+            <Formik
+              initialValues={{
+                name: "",
+                parentCategory: null,
+                parentCategoryLabel: null,
+              }}
+              onSubmit={(values) => {}}
+            >
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                setValues,
+              }) => {
+                console.log("values ===", values);
+
+                return (
+                  <div>
+                    <div className={s.add__category__container}>
+                      <Input
+                        name="name"
+                        label="Назва категорії"
+                        placeholder="Інгалятори"
+                        value={values.name}
+                        containerClass={s.add__category__input__container}
+                        inputClass={s.add__category__input}
+                        onChange={handleChange}
+                        onBlur={handleSubmit}
+                      />
+                      <Select
+                        label="Назва батьківської категорії"
+                        containerClass={s.add__category__select__container}
+                        // withSearch
+                        // noDefaultValue
+                        value={values.parentCategoryLabel}
+                        onSelect={(selectedOption) => {
+                          setValues({
+                            ...values,
+                            parentCategory: selectedOption.value,
+                            parentCategoryLabel: selectedOption.label,
+                          });
+                          console.log("value ===", selectedOption);
+                        }}
+                        options={categories
+                          .filter(({ sub }) => !sub.length)
+                          .map(({ title, parent, _id }) => {
+                            const isParentVisible = parent.length;
+                            return {
+                              label: `${title}${
+                                isParentVisible
+                                  ? `, батьківська категорія - ${parent[0].title}`
+                                  : ""
+                              }`,
+                              value: {
+                                title,
+                                _id,
+                                parent,
+                              },
+                            };
+                          })}
+                      />
+                    </div>
+                    <Button
+                      onClick={handleSubmit}
+                      className={s.add__button}
+                      title="Додати категорію"
+                    >
+                      <FontAwesomeIcon
+                        className={s.add__more__icon}
+                        icon={faPlus}
+                      />
+                    </Button>
+                  </div>
+                );
+              }}
+            </Formik>
+            <div className={s.order__header}>
+              <span>Назва</span>
+              <span>Назва батьківської категорії</span>
+            </div>
+
+            {categories.map((category) => (
+              <div className={s.category__container} key={category._id}>
+                <p className={s.category}>{category.title}</p>
+                {!!category.parent.length && !category.sub.length && (
+                  <p className={s.category}>{category.parent[0].title}</p>
+                )}
+                {!!category.sub.length && (
+                  <p className={s.category}>{category.sub[0].title}</p>
+                )}
+              </div>
+            ))}
+          </TabPanel>
           <TabPanel>1231</TabPanel>
           <TabPanel>123</TabPanel>
           <TabPanel>
@@ -110,11 +219,13 @@ const Admin = ({ recentNews, cartProducts, allProducts, _id, getUser }) => {
               <span>Кількість замовлень</span>
             </div>
             <div className={s.create__container}>
-              <Link to="/admin/edit-user">
-                <Button
-                  title="Створити користувача"
-                  className={s.create__btn}
-                />
+              <Link to="/admin/create-user">
+                <Button title="Створити користувача" className={s.create__btn}>
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    className={s.add__more__icon}
+                  />
+                </Button>
               </Link>
             </div>
             {/* {recentNews.map((newsItem, i) => (
@@ -133,8 +244,13 @@ const Admin = ({ recentNews, cartProducts, allProducts, _id, getUser }) => {
               <span>Дата створення</span>
             </div>
             <div className={s.create__container}>
-              <Link to="/admin/edit-news/:id">
-                <Button title="Створити новину" className={s.create__btn} />
+              <Link to="/admin/create-news">
+                <Button title="Створити новину" className={s.create__btn}>
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    className={s.add__more__icon}
+                  />
+                </Button>
               </Link>
             </div>
             <div className={s.section}>
@@ -157,6 +273,7 @@ const mapStateToProps = (state) => {
     allProducts: state.products.all,
     recentNews: state.news.recent,
     cartProducts: state.cart.all,
+    categories: state.products.categories,
     // fullPrice: state.cart.fullPrice,
   };
 };

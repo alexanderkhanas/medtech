@@ -45,9 +45,7 @@ export const fetchUserData = (token) => {
   });
 };
 export const registerRequest = (data) => {
-  return _axios.post("/register", data, {
-    withCredentials: true,
-  });
+  return _axios.post("/register", data, {});
 };
 export const loginRequest = (data) => {
   return _axios
@@ -63,6 +61,10 @@ export const patchUser = (user, token) => {
       Authorization: `Bearer ${token}`,
     },
   });
+};
+
+export const postCategory = (category) => {
+  return _axios.post("/categories", category);
 };
 
 export const fetchCities = (filterValue, limit = 20) => {

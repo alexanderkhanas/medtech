@@ -5,16 +5,18 @@ import Select from "../../../../misc/Select/Select";
 import Input from "../../../../misc/Inputs/Input/Input";
 import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
 import ProfileInput from "../../../../misc/Inputs/ProfileInput/ProfileInput";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import Button from "../../../../misc/Button/Button";
 
 const CreateProduct = (props) => {
   const [productInfo, setProductInfo] = useState({
     title: "",
     desc: "",
     gallery: [],
-    categories: [],
     price: "",
     vendor: "",
-    quantity: 0,
+    quantity: 1,
     recommended: false,
   });
 
@@ -38,6 +40,13 @@ const CreateProduct = (props) => {
       };
       reader.readAsDataURL(file);
     });
+  };
+
+  const deleteImage = (imageToDelete) => {
+    const filteredGallery = productInfo.gallery.filter(
+      (image) => image !== imageToDelete
+    );
+    setProductInfo((prev) => ({ ...prev, gallery: filteredGallery }));
   };
 
   const quantityOptions = [
@@ -67,12 +76,22 @@ const CreateProduct = (props) => {
             onChange={onInputChange}
             containerClass={s.input__container}
           />
-          <div className={s.images__container}>
-            {productInfo.gallery.map((image) => (
-              <img className={s.image} src={image} alt="loading" />
-            ))}
+          <div className={s.input__container}>
+            <p className={s.label}>Фото</p>
+            <div className={s.images__container}>
+              {productInfo.gallery.map((image) => (
+                <div className={s.image__container}>
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className={s.delete__icon}
+                    onClick={() => deleteImage(image)}
+                  />
+                  <img className={s.image} src={image} alt="loading" />
+                </div>
+              ))}
+            </div>
+            <input type="file" multiple onChange={handleImages} />
           </div>
-          <input type="file" multiple onChange={handleImages} />
           <Input
             label="Опис"
             value={productInfo.desc}
@@ -95,12 +114,15 @@ const CreateProduct = (props) => {
             containerClass={s.input__container}
           />
           <Input
-            label="Країна виробника"
-            value={productInfo.categories}
-            name="vendor"
+            label="Кількість"
+            value={productInfo.quantity}
+            name="quantity"
             onChange={onInputChange}
             containerClass={s.input__container}
           />
+          <div className={s.submit__container}>
+            <Button title="Створити" size="lg" />
+          </div>
         </div>
       </FixedWrapper>
     </div>

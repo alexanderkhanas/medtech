@@ -156,7 +156,7 @@ p {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  font-family: Roboto;
+  font-family: "Roboto", sans-serif;
   margin-top: 20px;
 }
 

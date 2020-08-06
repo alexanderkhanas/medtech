@@ -26,21 +26,23 @@
   padding: 0 0 10px 0;
 }
 
-.images__container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .image__container {
-  width: 70px;
-  height: 70px;
+  width: 90px;
+  height: 90px;
   margin: 10px 2.5%;
   position: relative;
+  margin: 0 auto;
 }
 
 .image {
   width: 100%;
+  border-radius: 50%;
+  cursor: pointer;
   height: 100%;
+}
+
+.buttons {
+  margin-top: 20px;
 }
 
 .delete__icon {
@@ -63,4 +65,8 @@
 
 .submit__container {
   margin-top: 30px;
+}
+
+.hidden {
+  display: none;
 }

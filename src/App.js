@@ -10,7 +10,10 @@ import Header from "./misc/Header/Header";
 import SingleProduct from "./pages/SingleProduct/SingleProduct";
 import { setCart, setFullPriceAction } from "./store/actions/cartActions";
 import { connect } from "react-redux";
-import { getProducts } from "./store/actions/productsActions";
+import {
+  getProducts,
+  getCategoriesAction,
+} from "./store/actions/productsActions";
 import Footer from "./misc/Footer/Footer";
 import Catalog from "./pages/Catalog/Catalog";
 import { setWishlist } from "./store/actions/wishlistActions";
@@ -36,17 +39,22 @@ const SingleNews = lazy(() => import("./pages/SingleNews/SingleNews"));
 const Politics = lazy(() => import("./misc/Politics/Politics"));
 const PublicOffer = lazy(() => import("./misc/PublicOffer/PublicOffer"));
 const Admin = lazy(() => import("./pages/Admin/Admin"));
+const Order = lazy(() => import("./pages/Order/Order"));
 const EditOrder = lazy(() => import("./pages/Admin/pages/EditOrder/EditOrder"));
 const EditNews = lazy(() => import("./pages/Admin/pages/EditNews/EditNews"));
 const EditUser = lazy(() => import("./pages/Admin/pages/EditUser/EditUser"));
 const EditProduct = lazy(() =>
   import("./pages/Admin/pages/EditProduct/EditProduct")
 );
-const CreateOrder = lazy(() =>
-  import("./pages/Admin/pages/CreateOrder/CreateOrder")
-);
+
 const CreateProduct = lazy(() =>
   import("./pages/Admin/pages/CreateProduct/CreateProduct")
+);
+const CreateNews = lazy(() =>
+  import("./pages/Admin/pages/CreateNews/CreateNews")
+);
+const CreateUser = lazy(() =>
+  import("./pages/Admin/pages/CreateUser/CreateUser")
 );
 const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
@@ -73,6 +81,7 @@ const App = ({
   setWishlist,
   getNews,
   getUser,
+  getCategories,
   user,
 }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
@@ -104,6 +113,8 @@ const App = ({
     (async () => {
       getNews();
       getProducts();
+      getCategories();
+
       if (token) {
         getUser(token);
         console.log("token ===", token);
@@ -204,7 +215,7 @@ const App = ({
               path="/order"
               redirectTo="/login"
               state={{ redirectTo: "/order" }}
-              component={CreateOrder}
+              component={Order}
             />
 
             <Route
@@ -235,6 +246,14 @@ const App = ({
                   <Route
                     path={`${url}/create-product/`}
                     component={(props) => <CreateProduct {...props} />}
+                  />
+                  <Route
+                    path={`${url}/create-news/`}
+                    component={(props) => <CreateNews {...props} />}
+                  />
+                  <Route
+                    path={`${url}/create-user/`}
+                    component={(props) => <CreateUser {...props} />}
                   />
                 </>
               )}
@@ -273,6 +292,7 @@ const mapDispatchToProps = (dispatch) => {
     getNews: () => dispatch(getAllNewsAction()),
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
     setFullPrice: (price) => dispatch(setFullPriceAction(price)),
+    getCategories: () => dispatch(getCategoriesAction()),
   };
 };
 

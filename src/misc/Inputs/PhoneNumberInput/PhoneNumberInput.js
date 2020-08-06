@@ -12,7 +12,7 @@ const PhoneNumberInput = ({
 }) => (
   <InputMask
     mask="+380-99-999-9999"
-    placeholder="Номер телефону"
+    placeholder="+380-99-123-4567"
     maskChar={null}
     {...{ value }}
     {...{ onFocus }}

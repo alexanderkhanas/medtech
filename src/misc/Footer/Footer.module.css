@@ -7,7 +7,7 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 30px 40px;
-  font-family: Roboto;
+  font-family: "Roboto", sans-serif;
   color: white;
   font-size: initial;
 }
@@ -90,7 +90,7 @@ p {
   border-top: 0.5px solid #3e4240;
   text-align: center;
   color: #fff;
-  font-family: Roboto;
+  font-family: "Roboto", sans-serif;
 }
 .btn_cl {
   color: white;

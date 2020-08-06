@@ -27,7 +27,6 @@
 .container span {
   align-self: start;
   font-family: "Roboto", sans-serif;
-  letter-spacing: 1.5px;
 }
 
 .container__input {

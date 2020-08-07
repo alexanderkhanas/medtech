@@ -28,14 +28,14 @@
 
 .image_upload > input {
   display: none;
-  color: #02ab6b;
+  color: #2bbd86;
   justify-content: center;
 }
 
 .image_upload {
   font-size: 1.3rem;
   padding: 10px;
-  color: #02ab6b;
+  color: #2bbd86;
   cursor: pointer;
   display: flex;
   justify-content: center;

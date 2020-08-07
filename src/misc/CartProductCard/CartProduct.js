@@ -9,12 +9,14 @@ import {
   removeFromCartAction,
 } from "../../store/actions/cartActions";
 import { Link } from "react-router-dom";
+import classnames from "classnames";
 
 const CartProduct = ({
   product,
   changeNumberInCart,
   removeFromCart,
   allProductsInCart,
+  isSmall,
 }) => {
   const {
     gallery,
@@ -24,6 +26,7 @@ const CartProduct = ({
     desc,
     numberInCart = 1,
     selectedAttributesId,
+    className,
     selectedAttributesPrice,
   } = product;
 
@@ -37,7 +40,7 @@ const CartProduct = ({
   useEffect(() => {}, []);
 
   return (
-    <div className={s.card}>
+    <div className={classnames(s.card, { [s.small]: isSmall })}>
       <div className={s.main}>
         <Link to={`product/${_id}`}>
           <img

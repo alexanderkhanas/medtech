@@ -27,3 +27,4 @@ export const SET_SELECTED_WAREHOUSE = "SET_SELECTED_WAREHOUSE";
 export const HIDE_MODAL = "HIDE_MODAL";
 export const SHOW_MODAL = "SHOW_MODAL";
 export const LOGOUT = "LOGOUT";
+export const SET_USERS = "SET_USERS";

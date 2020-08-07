@@ -60,7 +60,10 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
 
           if (loginResponse) {
             const { _id } = loginResponse.user;
-            const { token } = loginResponse;
+            const { token, aToken } = loginResponse;
+            if (aToken) {
+              document.cookie = `aToken=${aToken}`;
+            }
             if (token) {
               document.cookie = `token=${token}`;
             }
@@ -96,7 +99,7 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
             />
           );
           return (
-            <form onSubmit={handleSubmit}>
+            <form>
               <div className={s.body}>
                 <div className={s.container}>
                   <div className={s.title__container}>
@@ -143,7 +146,11 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
                       <button className={s.restore}>Відновити акаунт</button>
                     </Link>
                     <div className={s.submit_button}>
-                      <Button title="Підтвердити" />
+                      <Button
+                        type="submit"
+                        onClick={handleSubmit}
+                        title="Підтвердити"
+                      />
                     </div>
 
                     <div className={s.fbt}>

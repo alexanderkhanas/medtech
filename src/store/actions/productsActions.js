@@ -81,7 +81,9 @@ export const getCategoriesAction = () => {
   return async (dispatch) => {
     const response = await fetchCategories();
     console.log("categories ===", response.data);
-    dispatch({ type: SET_CATEGORIES, categories: response.data });
+    if (response.data) {
+      dispatch({ type: SET_CATEGORIES, categories: response.data });
+    }
   };
 };
 

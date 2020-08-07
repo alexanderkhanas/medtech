@@ -47,7 +47,7 @@
   border-radius: 5px;
   color: #fff;
   letter-spacing: 2px;
-  background: #02ab6b;
+  background: #2bbd86;
   box-shadow: -2px 2px 5px 2px #02ab6a3f;
   color: #ededed;
 }
@@ -95,7 +95,7 @@
 }
 
 .pagination__active__link {
-  border: 1px solid #02ab6b;
+  border: 1px solid #2bbd86;
   border-radius: 5px;
 }
 

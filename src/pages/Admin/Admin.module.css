@@ -32,7 +32,7 @@
 }
 
 .tab__active {
-  background: #02ab6b;
+  background: #2bbd86;
   color: #fff;
 }
 
@@ -45,7 +45,7 @@
   display: flex;
   justify-content: space-around;
   padding: 15px 0;
-  background: #02ab6b;
+  background: #2bbd86;
   margin-top: 20px;
 }
 

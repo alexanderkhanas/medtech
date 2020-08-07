@@ -4,6 +4,10 @@
   border: 1px solid #eeeeee;
 }
 
+.small {
+  padding: 12px 0;
+}
+
 .card > div {
   flex: 1;
   display: flex;
@@ -40,10 +44,15 @@
   height: 200px;
 }
 
+.small .img {
+  width: 100px;
+  height: 100px;
+}
+
 .price,
 .fullprice {
   font-size: 25px;
-  color: #02ab6b;
+  color: #2bbd86;
 }
 
 .remove__icon {
@@ -54,6 +63,10 @@
 
 .icon_ft {
   margin-right: 10px;
+}
+
+.small.card .price__wrapper {
+  display: none;
 }
 
 @media (max-width: 575px) {

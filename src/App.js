@@ -46,7 +46,6 @@ const EditUser = lazy(() => import("./pages/Admin/pages/EditUser/EditUser"));
 const EditProduct = lazy(() =>
   import("./pages/Admin/pages/EditProduct/EditProduct")
 );
-
 const CreateProduct = lazy(() =>
   import("./pages/Admin/pages/CreateProduct/CreateProduct")
 );
@@ -55,6 +54,9 @@ const CreateNews = lazy(() =>
 );
 const CreateUser = lazy(() =>
   import("./pages/Admin/pages/CreateUser/CreateUser")
+);
+const CreateOrder = lazy(() =>
+  import("./pages/Admin/pages/CreateOrder/CreateOrder")
 );
 const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
@@ -259,6 +261,7 @@ const App = ({
                     path={`${url}/create-user/`}
                     component={(props) => <CreateUser {...props} />}
                   />
+                  <Route path={`${url}/create-order`} component={CreateOrder} />
                 </>
               )}
             />

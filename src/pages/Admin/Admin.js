@@ -21,14 +21,9 @@ import Input from "../../misc/Inputs/Input/Input";
 import { Formik } from "formik";
 import Select from "../../misc/Select/Select";
 import EditSeller from "../../misc/Admin/EditSeller/EditSeller";
+import { getUsersAction } from "../../store/actions/adminActions";
 
-const Admin = ({
-  recentNews,
-  cartProducts,
-  allProducts,
-  getUser,
-  categories,
-}) => {
+const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const breadCrumbsItems = [
     {
@@ -40,6 +35,10 @@ const Admin = ({
   ];
 
   console.log("categories ===", categories);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <div className={s.container}>
@@ -72,6 +71,11 @@ const Admin = ({
             ))}
           </TabList>
           <TabPanel>
+            <Link to="/admin/create-order">
+              <Button className={s.add__button} title="Створити замовлення">
+                <FontAwesomeIcon icon={faPlus} className={s.add__more__icon} />
+              </Button>
+            </Link>
             <div className={s.order__header}>
               <span>Номер замовлення</span>
               <span>Дата створення</span>
@@ -121,7 +125,27 @@ const Admin = ({
                 parentCategory: null,
                 parentCategoryLabel: null,
               }}
-              onSubmit={(values) => {}}
+              onSubmit={({ name, parentCategory }) => {
+                const categoryToSubmit = {
+                  parent: [
+                    {
+                      title: parentCategory.title,
+                      _id: parentCategory._id,
+                    },
+                  ],
+                  sub: [],
+                  title: name,
+                };
+                if (parentCategory.parent?.length) {
+                  categoryToSubmit.parent = parentCategory.parent;
+                  categoryToSubmit.sub = [
+                    { title: parentCategory.title, _id: parentCategory._id },
+                  ];
+                }
+                console.log("name ===", name);
+                console.log("parentCategory ===", parentCategory);
+                console.log("categoryToSubmit ===", categoryToSubmit);
+              }}
             >
               {({
                 handleChange,
@@ -130,6 +154,8 @@ const Admin = ({
                 values,
                 setValues,
               }) => {
+                console.log("example category ===", categories[1]);
+
                 console.log("values ===", values);
 
                 return (
@@ -180,6 +206,7 @@ const Admin = ({
                     </div>
                     <Button
                       onClick={handleSubmit}
+                      type="submit"
                       className={s.add__button}
                       title="Додати категорію"
                     >
@@ -196,18 +223,19 @@ const Admin = ({
               <span>Назва</span>
               <span>Назва батьківської категорії</span>
             </div>
-            {/* 
-            {categories.map((category) => (
-              <div className={s.category__container} key={category._id}>
-                <p className={s.category}>{category.title}</p>
-                {!!category.parent.length && !category.sub.length && (
-                  <p className={s.category}>{category.parent[0].title}</p>
-                )}
-                {!!category.sub.length && (
-                  <p className={s.category}>{category.sub[0].title}</p>
-                )}
-              </div>
-            ))} */}
+
+            {categories.map &&
+              categories.map((category) => (
+                <div className={s.category__container} key={category._id}>
+                  <p className={s.category}>{category.title}</p>
+                  {!!category.parent.length && !category.sub.length && (
+                    <p className={s.category}>{category.parent[0].title}</p>
+                  )}
+                  {!!category.sub.length && (
+                    <p className={s.category}>{category.sub[0].title}</p>
+                  )}
+                </div>
+              ))}
           </TabPanel>
           <TabPanel>123</TabPanel>
           <TabPanel>
@@ -336,6 +364,7 @@ const mapDispatchToProps = (dispatch) => {
     addToCart: (product) => dispatch(addToCartAction(product)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
+    getUsers: () => dispatch(getUsersAction()),
     // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };

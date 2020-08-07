@@ -26,7 +26,9 @@ export const fetchFilteredProducts = (categoriesArray, searchValue) => {
     // });
   }
   if (searchValue) {
+    console.log("api search ===", searchValue);
     baseUrl += `search=${searchValue}`;
+    console.log("baseUrl ===", baseUrl);
   }
   return _axios.get(baseUrl);
 };
@@ -57,6 +59,14 @@ export const loginRequest = (data) => {
 
 export const patchUser = (user, token) => {
   return _axios.patch("/user", user, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const fetchUsers = (token) => {
+  return _axios.get("/users", {
     headers: {
       Authorization: `Bearer ${token}`,
     },

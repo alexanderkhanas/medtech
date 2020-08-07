@@ -18,3 +18,21 @@ export const debounce = (fn, ms) => {
     }, ms);
   };
 };
+
+export const getToken = () => {
+  return document.cookie.includes("token")
+    ? document.cookie
+        .split("; ")
+        .filter((value) => value.startsWith("token"))[0]
+        .split("=")[1]
+    : null;
+};
+
+export const getAdminToken = () => {
+  return document.cookie.includes("aToken")
+    ? document.cookie
+        .split("; ")
+        .filter((value) => value.startsWith("aToken"))[0]
+        .split("=")[1]
+    : null;
+};

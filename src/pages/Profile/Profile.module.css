@@ -81,14 +81,14 @@
 .profile__info__icon {
   font-size: 1.5rem;
   padding: 10px;
-  background: #02ab6b;
+  background: #2bbd86;
   color: white;
   border-radius: 25px;
   cursor: pointer;
 }
 
 .save__profile__btn {
-  background-color: #02ab6b;
+  background-color: #2bbd86;
   border: none;
   border-radius: 0 0 40px 40px;
   padding: 10px 20px;
@@ -136,14 +136,14 @@ p {
 }
 .image_upload > input {
   display: none;
-  color: #02ab6b;
+  color: #2bbd86;
   background: url("//src/assets/vadim.jpg") no-repeat center left;
 }
 
 .image_upload {
   font-size: 1.3rem;
   padding: 10px;
-  color: #02ab6b;
+  color: #2bbd86;
   cursor: pointer;
 }
 /* .image1 {
@@ -169,7 +169,7 @@ p {
 }
 
 .tab__active {
-  background: #02ab6b;
+  background: #2bbd86;
   color: #fff;
 }
 

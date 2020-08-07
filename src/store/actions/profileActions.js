@@ -5,6 +5,7 @@ import {
   patchUser,
 } from "../api/api";
 import { SET_USER_DATA, SET_LOADING, LOGOUT } from "./actionTypes";
+import { getToken } from "../../utils/utils";
 
 export const registerAction = (data) => {
   return async (dispatch) => {
@@ -27,11 +28,8 @@ export const loginAction = (data) => {
 export const getUserByIdAction = (id) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING, isLoading: true });
-    const response = await fetchUserData(id).catch((e) => {
-      console.log("get user err", e.response);
-    });
+    const response = await fetchUserData(id);
     if (response?.data) {
-      console.log("get user res ===", response?.data);
       dispatch({ type: SET_USER_DATA, user: response.data });
     }
     dispatch({ type: SET_LOADING, isLoading: false });
@@ -40,14 +38,8 @@ export const getUserByIdAction = (id) => {
 
 export const patchUserAction = (user) => {
   return async () => {
-    const token = document.cookie.includes("token")
-      ? document.cookie
-          .split("; ")
-          .filter((value) => value.startsWith("token"))[0]
-          .split("=")[1]
-      : null;
+    const token = getToken();
     const response = await patchUser(user, token);
-    console.log("patch response", response.data);
   };
 };
 

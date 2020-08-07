@@ -41,12 +41,12 @@ ul {
 }
 
 .BrainhubCarousel__arrows {
-  background-color: #02ab6b !important;
+  background-color: #2bbd86 !important;
 }
 
 .BrainhubCarousel__arrows:hover:enabled,
 .BrainhubCarousel__arrows:hover {
-  background-color: #02ab6b !important;
+  background-color: #2bbd86 !important;
 }
 
 .fallback {

@@ -21,7 +21,6 @@ import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
 import { useHistory, useParams } from "react-router-dom";
 import _axios from "../../store/api/_axios";
-import Modal from "../../misc/Modal/Modal";
 import { connect } from "react-redux";
 import userPhotoIcon from "../../assets/profile.webp";
 import {
@@ -32,15 +31,7 @@ import {
 import { showAlertAction } from "../../store/actions/alertActions";
 import { showModalAction } from "../../store/actions/baseActions";
 
-const Profile = ({
-  user,
-  getUser,
-  patchUser,
-  showAlert,
-  isLoading,
-  showModal,
-  logout,
-}) => {
+const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
   const { id } = useParams();
   const h = useHistory();
   const breadCrumbsItems = [

@@ -141,8 +141,10 @@ const Catalog = ({
   ];
 
   useEffect(() => {
-    getCategories();
-    getProducts();
+    if (!filteredProducts?.length) {
+      getCategories();
+      getProducts();
+    }
   }, []);
 
   return (

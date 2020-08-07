@@ -216,9 +216,8 @@ const Header = ({
               <div className={s.small_menu_button}>
                 {user.isLogged && !user.isAdmin && (
                   <Link
-                    to="/profile"
+                    to={`/profile/${user._id}`}
                     style={{ marginRight: 0 }}
-                    onMouseOver={showProfileModal}
                     className={classnames(s.nav__link, s.profile__nav__link, {
                       [s.nav__link__active]: pathname.startsWith("/profile"),
                     })}
@@ -230,7 +229,6 @@ const Header = ({
                   <Link
                     to="/login"
                     style={{ marginRight: 0 }}
-                    onMouseOver={showProfileModal}
                     className={classnames(s.nav__link, s.profile__nav__link, {
                       [s.nav__link__active]: pathname.startsWith("/login"),
                     })}
@@ -242,7 +240,6 @@ const Header = ({
                   <Link
                     to="/admin"
                     style={{ marginRight: 0 }}
-                    onMouseOver={showProfileModal}
                     className={classnames(s.nav__link, s.profile__nav__link, {
                       [s.nav__link__active]: pathname.startsWith("/admin"),
                     })}
@@ -344,7 +341,11 @@ const Header = ({
         <Link to="/catalog">Каталог</Link>
         <Link to="/wishlist">Улюблені</Link>
         <Link to="/cart">Кошик</Link>
-        <Link to="/profile/2">Профіль</Link>
+        {user.isLogged && !user.isAdmin && (
+          <Link to={`/profile/${user._id}`}>Мій профіль</Link>
+        )}
+        {!user.isLogged && <Link to="/login">Увійти</Link>}
+        {user.isAdmin && <Link to="/admin">Адмін</Link>}
       </Menu>
     </>
   );

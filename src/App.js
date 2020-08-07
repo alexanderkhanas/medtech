@@ -10,10 +10,6 @@ import Header from "./misc/Header/Header";
 import SingleProduct from "./pages/SingleProduct/SingleProduct";
 import { setCart, setFullPriceAction } from "./store/actions/cartActions";
 import { connect } from "react-redux";
-import {
-  getProducts,
-  getCategoriesAction,
-} from "./store/actions/productsActions";
 import Footer from "./misc/Footer/Footer";
 import Catalog from "./pages/Catalog/Catalog";
 import { setWishlist } from "./store/actions/wishlistActions";
@@ -98,9 +94,11 @@ const App = ({
     return () => {
       window.removeEventListener("resize", debouncedHandleResize);
     };
-  });
+  }, []);
 
   const token = useMemo(() => {
+    console.log("here");
+
     return document.cookie.includes("token")
       ? document.cookie
           .split("; ")
@@ -154,7 +152,7 @@ const App = ({
       ? allProducts.filter((product) => wishlistIds.includes(product._id))
       : [];
     setWishlist(wishlistProducts);
-  }, [allProducts]);
+  }, []);
   return (
     <Router>
       <Header />
@@ -293,8 +291,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setCart: (cart) => dispatch(setCart(cart)),
-    getProducts: () => dispatch(getProducts()),
-    getCategories: () => dispatch(getCategoriesAction()),
     setWishlist: (wishlist) => dispatch(setWishlist(wishlist)),
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
     setFullPrice: (price) => dispatch(setFullPriceAction(price)),

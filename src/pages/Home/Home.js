@@ -35,9 +35,11 @@ const Home = ({
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   useEffect(() => {
-    getNews();
-    getProducts();
-    getCategories();
+    if (!allProducts.length) {
+      getNews();
+      getProducts();
+      getCategories();
+    }
   }, []);
 
   return (

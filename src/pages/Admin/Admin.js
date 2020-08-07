@@ -20,11 +20,8 @@ import { getUserByIdAction } from "../../store/actions/profileActions";
 import Input from "../../misc/Inputs/Input/Input";
 import { Formik } from "formik";
 import Select from "../../misc/Select/Select";
-<<<<<<< HEAD
 import { getUsersAction } from "../../store/actions/adminActions";
-=======
 import EditSeller from "../../misc/Admin/EditSeller/EditSeller";
->>>>>>> origin/andriy
 
 const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -226,7 +223,6 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
               <span>Назва</span>
               <span>Назва батьківської категорії</span>
             </div>
-<<<<<<< HEAD
 
             {categories.map &&
               categories.map((category) => (
@@ -240,20 +236,6 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                   )}
                 </div>
               ))}
-=======
-            {/* 
-            {categories.map((category) => (
-              <div className={s.category__container} key={category._id}>
-                <p className={s.category}>{category.title}</p>
-                {!!category.parent.length && !category.sub.length && (
-                  <p className={s.category}>{category.parent[0].title}</p>
-                )}
-                {!!category.sub.length && (
-                  <p className={s.category}>{category.sub[0].title}</p>
-                )}
-              </div>
-            ))} */}
->>>>>>> origin/andriy
           </TabPanel>
           <TabPanel>123</TabPanel>
           <TabPanel>

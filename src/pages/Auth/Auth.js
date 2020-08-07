@@ -146,15 +146,11 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
                       <button className={s.restore}>Відновити акаунт</button>
                     </Link>
                     <div className={s.submit_button}>
-<<<<<<< HEAD
                       <Button
                         type="submit"
                         onClick={handleSubmit}
                         title="Підтвердити"
                       />
-=======
-                      <Button title="Увійти" />
->>>>>>> origin/andriy
                     </div>
                     <div className={s.fbt}>
                       <Link to="/register">

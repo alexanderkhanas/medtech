@@ -39,7 +39,7 @@
 
 .price {
   font-weight: bold;
-  color: #009d66;
+  color: #2bbd86;
   font-size: 25px;
   padding: 0;
 }
@@ -61,7 +61,7 @@
 }
 
 .attributes__wrapper .inStock {
-  color: #009d66;
+  color: #2bbd86;
 }
 
 .attributes__wrapper .lastInStock {
@@ -91,7 +91,7 @@
   font-weight: 300;
   padding: 15px 0;
   flex: 1;
-  border-bottom: 0px solid #009d66;
+  border-bottom: 0px solid #2bbd86;
   transition: 0.2s;
   text-align: center;
   cursor: pointer;

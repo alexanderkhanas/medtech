@@ -26,13 +26,13 @@ header {
 }
 
 .header_icon {
-  color: #009d66;
+  color: #2bbd86;
   transition: 0.2s;
   margin-right: 13px;
 }
 
 .navbar__icon {
-  color: #009d66;
+  color: #2bbd86;
   transition: 0.2s;
 }
 
@@ -51,11 +51,11 @@ header {
 }
 
 .nav__link__active {
-  color: #009d66;
+  color: #2bbd86;
 }
 
 .nav__link:hover {
-  color: #009d6684;
+  color: #2bbd8684;
 }
 
 .site_nav {
@@ -75,7 +75,7 @@ header {
   position: relative;
 }
 .small_menu_item button:hover {
-  color: #009d66;
+  color: #2bbd86;
 }
 .small_menu_button button {
   color: #404040;

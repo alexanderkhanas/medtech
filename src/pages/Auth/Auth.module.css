@@ -119,3 +119,16 @@ button {
   right: 15px;
   font-size: 25px;
 }
+
+.remember__container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.remember__desc {
+  margin-left: 10px;
+  font-size: 13px;
+  color: #838383;
+  cursor: pointer;
+}

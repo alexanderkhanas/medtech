@@ -6,8 +6,6 @@ import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
 import Input from "../../../../misc/Inputs/Input/Input";
 import PhoneNumberInput from "../../../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import Button from "../../../../misc/Button/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faHome } from "@fortawesome/free-solid-svg-icons";
 import { Formik } from "formik";
 import userDefaultAvatar from "../../../../assets/profile.png";
 import { registerAction } from "../../../../store/actions/profileActions";
@@ -274,6 +272,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     register: (user) => dispatch(registerAction(user)),
+
     // submitAvatar: (image) => dispatch()
   };
 };

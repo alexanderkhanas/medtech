@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import s from "./CreateOrder.module.css";
 import { connect } from "react-redux";
 import Select from "../../../../misc/Select/Select";
@@ -16,8 +16,20 @@ import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 import { Formik } from "formik";
 import OrderProductCard from "../../../../misc/OrderProductCard/OrderProductCard";
 import CartProduct from "../../../../misc/CartProductCard/CartProduct";
+import {
+  getUsersAction,
+  filterUsersAction,
+} from "../../../../store/actions/adminActions";
+import { getUserByIdAction } from "../../../../store/actions/profileActions";
 
-const CreateOrder = ({ products, filterProducts }) => {
+const CreateOrder = ({
+  products,
+  filterProducts,
+  getUsers,
+  users,
+  filterUsers,
+  filteredUsers,
+}) => {
   const [activePage, setActivePage] = useState(1);
 
   const breadCrumbsItems = [
@@ -48,6 +60,34 @@ const CreateOrder = ({ products, filterProducts }) => {
     });
   };
 
+  const onUserSelect = (option, formValues, setFormValues) => {
+    setFormValues({ ...formValues, user: option.value });
+  };
+
+  const onUsersSearchChange = (searchValue) => {
+    filterUsers(searchValue, users);
+  };
+
+  const usersOptions = useMemo(() => {
+    return filteredUsers.map((user) => ({
+      label: `${user.fName} ${user.lName} ${user.phone}`,
+      value: user,
+    }));
+  }, [filteredUsers]);
+
+  const productsOptions = useMemo(() => {
+    return products.map((product) => ({
+      label: product.title,
+      value: product,
+    }));
+  }, [products]);
+
+  console.log("users ===", users);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   return (
     <div className={s.container}>
       <div className={s.title__container}>
@@ -55,7 +95,7 @@ const CreateOrder = ({ products, filterProducts }) => {
         <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
-        <Formik initialValues={{ price: "", products: [], user: {} }}>
+        <Formik initialValues={{ price: "", products: [], user: null }}>
           {({ values, handleChange, setValues }) => (
             <>
               {values.products.map((product) => (
@@ -76,25 +116,17 @@ const CreateOrder = ({ products, filterProducts }) => {
                   }
                   onSearchValueChange={onProductSearchChange}
                   onMenuScroll={onProductsMenuScroll}
-                  options={products.map((product) => ({
-                    label: product.title,
-                    value: product,
-                  }))}
+                  options={productsOptions}
                 />
                 <Select
                   noDefaultValue
                   withSearch
                   containerClass={s.input__container}
                   label="Оберіть користувача"
-                  onSelect={(option) =>
-                    onProductSelect(option, values, setValues)
-                  }
-                  onSearchValueChange={onProductSearchChange}
+                  onSelect={(option) => onUserSelect(option, values, setValues)}
+                  onSearchValueChange={onUsersSearchChange}
                   onMenuScroll={onProductsMenuScroll}
-                  options={products.map((product) => ({
-                    label: product.title,
-                    value: product,
-                  }))}
+                  options={usersOptions}
                 />
                 <Input
                   name="price"
@@ -105,7 +137,11 @@ const CreateOrder = ({ products, filterProducts }) => {
                   onChange={handleChange}
                 />
                 <div className={s.submit__container}>
-                  <Button title="Створити" size="lg" />
+                  <Button
+                    isDisabled={!values.user || !values.products.length}
+                    title="Створити"
+                    size="lg"
+                  />
                 </div>
               </div>
             </>
@@ -119,6 +155,8 @@ const CreateOrder = ({ products, filterProducts }) => {
 const mapStateToProps = (state) => {
   return {
     products: state.products.filtered,
+    users: state.admin.users,
+    filteredUsers: state.admin.filteredUsers,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -126,6 +164,10 @@ const mapDispatchToProps = (dispatch) => {
     getProductsByPage: (page) => dispatch(getProductsByPage(page)),
     filterProducts: (categoryId, searchValue) =>
       dispatch(filterProductsAction(categoryId, searchValue)),
+    getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
+    getUsers: () => dispatch(getUsersAction()),
+    filterUsers: (searchValue, users) =>
+      dispatch(filterUsersAction(searchValue, users)),
   };
 };
 

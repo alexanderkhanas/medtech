@@ -1,4 +1,9 @@
-import { SET_USER_DATA, LOGOUT } from "../actions/actionTypes";
+import {
+  SET_USER_DATA,
+  LOGOUT,
+  SET_LOGGED_IN,
+  SET_ADMIN,
+} from "../actions/actionTypes";
 
 const initialState = {
   email: "",
@@ -8,6 +13,7 @@ const initialState = {
   lName: "",
   token: "",
   _id: "",
+  isLogged: false,
 };
 
 export default (state = initialState, action) => {
@@ -25,6 +31,17 @@ export default (state = initialState, action) => {
     case LOGOUT:
       return {
         initialState,
+      };
+    case SET_LOGGED_IN:
+      return {
+        ...state,
+        isLogged: true,
+      };
+    case SET_ADMIN:
+      return {
+        ...state,
+        isLogged: true,
+        isAdmin: true,
       };
     default:
       return state;

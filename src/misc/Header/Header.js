@@ -214,18 +214,46 @@ const Header = ({
             </div>
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
-                <Link
-                  to={user._id ? "/profile" : "/login"}
-                  style={{ marginRight: 0 }}
-                  onMouseOver={showProfileModal}
-                  className={classnames(s.nav__link, s.profile__nav__link, {
-                    [s.nav__link__active]: pathname.startsWith("/profile"),
-                  })}
-                >
-                  {user._id ? "Мій профіль" : "Увійти"}
-                </Link>
+                {user.isLogged && !user.isAdmin && (
+                  <Link
+                    to="/profile"
+                    style={{ marginRight: 0 }}
+                    onMouseOver={showProfileModal}
+                    className={classnames(s.nav__link, s.profile__nav__link, {
+                      [s.nav__link__active]: pathname.startsWith("/profile"),
+                    })}
+                  >
+                    Мій профіль
+                  </Link>
+                )}
+                {!user.isLogged && (
+                  <Link
+                    to="/login"
+                    style={{ marginRight: 0 }}
+                    onMouseOver={showProfileModal}
+                    className={classnames(s.nav__link, s.profile__nav__link, {
+                      [s.nav__link__active]: pathname.startsWith("/login"),
+                    })}
+                  >
+                    Увійти
+                  </Link>
+                )}
+                {user.isAdmin && (
+                  <Link
+                    to="/admin"
+                    style={{ marginRight: 0 }}
+                    onMouseOver={showProfileModal}
+                    className={classnames(s.nav__link, s.profile__nav__link, {
+                      [s.nav__link__active]: pathname.startsWith("/admin"),
+                    })}
+                  >
+                    Адмін
+                  </Link>
+                )}
                 <ProfileModal
-                  isVisible={user._id && isProfileModalVisible}
+                  isVisible={
+                    user.isLogged && !user.isAdmin && isProfileModalVisible
+                  }
                   hide={hideProfileModal}
                 />
               </div>

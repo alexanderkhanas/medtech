@@ -1,7 +1,12 @@
-import { SET_USERS } from "../actions/actionTypes";
+import {
+  SET_USERS,
+  SET_FILTERED_USERS,
+  RESET_FILTERED_USERS,
+} from "../actions/actionTypes";
 
 const initialState = {
   users: [],
+  filteredUsers: [],
 };
 
 export default (state = initialState, action) => {
@@ -10,6 +15,17 @@ export default (state = initialState, action) => {
       return {
         ...state,
         users: action.users,
+        filteredUsers: action.users,
+      };
+    case SET_FILTERED_USERS:
+      return {
+        ...state,
+        filteredUsers: action.users,
+      };
+    case RESET_FILTERED_USERS:
+      return {
+        ...state,
+        filteredUsers: state.users,
       };
     default:
       return state;

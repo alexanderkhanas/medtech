@@ -53,10 +53,13 @@ const Profile = ({
   ];
 
   const token = useMemo(() => {
-    return document.cookie
-      ?.split("; ")
-      .filter((value) => value.startsWith("token"))[0]
-      .split("=")[1];
+    if (document.cookie?.includes("token")) {
+      return document.cookie
+        ?.split("; ")
+        .filter((value) => value.startsWith("token"))[0]
+        .split("=")[1];
+    }
+    return null;
   }, [document.cookie]);
 
   //   const { oderData, oderAddress, oderHistory } = userData;
@@ -109,6 +112,8 @@ const Profile = ({
   useEffect(() => {
     setUserData(user);
   }, [user]);
+
+  console.log("user data ===", userData);
 
   return !isLoading ? (
     <div className={s.body}>

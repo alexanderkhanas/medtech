@@ -22,7 +22,7 @@ import { getAllNewsAction } from "./store/actions/newsActions";
 import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
-import { getUserByIdAction } from "./store/actions/profileActions";
+import { getUserByIdAction, loginAction } from "./store/actions/profileActions";
 import Modal from "./misc/Modal/Modal";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
@@ -84,6 +84,7 @@ const App = ({
   getNews,
   getUser,
   getCategories,
+  autologin,
   user,
 }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
@@ -116,7 +117,11 @@ const App = ({
       getNews();
       getProducts();
       getCategories();
-
+      const loginData = localStorage.getItem("_login");
+      if (loginData) {
+        autologin(JSON.parse(loginData));
+        return;
+      }
       if (token) {
         getUser(token);
         console.log("token ===", token);
@@ -300,6 +305,7 @@ const mapDispatchToProps = (dispatch) => {
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
     setFullPrice: (price) => dispatch(setFullPriceAction(price)),
     getCategories: () => dispatch(getCategoriesAction()),
+    autologin: (data) => dispatch(loginAction(data)),
   };
 };
 

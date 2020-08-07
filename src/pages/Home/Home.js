@@ -26,10 +26,9 @@ const Home = ({ products, recentNews, windowWidth }) => {
     <div>
       <ImageCarousel
         images={[
-          "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider02_2000x.jpg?v=1543380453",
-          "https://vsetrts.ru/images/article/1568969241-3.jpg",
-          "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider-sm3_767x.jpg?v=1543380475",
-          "//cdn.shopify.com/s/files/1/0023/8075/9140/files/slider01_2000x.jpg?v=1543380436",
+          require("../../assets/home1.webp"),
+          require("../../assets/home2.webp"),
+          require("../../assets/home3.webp"),
         ]}
       />
       <FixedWrapper className={s.tabs__container}>
@@ -113,13 +112,13 @@ const Home = ({ products, recentNews, windowWidth }) => {
               title="Час роботи"
               bodyText="Працюємо з 9-ої до 6-ої з понеділка до п'ятниці"
               imgSrc={require("../../assets/scheduleIcon.png")}
-              mainColor="#009d66"
+              mainColor="#2bbd86"
             />
             <AdvantagesCard
               title="Час роботи"
               bodyText="Працюємо з 9-ої до 6-ої з понеділка до п'ятниці"
               imgSrc={require("../../assets/scheduleIcon.png")}
-              mainColor="#009d66"
+              mainColor="#2bbd86"
             />
             <AdvantagesCard
               title="Доставка по всій Україні"

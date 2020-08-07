@@ -45,7 +45,7 @@ const CartProduct = ({
         <Link to={`product/${_id}`}>
           <img
             className={s.img}
-            src="https://i.ibb.co/27WPrWh/i1.png"
+            src="https://d3emaq2p21aram.cloudfront.net/media/cache/venue_gallery/uploads/venues/33152/originals/meagan_shuptar_low_res_ceremony-104.jpg"
             alt="loading"
           />
         </Link>

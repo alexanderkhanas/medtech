@@ -9,8 +9,20 @@ import AdvantagesCard from "../../misc/AdvantagesCard/AdvantagesCard";
 import NewsCard from "../../misc/NewsCard/NewsCard";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import { Link } from "react-router-dom";
+import { getAllNewsAction } from "../../store/actions/newsActions";
+import {
+  getCategoriesAction,
+  getProducts,
+} from "../../store/actions/productsActions";
 
-const Home = ({ products, recentNews, windowWidth }) => {
+const Home = ({
+  products,
+  recentNews,
+  windowWidth,
+  getNews,
+  getCategories,
+  getProducts,
+}) => {
   const {
     bestRatingProducts,
     recommendedProducts,
@@ -21,6 +33,12 @@ const Home = ({ products, recentNews, windowWidth }) => {
   } = products;
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  useEffect(() => {
+    getNews();
+    getProducts();
+    getCategories();
+  }, []);
 
   return (
     <div>
@@ -173,6 +191,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getNews: () => dispatch(getAllNewsAction()),
+    getProducts: () => dispatch(getProducts()),
+    getCategories: () => dispatch(getCategoriesAction()),
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

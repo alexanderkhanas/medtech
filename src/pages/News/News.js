@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from "./News.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,8 +6,9 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import { connect } from "react-redux";
 import NewsCard from "../../misc/NewsCard/NewsCard";
+import { getAllNewsAction } from "../../store/actions/newsActions";
 
-const News = ({ recentNews }) => {
+const News = ({ recentNews, getNews }) => {
   const breadCrumbsItems = [
     {
       name: "Головна",
@@ -17,6 +18,9 @@ const News = ({ recentNews }) => {
     { name: "Новини", path: "/news" },
   ];
   console.log("recent news ===", recentNews);
+  useEffect(() => {
+    getNews();
+  }, []);
   return (
     <div>
       <div className={s.title__container}>
@@ -43,6 +47,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getNews: () => dispatch(getAllNewsAction()),
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(News);

@@ -23,7 +23,7 @@ import { useHistory, useParams } from "react-router-dom";
 import _axios from "../../store/api/_axios";
 import Modal from "../../misc/Modal/Modal";
 import { connect } from "react-redux";
-import userPhotoIcon from "../../assets/profile.png";
+import userPhotoIcon from "../../assets/profile.webp";
 import {
   getUserByIdAction,
   patchUserAction,

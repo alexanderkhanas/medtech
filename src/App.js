@@ -79,11 +79,8 @@ const PrivateRoute = ({
 const App = ({
   allProducts,
   setCart,
-  getProducts,
   setWishlist,
-  getNews,
   getUser,
-  getCategories,
   autologin,
   user,
 }) => {
@@ -114,9 +111,6 @@ const App = ({
 
   useEffect(() => {
     (async () => {
-      getNews();
-      getProducts();
-      getCategories();
       const loginData = localStorage.getItem("_login");
       if (loginData) {
         autologin(JSON.parse(loginData));
@@ -300,11 +294,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setCart: (cart) => dispatch(setCart(cart)),
     getProducts: () => dispatch(getProducts()),
+    getCategories: () => dispatch(getCategoriesAction()),
     setWishlist: (wishlist) => dispatch(setWishlist(wishlist)),
-    getNews: () => dispatch(getAllNewsAction()),
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
     setFullPrice: (price) => dispatch(setFullPriceAction(price)),
-    getCategories: () => dispatch(getCategoriesAction()),
     autologin: (data) => dispatch(loginAction(data)),
   };
 };

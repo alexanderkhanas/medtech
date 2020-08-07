@@ -252,17 +252,19 @@ const Register = ({ register }) => {
                         </Input>
                       </div>
                       <div className={s.check_box}>
-                        <p>
-                          <input
-                            icon={faCheck}
-                            className={s.faCheck}
-                            type="checkbox"
-                            name="chexbox"
-                            onChange={agreeCheckbox}
-                            chacked={isAgree}
-                          />
-                          Погоджуюся з політикою кофіденційності
-                        </p>
+                        <input
+                          icon={faCheck}
+                          className={s.faCheck}
+                          type="checkbox"
+                          name="chexbox"
+                          onChange={agreeCheckbox}
+                          chacked={isAgree}
+                        />
+                        <Link to="/politics">
+                          <p className={s.politics}>
+                            Погоджуюся з політикою кофіденційності
+                          </p>
+                        </Link>
                       </div>
                       <div className={s.submit_button}>
                         <Button

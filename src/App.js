@@ -184,6 +184,10 @@ const App = ({
               component={(props) => <Politics {...props} />}
             />
             <Route
+              path="/about-us"
+              component={(props) => <AboutUs {...props} />}
+            />
+            <Route
               path="/single-news/:id"
               component={(props) => <SingleNews {...props} />}
             />

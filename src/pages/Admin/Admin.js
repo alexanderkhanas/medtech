@@ -20,6 +20,7 @@ import { getUserByIdAction } from "../../store/actions/profileActions";
 import Input from "../../misc/Inputs/Input/Input";
 import { Formik } from "formik";
 import Select from "../../misc/Select/Select";
+import EditSeller from "../../misc/Admin/EditSeller/EditSeller";
 
 const Admin = ({
   recentNews,
@@ -195,7 +196,7 @@ const Admin = ({
               <span>Назва</span>
               <span>Назва батьківської категорії</span>
             </div>
-
+            {/* 
             {categories.map((category) => (
               <div className={s.category__container} key={category._id}>
                 <p className={s.category}>{category.title}</p>
@@ -206,10 +207,62 @@ const Admin = ({
                   <p className={s.category}>{category.sub[0].title}</p>
                 )}
               </div>
-            ))}
+            ))} */}
           </TabPanel>
-          <TabPanel>1231</TabPanel>
           <TabPanel>123</TabPanel>
+          <TabPanel>
+            <Formik
+              initialValues={{
+                name: "",
+              }}
+              onSubmit={(values) => {}}
+            >
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                setValues,
+              }) => {
+                return (
+                  <div>
+                    <div className={s.seller__container}>
+                      <Input
+                        name="name"
+                        label="Добавити продавця"
+                        placeholder="Germany"
+                        value={values.name}
+                        containerClass={s.add__category__input__container}
+                        inputClass={s.add__category__input}
+                        onChange={handleChange}
+                        onBlur={handleSubmit}
+                      />
+                    </div>
+                    <Button
+                      onClick={handleSubmit}
+                      className={s.add__button}
+                      title="Додати категорію"
+                    >
+                      <FontAwesomeIcon
+                        className={s.add__more__icon}
+                        icon={faPlus}
+                      />
+                    </Button>
+                  </div>
+                );
+              }}
+            </Formik>
+            <div className={s.order__header}>
+              <span>Назва</span>
+              <span>Кількість продуктів</span>
+            </div>
+            <EditSeller />
+            <EditSeller />
+            <EditSeller />
+            <EditSeller />
+            <EditSeller />
+            <EditSeller />
+          </TabPanel>
           <TabPanel>
             <div className={s.order__header}>
               <span>Ім'я</span>

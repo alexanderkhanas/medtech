@@ -70,8 +70,7 @@
 
   .card .price__wrapper,
   .card .qty__counter__wrapper,
-  .card .fullprice__container,
-  .card .remove__icon__wrapper {
+  .card .fullprice__container {
     display: none;
   }
 

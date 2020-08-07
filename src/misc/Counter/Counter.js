@@ -22,7 +22,12 @@ const Counter = ({ onChange, initialValue }) => {
       <div onClick={onMinusClick} className={s.sign__icon__container}>
         <FontAwesomeIcon className={s.icon} icon={faMinus} />
       </div>
-      <InputMask mask="9" {...{ value }} onChange={onInputChange}>
+      <InputMask
+        maskChar=""
+        mask="9999"
+        {...{ value }}
+        onChange={onInputChange}
+      >
         {(rest) => <input {...rest} className={s.input} disableUnderline />}
       </InputMask>
       <div onClick={onPlusClick} className={s.sign__icon__container}>

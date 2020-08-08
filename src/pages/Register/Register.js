@@ -94,9 +94,22 @@ const Register = ({ register }) => {
           }
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           const { fName, lName, fatherName, phone, password, email } = values;
-          register({ fName, lName, fatherName, phone, password, email });
+          const correctPhone = phone.replace(/-/gi, "").replace("+", "");
+          console.log("phone ===", correctPhone);
+
+          const user = await register({
+            fName,
+            lName,
+            fatherName,
+            phone: +correctPhone,
+            password,
+            email,
+          });
+          if (user) {
+            h.push(`/profile/${user._id}`);
+          }
         }}
       >
         {({

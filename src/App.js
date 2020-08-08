@@ -10,10 +10,6 @@ import Header from "./misc/Header/Header";
 import SingleProduct from "./pages/SingleProduct/SingleProduct";
 import { setCart, setFullPriceAction } from "./store/actions/cartActions";
 import { connect } from "react-redux";
-import {
-  getProducts,
-  getCategoriesAction,
-} from "./store/actions/productsActions";
 import Footer from "./misc/Footer/Footer";
 import Catalog from "./pages/Catalog/Catalog";
 import { setWishlist } from "./store/actions/wishlistActions";
@@ -22,7 +18,7 @@ import { getAllNewsAction } from "./store/actions/newsActions";
 import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
-import { getUserByIdAction } from "./store/actions/profileActions";
+import { getUserByIdAction, loginAction } from "./store/actions/profileActions";
 import Modal from "./misc/Modal/Modal";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
@@ -79,11 +75,9 @@ const PrivateRoute = ({
 const App = ({
   allProducts,
   setCart,
-  getProducts,
   setWishlist,
-  getNews,
   getUser,
-  getCategories,
+  autologin,
   user,
 }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
@@ -100,9 +94,11 @@ const App = ({
     return () => {
       window.removeEventListener("resize", debouncedHandleResize);
     };
-  });
+  }, []);
 
   const token = useMemo(() => {
+    console.log("here");
+
     return document.cookie.includes("token")
       ? document.cookie
           .split("; ")
@@ -113,10 +109,11 @@ const App = ({
 
   useEffect(() => {
     (async () => {
-      getNews();
-      getProducts();
-      getCategories();
-
+      const loginData = localStorage.getItem("_login");
+      if (loginData) {
+        autologin(JSON.parse(loginData));
+        return;
+      }
       if (token) {
         getUser(token);
         console.log("token ===", token);
@@ -155,7 +152,7 @@ const App = ({
       ? allProducts.filter((product) => wishlistIds.includes(product._id))
       : [];
     setWishlist(wishlistProducts);
-  }, [allProducts]);
+  }, []);
   return (
     <Router>
       <Header />
@@ -294,12 +291,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setCart: (cart) => dispatch(setCart(cart)),
-    getProducts: () => dispatch(getProducts()),
     setWishlist: (wishlist) => dispatch(setWishlist(wishlist)),
-    getNews: () => dispatch(getAllNewsAction()),
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
     setFullPrice: (price) => dispatch(setFullPriceAction(price)),
-    getCategories: () => dispatch(getCategoriesAction()),
+    autologin: (data) => dispatch(loginAction(data)),
   };
 };
 

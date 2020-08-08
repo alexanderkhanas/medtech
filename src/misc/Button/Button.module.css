@@ -10,7 +10,7 @@
 }
 
 .button:hover {
-  background: #009d66;
+  background: #2bbd86;
 }
 
 .button__round {
@@ -46,16 +46,16 @@
 }
 
 .secondary {
-  background: #009d66a8;
+  background: #2bbd86a8;
 }
 
 .disabled {
-  background: #009d66a8;
+  background: #2bbd86a8;
   cursor: default;
 }
 
 .disabled:hover {
-  background: #009d66a8;
+  background: #2bbd86a8;
 }
 
 .capitalize {

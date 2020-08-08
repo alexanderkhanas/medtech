@@ -21,9 +21,8 @@ import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
 import { useHistory, useParams } from "react-router-dom";
 import _axios from "../../store/api/_axios";
-import Modal from "../../misc/Modal/Modal";
 import { connect } from "react-redux";
-import userPhotoIcon from "../../assets/profile.png";
+import userPhotoIcon from "../../assets/profile.webp";
 import {
   getUserByIdAction,
   patchUserAction,
@@ -32,15 +31,7 @@ import {
 import { showAlertAction } from "../../store/actions/alertActions";
 import { showModalAction } from "../../store/actions/baseActions";
 
-const Profile = ({
-  user,
-  getUser,
-  patchUser,
-  showAlert,
-  isLoading,
-  showModal,
-  logout,
-}) => {
+const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
   const { id } = useParams();
   const h = useHistory();
   const breadCrumbsItems = [
@@ -53,10 +44,13 @@ const Profile = ({
   ];
 
   const token = useMemo(() => {
-    return document.cookie
-      ?.split("; ")
-      .filter((value) => value.startsWith("token"))[0]
-      .split("=")[1];
+    if (document.cookie?.includes("token")) {
+      return document.cookie
+        ?.split("; ")
+        .filter((value) => value.startsWith("token"))[0]
+        .split("=")[1];
+    }
+    return null;
   }, [document.cookie]);
 
   //   const { oderData, oderAddress, oderHistory } = userData;
@@ -109,6 +103,8 @@ const Profile = ({
   useEffect(() => {
     setUserData(user);
   }, [user]);
+
+  console.log("user data ===", userData);
 
   return !isLoading ? (
     <div className={s.body}>

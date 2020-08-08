@@ -7,6 +7,8 @@ import HorizontalProductCard from "../../misc/HorizontalProductCard/HorizontalPr
 import {
   getProductsByPage,
   filterProductsAction,
+  getCategoriesAction,
+  getProducts,
 } from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import { scrollToRef } from "../../utils/utils";
@@ -33,6 +35,8 @@ const Catalog = ({
   recommendedProducts,
   filterProducts,
   isLoading,
+  getCategories,
+  getProducts,
   categories,
   searchValue,
   windowWidth,
@@ -135,6 +139,13 @@ const Catalog = ({
     },
     { name: "Каталог", path: "/catalog" },
   ];
+
+  useEffect(() => {
+    if (!filteredProducts?.length) {
+      getCategories();
+      getProducts();
+    }
+  }, []);
 
   return (
     <div>
@@ -283,6 +294,8 @@ const mapDispatchToProps = (dispatch) => {
     filterProducts: (categoryId, searchValue) =>
       dispatch(filterProductsAction(categoryId, searchValue)),
     setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
+    getProducts: () => dispatch(getProducts()),
+    getCategories: () => dispatch(getCategoriesAction()),
   };
 };
 

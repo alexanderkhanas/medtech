@@ -28,3 +28,7 @@ export const HIDE_MODAL = "HIDE_MODAL";
 export const SHOW_MODAL = "SHOW_MODAL";
 export const LOGOUT = "LOGOUT";
 export const SET_USERS = "SET_USERS";
+export const SET_LOGGED_IN = "SET_LOGGED_IN";
+export const SET_ADMIN = "SET_ADMIN";
+export const RESET_FILTERED_USERS = "RESET_FILTERED_USERS";
+export const SET_FILTERED_USERS = "SET_FILTERED_USERS";

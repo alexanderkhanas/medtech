@@ -38,9 +38,11 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
   return (
     <div>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "", password: "", isRemember: false }}
         validate={(values) => {
           const errors = {};
+          console.log("is remember ===", values.isRemember);
+
           if (values.password.length <= 5) {
             errors.password = "Занадто короткий пароль";
           }
@@ -55,22 +57,16 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
         }}
         onSubmit={async (values, { setSubmitting }) => {
           const { email, password } = values;
-          const loginResponse = await login({ email, password });
-          console.log("login response ===", loginResponse);
+          const userId = await login({ email, password }, values.isRemember);
+          console.log("userId ===", userId);
 
-          if (loginResponse) {
-            const { _id } = loginResponse.user;
-            const { token, aToken } = loginResponse;
-            if (aToken) {
-              document.cookie = `aToken=${aToken}`;
-            }
-            if (token) {
-              document.cookie = `token=${token}`;
-            }
+          if (userId === "admin") {
+            h.push("/admin");
+          } else if (userId) {
             if (location?.state?.redirectTo) {
               h.push(location.state.redirectTo);
             } else {
-              h.push(`/profile/${_id}`);
+              h.push(`/profile/${userId}`);
             }
           } else {
             showAlert("Помилка при авторизації. Невірно введені дані.");
@@ -84,7 +80,7 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
           handleChange,
           handleBlur,
           handleSubmit,
-          isSubmiting,
+          setValues,
         }) => {
           const SuccessIcon = () => (
             <FontAwesomeIcon
@@ -139,6 +135,26 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
                             {(errors.email || !values.email) &&
                               touched.email && <ErrorIcon />}
                           </Input>
+                        </div>
+                        <div className={s.remember__container}>
+                          <input
+                            type="checkbox"
+                            checked={values.isRemember}
+                            className={s.remember__checkbox}
+                            name="isRemember"
+                            onChange={handleChange}
+                          />
+                          <p
+                            onClick={() =>
+                              setValues({
+                                ...values,
+                                isRemember: !values.isRemember,
+                              })
+                            }
+                            className={s.remember__desc}
+                          >
+                            Запам'ятати мене
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -199,7 +215,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (data) => dispatch(loginAction(data)),
+    login: (data, isRemember) => dispatch(loginAction(data, isRemember)),
     showAlert: (content) => dispatch(showAlertAction(content)),
     hideAlert: () => dispatch(hideAlertAction()),
   };

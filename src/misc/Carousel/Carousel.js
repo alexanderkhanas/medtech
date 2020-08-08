@@ -4,8 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronLeft,
+  faStoreAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { Transition } from "react-transition-group";
+import { Link } from "react-router-dom";
+import Button from "../Button/Button";
 
 const Carousel = ({ images, className }) => {
   const [activeImageId, setActiveImageId] = useState(0);
@@ -53,6 +56,11 @@ const Carousel = ({ images, className }) => {
         icon={faChevronRight}
         className={`${s.switch__button} ${s.switch__button__right}`}
       />
+      <Link to="/catalog" className={s.catalog__btn__container}>
+        <Button title="Перейти до покупок" className={s.catalog__btn} size="sm">
+          <FontAwesomeIcon icon={faStoreAlt} className={s.catalog__btn__icon} />
+        </Button>
+      </Link>
     </div>
   );
 };

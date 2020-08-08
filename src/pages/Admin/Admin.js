@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import s from "./Admin.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
@@ -16,12 +16,10 @@ import {
   addToCartAction,
   removeFromCartAction,
 } from "../../store/actions/cartActions";
-import { getUserByIdAction } from "../../store/actions/profileActions";
 import Input from "../../misc/Inputs/Input/Input";
 import { Formik } from "formik";
 import Select from "../../misc/Select/Select";
 import EditSeller from "../../misc/Admin/EditSeller/EditSeller";
-import { getUsersAction } from "../../store/actions/adminActions";
 
 const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -35,10 +33,6 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
   ];
 
   console.log("categories ===", categories);
-
-  useEffect(() => {
-    getUsers();
-  }, []);
 
   return (
     <div className={s.container}>
@@ -370,8 +364,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addToCart: (product) => dispatch(addToCartAction(product)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
-    getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
-    getUsers: () => dispatch(getUsersAction()),
     // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };

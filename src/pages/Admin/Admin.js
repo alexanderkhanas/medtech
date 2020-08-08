@@ -85,7 +85,14 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
               <span>Загальна сума</span>
             </div>
             <Link to="/admin/edit-order/:id">
-              <OrderCard />
+              <OrderCard
+                orderNumber="qweqweqw"
+                createDate="14.123"
+                status="asdads"
+                delivery="asd"
+                orderSum="asdasd"
+                paymentType="65491"
+              />
             </Link>
             <OrderCard />
             <OrderCard />

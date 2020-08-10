@@ -56,6 +56,10 @@
   border: none;
 }
 
+.search__input:focus {
+  outline: none;
+}
+
 .value__text {
   color: #404040;
   font-size: 15px;

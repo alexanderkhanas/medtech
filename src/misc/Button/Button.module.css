@@ -61,3 +61,28 @@
 .capitalize {
   text-transform: capitalize;
 }
+
+@media (max-width: 450px) {
+  .button {
+    padding: 14px 17px;
+  }
+  .button__sm {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .button__md {
+    padding: 7px 12px;
+    font-size: 14px;
+  }
+
+  .button__lg {
+    padding: 9px 17px;
+    font-size: 18px;
+  }
+
+  .button__xl {
+    padding: 11px 2px;
+    font-size: 18px;
+  }
+}

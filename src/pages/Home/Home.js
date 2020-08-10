@@ -13,6 +13,7 @@ import { getAllNewsAction } from "../../store/actions/newsActions";
 import {
   getCategoriesAction,
   getProducts,
+  getHighRatingProductsAction,
 } from "../../store/actions/productsActions";
 
 const Home = ({
@@ -21,26 +22,35 @@ const Home = ({
   windowWidth,
   getNews,
   getCategories,
-  getProducts,
+  getHighRatingProducts,
 }) => {
   const {
-    bestRatingProducts,
+    highRatingProducts,
     recommendedProducts,
     popularProducts,
     newProducts,
     allProducts,
-    cartProducts,
   } = products;
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   useEffect(() => {
-    if (!allProducts.length) {
-      getNews();
-      getProducts();
-      getCategories();
-    }
+    (async () => {
+      if (!allProducts.length) {
+        await getCategories();
+        await getHighRatingProducts();
+        await getNews();
+      }
+    })();
   }, []);
+
+  let slidesPerPage = Math.floor(windowWidth / 350);
+
+  if (slidesPerPage > 4) {
+    slidesPerPage = 4;
+  } else if (slidesPerPage < 1) {
+    slidesPerPage = 1;
+  }
 
   return (
     <div>
@@ -71,30 +81,14 @@ const Home = ({
               )}
             </TabList>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel
-                arrows
-                slidesPerPage={
-                  Math.floor(windowWidth / 350) > 4
-                    ? 4
-                    : Math.floor(windowWidth / 350)
-                }
-                infinite
-              >
+              <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
                 {recommendedProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
             </TabPanel>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel
-                arrows
-                slidesPerPage={
-                  Math.floor(windowWidth / 350) > 4
-                    ? 4
-                    : Math.floor(windowWidth / 350)
-                }
-                infinite
-              >
+              <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
                 {popularProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
@@ -102,17 +96,8 @@ const Home = ({
             </TabPanel>
 
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel
-                arrows
-                offset={10}
-                slidesPerPage={
-                  Math.floor(windowWidth / 350) > 4
-                    ? 4
-                    : Math.floor(windowWidth / 350)
-                }
-                infinite
-              >
-                {bestRatingProducts.map((product, i) => (
+              <ItemsCarousel arrows offset={10} {...{ slidesPerPage }} infinite>
+                {highRatingProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
@@ -150,15 +135,7 @@ const Home = ({
         </div>
         <div className={s.section}>
           <h3 className={s.section__title}>Останні товари</h3>
-          <ItemsCarousel
-            arrows
-            slidesPerPage={
-              Math.floor(windowWidth / 350) > 4
-                ? 4
-                : Math.floor(windowWidth / 350)
-            }
-            infinite
-          >
+          <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
             {newProducts.map((product, i) => (
               <ProductCard key={product._id} {...{ product }} />
             ))}
@@ -184,7 +161,7 @@ const mapStateToProps = (state) => {
     products: {
       recommendedProducts: state.products.recommended,
       popularProducts: state.products.popular,
-      bestRatingProducts: state.products.bestRating,
+      highRatingProducts: state.products.highRating,
       newProducts: state.products.new,
       allProducts: state.products.all,
     },
@@ -195,8 +172,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getNews: () => dispatch(getAllNewsAction()),
-    getProducts: () => dispatch(getProducts()),
     getCategories: () => dispatch(getCategoriesAction()),
+    getHighRatingProducts: () => dispatch(getHighRatingProductsAction()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

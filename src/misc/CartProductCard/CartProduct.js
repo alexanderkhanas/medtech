@@ -43,11 +43,7 @@ const CartProduct = ({
     <div className={classnames(s.card, { [s.small]: isSmall })}>
       <div className={s.main}>
         <Link to={`product/${_id}`}>
-          <img
-            className={s.img}
-            src="https://d3emaq2p21aram.cloudfront.net/media/cache/venue_gallery/uploads/venues/33152/originals/meagan_shuptar_low_res_ceremony-104.jpg"
-            alt="loading"
-          />
+          <img className={s.img} src={gallery[0]} alt="loading" />
         </Link>
         <div className={s.main__content}>
           <Link to={`product/${_id}`}>

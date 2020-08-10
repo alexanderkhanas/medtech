@@ -21,7 +21,7 @@ const ProductCard = ({ product, className }) => {
         <img
           className={s.card__img}
           onClick={redirectToSingleProduct}
-          src="https://d3emaq2p21aram.cloudfront.net/media/cache/venue_gallery/uploads/venues/33152/originals/meagan_shuptar_low_res_ceremony-104.jpg"
+          src={gallery[0]}
           alt="loading..."
         />
       </div>

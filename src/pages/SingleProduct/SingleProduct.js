@@ -196,15 +196,11 @@ const SingleProduct = ({
         <div className={s.desktop__container}>
           <div className={s.carousel__container}>
             <ItemsCarousel arrows={false} dots slidesPerPage={1}>
-              {[
-                "https://i.ibb.co/rxSTJfz/img2.png",
-                "https://i.ibb.co/dMsk2PN/img1.png",
-                "https://i.ibb.co/kgmN7bf/img3.png",
-              ].map((img, i) => (
+              {gallery.map((img, i) => (
                 <img
                   className={s.main__image}
                   key={img}
-                  src={`${img}.png`}
+                  src={img}
                   alt="loading"
                 />
               ))}

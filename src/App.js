@@ -20,6 +20,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
 import { getUserByIdAction, loginAction } from "./store/actions/profileActions";
 import Modal from "./misc/Modal/Modal";
+import { getProducts } from "./store/actions/productsActions";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -78,6 +79,7 @@ const App = ({
   setWishlist,
   getUser,
   autologin,
+  getProducts,
   user,
 }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
@@ -97,8 +99,6 @@ const App = ({
   }, []);
 
   const token = useMemo(() => {
-    console.log("here");
-
     return document.cookie.includes("token")
       ? document.cookie
           .split("; ")
@@ -108,6 +108,7 @@ const App = ({
   }, [document.cookie]);
 
   useEffect(() => {
+    getProducts();
     (async () => {
       const loginData = localStorage.getItem("_login");
       if (loginData) {
@@ -116,7 +117,6 @@ const App = ({
       }
       if (token) {
         getUser(token);
-        console.log("token ===", token);
       }
     })();
   }, []);
@@ -148,11 +148,14 @@ const App = ({
     setCart(cartProducts);
 
     const wishlistIds = getLocalWishlist();
+    console.log("all products ===", allProducts);
+
     const wishlistProducts = wishlistIds
       ? allProducts.filter((product) => wishlistIds.includes(product._id))
       : [];
+    console.log("wishlist ===", wishlistProducts);
     setWishlist(wishlistProducts);
-  }, []);
+  }, [allProducts]);
   return (
     <Router>
       <Header />
@@ -295,6 +298,7 @@ const mapDispatchToProps = (dispatch) => {
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
     setFullPrice: (price) => dispatch(setFullPriceAction(price)),
     autologin: (data) => dispatch(loginAction(data)),
+    getProducts: () => dispatch(getProducts()),
   };
 };
 

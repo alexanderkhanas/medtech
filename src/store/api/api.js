@@ -1,12 +1,12 @@
 import _axios from "./_axios";
 import axios from "axios";
 
-export const fetchProducts = async () => _axios.get("/products");
+export const fetchProducts = () => _axios.get("/products");
 
-export const fetchProductsByPage = async (page) =>
+export const fetchProductsByPage = (page) =>
   _axios.get(`/products?page=${page}`);
 
-export const fetchSingleProduct = async (id) => _axios.get(`/product/${id}`);
+export const fetchSingleProduct = (id) => _axios.get(`/product/${id}`);
 
 export const searchProductsRequest = async (value) => {
   console.log("url ===", `/products?search=${value}`);
@@ -32,6 +32,8 @@ export const fetchFilteredProducts = (categoriesArray, searchValue) => {
   }
   return _axios.get(baseUrl);
 };
+
+export const fetchHighRatingProducts = () => _axios.get("/products/highRating");
 
 export const fetchCategories = () => _axios.get("/categories");
 
@@ -73,8 +75,16 @@ export const fetchUsers = (token) => {
   });
 };
 
-export const postCategory = (category) => {
-  return _axios.post("/categories", category);
+export const fetchAttributes = (token) => {};
+
+export const postCategory = (category, token) => {
+  console.log("token ===", token);
+
+  return _axios.post("/category", category, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const fetchCities = (filterValue, limit = 20) => {

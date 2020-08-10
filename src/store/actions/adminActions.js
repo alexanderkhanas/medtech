@@ -6,9 +6,17 @@ import {
   SET_FILTERED_USERS,
 } from "./actionTypes";
 
-export const submitCategoryAction = (category) => {
+export const createCategoryAction = (category) => {
   return async (dispatch) => {
-    const response = await postCategory(category);
+    const token = getAdminToken();
+    console.log("token ===", token);
+    console.log("category ===", { ...category, desc: "", gallery: [""] });
+
+    const response = await postCategory(
+      { ...category, desc: "", gallery: [""] },
+      token
+    );
+    console.log("category response ===", response.data);
   };
 };
 

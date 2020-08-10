@@ -33,11 +33,7 @@ const OrderProductCard = ({
     <div className={s.card}>
       <div className={s.main}>
         <Link to={`product/${_id}`} style={{ position: "relative" }}>
-          <img
-            className={s.img}
-            src="https://d3emaq2p21aram.cloudfront.net/media/cache/venue_gallery/uploads/venues/33152/originals/meagan_shuptar_low_res_ceremony-104.jpg"
-            alt="loading"
-          />
+          <img className={s.img} src={gallery[0]} alt="loading" />
           <div className={s.number__tag}>
             <span className={s.number}>{numberInCart}</span>
           </div>

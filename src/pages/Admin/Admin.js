@@ -20,8 +20,19 @@ import Input from "../../misc/Inputs/Input/Input";
 import { Formik } from "formik";
 import Select from "../../misc/Select/Select";
 import EditSeller from "../../misc/Admin/EditSeller/EditSeller";
+import {
+  getProducts,
+  getCategoriesAction,
+} from "../../store/actions/productsActions";
+import { createCategoryAction } from "../../store/actions/adminActions";
 
-const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
+const Admin = ({
+  recentNews,
+  allProducts,
+  categories,
+  getCategories,
+  postCategory,
+}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const breadCrumbsItems = [
     {
@@ -31,6 +42,10 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
     },
     { name: "Адмін", path: "/admin" },
   ];
+
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   console.log("categories ===", categories);
 
@@ -106,10 +121,6 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                   />
                 </Link>
               ))}
-              <div className={s.subtotal__container}>
-                <div className={s.subtotal__title}>Ціна:</div>
-                {/* <div className={s.subtotal__price}>{`${fullPrice || 0} ₴`}</div> */}
-              </div>
             </div>
           </TabPanel>
           <TabPanel>
@@ -121,13 +132,8 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
               }}
               onSubmit={({ name, parentCategory }) => {
                 const categoryToSubmit = {
-                  parent: [
-                    {
-                      title: parentCategory.title,
-                      _id: parentCategory._id,
-                    },
-                  ],
-                  sub: [],
+                  parentID: parentCategory._id,
+                  subParentID: null,
                   title: name,
                 };
                 if (parentCategory.parent?.length) {
@@ -136,6 +142,7 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                     { title: parentCategory.title, _id: parentCategory._id },
                   ];
                 }
+                postCategory(categoryToSubmit);
                 console.log("name ===", name);
                 console.log("parentCategory ===", parentCategory);
                 console.log("categoryToSubmit ===", categoryToSubmit);
@@ -153,7 +160,14 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                 console.log("values ===", values);
 
                 return (
-                  <div>
+                  <form
+                    onSubmit={handleSubmit}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleSubmit();
+                      }
+                    }}
+                  >
                     <div className={s.add__category__container}>
                       <Input
                         name="name"
@@ -209,7 +223,7 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                         icon={faPlus}
                       />
                     </Button>
-                  </div>
+                  </form>
                 );
               }}
             </Formik>
@@ -357,6 +371,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addToCart: (product) => dispatch(addToCartAction(product)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
+    getProducts: () => dispatch(getProducts()),
+    getCategories: () => dispatch(getCategoriesAction()),
+    postCategory: (category) => dispatch(createCategoryAction(category)),
     // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };

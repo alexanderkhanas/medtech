@@ -63,3 +63,16 @@
   justify-content: center;
   align-items: center;
 }
+
+@media (max-width: 350px) {
+  .card {
+    width: 180px;
+    min-height: 350px;
+  }
+  .card__title {
+    font-size: 16px;
+  }
+  .card__footer {
+    padding: 0 15px 20px 15px;
+  }
+}

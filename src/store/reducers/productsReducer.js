@@ -6,6 +6,7 @@ import {
   SET_FILTERED_PRODUCTS,
   SET_CATEGORIES,
   SET_SEARCH_VALUE,
+  SET_HIGHRATING_PRODUCTS,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -42,50 +43,7 @@ const initialState = {
       id: uuid(),
     },
   ],
-  bestRating: [
-    {
-      title: "toothbrush",
-      gallery: ["https://www.randomlists.com/img/things/toothbrush.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "glow stick",
-      gallery: ["https://www.randomlists.com/img/things/glow_stick.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "vase",
-      gallery: ["https://www.randomlists.com/img/things/vase.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "pencil",
-      gallery: ["https://www.randomlists.com/img/things/pencil.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "fridge",
-      gallery: ["https://www.randomlists.com/img/things/fridge.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "toothbrush",
-      gallery: ["https://www.randomlists.com/img/things/toothbrush.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "glow stick",
-      gallery: ["https://www.randomlists.com/img/things/glow_stick.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-  ],
+  highRating: [],
   new: [],
   all: [],
   filtered: [],
@@ -130,6 +88,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         searchValue: action.searchValue,
+      };
+    case SET_HIGHRATING_PRODUCTS:
+      return {
+        ...state,
+        highRating: action.products,
       };
     default:
       return state;

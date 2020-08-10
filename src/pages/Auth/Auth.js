@@ -159,7 +159,9 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
                       </div>
                     </div>
                     <Link to="/restore">
-                      <button className={s.restore}>Відновити акаунт</button>
+                      <button className={s.restore} type="button">
+                        Відновити акаунт
+                      </button>
                     </Link>
                     <div className={s.submit_button}>
                       <Button

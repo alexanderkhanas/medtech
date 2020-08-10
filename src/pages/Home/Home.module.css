@@ -77,6 +77,12 @@
   }
 }
 
+/* .news__container::after { content: ""; flex: auto; } */
+.section__title {
+  margin-bottom: 20px;
+  color: black;
+}
+
 @media (max-width: 600px) {
   .news__container {
     width: initial;
@@ -86,8 +92,13 @@
     margin-top: 55px;
   }
 }
-/* .news__container::after { content: ""; flex: auto; } */
-.section__title {
-  margin-bottom: 20px;
-  color: black;
+
+@media (max-width: 350px) {
+  .tab {
+    font-size: 14px;
+    padding: 6px 15px;
+  }
+  .section h3 {
+    font-size: 1.5rem;
+  }
 }

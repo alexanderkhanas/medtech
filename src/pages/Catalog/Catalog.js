@@ -36,7 +36,6 @@ const Catalog = ({
   filterProducts,
   isLoading,
   getCategories,
-  getProducts,
   categories,
   searchValue,
   windowWidth,
@@ -141,7 +140,7 @@ const Catalog = ({
   ];
 
   useEffect(() => {
-    if (!filteredProducts?.length) {
+    if (!categories?.length) {
       getCategories();
       getProducts();
     }
@@ -165,15 +164,16 @@ const Catalog = ({
               </h3>
               {windowWidth >= 600 ? (
                 <div className={s.filter__categories}>
-                  {sortedCategories.map((parent) => (
-                    <CategoryAccordion
-                      {...{ selectCategory }}
-                      {...{ removeCategory }}
-                      {...{ selectedCategories }}
-                      {...{ parent }}
-                      key={parent._id}
-                    />
-                  ))}
+                  {sortedCategories?.length &&
+                    sortedCategories.map((parent) => (
+                      <CategoryAccordion
+                        {...{ selectCategory }}
+                        {...{ removeCategory }}
+                        {...{ selectedCategories }}
+                        {...{ parent }}
+                        key={parent._id}
+                      />
+                    ))}
                 </div>
               ) : (
                 <CSSTransition
@@ -294,7 +294,6 @@ const mapDispatchToProps = (dispatch) => {
     filterProducts: (categoryId, searchValue) =>
       dispatch(filterProductsAction(categoryId, searchValue)),
     setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
-    getProducts: () => dispatch(getProducts()),
     getCategories: () => dispatch(getCategoriesAction()),
   };
 };

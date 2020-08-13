@@ -237,6 +237,10 @@ header {
   height: 100px;
 }
 
+.product {
+  flex: 1;
+}
+
 @media (max-width: 1200px) {
   .nav__link {
     font-size: 16px;

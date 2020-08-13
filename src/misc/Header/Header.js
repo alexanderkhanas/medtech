@@ -67,13 +67,13 @@ const Header = ({
   };
 
   useEffect(() => {
-    if (searchValue.length >= 3) {
+    if (searchValue.trim().length >= 3) {
       setDropdownVisible(true);
       searchProductsByValue(searchValue);
     }
-    if (!searchValue.length) {
-      searchProductsByValue("");
-    }
+    // if (!searchValue.length) {
+    //   searchProductsByValue("");
+    // }
   }, [searchValue]);
 
   useEffect(() => {
@@ -100,6 +100,10 @@ const Header = ({
   const isLogged = document.cookie.includes("token");
 
   console.log("isLogged ===", isLogged);
+
+  console.log("found products ===", foundProducts);
+
+  console.log("isDropdownVisible ===", isDropdownVisible);
 
   return (
     <>
@@ -204,6 +208,7 @@ const Header = ({
                         <HorizontalProductCard
                           key={foundProduct._id}
                           isSmall
+                          className={s.product}
                           product={foundProduct}
                         />
                       </Link>
@@ -350,6 +355,7 @@ const Header = ({
         <Link to="/catalog">Каталог</Link>
         <Link to="/wishlist">Улюблені</Link>
         <Link to="/cart">Кошик</Link>
+        <Link to="/news">Новини</Link>
         {user.isLogged && !user.isAdmin && (
           <Link to={`/profile/${user._id}`}>Мій профіль</Link>
         )}

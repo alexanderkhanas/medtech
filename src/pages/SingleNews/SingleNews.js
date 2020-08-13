@@ -8,7 +8,6 @@ import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import NewsCard from "../../misc/NewsCard/NewsCard";
 import { getSingleNewsAction } from "../../store/actions/newsActions";
 import { connect } from "react-redux";
-import Moment from "react-moment";
 
 const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
   const { title, gallery, desc, createdAt, _id } = singleNews;
@@ -41,9 +40,9 @@ const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
             <div className={s.news_text}>
               <p>{desc}</p>
             </div>
-            <Moment format="DD/MM/YYYY" className={s.createdAt}>
-              {createdAt}
-            </Moment>
+            {/* <Moment format="DD/MM/YYYY" className={s.createdAt}> */}
+            {createdAt}
+            {/* </Moment> */}
           </div>
         </div>
         <div className={s.section}>

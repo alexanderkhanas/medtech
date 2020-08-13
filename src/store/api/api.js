@@ -75,12 +75,90 @@ export const fetchUsers = (token) => {
   });
 };
 
-export const fetchAttributes = (token) => {};
+export const fetchAttributes = (token) => {
+  return _axios.get("/attr", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteAttribute = (id, token) => {
+  return _axios.delete(`/attr/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const createAttribute = (attribute, token) => {
+  return _axios.post("/attr", attribute, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const patchAttribute = (attribute, token) => {
+  return _axios.patch(`/attr/${attribute._id}`, attribute, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
 export const postCategory = (category, token) => {
-  console.log("token ===", token);
-
   return _axios.post("/category", category, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteCategory = (id, token) => {
+  return _axios.delete(`/category/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const createNews = (news, token) => {
+  return _axios.post("/new", news, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteNews = (id, token) => {
+  return _axios.delete(`/new/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+export const uploadImageToNews = (gallery, id, token) => {
+  console.log("gallery ===", gallery);
+
+  return _axios.post(`/new/upload/${id}`, gallery, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const fetchVendors = (token) => {
+  return _axios.get("/vendors", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const postVendor = (vendor, token) => {
+  return _axios.post("/vendors", vendor, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

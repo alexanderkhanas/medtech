@@ -15,6 +15,9 @@ import {
   getProducts,
   getHighRatingProductsAction,
 } from "../../store/actions/productsActions";
+import Button from "../../misc/Button/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStoreAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Home = ({
   products,
@@ -60,7 +63,30 @@ const Home = ({
           require("../../assets/home2.webp"),
           require("../../assets/home3.webp"),
         ]}
-      />
+      >
+        <div className={s.overlay}>
+          <div className={s.overlay__inner}>
+            <h2 className={s.carousel__title}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </h2>
+            <p className={s.carousel__subtitle}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+            <Link to="/catalog" className={s.catalog__btn__container}>
+              <Button
+                title="Перейти до покупок"
+                className={s.catalog__btn}
+                size="md"
+              >
+                <FontAwesomeIcon
+                  icon={faStoreAlt}
+                  className={s.catalog__btn__icon}
+                />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </ImageCarousel>
       <FixedWrapper className={s.tabs__container}>
         <div className={s.section}>
           <h3 className={s.tabs__title}>Обрати по категорії</h3>

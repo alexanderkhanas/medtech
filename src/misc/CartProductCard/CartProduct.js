@@ -43,7 +43,14 @@ const CartProduct = ({
     <div className={classnames(s.card, { [s.small]: isSmall })}>
       <div className={s.main}>
         <Link to={`product/${_id}`}>
-          <img className={s.img} src={gallery[0]} alt="loading" />
+          <img
+            className={s.img}
+            src={
+              gallery[0] ||
+              "https://medtechnika.te.ua/assets/products/5f2d3348f267ed397417cb0e/i2.png"
+            }
+            alt="loading"
+          />
         </Link>
         <div className={s.main__content}>
           <Link to={`product/${_id}`}>

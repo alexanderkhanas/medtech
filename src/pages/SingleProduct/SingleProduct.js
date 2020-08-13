@@ -148,7 +148,18 @@ const SingleProduct = ({
       });
       setFilteredAttributes(filteredObject);
     }
+    if (_id) {
+      console.log("changing title");
+
+      document.title = title;
+    }
   }, [product]);
+
+  useEffect(() => {
+    return () => {
+      document.title = "Медтехніка";
+    };
+  }, []);
 
   useEffect(() => {
     if (attributeOptions) {

@@ -7,9 +7,7 @@ import {
 } from "../../store/actions/cartActions";
 import { useHistory } from "react-router-dom";
 import classnames from "classnames";
-import CartButton from "../CartButton/CartButton";
 import WishlistButton from "../WishlistButton/WishlistButton";
-import ImageUploader from "react-images-upload";
 
 const ProductCard = ({ product, className }) => {
   const { gallery, title, price, _id } = product;
@@ -21,7 +19,11 @@ const ProductCard = ({ product, className }) => {
         <img
           className={s.card__img}
           onClick={redirectToSingleProduct}
-          src={gallery[0]}
+          src={
+            gallery[0]?.includes("png")
+              ? gallery[0]
+              : "https://medtechnika.te.ua/assets/products/5f2d3348f267ed397417cb0e/i2.png"
+          }
           alt="loading..."
         />
       </div>

@@ -2,11 +2,16 @@ import {
   SET_USERS,
   SET_FILTERED_USERS,
   RESET_FILTERED_USERS,
+  SET_ATTRIBUTES,
+  DELETE_ATTRIBUTE,
+  DELETE_CATEGORY,
+  ADD_ATTRIBUTE,
 } from "../actions/actionTypes";
 
 const initialState = {
   users: [],
   filteredUsers: [],
+  attributes: [],
 };
 
 export default (state = initialState, action) => {
@@ -27,6 +32,22 @@ export default (state = initialState, action) => {
         ...state,
         filteredUsers: state.users,
       };
+    case SET_ATTRIBUTES:
+      return {
+        ...state,
+        attributes: action.attributes,
+      };
+    case DELETE_ATTRIBUTE:
+      return {
+        ...state,
+        attributes: state.attributes.filter((attr) => attr._id !== action.id),
+      };
+    case ADD_ATTRIBUTE:
+      return {
+        ...state,
+        attributes: [...state.attributes, action.attribute],
+      };
+
     default:
       return state;
   }

@@ -105,18 +105,20 @@ const App = ({
           .filter((value) => value.startsWith("token"))[0]
           .split("=")[1]
       : null;
-  }, [document.cookie]);
+  }, []);
 
   useEffect(() => {
     getProducts();
+    console.log("APPJS EFFECT");
+
     (async () => {
       const loginData = localStorage.getItem("_login");
       if (loginData) {
-        autologin(JSON.parse(loginData));
+        await autologin(JSON.parse(loginData));
         return;
       }
       if (token) {
-        getUser(token);
+        await getUser(token);
       }
     })();
   }, []);
@@ -224,47 +226,11 @@ const App = ({
               component={Order}
             />
 
-            <Route
+            {/* <Route
               path="/admin"
+              key="/ADMIN"
               render={({ match: { url } }) => (
-                <>
-                  <Route
-                    path={`${url}/`}
-                    component={(props) => <Admin {...props} />}
-                    exact
-                  />
-                  <Route
-                    path={`${url}/edit-order/:id`}
-                    component={(props) => <EditOrder {...props} />}
-                  />
-                  <Route
-                    path={`${url}/edit-news/:id`}
-                    component={(props) => <EditNews {...props} />}
-                  />
-                  <Route
-                    path={`${url}/edit-user/`}
-                    component={(props) => <EditUser {...props} />}
-                  />
-                  <Route
-                    path={`${url}/edit-product/`}
-                    component={(props) => <EditProduct {...props} />}
-                  />
-                  <Route
-                    path={`${url}/create-product/`}
-                    component={(props) => <CreateProduct {...props} />}
-                  />
-                  <Route
-                    path={`${url}/create-news/`}
-                    component={(props) => <CreateNews {...props} />}
-                  />
-                  <Route
-                    path={`${url}/create-user/`}
-                    component={(props) => <CreateUser {...props} />}
-                  />
-                  <Route path={`${url}/create-order`} component={CreateOrder} />
-                </>
-              )}
-            />
+                <> */}
             <Route
               path="/new-password"
               component={(props) => <NewPassword {...props} />}
@@ -273,6 +239,40 @@ const App = ({
               path="/wishlist"
               component={(props) => <Wishlist {...props} />}
             />
+            <Route
+              path="/admin"
+              component={(props) => <Admin {...props} />}
+              exact
+            />
+            <Route
+              path="/admin/edit-order/:id"
+              component={(props) => <EditOrder {...props} />}
+            />
+            <Route
+              path="/admin/edit-news/:id"
+              component={(props) => <EditNews {...props} />}
+            />
+            <Route
+              path="/admin/edit-user/"
+              component={(props) => <EditUser {...props} />}
+            />
+            <Route
+              path="/admin/edit-product/"
+              component={(props) => <EditProduct {...props} />}
+            />
+            <Route
+              path="/admin/create-product/"
+              component={(props) => <CreateProduct {...props} />}
+            />
+            <Route
+              path="/admin/create-news/"
+              component={(props) => <CreateNews {...props} />}
+            />
+            <Route
+              path="/admin/create-user/"
+              component={(props) => <CreateUser {...props} />}
+            />
+            <Route path="/admin/create-order" component={CreateOrder} />
             <Route path="*">
               <NoMatchPage />
             </Route>

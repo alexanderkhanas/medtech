@@ -71,6 +71,39 @@
   box-sizing: border-box;
 }
 
+.overlay {
+  position: absolute;
+
+  left: 10%;
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay__inner {
+}
+
+.carousel__title {
+  margin-bottom: 10px;
+  color: #eeeeee;
+}
+
+.carousel__subtitle {
+  margin-bottom: 20px;
+  color: #eeeeee;
+  font-weight: lighter;
+}
+
+.catalog__btn__container {
+}
+
+.catalog__btn__icon {
+  margin-right: 10px;
+}
+
 @media (min-width: 600px) {
   .news__container {
     padding: 0 0 100px 0;

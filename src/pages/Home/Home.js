@@ -21,6 +21,7 @@ import { faStoreAlt, faMailBulk } from "@fortawesome/free-solid-svg-icons";
 import { Formik } from "formik";
 import Input from "../../misc/Inputs/Input/Input";
 import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
+import GoCatalogBtn from "../../misc/GoCatalogBtn/GoCatalogBtn";
 
 const Home = ({
   products,
@@ -76,18 +77,9 @@ const Home = ({
             <p className={s.carousel__subtitle}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </p>
-            <Link to="/catalog" className={s.catalog__btn__container}>
-              <Button
-                title="Перейти до покупок"
-                className={s.catalog__btn}
-                size="md"
-              >
-                <FontAwesomeIcon
-                  icon={faStoreAlt}
-                  className={s.catalog__btn__icon}
-                />
-              </Button>
-            </Link>
+            <div className={s.catalog__btn}>
+              <GoCatalogBtn />
+            </div>
           </div>
         </div>
       </ImageCarousel>

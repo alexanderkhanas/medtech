@@ -14,6 +14,7 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import { useHistory } from "react-router-dom";
 import { showAlertAction } from "../../store/actions/alertActions";
+import GoCatalogBtn from "../../misc/GoCatalogBtn/GoCatalogBtn";
 
 const Cart = ({ cartProducts, fullPrice, setFullPrice, showAlert, user }) => {
   const h = useHistory();
@@ -84,6 +85,9 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice, showAlert, user }) => {
         ) : (
           <div className={s.empty__cart__msg__container}>
             <h1 className={s.empty__cart__msg}>Поки що ваш кошик порожній</h1>
+            <div className={s.catalog__btn}>
+              <GoCatalogBtn />
+            </div>
           </div>
         )}
       </FixedWrapper>

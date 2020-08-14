@@ -26,6 +26,8 @@
   height: 50vh;
   font-size: large;
   display: flex;
+  text-align: center;
+  font-size: 14px;
   align-items: center;
   justify-content: center;
 }

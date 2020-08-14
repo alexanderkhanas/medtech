@@ -1,12 +1,12 @@
 import _axios from "./_axios";
 import axios from "axios";
 
-export const fetchProducts = async () => _axios.get("/products");
+export const fetchProducts = () => _axios.get("/products");
 
-export const fetchProductsByPage = async (page) =>
+export const fetchProductsByPage = (page) =>
   _axios.get(`/products?page=${page}`);
 
-export const fetchSingleProduct = async (id) => _axios.get(`/product/${id}`);
+export const fetchSingleProduct = (id) => _axios.get(`/product/${id}`);
 
 export const searchProductsRequest = async (value) => {
   console.log("url ===", `/products?search=${value}`);
@@ -32,6 +32,8 @@ export const fetchFilteredProducts = (categoriesArray, searchValue) => {
   }
   return _axios.get(baseUrl);
 };
+
+export const fetchHighRatingProducts = () => _axios.get("/products/highRating");
 
 export const fetchCategories = () => _axios.get("/categories");
 
@@ -73,8 +75,110 @@ export const fetchUsers = (token) => {
   });
 };
 
-export const postCategory = (category) => {
-  return _axios.post("/categories", category);
+export const fetchAttributes = (token) => {
+  return _axios.get("/attr", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteAttribute = (id, token) => {
+  return _axios.delete(`/attr/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const createAttribute = (attribute, token) => {
+  return _axios.post("/attr", attribute, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const patchAttribute = (attribute, token) => {
+  return _axios.patch(`/attr/${attribute._id}`, attribute, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const createCategory = (category, token) => {
+  return _axios.post("/category", category, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteCategory = (id, token) => {
+  return _axios.delete(`/category/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const createNews = (news, token) => {
+  return _axios.post("/new", news, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteNews = (id, token) => {
+  return _axios.delete(`/new/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+export const uploadImageToNews = (gallery, id, token) => {
+  console.log("gallery ===", gallery);
+
+  return _axios.post(`/new/upload/${id}`, gallery, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const fetchVendors = (token) => {
+  return _axios.get("/vendors", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const createVendor = (vendor, token) => {
+  return _axios.post(`/vendor`, vendor, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteVendor = (id, token) => {
+  return _axios.delete(`/vendor/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const patchVendor = (vendor, id, token) => {
+  return _axios.patch(`/vendor/${id}`, vendor, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const fetchCities = (filterValue, limit = 20) => {

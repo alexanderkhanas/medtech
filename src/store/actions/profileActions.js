@@ -71,6 +71,7 @@ export const patchUserAction = (user) => {
 
 export const logoutAction = () => {
   document.cookie = "token=''; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+  localStorage.removeItem("_login");
   return {
     type: LOGOUT,
   };

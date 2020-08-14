@@ -7,9 +7,7 @@ import {
 } from "../../store/actions/cartActions";
 import { useHistory } from "react-router-dom";
 import classnames from "classnames";
-import CartButton from "../CartButton/CartButton";
 import WishlistButton from "../WishlistButton/WishlistButton";
-import ImageUploader from "react-images-upload";
 
 const ProductCard = ({ product, className }) => {
   const { gallery, title, price, _id } = product;
@@ -21,13 +19,17 @@ const ProductCard = ({ product, className }) => {
         <img
           className={s.card__img}
           onClick={redirectToSingleProduct}
-          src="https://d3emaq2p21aram.cloudfront.net/media/cache/venue_gallery/uploads/venues/33152/originals/meagan_shuptar_low_res_ceremony-104.jpg"
+          src={
+            gallery[0]?.includes("png")
+              ? gallery[0]
+              : require("../../assets/image-placeholder.webp")
+          }
           alt="loading..."
         />
       </div>
       <div className={s.card__footer}>
         <h4 className={s.card__title} onClick={redirectToSingleProduct}>
-          {title}
+          {title.slice(0, 40)}
         </h4>
         <div className={s.card__price__container}>
           <span className={s.card__price}>{`${price} ₴`}</span>

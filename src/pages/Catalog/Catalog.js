@@ -9,6 +9,7 @@ import {
   filterProductsAction,
   getCategoriesAction,
   getProducts,
+  clearFilterAction,
 } from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import { scrollToRef } from "../../utils/utils";
@@ -36,10 +37,11 @@ const Catalog = ({
   filterProducts,
   isLoading,
   getCategories,
-  getProducts,
   categories,
   searchValue,
   windowWidth,
+  clearFilter,
+  products,
 }) => {
   const [productViewType, setProductViewType] = useState("row");
   const [sortType, setSortType] = useState(sortSelectOption[0]);
@@ -118,6 +120,12 @@ const Catalog = ({
     setSortedCategories(filtered);
   }, [categories]);
 
+  useEffect(() => {
+    if (!selectedCategories?.length) {
+      clearFilter(products);
+    }
+  }, [selectedCategories]);
+
   const isEmptyResults = !filteredProducts.length && !isLoading;
 
   useEffect(() => {
@@ -141,11 +149,12 @@ const Catalog = ({
   ];
 
   useEffect(() => {
-    if (!filteredProducts?.length) {
+    if (!categories?.length) {
       getCategories();
-      getProducts();
     }
   }, []);
+
+  console.log("filtered ===", filteredProducts);
 
   return (
     <div>
@@ -165,15 +174,16 @@ const Catalog = ({
               </h3>
               {windowWidth >= 600 ? (
                 <div className={s.filter__categories}>
-                  {sortedCategories.map((parent) => (
-                    <CategoryAccordion
-                      {...{ selectCategory }}
-                      {...{ removeCategory }}
-                      {...{ selectedCategories }}
-                      {...{ parent }}
-                      key={parent._id}
-                    />
-                  ))}
+                  {sortedCategories?.length &&
+                    sortedCategories.map((parent) => (
+                      <CategoryAccordion
+                        {...{ selectCategory }}
+                        {...{ removeCategory }}
+                        {...{ selectedCategories }}
+                        {...{ parent }}
+                        key={parent._id}
+                      />
+                    ))}
                 </div>
               ) : (
                 <CSSTransition
@@ -229,17 +239,18 @@ const Catalog = ({
               </div>
             </div>
             <div className={s.products}>
-              {filteredProducts.map((product, i) =>
-                productViewType === "row" ? (
-                  <ProductCard
-                    className={s.product__card}
-                    key={product._id}
-                    {...{ product }}
-                  />
-                ) : (
-                  <HorizontalProductCard {...{ product }} key={product._id} />
-                )
-              )}
+              {!!filteredProducts &&
+                filteredProducts.map((product, i) =>
+                  productViewType === "row" ? (
+                    <ProductCard
+                      className={s.product__card}
+                      key={product._id}
+                      {...{ product }}
+                    />
+                  ) : (
+                    <HorizontalProductCard {...{ product }} key={product._id} />
+                  )
+                )}
             </div>
             {isEmptyResults && (
               <h2 className={s.empty__result__msg}>
@@ -286,6 +297,7 @@ const mapStateToProps = (state) => {
     isLoading: state.base.isLoading,
     categories: state.products.categories,
     searchValue: state.products.searchValue,
+    products: state.products.all,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -294,8 +306,8 @@ const mapDispatchToProps = (dispatch) => {
     filterProducts: (categoryId, searchValue) =>
       dispatch(filterProductsAction(categoryId, searchValue)),
     setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
-    getProducts: () => dispatch(getProducts()),
     getCategories: () => dispatch(getCategoriesAction()),
+    clearFilter: (products) => dispatch(clearFilterAction(products)),
   };
 };
 

@@ -16,7 +16,6 @@ const Counter = ({ onChange, initialValue }) => {
   useEffect(() => {
     onChange(value);
   }, [value]);
-
   return (
     <div className={s.container}>
       <div onClick={onMinusClick} className={s.sign__icon__container}>

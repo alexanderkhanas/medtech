@@ -3,27 +3,31 @@
   padding: 15px 0;
   border: 1px solid #eeeeee;
   /* width: 100%; */
+  border-bottom: none;
+}
+
+.card:last-child {
+  border-bottom: 1px solid #eeeeee;
 }
 
 .card__atrbutes {
   flex: 1;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   color: black;
 }
-.card__title {
-  width: 33%;
-  display: flex;
-  justify-content: center;
+
+.card__atrbutes > div {
+  flex: 1;
 }
-.card__subtitle {
-  width: 33%;
+
+.card__title {
   display: flex;
   justify-content: center;
+  text-align: center;
 }
 .table__container {
-  width: 33%;
   display: flex;
   justify-content: center;
   align-items: center;

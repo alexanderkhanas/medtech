@@ -58,11 +58,22 @@ const Header = ({
   const hideDropdown = () => setDropdownVisible(false);
   const onSearchInputFocus = () => setDropdownVisible(searchValue.length >= 3);
 
+  const { pathname } = history.location;
+
+  const onMobileSearchClick = () => {
+    if (pathname.startsWith("/catalog")) {
+      window.scrollTo({ top: 600, left: 0, behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
-    if (searchValue.length >= 3) {
+    if (searchValue.trim().length >= 3) {
       setDropdownVisible(true);
       searchProductsByValue(searchValue);
     }
+    // if (!searchValue.length) {
+    //   searchProductsByValue("");
+    // }
   }, [searchValue]);
 
   useEffect(() => {
@@ -74,8 +85,6 @@ const Header = ({
       setSidebarIcon((prev) => (prev === faBars ? faTimes : faBars));
     }, 200);
   }, [isBarOpen]);
-
-  const { pathname } = history.location;
 
   useEffect(() => {
     window.scroll({ left: 0, top: 0 });
@@ -91,6 +100,10 @@ const Header = ({
   const isLogged = document.cookie.includes("token");
 
   console.log("isLogged ===", isLogged);
+
+  console.log("found products ===", foundProducts);
+
+  console.log("isDropdownVisible ===", isDropdownVisible);
 
   return (
     <>
@@ -195,6 +208,7 @@ const Header = ({
                         <HorizontalProductCard
                           key={foundProduct._id}
                           isSmall
+                          className={s.product}
                           product={foundProduct}
                         />
                       </Link>
@@ -286,7 +300,7 @@ const Header = ({
               onChange={onSearchInputChange}
               onFocus={onSearchInputFocus}
             />
-            <Button className={s.search__button}>
+            <Button className={s.search__button} onClick={onMobileSearchClick}>
               <FontAwesomeIcon icon={faSearch} />
             </Button>
             {!!foundProducts.length &&
@@ -341,6 +355,7 @@ const Header = ({
         <Link to="/catalog">Каталог</Link>
         <Link to="/wishlist">Улюблені</Link>
         <Link to="/cart">Кошик</Link>
+        <Link to="/news">Новини</Link>
         {user.isLogged && !user.isAdmin && (
           <Link to={`/profile/${user._id}`}>Мій профіль</Link>
         )}

@@ -2,7 +2,7 @@ import React from "react";
 import s from "./AboutUs.module.css";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 
@@ -24,7 +24,7 @@ const AboutUs = (props) => {
       <FixedWrapper>
         <div className={s.single_new}>
           <div className={s.main_container}>
-            <h4 className={s.news_title}>Мед техніка</h4>
+            <h4 className={s.news_title}>Медтехніка</h4>
             <div className={s.image_container}>
               <img className={s.main__image} src={logo} alt="loading" />
             </div>

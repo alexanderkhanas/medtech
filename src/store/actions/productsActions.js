@@ -4,6 +4,7 @@ import {
   searchProductsRequest,
   fetchFilteredProducts,
   fetchCategories,
+  fetchHighRatingProducts,
 } from "../api/api";
 import {
   SET_PRODUCTS,
@@ -14,6 +15,7 @@ import {
   SET_LOADING,
   SET_CATEGORIES,
   SET_SEARCH_VALUE,
+  SET_HIGHRATING_PRODUCTS,
 } from "./actionTypes";
 import _axios from "../api/_axios";
 
@@ -22,7 +24,6 @@ export const getProducts = () => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchProducts();
     dispatch({ type: SET_LOADING, isLoading: false });
-
     if (!response.data) return;
     const { products } = response.data;
     dispatch({
@@ -41,18 +42,30 @@ export const getProducts = () => {
           new Date(product.createdAt) - new Date(nextProduct.createdAt)
       ),
     });
+    const popularProducts = [];
+    products.forEach((product, i) => {});
   };
 };
 
 export const getProductsByPage = (page) => {
   return async (dispatch) => {
     console.log("page ===", page);
+    dispatch({ type: SET_LOADING, isLoading: true });
 
     const response = await fetchProductsByPage(page);
     console.log("page products ===", response);
+    dispatch({ type: SET_LOADING, isLoading: false });
+
     if (!response.data) return;
     const { products, length } = response.data;
     dispatch({ type: SET_FILTERED_PRODUCTS, products, quantity: length });
+  };
+};
+
+export const clearFilterAction = (products) => {
+  return {
+    type: SET_FILTERED_PRODUCTS,
+    products,
   };
 };
 
@@ -61,11 +74,18 @@ export const filterProductsAction = (categoryIdsArray, searchValue) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchFilteredProducts(categoryIdsArray, searchValue);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("response ===", response.data);
-    dispatch({
-      type: SET_FILTERED_PRODUCTS,
-      products: response.data,
-    });
+    console.log("response ===", response?.data);
+    if (response?.data) {
+      dispatch({
+        type: SET_FILTERED_PRODUCTS,
+        products: response.data,
+      });
+    } else {
+      dispatch({
+        type: SET_FILTERED_PRODUCTS,
+        products: [],
+      });
+    }
   };
 };
 
@@ -79,10 +99,23 @@ export const getProductsBySearch = (value) => {
 
 export const getCategoriesAction = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchCategories();
     console.log("categories ===", response.data);
-    if (response.data) {
-      dispatch({ type: SET_CATEGORIES, categories: response.data });
+    // if (response?.data) {
+    dispatch({ type: SET_CATEGORIES, categories: response?.data || [] });
+    dispatch({ type: SET_LOADING, isLoading: false });
+    // }
+  };
+};
+
+export const getHighRatingProductsAction = () => {
+  return async (dispatch) => {
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await fetchHighRatingProducts();
+    dispatch({ type: SET_LOADING, isLoading: false });
+    if (response?.data) {
+      dispatch({ type: SET_HIGHRATING_PRODUCTS, products: response.data });
     }
   };
 };

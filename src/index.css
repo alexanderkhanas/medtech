@@ -26,7 +26,8 @@ p,
 span,
 input,
 a,
-div {
+div,
+textarea {
   font-family: "Roboto", sans-serif;
   margin: 0;
 }

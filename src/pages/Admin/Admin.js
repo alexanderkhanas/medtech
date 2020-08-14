@@ -1,16 +1,19 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import s from "./Admin.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
-import { faHome, faPencilAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHome,
+  faPlus,
+  faSignOutAlt,
+  faMinus,
+} from "@fortawesome/free-solid-svg-icons";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { TabList, Tabs, Tab, TabPanel } from "react-tabs";
 import OrderCard from "../../misc/Admin/OrderCard/OrderCard";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import NewsAdminCard from "../../misc/Admin/NewsAdminCard/NewsAdminCard";
 import Button from "../../misc/Button/Button";
-import UserCard from "../../misc/Admin/UserCard/UserCard";
 import OrderProductCard from "../../misc/OrderProductCard/OrderProductCard";
 import {
   addToCartAction,
@@ -19,10 +22,64 @@ import {
 import Input from "../../misc/Inputs/Input/Input";
 import { Formik } from "formik";
 import Select from "../../misc/Select/Select";
-import EditSeller from "../../misc/Admin/EditSeller/EditSeller";
+import AdminRow from "../../misc/Admin/AdminRow/AdminRow";
+import {
+  getProducts,
+  getCategoriesAction,
+} from "../../store/actions/productsActions";
+import {
+  createCategoryAction,
+  getVendorsAction,
+  createVendorAction,
+  getAttributesAction,
+  deleteAttributeAction,
+  deleteCategoryAction,
+  getUsersAction,
+  createAttributeAction,
+  editAttributeAction,
+  deleteNewsAction,
+  editVendorAction,
+  deleteVendorAction,
+} from "../../store/actions/adminActions";
+import { getAllNewsAction } from "../../store/actions/newsActions";
+import { showAlertAction } from "../../store/actions/alertActions";
 
-const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
+const Admin = ({
+  isLoading,
+  showAlert,
+  allNews,
+  allProducts,
+  categories,
+  attributes,
+  users,
+  vendors,
+  getCategories,
+  getVendors,
+  getAttributes,
+  getUsers,
+  getNews,
+  createCategory,
+  createVendor,
+  createAttribute,
+  deleteAttribute,
+  deleteCategory,
+  deleteNews,
+  deleteVendor,
+  editAttribute,
+  editVendor,
+}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [editing, setEditing] = useState({
+    attribute: { _id: null, name: "" },
+    category: { _id: null },
+    vendor: { _id: null },
+  });
+
+  const editingHandler = (type, setValues, body, value) => {
+    setEditing((prev) => ({ ...prev, [type]: body }));
+    setValues(value);
+  };
+
   const breadCrumbsItems = [
     {
       name: "Головна",
@@ -32,12 +89,35 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
     { name: "Адмін", path: "/admin" },
   ];
 
+  const h = useHistory();
+
+  useEffect(() => {
+    (async () => {
+      console.log("isLoading ===", isLoading);
+
+      if (!isLoading && !attributes?.length) {
+        console.log("here");
+
+        await getCategories();
+        await getVendors();
+        await getAttributes();
+        await getUsers();
+        await getNews();
+      }
+    })();
+  }, []);
+
   console.log("categories ===", categories);
+
+  const isVendorEditing = !!editing.vendor._id;
+  const isAttributeEditing = !!editing.attribute._id;
+  const isCategoryEditing = !!editing.category._id;
 
   return (
     <div className={s.container}>
       <div className={s.title__container}>
         <h4 className={s.title}>Адмін</h4>
+
         <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
@@ -55,7 +135,7 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
             ].map((item, i) => (
               <Tab
                 onClick={() => setActiveTabIndex(i)}
-                key={i}
+                key={item}
                 className={
                   activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
                 }
@@ -63,6 +143,14 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                 {item}
               </Tab>
             ))}
+            <div>
+              <Button title="Вийти з акаунту" className={s.logout__button}>
+                <FontAwesomeIcon
+                  className={s.logout__icon}
+                  icon={faSignOutAlt}
+                />
+              </Button>
+            </div>
           </TabList>
           <TabPanel>
             <Link to="/admin/create-order">
@@ -113,10 +201,6 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                   />
                 </Link>
               ))}
-              <div className={s.subtotal__container}>
-                <div className={s.subtotal__title}>Ціна:</div>
-                {/* <div className={s.subtotal__price}>{`${fullPrice || 0} ₴`}</div> */}
-              </div>
             </div>
           </TabPanel>
           <TabPanel>
@@ -126,26 +210,39 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                 parentCategory: null,
                 parentCategoryLabel: null,
               }}
-              onSubmit={({ name, parentCategory }) => {
+              onSubmit={async ({ name, parentCategory }, { resetForm }) => {
                 const categoryToSubmit = {
-                  parent: [
-                    {
-                      title: parentCategory.title,
-                      _id: parentCategory._id,
-                    },
-                  ],
-                  sub: [],
+                  parentID: parentCategory?._id,
+                  subParentID: null,
                   title: name,
                 };
-                if (parentCategory.parent?.length) {
+                if (parentCategory?.parent?.length) {
                   categoryToSubmit.parent = parentCategory.parent;
                   categoryToSubmit.sub = [
                     { title: parentCategory.title, _id: parentCategory._id },
                   ];
                 }
-                console.log("name ===", name);
-                console.log("parentCategory ===", parentCategory);
-                console.log("categoryToSubmit ===", categoryToSubmit);
+                let isSuccess = false;
+                isSuccess = await createCategory(categoryToSubmit);
+                if (isSuccess) {
+                  resetForm({
+                    name: "",
+                    parentCategory: null,
+                    parentCategoryLabel: null,
+                  });
+                  if (isCategoryEditing) {
+                    showAlert("Категорію змінено успішно!", "success");
+                  } else {
+                    showAlert("Категорію створено успішно!", "success");
+                  }
+                } else {
+                  showAlert("Сталась помилка!", "error");
+                }
+                resetForm({
+                  name: "",
+                  parentCategory: null,
+                  parentCategoryLabel: null,
+                });
               }}
             >
               {({
@@ -160,7 +257,14 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                 console.log("values ===", values);
 
                 return (
-                  <div>
+                  <form
+                    onSubmit={handleSubmit}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleSubmit();
+                      }
+                    }}
+                  >
                     <div className={s.add__category__container}>
                       <Input
                         name="name"
@@ -170,7 +274,6 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                         containerClass={s.add__category__input__container}
                         inputClass={s.add__category__input}
                         onChange={handleChange}
-                        onBlur={handleSubmit}
                       />
                       <Select
                         label="Назва батьківської категорії"
@@ -187,9 +290,9 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                           console.log("value ===", selectedOption);
                         }}
                         options={categories
-                          .filter(({ sub }) => !sub.length)
+                          .filter(({ sub }) => !sub?.length)
                           .map(({ title, parent, _id }) => {
-                            const isParentVisible = parent.length;
+                            const isParentVisible = parent?.length;
                             return {
                               label: `${title}${
                                 isParentVisible
@@ -216,90 +319,234 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                         icon={faPlus}
                       />
                     </Button>
-                  </div>
+                  </form>
                 );
               }}
             </Formik>
             <div className={s.order__header}>
               <span>Назва</span>
               <span>Назва батьківської категорії</span>
+              <span>Дії</span>
             </div>
 
-            {categories.map &&
-              categories.map((category) => (
-                <div className={s.category__container} key={category._id}>
-                  <p className={s.category}>{category.title}</p>
-                  {!!category.parent.length && !category.sub.length && (
-                    <p className={s.category}>{category.parent[0].title}</p>
-                  )}
-                  {!!category.sub.length && (
-                    <p className={s.category}>{category.sub[0].title}</p>
-                  )}
-                </div>
-              ))}
+            {categories &&
+              categories.map(({ sub, parent, _id, title }) => {
+                let parentLabel = "";
+                if (parent?.length && !sub?.length) {
+                  parentLabel = parent[0].title;
+                } else if (sub?.length) {
+                  parentLabel = sub[0].title;
+                }
+                return (
+                  <AdminRow
+                    key={_id}
+                    onDelete={() => deleteCategory(_id)}
+                    onEdit={() => {}}
+                    items={[
+                      { title, key: `${_id}title` },
+                      { title: parentLabel, key: `${_id}parent` },
+                    ]}
+                  />
+                );
+              })}
           </TabPanel>
-          <TabPanel>123</TabPanel>
           <TabPanel>
             <Formik
-              initialValues={{
-                name: "",
+              initialValues={{ name: "" }}
+              onSubmit={async ({ name }, { resetForm }) => {
+                if (name) {
+                  let isSuccess = false;
+                  if (isAttributeEditing) {
+                    const { _id } = editing.attribute;
+                    isSuccess = await editAttribute({ name, _id });
+                  } else {
+                    isSuccess = await createAttribute({ name });
+                  }
+                  if (isSuccess) {
+                    resetForm({ name: "" });
+                    if (isAttributeEditing) {
+                      showAlert("Атрибут змінено успішно!", "success");
+                    } else {
+                      showAlert("Атрибут створено успішно!", "success");
+                    }
+                  } else {
+                    showAlert("Сталась помилка!", "error");
+                  }
+                  resetForm({ name: "" });
+                }
               }}
-              onSubmit={(values) => {}}
             >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                values,
-                setValues,
-              }) => {
-                return (
-                  <div>
-                    <div className={s.seller__container}>
-                      <Input
-                        name="name"
-                        label="Добавити продавця"
-                        placeholder="Germany"
-                        value={values.name}
-                        containerClass={s.add__category__input__container}
-                        inputClass={s.add__category__input}
-                        onChange={handleChange}
-                        onBlur={handleSubmit}
-                      />
-                    </div>
+              {({ handleChange, handleSubmit, values, setValues }) => (
+                <>
+                  <form className={s.form}>
+                    <Input
+                      label="Назва атрибута"
+                      onChange={handleChange}
+                      placeholder="Розмір"
+                      containerClass={s.add__category__input__container}
+                      inputClass={s.add__category__input}
+                      value={values.name}
+                      name="name"
+                    />
                     <Button
                       onClick={handleSubmit}
                       className={s.add__button}
-                      title="Додати категорію"
+                      title={
+                        isAttributeEditing
+                          ? "Змінити атрибут"
+                          : "Додати атрибут"
+                      }
+                      type="submit"
                     >
                       <FontAwesomeIcon
                         className={s.add__more__icon}
                         icon={faPlus}
                       />
                     </Button>
+                    {isAttributeEditing && (
+                      <Button
+                        onClick={() => {
+                          setValues({ name: "" });
+                          setEditing((prev) => ({
+                            ...prev,
+                            attribute: {},
+                          }));
+                        }}
+                        className={s.remove__button}
+                        title="Зупинити редагування"
+                        isSecondary
+                        type="submit"
+                      >
+                        <FontAwesomeIcon
+                          className={s.add__more__icon}
+                          icon={faMinus}
+                        />
+                      </Button>
+                    )}
+                  </form>
+                  <div className={s.order__header}>
+                    <span>Назва атрибута</span>
+                    <span>Дії</span>
+                  </div>
+                  {attributes.map(({ _id, name }) => (
+                    <AdminRow
+                      key={_id}
+                      items={[{ title: name, key: _id }]}
+                      onEdit={() => {
+                        setValues({ name });
+                        setEditing((prev) => ({
+                          ...prev,
+                          attribute: { _id, name },
+                        }));
+                      }}
+                      onDelete={() => deleteAttribute(_id)}
+                    />
+                  ))}
+                </>
+              )}
+            </Formik>
+          </TabPanel>
+          <TabPanel>
+            <Formik
+              initialValues={{
+                title: "",
+              }}
+              onSubmit={async ({ title }, { resetForm }) => {
+                let isSuccess = false;
+                if (isVendorEditing) {
+                  //ASD
+                  console.log("editing vendor ===", editing.vendor);
+
+                  isSuccess = await editVendor({
+                    ...editing.vendor,
+                    title,
+                    desc: "",
+                  });
+                } else {
+                  isSuccess = await createVendor({ title });
+                }
+                console.log("is success ===", isSuccess);
+
+                if (isSuccess) {
+                  resetForm({ title: "" });
+                  if (isVendorEditing) {
+                    showAlert("Продавця змінено успішно!", "success");
+                  } else {
+                    showAlert("Продавця створено успішно!", "success");
+                  }
+                } else {
+                  showAlert("Сталась помилка!", "error");
+                }
+              }}
+            >
+              {({ handleChange, handleSubmit, values, setValues }) => {
+                return (
+                  <div>
+                    <div className={s.seller__container}>
+                      <Input
+                        name="title"
+                        label="Назва продавця"
+                        placeholder="Germany"
+                        value={values.title}
+                        containerClass={s.add__category__input__container}
+                        inputClass={s.add__category__input}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <Button
+                      onClick={handleSubmit}
+                      className={s.add__button}
+                      title={
+                        isVendorEditing
+                          ? "Редагувати продавця"
+                          : "Додати продавця"
+                      }
+                      type="submit"
+                    >
+                      <FontAwesomeIcon
+                        className={s.add__more__icon}
+                        icon={faPlus}
+                      />
+                    </Button>
+                    {isVendorEditing && (
+                      <Button
+                        onClick={() =>
+                          setEditing((prev) => ({ ...prev, vendor: {} }))
+                        }
+                        className={s.add__button}
+                        title="Зупинити редагування"
+                        type="submit"
+                      >
+                        <FontAwesomeIcon
+                          className={s.add__more__icon}
+                          icon={faMinus}
+                        />
+                      </Button>
+                    )}
+                    <div className={s.order__header}>
+                      <span>Назва</span>
+                      <span>Кількість продуктів</span>
+                    </div>
+                    {vendors.map((vendor) => {
+                      const { title, _id } = vendor;
+                      return (
+                        <AdminRow
+                          onEdit={() =>
+                            editingHandler("vendor", setValues, vendor, {
+                              title: vendor.title,
+                            })
+                          }
+                          onDelete={() => deleteVendor(vendor)}
+                          items={[{ title, key: _id }]}
+                        />
+                      );
+                    })}
                   </div>
                 );
               }}
             </Formik>
-            <div className={s.order__header}>
-              <span>Назва</span>
-              <span>Кількість продуктів</span>
-            </div>
-            <EditSeller />
-            <EditSeller />
-            <EditSeller />
-            <EditSeller />
-            <EditSeller />
-            <EditSeller />
           </TabPanel>
           <TabPanel>
-            <div className={s.order__header}>
-              <span>Ім'я</span>
-              <span>Прізвище</span>
-              <span>Пошта</span>
-              <span>Номер телефону</span>
-              <span>Кількість замовлень</span>
-            </div>
             <div className={s.create__container}>
               <Link to="/admin/create-user">
                 <Button title="Створити користувача" className={s.create__btn}>
@@ -310,21 +557,25 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                 </Button>
               </Link>
             </div>
-            {/* {recentNews.map((newsItem, i) => (
-              <NewsAdminCard {...{ newsItem }} key={newsItem._id} />
-            ))} */}
-            <UserCard />
-            <UserCard />
-            <UserCard />
-            <UserCard />
-          </TabPanel>
-          {/* <TabPanel>123</TabPanel> */}
-          <TabPanel>
             <div className={s.order__header}>
-              <span>Заголовок</span>
-              <span>Текст</span>
-              <span>Дата створення</span>
+              <span>Ім'я</span>
+              <span>Прізвище</span>
+              <span>Номер телефону</span>
+              <span>Дії</span>
             </div>
+            {users.map(({ fName, lName, phone, _id }) => (
+              <AdminRow
+                items={[
+                  { title: fName, key: `${_id}fName` },
+                  { title: lName, key: `${_id}lName` },
+                  { title: phone, key: `${_id}phone` },
+                ]}
+                onEdit={() => {}}
+                onDelete={() => {}}
+              />
+            ))}
+          </TabPanel>
+          <TabPanel>
             <div className={s.create__container}>
               <Link to="/admin/create-news">
                 <Button title="Створити новину" className={s.create__btn}>
@@ -335,13 +586,31 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
                 </Button>
               </Link>
             </div>
+            <div className={s.order__header}>
+              <span>Заголовок</span>
+              <span>Текст</span>
+              <span>Дата створення</span>
+              <span>Дії</span>
+            </div>
+
             <div className={s.section}>
               {/* <h3 className={s.section__title}>Новини</h3> */}
-              <div className={s.news__container}>
-                {recentNews.map((newsItem, i) => (
-                  <NewsAdminCard {...{ newsItem }} key={newsItem._id} />
-                ))}
-              </div>
+
+              {allNews.map(({ _id, createdAt, title, desc }) => (
+                <AdminRow
+                  items={[
+                    { title: title.slice(0, 20), key: `${_id}title` },
+                    { title: `${desc.slice(0, 20)}...`, key: `${_id}desc` },
+                    {
+                      title: new Date(createdAt).toISOString().split("T")[0],
+                      key: `${_id}date`,
+                    },
+                  ]}
+                  onEdit={() => h.push(`/admin/edit-news/${_id}`)}
+                  onDelete={() => deleteNews(_id)}
+                  key={_id}
+                />
+              ))}
             </div>
           </TabPanel>
           <TabPanel>123</TabPanel>
@@ -353,9 +622,13 @@ const Admin = ({ recentNews, allProducts, categories, getUsers }) => {
 const mapStateToProps = (state) => {
   return {
     allProducts: state.products.all,
-    recentNews: state.news.recent,
+    allNews: state.news.all,
     cartProducts: state.cart.all,
     categories: state.products.categories,
+    attributes: state.admin.attributes,
+    users: state.admin.users,
+    vendors: state.admin.vendors,
+    isLoading: state.base.isLoading,
     // fullPrice: state.cart.fullPrice,
   };
 };
@@ -364,6 +637,22 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addToCart: (product) => dispatch(addToCartAction(product)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
+    getProducts: () => dispatch(getProducts()),
+    getCategories: () => dispatch(getCategoriesAction()),
+    getVendors: () => dispatch(getVendorsAction()),
+    getAttributes: () => dispatch(getAttributesAction()),
+    getUsers: () => dispatch(getUsersAction()),
+    getNews: () => dispatch(getAllNewsAction()),
+    deleteAttribute: (id) => dispatch(deleteAttributeAction(id)),
+    deleteCategory: (id) => dispatch(deleteCategoryAction(id)),
+    deleteNews: (id) => dispatch(deleteNewsAction(id)),
+    deleteVendor: (id) => dispatch(deleteVendorAction(id)),
+    createCategory: (category) => dispatch(createCategoryAction(category)),
+    createVendor: (vendor) => dispatch(createVendorAction(vendor)),
+    createAttribute: (attribute) => dispatch(createAttributeAction(attribute)),
+    editAttribute: (attribute) => dispatch(editAttributeAction(attribute)),
+    editVendor: (vendor) => dispatch(editVendorAction(vendor)),
     // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };

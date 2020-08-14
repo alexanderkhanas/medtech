@@ -55,9 +55,7 @@ const EditNews = ({ getSingleNews, match, singleNews }) => {
             <input defaultValue={title} className={s.input} />
           </div>
           <div className={s.image__input}>
-            <span className={s.label}>
-              Нажміть на картинку щоб вибрати нову
-            </span>
+            <span className={s.label}>Натисніть на фото, щоб обрати нове</span>
             <input
               type="file"
               accept="image/*"

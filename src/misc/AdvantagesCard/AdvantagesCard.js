@@ -9,7 +9,11 @@ const AdvantagesCard = ({ title, bodyText, imgSrc, mainColor }) => {
           <h2 className={s.card__title}>{title}</h2>
           <p className={s.card__text}>{bodyText}</p>
         </div>
-        <img src={imgSrc} alt="loading" className={s.card__img} />
+        <img
+          src={imgSrc || require("../../assets/image-placeholder.webp")}
+          alt="loading"
+          className={s.card__img}
+        />
       </div>
 
       <p className={s.card__text__mobile}>{bodyText}</p>

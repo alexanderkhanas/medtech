@@ -15,7 +15,7 @@ const Select = ({
 }) => {
   const [isMenuOpened, setMenuOpened] = useState(false);
   const [searchValue, setSearchValue] = useState(
-    noDefaultValue ? "" : options[0].label
+    noDefaultValue ? "" : options[0]?.label
   );
 
   const switchMenuOpened = () => setMenuOpened((prev) => !prev);

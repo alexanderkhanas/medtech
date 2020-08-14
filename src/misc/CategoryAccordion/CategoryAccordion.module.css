@@ -1,6 +1,7 @@
 .accordion__container {
-  border-bottom: 2px solid #9b9b9b72;
-  margin-bottom: 35px;
+  border-bottom: 1px solid #9b9b9b56;
+  margin-bottom: 25px;
+  padding: 0 5px;
 }
 .subchilds__container {
   margin: 10px 0 0 20px;
@@ -30,6 +31,7 @@
   height: 0;
   opacity: 0;
   transform: translateY(-10px);
+  margin: 0;
 }
 
 .category__text {

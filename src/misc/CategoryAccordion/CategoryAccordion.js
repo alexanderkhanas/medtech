@@ -49,11 +49,13 @@ const CategoryAccordion = ({
         >
           {parent.title}
         </p>
-        <FontAwesomeIcon
-          onClick={() => setParentExpandedState((prev) => !prev)}
-          icon={parentExpandedState ? faMinus : faPlus}
-          className={s.category__item__btn}
-        />
+        {!!subchilds.length && (
+          <FontAwesomeIcon
+            onClick={() => setParentExpandedState((prev) => !prev)}
+            icon={parentExpandedState ? faMinus : faPlus}
+            className={s.category__item__btn}
+          />
+        )}
       </div>
       <div
         className={
@@ -87,16 +89,20 @@ const CategoryAccordion = ({
                 >
                   {subchild.title}
                 </p>
-                <FontAwesomeIcon
-                  onClick={() =>
-                    setSubchildExpandedState((prev) => ({
-                      ...prev,
-                      [subchild._id]: !prev[subchild._id],
-                    }))
-                  }
-                  icon={subchildExpandedState[subchild._id] ? faMinus : faPlus}
-                  className={s.category__item__btn}
-                />
+                {!!childs[subchild._id]?.length && (
+                  <FontAwesomeIcon
+                    onClick={() =>
+                      setSubchildExpandedState((prev) => ({
+                        ...prev,
+                        [subchild._id]: !prev[subchild._id],
+                      }))
+                    }
+                    icon={
+                      subchildExpandedState[subchild._id] ? faMinus : faPlus
+                    }
+                    className={s.category__item__btn}
+                  />
+                )}
               </div>
               {/*childs*/}
               <div
@@ -106,28 +112,29 @@ const CategoryAccordion = ({
                     : `${s.childs__container} ${s.invisible}`
                 }
               >
-                {childs[subchild._id].map((child) => {
-                  const isChildActive = isSelected(child.title);
-                  return (
-                    <div
-                      key={child._id}
-                      className={s.category__item}
-                      onClick={() =>
-                        onCategoryClick(child.title, child._id, isChildActive)
-                      }
-                    >
-                      <p
-                        className={
-                          isChildActive
-                            ? `${s.category__text} ${s.category__text__active}`
-                            : s.category__text
+                {childs[subchild._id] &&
+                  childs[subchild._id].map((child) => {
+                    const isChildActive = isSelected(child.title);
+                    return (
+                      <div
+                        key={child._id}
+                        className={s.category__item}
+                        onClick={() =>
+                          onCategoryClick(child.title, child._id, isChildActive)
                         }
                       >
-                        {child.title}
-                      </p>
-                    </div>
-                  );
-                })}
+                        <p
+                          className={
+                            isChildActive
+                              ? `${s.category__text} ${s.category__text__active}`
+                              : s.category__text
+                          }
+                        >
+                          {child.title}
+                        </p>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           );

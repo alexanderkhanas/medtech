@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, lazy, useMemo } from "react";
+import React, { useEffect, Suspense, lazy, useMemo, useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,6 +20,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { getLocalCart, debounce } from "./utils/utils";
 import { getUserByIdAction, loginAction } from "./store/actions/profileActions";
 import Modal from "./misc/Modal/Modal";
+import { getProducts } from "./store/actions/productsActions";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -78,11 +79,12 @@ const App = ({
   setWishlist,
   getUser,
   autologin,
+  getProducts,
   user,
 }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
 
-  const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const debouncedHandleResize = debounce(() => {
@@ -97,26 +99,24 @@ const App = ({
   }, []);
 
   const token = useMemo(() => {
-    console.log("here");
-
     return document.cookie.includes("token")
       ? document.cookie
           .split("; ")
           .filter((value) => value.startsWith("token"))[0]
           .split("=")[1]
       : null;
-  }, [document.cookie]);
+  }, []);
 
   useEffect(() => {
     (async () => {
+      getProducts();
       const loginData = localStorage.getItem("_login");
       if (loginData) {
-        autologin(JSON.parse(loginData));
+        await autologin(JSON.parse(loginData));
         return;
       }
       if (token) {
-        getUser(token);
-        console.log("token ===", token);
+        await getUser(token);
       }
     })();
   }, []);
@@ -148,11 +148,14 @@ const App = ({
     setCart(cartProducts);
 
     const wishlistIds = getLocalWishlist();
+    console.log("all products ===", allProducts);
+
     const wishlistProducts = wishlistIds
       ? allProducts.filter((product) => wishlistIds.includes(product._id))
       : [];
+    console.log("wishlist ===", wishlistProducts);
     setWishlist(wishlistProducts);
-  }, []);
+  }, [allProducts]);
   return (
     <Router>
       <Header />
@@ -221,47 +224,11 @@ const App = ({
               component={Order}
             />
 
-            <Route
+            {/* <Route
               path="/admin"
+              key="/ADMIN"
               render={({ match: { url } }) => (
-                <>
-                  <Route
-                    path={`${url}/`}
-                    component={(props) => <Admin {...props} />}
-                    exact
-                  />
-                  <Route
-                    path={`${url}/edit-order/:id`}
-                    component={(props) => <EditOrder {...props} />}
-                  />
-                  <Route
-                    path={`${url}/edit-news/:id`}
-                    component={(props) => <EditNews {...props} />}
-                  />
-                  <Route
-                    path={`${url}/edit-user/`}
-                    component={(props) => <EditUser {...props} />}
-                  />
-                  <Route
-                    path={`${url}/edit-product/`}
-                    component={(props) => <EditProduct {...props} />}
-                  />
-                  <Route
-                    path={`${url}/create-product/`}
-                    component={(props) => <CreateProduct {...props} />}
-                  />
-                  <Route
-                    path={`${url}/create-news/`}
-                    component={(props) => <CreateNews {...props} />}
-                  />
-                  <Route
-                    path={`${url}/create-user/`}
-                    component={(props) => <CreateUser {...props} />}
-                  />
-                  <Route path={`${url}/create-order`} component={CreateOrder} />
-                </>
-              )}
-            />
+                <> */}
             <Route
               path="/new-password"
               component={(props) => <NewPassword {...props} />}
@@ -270,6 +237,48 @@ const App = ({
               path="/wishlist"
               component={(props) => <Wishlist {...props} />}
             />
+            <PrivateRoute
+              path="/admin"
+              condition={user.isAdmin}
+              component={(props) => <Admin {...props} />}
+              exact
+            />
+            <PrivateRoute
+              condition={user.isAdmin}
+              path="/admin/edit-order/:id"
+              component={(props) => <EditOrder {...props} />}
+            />
+            <PrivateRoute
+              condition={user.isAdmin}
+              path="/admin/edit-news/:id"
+              component={(props) => <EditNews {...props} />}
+            />
+            <PrivateRoute
+              condition={user.isAdmin}
+              path="/admin/edit-user/"
+              component={(props) => <EditUser {...props} />}
+            />
+            <PrivateRoute
+              condition={user.isAdmin}
+              path="/admin/edit-product/"
+              component={(props) => <EditProduct {...props} />}
+            />
+            <PrivateRoute
+              condition={user.isAdmin}
+              path="/admin/create-product/"
+              component={(props) => <CreateProduct {...props} />}
+            />
+            <PrivateRoute
+              condition={user.isAdmin}
+              path="/admin/create-news/"
+              component={(props) => <CreateNews {...props} />}
+            />
+            <PrivateRoute
+              condition={user.isAdmin}
+              path="/admin/create-user/"
+              component={(props) => <CreateUser {...props} />}
+            />
+            <PrivateRoute path="/admin/create-order" component={CreateOrder} />
             <Route path="*">
               <NoMatchPage />
             </Route>
@@ -295,6 +304,7 @@ const mapDispatchToProps = (dispatch) => {
     getUser: (id, redirect) => dispatch(getUserByIdAction(id, redirect)),
     setFullPrice: (price) => dispatch(setFullPriceAction(price)),
     autologin: (data) => dispatch(loginAction(data)),
+    getProducts: () => dispatch(getProducts()),
   };
 };
 

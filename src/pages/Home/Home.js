@@ -13,7 +13,14 @@ import { getAllNewsAction } from "../../store/actions/newsActions";
 import {
   getCategoriesAction,
   getProducts,
+  getHighRatingProductsAction,
 } from "../../store/actions/productsActions";
+import Button from "../../misc/Button/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStoreAlt, faMailBulk } from "@fortawesome/free-solid-svg-icons";
+import { Formik } from "formik";
+import Input from "../../misc/Inputs/Input/Input";
+import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 
 const Home = ({
   products,
@@ -21,26 +28,36 @@ const Home = ({
   windowWidth,
   getNews,
   getCategories,
-  getProducts,
+  getHighRatingProducts,
+  user,
 }) => {
   const {
-    bestRatingProducts,
+    highRatingProducts,
     recommendedProducts,
     popularProducts,
     newProducts,
     allProducts,
-    cartProducts,
   } = products;
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   useEffect(() => {
-    if (!allProducts.length) {
-      getNews();
-      getProducts();
-      getCategories();
-    }
+    (async () => {
+      if (!allProducts.length) {
+        await getCategories();
+        await getHighRatingProducts();
+        await getNews();
+      }
+    })();
   }, []);
+
+  let slidesPerPage = Math.floor(windowWidth / 350);
+
+  if (slidesPerPage > 4) {
+    slidesPerPage = 4;
+  } else if (slidesPerPage < 1) {
+    slidesPerPage = 1;
+  }
 
   return (
     <div>
@@ -50,7 +67,30 @@ const Home = ({
           require("../../assets/home2.webp"),
           require("../../assets/home3.webp"),
         ]}
-      />
+      >
+        <div className={s.overlay}>
+          <div className={s.overlay__inner}>
+            <h2 className={s.carousel__title}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </h2>
+            <p className={s.carousel__subtitle}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+            <Link to="/catalog" className={s.catalog__btn__container}>
+              <Button
+                title="Перейти до покупок"
+                className={s.catalog__btn}
+                size="md"
+              >
+                <FontAwesomeIcon
+                  icon={faStoreAlt}
+                  className={s.catalog__btn__icon}
+                />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </ImageCarousel>
       <FixedWrapper className={s.tabs__container}>
         <div className={s.section}>
           <h3 className={s.tabs__title}>Обрати по категорії</h3>
@@ -71,30 +111,14 @@ const Home = ({
               )}
             </TabList>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel
-                arrows
-                slidesPerPage={
-                  Math.floor(windowWidth / 350) > 4
-                    ? 4
-                    : Math.floor(windowWidth / 350)
-                }
-                infinite
-              >
+              <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
                 {recommendedProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
             </TabPanel>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel
-                arrows
-                slidesPerPage={
-                  Math.floor(windowWidth / 350) > 4
-                    ? 4
-                    : Math.floor(windowWidth / 350)
-                }
-                infinite
-              >
+              <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
                 {popularProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
@@ -102,17 +126,8 @@ const Home = ({
             </TabPanel>
 
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel
-                arrows
-                offset={10}
-                slidesPerPage={
-                  Math.floor(windowWidth / 350) > 4
-                    ? 4
-                    : Math.floor(windowWidth / 350)
-                }
-                infinite
-              >
-                {bestRatingProducts.map((product, i) => (
+              <ItemsCarousel arrows offset={10} {...{ slidesPerPage }} infinite>
+                {highRatingProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
@@ -150,15 +165,7 @@ const Home = ({
         </div>
         <div className={s.section}>
           <h3 className={s.section__title}>Останні товари</h3>
-          <ItemsCarousel
-            arrows
-            slidesPerPage={
-              Math.floor(windowWidth / 350) > 4
-                ? 4
-                : Math.floor(windowWidth / 350)
-            }
-            infinite
-          >
+          <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
             {newProducts.map((product, i) => (
               <ProductCard key={product._id} {...{ product }} />
             ))}
@@ -174,6 +181,73 @@ const Home = ({
             ))}
           </div>
         </div>
+        <div className={s.section}>
+          <h3 className={s.section__title}>Зв'яжіться з нами</h3>
+          <Formik
+            initialValues={{
+              email: user.email,
+              name:
+                user.fName || user.lName ? `${user.fName} ${user.lName}` : "",
+              phone: user.phone,
+              message: "",
+            }}
+            validate={(values) => {
+              const { email, phone } = values;
+              const errors = {};
+              if (!email && !phone) {
+                errors.email = "required";
+              }
+              return errors;
+            }}
+            onSubmit={(values) => {
+              console.log("values ===", values);
+            }}
+          >
+            {({ values, handleChange, errors, touched, handleSubmit }) => (
+              <form className={s.form}>
+                <Input
+                  label="Електронна пошта"
+                  name="email"
+                  containerClass={s.input__container}
+                  isError={errors.email && touched.email}
+                  value={values.email}
+                  placeholder="joe.doe.example@gmail.com"
+                  onChange={handleChange}
+                />
+                <PhoneNumberInput
+                  label="Номер телефону"
+                  name="phone"
+                  containerClass={s.input__container}
+                  value={values.phone}
+                  onChange={handleChange}
+                />
+                <Input
+                  label="Ім'я"
+                  name="name"
+                  placeholder="Іван"
+                  containerClass={s.input__container}
+                  value={values.name}
+                  onChange={handleChange}
+                />
+                <Input
+                  label="Повідомлення"
+                  name="message"
+                  isTextarea
+                  placeholder="Все сподобалось, дякую!"
+                  containerClass={s.input__container}
+                  value={values.message}
+                  onChange={handleChange}
+                />
+                <Button title="Надіслати повідомлення" onClick={handleSubmit}>
+                  <FontAwesomeIcon
+                    icon={faMailBulk}
+                    className={s.submit__button__icon}
+                  />
+                </Button>
+              </form>
+            )}
+          </Formik>
+        </div>
       </FixedWrapper>
     </div>
   );
@@ -184,10 +258,11 @@ const mapStateToProps = (state) => {
     products: {
       recommendedProducts: state.products.recommended,
       popularProducts: state.products.popular,
-      bestRatingProducts: state.products.bestRating,
+      highRatingProducts: state.products.highRating,
       newProducts: state.products.new,
       allProducts: state.products.all,
     },
+    user: state.profile,
     recentNews: state.news.recent,
   };
 };
@@ -195,8 +270,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getNews: () => dispatch(getAllNewsAction()),
-    getProducts: () => dispatch(getProducts()),
     getCategories: () => dispatch(getCategoriesAction()),
+    getHighRatingProducts: () => dispatch(getHighRatingProductsAction()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

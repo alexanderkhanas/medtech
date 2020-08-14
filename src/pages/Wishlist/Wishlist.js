@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 
-const Wishlist = ({ products }) => {
+const Wishlist = ({ wishlistProducts }) => {
   const breadCrumbsItems = [
     {
       name: "Головна",
@@ -17,6 +17,8 @@ const Wishlist = ({ products }) => {
     },
     { name: "Улюблені", path: "/wishlist" },
   ];
+  console.log("wishlistProducts ===", wishlistProducts);
+
   return (
     <>
       <div className={s.title__container}>
@@ -26,7 +28,7 @@ const Wishlist = ({ products }) => {
       <FixedWrapper>
         <div className={s.container}>
           <div className={s.products__container}>
-            {products.map((product, i) =>
+            {wishlistProducts.map((product, i) =>
               window.innerWidth >= 800 ? (
                 <HorizontalProductCard
                   {...{ product }}
@@ -42,7 +44,7 @@ const Wishlist = ({ products }) => {
               )
             )}
           </div>
-          {!products?.length && (
+          {!wishlistProducts?.length && (
             <div className={s.empty__msg__container}>
               <h1 className={s.empty__msg}>
                 Ваш список улюблених товарів порожній
@@ -57,7 +59,7 @@ const Wishlist = ({ products }) => {
 
 const mapStateToProps = (state) => {
   return {
-    products: state.wishlist.all,
+    wishlistProducts: state.wishlist.all,
   };
 };
 const mapDispatchToProps = (dispatch) => {

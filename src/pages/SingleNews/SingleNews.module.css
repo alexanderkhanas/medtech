@@ -7,7 +7,7 @@
 .single_new {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
   padding: 20px;
 }
 .news_title {
@@ -37,6 +37,9 @@
 .main__image {
   padding: 20px 0;
   width: 100%;
+  max-width: 700px;
+  max-height: 400px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
 }

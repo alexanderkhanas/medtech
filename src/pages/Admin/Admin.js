@@ -38,16 +38,21 @@ import {
   createAttributeAction,
   editAttributeAction,
   deleteNewsAction,
+  editVendorAction,
+  deleteVendorAction,
 } from "../../store/actions/adminActions";
 import { getAllNewsAction } from "../../store/actions/newsActions";
+import { showAlertAction } from "../../store/actions/alertActions";
 
 const Admin = ({
   isLoading,
+  showAlert,
   allNews,
   allProducts,
   categories,
   attributes,
   users,
+  vendors,
   getCategories,
   getVendors,
   getAttributes,
@@ -59,14 +64,21 @@ const Admin = ({
   deleteAttribute,
   deleteCategory,
   deleteNews,
+  deleteVendor,
   editAttribute,
+  editVendor,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [editingIds, setEditingIds] = useState({
+  const [editing, setEditing] = useState({
     attribute: { _id: null, name: "" },
     category: { _id: null },
     vendor: { _id: null },
   });
+
+  const editingHandler = (type, setValues, body, value) => {
+    setEditing((prev) => ({ ...prev, [type]: body }));
+    setValues(value);
+  };
 
   const breadCrumbsItems = [
     {
@@ -96,6 +108,10 @@ const Admin = ({
   }, []);
 
   console.log("categories ===", categories);
+
+  const isVendorEditing = !!editing.vendor._id;
+  const isAttributeEditing = !!editing.attribute._id;
+  const isCategoryEditing = !!editing.category._id;
 
   return (
     <div className={s.container}>
@@ -187,19 +203,34 @@ const Admin = ({
                 parentCategory: null,
                 parentCategoryLabel: null,
               }}
-              onSubmit={({ name, parentCategory }, { resetForm }) => {
+              onSubmit={async ({ name, parentCategory }, { resetForm }) => {
                 const categoryToSubmit = {
-                  parentID: parentCategory._id,
+                  parentID: parentCategory?._id,
                   subParentID: null,
                   title: name,
                 };
-                if (parentCategory.parent?.length) {
+                if (parentCategory?.parent?.length) {
                   categoryToSubmit.parent = parentCategory.parent;
                   categoryToSubmit.sub = [
                     { title: parentCategory.title, _id: parentCategory._id },
                   ];
                 }
-                createCategory(categoryToSubmit);
+                let isSuccess = false;
+                isSuccess = await createCategory(categoryToSubmit);
+                if (isSuccess) {
+                  resetForm({
+                    name: "",
+                    parentCategory: null,
+                    parentCategoryLabel: null,
+                  });
+                  if (isCategoryEditing) {
+                    showAlert("Категорію змінено успішно!", "success");
+                  } else {
+                    showAlert("Категорію створено успішно!", "success");
+                  }
+                } else {
+                  showAlert("Сталась помилка!", "error");
+                }
                 resetForm({
                   name: "",
                   parentCategory: null,
@@ -236,7 +267,6 @@ const Admin = ({
                         containerClass={s.add__category__input__container}
                         inputClass={s.add__category__input}
                         onChange={handleChange}
-                        onBlur={handleSubmit}
                       />
                       <Select
                         label="Назва батьківської категорії"
@@ -253,9 +283,9 @@ const Admin = ({
                           console.log("value ===", selectedOption);
                         }}
                         options={categories
-                          .filter(({ sub }) => !sub.length)
+                          .filter(({ sub }) => !sub?.length)
                           .map(({ title, parent, _id }) => {
-                            const isParentVisible = parent.length;
+                            const isParentVisible = parent?.length;
                             return {
                               label: `${title}${
                                 isParentVisible
@@ -295,9 +325,9 @@ const Admin = ({
             {categories &&
               categories.map(({ sub, parent, _id, title }) => {
                 let parentLabel = "";
-                if (parent.length && !sub.length) {
+                if (parent?.length && !sub?.length) {
                   parentLabel = parent[0].title;
-                } else if (sub.length) {
+                } else if (sub?.length) {
                   parentLabel = sub[0].title;
                 }
                 return (
@@ -316,13 +346,24 @@ const Admin = ({
           <TabPanel>
             <Formik
               initialValues={{ name: "" }}
-              onSubmit={({ name }, { resetForm }) => {
+              onSubmit={async ({ name }, { resetForm }) => {
                 if (name) {
-                  const { _id } = editingIds.attribute;
-                  if (_id) {
-                    editAttribute({ name, _id });
+                  let isSuccess = false;
+                  if (isAttributeEditing) {
+                    const { _id } = editing.attribute;
+                    isSuccess = await editAttribute({ name, _id });
                   } else {
-                    createAttribute({ name });
+                    isSuccess = await createAttribute({ name });
+                  }
+                  if (isSuccess) {
+                    resetForm({ name: "" });
+                    if (isAttributeEditing) {
+                      showAlert("Атрибут змінено успішно!", "success");
+                    } else {
+                      showAlert("Атрибут створено успішно!", "success");
+                    }
+                  } else {
+                    showAlert("Сталась помилка!", "error");
                   }
                   resetForm({ name: "" });
                 }
@@ -344,7 +385,7 @@ const Admin = ({
                       onClick={handleSubmit}
                       className={s.add__button}
                       title={
-                        editingIds.attribute._id
+                        isAttributeEditing
                           ? "Змінити атрибут"
                           : "Додати атрибут"
                       }
@@ -355,11 +396,11 @@ const Admin = ({
                         icon={faPlus}
                       />
                     </Button>
-                    {!!editingIds.attribute._id && (
+                    {isAttributeEditing && (
                       <Button
                         onClick={() => {
                           setValues({ name: "" });
-                          setEditingIds((prev) => ({
+                          setEditing((prev) => ({
                             ...prev,
                             attribute: {},
                           }));
@@ -386,7 +427,7 @@ const Admin = ({
                       items={[{ title: name, key: _id }]}
                       onEdit={() => {
                         setValues({ name });
-                        setEditingIds((prev) => ({
+                        setEditing((prev) => ({
                           ...prev,
                           attribute: { _id, name },
                         }));
@@ -403,11 +444,35 @@ const Admin = ({
               initialValues={{
                 title: "",
               }}
-              onSubmit={({ title }) => {
-                createVendor({ title });
+              onSubmit={async ({ title }, { resetForm }) => {
+                let isSuccess = false;
+                if (isVendorEditing) {
+                  //ASD
+                  console.log("editing vendor ===", editing.vendor);
+
+                  isSuccess = await editVendor({
+                    ...editing.vendor,
+                    title,
+                    desc: "",
+                  });
+                } else {
+                  isSuccess = await createVendor({ title });
+                }
+                console.log("is success ===", isSuccess);
+
+                if (isSuccess) {
+                  resetForm({ title: "" });
+                  if (isVendorEditing) {
+                    showAlert("Продавця змінено успішно!", "success");
+                  } else {
+                    showAlert("Продавця створено успішно!", "success");
+                  }
+                } else {
+                  showAlert("Сталась помилка!", "error");
+                }
               }}
             >
-              {({ handleChange, handleSubmit, values }) => {
+              {({ handleChange, handleSubmit, values, setValues }) => {
                 return (
                   <div>
                     <div className={s.seller__container}>
@@ -424,7 +489,11 @@ const Admin = ({
                     <Button
                       onClick={handleSubmit}
                       className={s.add__button}
-                      title="Додати продавця"
+                      title={
+                        isVendorEditing
+                          ? "Редагувати продавця"
+                          : "Додати продавця"
+                      }
                       type="submit"
                     >
                       <FontAwesomeIcon
@@ -432,20 +501,43 @@ const Admin = ({
                         icon={faPlus}
                       />
                     </Button>
+                    {isVendorEditing && (
+                      <Button
+                        onClick={() =>
+                          setEditing((prev) => ({ ...prev, vendor: {} }))
+                        }
+                        className={s.add__button}
+                        title="Зупинити редагування"
+                        type="submit"
+                      >
+                        <FontAwesomeIcon
+                          className={s.add__more__icon}
+                          icon={faMinus}
+                        />
+                      </Button>
+                    )}
+                    <div className={s.order__header}>
+                      <span>Назва</span>
+                      <span>Кількість продуктів</span>
+                    </div>
+                    {vendors.map((vendor) => {
+                      const { title, _id } = vendor;
+                      return (
+                        <AdminRow
+                          onEdit={() =>
+                            editingHandler("vendor", setValues, vendor, {
+                              title: vendor.title,
+                            })
+                          }
+                          onDelete={() => deleteVendor(vendor)}
+                          items={[{ title, key: _id }]}
+                        />
+                      );
+                    })}
                   </div>
                 );
               }}
             </Formik>
-            <div className={s.order__header}>
-              <span>Назва</span>
-              <span>Кількість продуктів</span>
-            </div>
-            {/* <EditSeller />
-            <EditSeller />
-            <EditSeller />
-            <EditSeller />
-            <EditSeller />
-            <EditSeller /> */}
           </TabPanel>
           <TabPanel>
             <div className={s.create__container}>
@@ -528,6 +620,7 @@ const mapStateToProps = (state) => {
     categories: state.products.categories,
     attributes: state.admin.attributes,
     users: state.admin.users,
+    vendors: state.admin.vendors,
     isLoading: state.base.isLoading,
     // fullPrice: state.cart.fullPrice,
   };
@@ -537,6 +630,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addToCart: (product) => dispatch(addToCartAction(product)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
     getProducts: () => dispatch(getProducts()),
     getCategories: () => dispatch(getCategoriesAction()),
     getVendors: () => dispatch(getVendorsAction()),
@@ -546,10 +640,12 @@ const mapDispatchToProps = (dispatch) => {
     deleteAttribute: (id) => dispatch(deleteAttributeAction(id)),
     deleteCategory: (id) => dispatch(deleteCategoryAction(id)),
     deleteNews: (id) => dispatch(deleteNewsAction(id)),
+    deleteVendor: (id) => dispatch(deleteVendorAction(id)),
     createCategory: (category) => dispatch(createCategoryAction(category)),
     createVendor: (vendor) => dispatch(createVendorAction(vendor)),
     createAttribute: (attribute) => dispatch(createAttributeAction(attribute)),
     editAttribute: (attribute) => dispatch(editAttributeAction(attribute)),
+    editVendor: (vendor) => dispatch(editVendorAction(vendor)),
     // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };

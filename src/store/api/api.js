@@ -107,7 +107,7 @@ export const patchAttribute = (attribute, token) => {
   });
 };
 
-export const postCategory = (category, token) => {
+export const createCategory = (category, token) => {
   return _axios.post("/category", category, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -157,8 +157,24 @@ export const fetchVendors = (token) => {
   });
 };
 
-export const postVendor = (vendor, token) => {
-  return _axios.post("/vendors", vendor, {
+export const createVendor = (vendor, token) => {
+  return _axios.post(`/vendor`, vendor, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteVendor = (id, token) => {
+  return _axios.delete(`/vendor/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const patchVendor = (vendor, id, token) => {
+  return _axios.patch(`/vendor/${id}`, vendor, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

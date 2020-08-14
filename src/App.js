@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, lazy, useMemo } from "react";
+import React, { useEffect, Suspense, lazy, useMemo, useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -84,7 +84,7 @@ const App = ({
 }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
 
-  const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const debouncedHandleResize = debounce(() => {
@@ -108,10 +108,8 @@ const App = ({
   }, []);
 
   useEffect(() => {
-    getProducts();
-    console.log("APPJS EFFECT");
-
     (async () => {
+      getProducts();
       const loginData = localStorage.getItem("_login");
       if (loginData) {
         await autologin(JSON.parse(loginData));
@@ -239,40 +237,48 @@ const App = ({
               path="/wishlist"
               component={(props) => <Wishlist {...props} />}
             />
-            <Route
+            <PrivateRoute
               path="/admin"
+              condition={user.isAdmin}
               component={(props) => <Admin {...props} />}
               exact
             />
-            <Route
+            <PrivateRoute
+              condition={user.isAdmin}
               path="/admin/edit-order/:id"
               component={(props) => <EditOrder {...props} />}
             />
-            <Route
+            <PrivateRoute
+              condition={user.isAdmin}
               path="/admin/edit-news/:id"
               component={(props) => <EditNews {...props} />}
             />
-            <Route
+            <PrivateRoute
+              condition={user.isAdmin}
               path="/admin/edit-user/"
               component={(props) => <EditUser {...props} />}
             />
-            <Route
+            <PrivateRoute
+              condition={user.isAdmin}
               path="/admin/edit-product/"
               component={(props) => <EditProduct {...props} />}
             />
-            <Route
+            <PrivateRoute
+              condition={user.isAdmin}
               path="/admin/create-product/"
               component={(props) => <CreateProduct {...props} />}
             />
-            <Route
+            <PrivateRoute
+              condition={user.isAdmin}
               path="/admin/create-news/"
               component={(props) => <CreateNews {...props} />}
             />
-            <Route
+            <PrivateRoute
+              condition={user.isAdmin}
               path="/admin/create-user/"
               component={(props) => <CreateUser {...props} />}
             />
-            <Route path="/admin/create-order" component={CreateOrder} />
+            <PrivateRoute path="/admin/create-order" component={CreateOrder} />
             <Route path="*">
               <NoMatchPage />
             </Route>

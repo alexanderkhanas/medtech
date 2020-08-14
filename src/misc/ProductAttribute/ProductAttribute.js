@@ -31,39 +31,6 @@ const ProductAttribute = ({
             {value}
           </span>
         ))}
-        {values.map((value, i) => (
-          <span
-            onClick={() => isClickable && selectAttributeHandler(value, i)}
-            className={classnames(s.attribute, attributeClasses, {
-              [s.active]: activeAttribute === i,
-            })}
-            key={i}
-          >
-            {value}
-          </span>
-        ))}
-        {values.map((value, i) => (
-          <span
-            onClick={() => isClickable && selectAttributeHandler(value, i)}
-            className={classnames(s.attribute, attributeClasses, {
-              [s.active]: activeAttribute === i,
-            })}
-            key={i}
-          >
-            {value}
-          </span>
-        ))}
-        {values.map((value, i) => (
-          <span
-            onClick={() => isClickable && selectAttributeHandler(value, i)}
-            className={classnames(s.attribute, attributeClasses, {
-              [s.active]: activeAttribute === i,
-            })}
-            key={i}
-          >
-            {value}
-          </span>
-        ))}
       </div>
     </div>
   );

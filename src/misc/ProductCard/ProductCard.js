@@ -22,14 +22,14 @@ const ProductCard = ({ product, className }) => {
           src={
             gallery[0]?.includes("png")
               ? gallery[0]
-              : "https://medtechnika.te.ua/assets/products/5f2d3348f267ed397417cb0e/i2.png"
+              : require("../../assets/image-placeholder.webp")
           }
           alt="loading..."
         />
       </div>
       <div className={s.card__footer}>
         <h4 className={s.card__title} onClick={redirectToSingleProduct}>
-          {title}
+          {title.slice(0, 40)}
         </h4>
         <div className={s.card__price__container}>
           <span className={s.card__price}>{`${price} ₴`}</span>

@@ -33,7 +33,11 @@ const OrderProductCard = ({
     <div className={s.card}>
       <div className={s.main}>
         <Link to={`product/${_id}`} style={{ position: "relative" }}>
-          <img className={s.img} src={gallery[0]} alt="loading" />
+          <img
+            className={s.img}
+            src={gallery[0] || require("../../assets/image-placeholder.webp")}
+            alt="loading"
+          />
           <div className={s.number__tag}>
             <span className={s.number}>{numberInCart}</span>
           </div>

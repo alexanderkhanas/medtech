@@ -22,7 +22,7 @@ const HorizontalProductCard = ({ product, isSmall, className }) => {
     <div className={`${s.container} ${className}`}>
       <img
         onClick={redirectToSingle}
-        src={gallery[0] || "https://medtechnika.te.ua/assets/products/5f2d3348f267ed397417cb0e/i2.png"}
+        src={gallery[0] || require("../../assets/image-placeholder.webp")}
         alt="loading"
         className={s.img}
       />

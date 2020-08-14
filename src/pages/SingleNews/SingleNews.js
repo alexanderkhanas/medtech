@@ -24,37 +24,49 @@ const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
     getSingleNews(match.params.id);
   }, []);
   console.log("singleNews ===", singleNews);
+  console.log("created at ===", createdAt);
+
   return (
-    <div>
-      <div className={s.title__container}>
-        <h4 className={s.title}>{title}</h4>
-        <BreadCrumbs items={breadCrumbsItems} />
+    !!_id && (
+      <div>
+        <div className={s.title__container}>
+          <h4 className={s.title}>{title}</h4>
+          <BreadCrumbs items={breadCrumbsItems} />
+        </div>
+        <FixedWrapper>
+          <div className={s.single_new}>
+            <div className={s.main_container}>
+              <h4 className={s.news_title}>{title}</h4>
+              <div className={s.image_container}>
+                <img
+                  className={s.main__image}
+                  src={
+                    gallery || require("../../assets/image-placeholder.webp")
+                  }
+                  alt="loading"
+                />
+              </div>
+              <div className={s.news_text}>
+                <p>{desc}</p>
+              </div>
+              {/* <Moment format="DD/MM/YYYY" className={s.createdAt}> */}
+              {/* {new Date(createdAt).toISOString().split("T")[0]} */}
+
+              {createdAt.split("T")[0]}
+              {/* </Moment> */}
+            </div>
+          </div>
+          <div className={s.section}>
+            <h3 className={s.section__title}>Популярні новини</h3>
+            <div className={s.news__container}>
+              {recentNews.slice(0, 3).map((newsItem, i) => (
+                <NewsCard {...{ newsItem }} key={newsItem._id} />
+              ))}
+            </div>
+          </div>
+        </FixedWrapper>
       </div>
-      <FixedWrapper>
-        <div className={s.single_new}>
-          <div className={s.main_container}>
-            <h4 className={s.news_title}>{title}</h4>
-            <div className={s.image_container}>
-              <img className={s.main__image} src={gallery} alt="loading" />
-            </div>
-            <div className={s.news_text}>
-              <p>{desc}</p>
-            </div>
-            {/* <Moment format="DD/MM/YYYY" className={s.createdAt}> */}
-            {createdAt}
-            {/* </Moment> */}
-          </div>
-        </div>
-        <div className={s.section}>
-          <h3 className={s.section__title}>Популярні новини</h3>
-          <div className={s.news__container}>
-            {recentNews.slice(0, 3).map((newsItem, i) => (
-              <NewsCard {...{ newsItem }} key={newsItem._id} />
-            ))}
-          </div>
-        </div>
-      </FixedWrapper>
-    </div>
+    )
   );
 };
 const mapStateToProps = (state) => {

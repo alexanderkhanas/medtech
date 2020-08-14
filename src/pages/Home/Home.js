@@ -17,7 +17,10 @@ import {
 } from "../../store/actions/productsActions";
 import Button from "../../misc/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStoreAlt } from "@fortawesome/free-solid-svg-icons";
+import { faStoreAlt, faMailBulk } from "@fortawesome/free-solid-svg-icons";
+import { Formik } from "formik";
+import Input from "../../misc/Inputs/Input/Input";
+import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 
 const Home = ({
   products,
@@ -26,6 +29,7 @@ const Home = ({
   getNews,
   getCategories,
   getHighRatingProducts,
+  user,
 }) => {
   const {
     highRatingProducts,
@@ -177,6 +181,73 @@ const Home = ({
             ))}
           </div>
         </div>
+        <div className={s.section}>
+          <h3 className={s.section__title}>Зв'яжіться з нами</h3>
+          <Formik
+            initialValues={{
+              email: user.email,
+              name:
+                user.fName || user.lName ? `${user.fName} ${user.lName}` : "",
+              phone: user.phone,
+              message: "",
+            }}
+            validate={(values) => {
+              const { email, phone } = values;
+              const errors = {};
+              if (!email && !phone) {
+                errors.email = "required";
+              }
+              return errors;
+            }}
+            onSubmit={(values) => {
+              console.log("values ===", values);
+            }}
+          >
+            {({ values, handleChange, errors, touched, handleSubmit }) => (
+              <form className={s.form}>
+                <Input
+                  label="Електронна пошта"
+                  name="email"
+                  containerClass={s.input__container}
+                  isError={errors.email && touched.email}
+                  value={values.email}
+                  placeholder="joe.doe.example@gmail.com"
+                  onChange={handleChange}
+                />
+                <PhoneNumberInput
+                  label="Номер телефону"
+                  name="phone"
+                  containerClass={s.input__container}
+                  value={values.phone}
+                  onChange={handleChange}
+                />
+                <Input
+                  label="Ім'я"
+                  name="name"
+                  placeholder="Іван"
+                  containerClass={s.input__container}
+                  value={values.name}
+                  onChange={handleChange}
+                />
+                <Input
+                  label="Повідомлення"
+                  name="message"
+                  isTextarea
+                  placeholder="Все сподобалось, дякую!"
+                  containerClass={s.input__container}
+                  value={values.message}
+                  onChange={handleChange}
+                />
+                <Button title="Надіслати повідомлення" onClick={handleSubmit}>
+                  <FontAwesomeIcon
+                    icon={faMailBulk}
+                    className={s.submit__button__icon}
+                  />
+                </Button>
+              </form>
+            )}
+          </Formik>
+        </div>
       </FixedWrapper>
     </div>
   );
@@ -191,6 +262,7 @@ const mapStateToProps = (state) => {
       newProducts: state.products.new,
       allProducts: state.products.all,
     },
+    user: state.profile,
     recentNews: state.news.recent,
   };
 };

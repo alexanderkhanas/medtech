@@ -6,12 +6,14 @@ import {
   DELETE_ATTRIBUTE,
   DELETE_CATEGORY,
   ADD_ATTRIBUTE,
+  SET_VENDORS,
 } from "../actions/actionTypes";
 
 const initialState = {
   users: [],
   filteredUsers: [],
   attributes: [],
+  vendors: [],
 };
 
 export default (state = initialState, action) => {
@@ -47,7 +49,11 @@ export default (state = initialState, action) => {
         ...state,
         attributes: [...state.attributes, action.attribute],
       };
-
+    case SET_VENDORS:
+      return {
+        ...state,
+        vendors: action.vendors,
+      };
     default:
       return state;
   }

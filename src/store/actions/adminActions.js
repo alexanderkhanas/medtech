@@ -1,7 +1,7 @@
 import {
-  postCategory,
+  createCategory,
   fetchUsers,
-  postVendor,
+  createVendor,
   fetchVendors,
   fetchAttributes,
   deleteAttribute,
@@ -11,6 +11,8 @@ import {
   createNews,
   uploadImageToNews,
   deleteNews,
+  deleteVendor,
+  patchVendor,
 } from "../api/api";
 import { getToken, getAdminToken } from "../../utils/utils";
 import {
@@ -23,22 +25,22 @@ import {
   DELETE_CATEGORY,
   ADD_ATTRIBUTE,
   DELETE_NEWS,
+  SET_VENDORS,
 } from "./actionTypes";
 
 export const createCategoryAction = (category) => {
   return async (dispatch) => {
     const token = getAdminToken();
-    console.log("token ===", token);
-    console.log("category ===", { ...category, desc: "", gallery: [""] });
 
-    const response = await postCategory(
+    const response = await createCategory(
       { ...category, desc: "", gallery: [""] },
       token
     );
-    if (response?.status) {
+    if (response?.data) {
       dispatch({ type: ADD_CATEGORY, category: response.data });
     }
-    console.log("category response ===", response.status);
+    console.log("category response ===", response.data);
+    return response.status === 200;
   };
 };
 
@@ -50,6 +52,7 @@ export const deleteCategoryAction = (id) => {
       dispatch({ type: DELETE_CATEGORY, id });
     }
     console.log("delete category ===", response?.data);
+    return response.status === 200;
   };
 };
 
@@ -85,13 +88,33 @@ export const deleteNewsAction = (id) => {
         id,
       });
     }
+    return response.status === 200;
   };
 };
 
 export const createVendorAction = (vendor) => {
   return async (dispatch) => {
     const token = getAdminToken();
-    const response = postVendor(vendor, token);
+    const response = await createVendor(vendor, token);
+    return response.status === 200;
+  };
+};
+
+export const deleteVendorAction = (vendor) => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    const response = deleteVendor(vendor._id, token);
+    console.log("delete vendor ===", response?.data);
+    return response.status === 200;
+  };
+};
+
+export const editVendorAction = (vendor) => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    const response = await patchVendor(vendor, vendor._id, token);
+    console.log("patch vendor ===", response?.data);
+    return response.status === 200;
   };
 };
 
@@ -106,6 +129,7 @@ export const getAttributesAction = () => {
       });
     }
     console.log("attributes ===", response?.data);
+    return response.status === 200;
   };
 };
 
@@ -120,6 +144,7 @@ export const deleteAttributeAction = (id) => {
         id,
       });
     }
+    return response.status === 200;
   };
 };
 
@@ -134,6 +159,7 @@ export const createAttributeAction = (attribute) => {
         attribute: response.data,
       });
     }
+    return response.status === 200;
   };
 };
 
@@ -142,6 +168,7 @@ export const editAttributeAction = (attribute) => {
     const token = getAdminToken();
     const response = await patchAttribute(attribute, token);
     console.log("edit attribute ===", response?.data);
+    return response.status === 200;
   };
 };
 
@@ -163,6 +190,12 @@ export const getVendorsAction = () => {
     const token = getAdminToken();
     const response = await fetchVendors(token);
     console.log("response ===", response?.data);
+    if (response?.data) {
+      dispatch({
+        type: SET_VENDORS,
+        vendors: response.data,
+      });
+    }
   };
 };
 

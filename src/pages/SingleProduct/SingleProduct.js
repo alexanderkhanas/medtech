@@ -210,8 +210,8 @@ const SingleProduct = ({
               {gallery.map((img, i) => (
                 <img
                   className={s.main__image}
-                  key={img}
-                  src={img}
+                  key={img + i}
+                  src={img || require("../../assets/image-placeholder.webp")}
                   alt="loading"
                 />
               ))}

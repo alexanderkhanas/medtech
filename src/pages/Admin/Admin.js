@@ -94,20 +94,22 @@ const Admin = ({
   ];
 
   useEffect(() => {
-    (async () => {
-      console.log("isLoading ===", isLoading);
+    // (async () => {
+    console.log("isLoading ===", isLoading);
 
-      if (!isLoading && !attributes?.length) {
-        console.log("here");
+    // if (!isLoading && !attributes?.length) {
+    console.log("here");
 
-        await getAttributes();
-        await getCategories();
-        await getVendors();
-        await getUsers();
-        await getNews();
-      }
-    })();
+    getAttributes();
+    getCategories();
+    getVendors();
+    getUsers();
+    getNews();
+    // }
+    // })();
   }, []);
+
+  console.log("render");
 
   console.log("categories ===", categories);
 

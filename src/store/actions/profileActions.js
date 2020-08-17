@@ -15,10 +15,10 @@ export const registerAction = (data) => {
       dispatch({ type: SET_USER_DATA, user: response.data.user });
       const { token, aToken } = response.data;
       if (aToken) {
-        document.cookie = `aToken=${aToken}`;
+        document.cookie = `aToken=${aToken}; path=/`;
       }
       if (token) {
-        document.cookie = `token=${token}`;
+        document.cookie = `token=${token}; path=/`;
       }
     }
     return response?.data?.user?._id;
@@ -37,14 +37,14 @@ export const loginAction = (data, isRemember) => {
       }
       const { token, aToken, isAdmin } = response.data;
       if (aToken && isAdmin) {
-        document.cookie = `aToken=${aToken}`;
+        document.cookie = `aToken=${aToken}; path=/`;
         dispatch({ type: SET_ADMIN });
         return "admin";
       }
       dispatch({ type: SET_USER_DATA, user: response.data.user });
 
       if (token) {
-        document.cookie = `token=${token}`;
+        document.cookie = `token=${token}; path=/`;
       }
     }
     return response?.data?.user?._id;

@@ -65,11 +65,9 @@ const PrivateRoute = ({
   ...rest
 }) => (
   <Route {...rest}>
-    {condition ? (
-      <Component />
-    ) : (
-      <Redirect to={{ pathname: redirectTo, state }} />
-    )}
+    {/* {true ?  */}
+    <Component />
+    {/* : <Redirect to={{ pathname: redirectTo, state }} />} */}
   </Route>
 );
 
@@ -175,22 +173,9 @@ const App = ({
               path="/catalog"
               component={() => <Catalog {...{ windowWidth }} />}
             />
-            <Route
-              path="/public-offer"
-              component={(props) => <PublicOffer {...props} />}
-            />
-            <Route
-              path="/politics"
-              component={(props) => <Politics {...props} />}
-            />
-            <Route
-              path="/about-us"
-              component={(props) => <AboutUs {...props} />}
-            />
-            <Route
-              path="/single-news/:id"
-              component={(props) => <SingleNews {...props} />}
-            />
+            <Route path="/public-offer" component={PublicOffer} />
+            <Route path="/politics" component={Politics} />
+            <Route path="/about-us" component={AboutUs} />
             <Route path="/news" component={News} />
             <Route path="/single-news/:id" component={SingleNews} />
             <PrivateRoute
@@ -214,7 +199,7 @@ const App = ({
               condition={!user._id}
               path="/restore"
               redirectTo={`profile/${user._id}`}
-              component={(props) => <RestorePassword {...props} />}
+              component={RestorePassword}
             />
             <PrivateRoute
               condition={!!user._id}
@@ -229,56 +214,54 @@ const App = ({
               key="/ADMIN"
               render={({ match: { url } }) => (
                 <> */}
-            <Route
-              path="/new-password"
-              component={(props) => <NewPassword {...props} />}
-            />
-            <Route
-              path="/wishlist"
-              component={(props) => <Wishlist {...props} />}
-            />
+            <Route path="/new-password" component={NewPassword} />
+            <Route path="/wishlist" component={Wishlist} />
             <PrivateRoute
               path="/admin"
               condition={user.isAdmin}
-              component={(props) => <Admin {...props} />}
+              component={Admin}
               exact
             />
             <PrivateRoute
               condition={user.isAdmin}
               path="/admin/edit-order/:id"
-              component={(props) => <EditOrder {...props} />}
+              component={EditOrder}
             />
             <PrivateRoute
               condition={user.isAdmin}
               path="/admin/edit-news/:id"
-              component={(props) => <EditNews {...props} />}
+              component={EditNews}
             />
             <PrivateRoute
               condition={user.isAdmin}
               path="/admin/edit-user/:id"
-              component={(props) => <EditUser {...props} />}
+              component={EditUser}
             />
             <PrivateRoute
               condition={user.isAdmin}
               path="/admin/edit-product/"
-              component={(props) => <EditProduct {...props} />}
+              component={EditProduct}
             />
             <PrivateRoute
               condition={user.isAdmin}
               path="/admin/create-product/"
-              component={(props) => <CreateProduct {...props} />}
+              component={CreateProduct}
             />
             <PrivateRoute
               condition={user.isAdmin}
               path="/admin/create-news/"
-              component={(props) => <CreateNews {...props} />}
+              component={CreateNews}
             />
             <PrivateRoute
               condition={user.isAdmin}
               path="/admin/create-user/"
-              component={(props) => <CreateUser {...props} />}
+              component={CreateUser}
             />
-            <PrivateRoute path="/admin/create-order" component={CreateOrder} />
+            <PrivateRoute
+              condition={user.isAdmin}
+              path="/admin/create-order"
+              component={CreateOrder}
+            />
             <Route path="*">
               <NoMatchPage />
             </Route>

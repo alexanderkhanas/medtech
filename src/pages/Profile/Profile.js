@@ -335,17 +335,6 @@ const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
                           name="flat"
                           placeholder="81"
                           icon={faBuilding}
-                          //   defaultValue={profileInfo.phone}
-                          onChange={onInputChange}
-                        />
-                      </div>
-                      <div className={s.profile__info__field}>
-                        <ProfileInput
-                          label="Поштовий індекс"
-                          name="zip-code"
-                          placeholder="46000"
-                          icon={faKeyboard}
-                          //   defaultValue={profileInfo.email}
                           onChange={onInputChange}
                         />
                       </div>
@@ -355,14 +344,13 @@ const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
                           name="warehouse"
                           placeholder="1"
                           icon={faMailBulk}
-                          //   defaultValue={profileInfo.email}
                           onChange={onInputChange}
                         />
                       </div>
 
                       <button
                         className={s.save__profile__btn}
-                        // onClick={editProfile}
+                        onClick={handleSubmit}
                       >
                         Змінити
                         <span className={s.profile__btn__overlay}>

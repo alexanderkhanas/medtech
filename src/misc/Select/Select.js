@@ -5,6 +5,7 @@ const Select = ({
   options = [],
   withSearch,
   label,
+  clearInputOnSelect,
   noDefaultValue = false,
   containerClass = "",
   menuClass = "",
@@ -27,7 +28,11 @@ const Select = ({
   };
 
   const selectSearchHandler = (option) => {
-    setSearchValue(option.label);
+    if (clearInputOnSelect) {
+      setSearchValue("");
+    } else {
+      setSearchValue(option.label);
+    }
     onSelect(option);
     setMenuOpened(false);
   };
@@ -54,7 +59,7 @@ const Select = ({
                 <div
                   key={i}
                   className={s.option}
-                  onClick={() => selectHandler(option)}
+                  onClick={() => selectHandler(option, setSearchValue)}
                 >
                   <span className={s.option__text}>{option.label}</span>
                 </div>

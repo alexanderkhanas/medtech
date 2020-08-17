@@ -21,7 +21,7 @@ const Input = ({
   style = {},
   inputStyle = {},
   onChange = () => {},
-  placeholder = "",
+  placeholder,
   ...rest
 }) => {
   const [isFocused, setFocused] = useState(false);

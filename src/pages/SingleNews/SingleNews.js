@@ -21,8 +21,12 @@ const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
     { name: "Новина", path: "/single-news/:id" },
   ];
   useEffect(() => {
-    getSingleNews(match.params.id);
-  }, []);
+    if (match.params?.id) {
+      getSingleNews(match.params.id);
+    }
+  }, [match.params?.id]);
+  console.log("match.params.id ===", match.params.id);
+
   console.log("singleNews ===", singleNews);
   console.log("created at ===", createdAt);
 

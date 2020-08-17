@@ -30,6 +30,7 @@ import {
 } from "../../store/actions/profileActions";
 import { showAlertAction } from "../../store/actions/alertActions";
 import { showModalAction } from "../../store/actions/baseActions";
+import { Formik } from "formik";
 
 const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
   const { id } = useParams();
@@ -301,55 +302,61 @@ const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Місто"
-                          val="city"
+                          name="city"
+                          placeholder="Тернопіль"
                           icon={faCity}
                           //   defaultValue={profileInfo.firstName}
-                          //   onChange={onChange}
+                          onChange={onInputChange}
                         />
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Вулиця"
-                          val="street"
+                          name="street"
+                          placeholder="Руська"
                           icon={faStreetView}
                           //   defaultValue={profileInfo.lastName}
-                          //   onChange={onChange}
+                          onChange={onInputChange}
                         />
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Будинок"
-                          val="house"
+                          name="house"
+                          placeholder="12"
                           icon={faHouseUser}
                           //   defaultValue={profileInfo.lastName}
-                          //   onChange={onChange}
+                          onChange={onInputChange}
                         />
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Квартира"
-                          val="apartment"
+                          name="flat"
+                          placeholder="81"
                           icon={faBuilding}
                           //   defaultValue={profileInfo.phone}
-                          //   onChange={onChange}
+                          onChange={onInputChange}
                         />
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Поштовий індекс"
-                          val="zip-code"
+                          name="zip-code"
+                          placeholder="46000"
                           icon={faKeyboard}
                           //   defaultValue={profileInfo.email}
-                          //   onChange={onChange}
+                          onChange={onInputChange}
                         />
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Склад Нової пошти"
-                          val="np-number"
+                          name="warehouse"
+                          placeholder="1"
                           icon={faMailBulk}
                           //   defaultValue={profileInfo.email}
-                          //   onChange={onChange}
+                          onChange={onInputChange}
                         />
                       </div>
 

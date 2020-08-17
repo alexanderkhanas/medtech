@@ -27,6 +27,7 @@ export default (state = initialState, action) => {
         gallery: action.user.gallery,
         lName: action.user.lName,
         _id: action.user._id,
+        isLogged: true,
       };
     case LOGOUT:
       return {

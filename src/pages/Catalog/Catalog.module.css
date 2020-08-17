@@ -160,6 +160,13 @@
   visibility: initial;
 }
 
+@media (min-width: 550px) and (max-width: 750px) {
+  .product__card {
+    height: initial;
+    width: 100%;
+  }
+}
+
 @media (max-width: 550px) {
   .product__card {
     height: initial;

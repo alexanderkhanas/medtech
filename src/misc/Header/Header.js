@@ -105,6 +105,8 @@ const Header = ({
 
   console.log("isDropdownVisible ===", isDropdownVisible);
 
+  console.log("user ===", user);
+
   return (
     <>
       <FixedWrapper>

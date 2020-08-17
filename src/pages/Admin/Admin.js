@@ -11,7 +11,7 @@ import {
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { TabList, Tabs, Tab, TabPanel } from "react-tabs";
 import OrderCard from "../../misc/Admin/OrderCard/OrderCard";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import Button from "../../misc/Button/Button";
 import OrderProductCard from "../../misc/OrderProductCard/OrderProductCard";
@@ -40,6 +40,7 @@ import {
   deleteNewsAction,
   editVendorAction,
   deleteVendorAction,
+  deleteUserAction,
 } from "../../store/actions/adminActions";
 import { getAllNewsAction } from "../../store/actions/newsActions";
 import { showAlertAction } from "../../store/actions/alertActions";
@@ -65,6 +66,7 @@ const Admin = ({
   deleteCategory,
   deleteNews,
   deleteVendor,
+  deleteUser,
   editAttribute,
   editVendor,
 }) => {
@@ -80,6 +82,8 @@ const Admin = ({
     setValues(value);
   };
 
+  const h = useHistory();
+
   const breadCrumbsItems = [
     {
       name: "Головна",
@@ -89,8 +93,6 @@ const Admin = ({
     { name: "Адмін", path: "/admin" },
   ];
 
-  const h = useHistory();
-
   useEffect(() => {
     (async () => {
       console.log("isLoading ===", isLoading);
@@ -98,9 +100,9 @@ const Admin = ({
       if (!isLoading && !attributes?.length) {
         console.log("here");
 
+        await getAttributes();
         await getCategories();
         await getVendors();
-        await getAttributes();
         await getUsers();
         await getNews();
       }
@@ -570,8 +572,8 @@ const Admin = ({
                   { title: lName, key: `${_id}lName` },
                   { title: phone, key: `${_id}phone` },
                 ]}
-                onEdit={() => {}}
-                onDelete={() => {}}
+                onEdit={() => h.push(`/admin/edit-user/${_id}`)}
+                onDelete={() => deleteUser(_id)}
               />
             ))}
           </TabPanel>
@@ -648,6 +650,7 @@ const mapDispatchToProps = (dispatch) => {
     deleteCategory: (id) => dispatch(deleteCategoryAction(id)),
     deleteNews: (id) => dispatch(deleteNewsAction(id)),
     deleteVendor: (id) => dispatch(deleteVendorAction(id)),
+    deleteUser: (id) => dispatch(deleteUserAction(id)),
     createCategory: (category) => dispatch(createCategoryAction(category)),
     createVendor: (vendor) => dispatch(createVendorAction(vendor)),
     createAttribute: (attribute) => dispatch(createAttributeAction(attribute)),

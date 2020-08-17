@@ -62,9 +62,12 @@ export const getUserByIdAction = (id) => {
   };
 };
 
-export const patchUserAction = (user) => {
-  return async () => {
-    const token = getToken();
+export const patchUserAction = (user, userToken) => {
+  return async (dispatch) => {
+    let token = userToken;
+    if (!userToken) {
+      token = getToken();
+    }
     const response = await patchUser(user, token);
   };
 };

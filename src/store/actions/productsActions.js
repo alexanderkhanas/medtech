@@ -75,10 +75,10 @@ export const filterProductsAction = (categoryIdsArray, searchValue) => {
     const response = await fetchFilteredProducts(categoryIdsArray, searchValue);
     dispatch({ type: SET_LOADING, isLoading: false });
     console.log("response ===", response?.data);
-    if (response?.data) {
+    if (response?.data?.products) {
       dispatch({
         type: SET_FILTERED_PRODUCTS,
-        products: response.data,
+        products: response.data.products,
       });
     } else {
       dispatch({

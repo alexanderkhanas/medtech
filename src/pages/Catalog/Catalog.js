@@ -174,7 +174,7 @@ const Catalog = ({
               </h3>
               {windowWidth >= 600 ? (
                 <div className={s.filter__categories}>
-                  {sortedCategories?.length &&
+                  {!!sortedCategories?.length &&
                     sortedCategories.map((parent) => (
                       <CategoryAccordion
                         {...{ selectCategory }}

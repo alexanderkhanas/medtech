@@ -255,7 +255,7 @@ const App = ({
             />
             <PrivateRoute
               condition={user.isAdmin}
-              path="/admin/edit-user/"
+              path="/admin/edit-user/:id"
               component={(props) => <EditUser {...props} />}
             />
             <PrivateRoute

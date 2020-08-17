@@ -40,3 +40,4 @@ export const DELETE_CATEGORY = "DELETE_CATEGORY";
 export const ADD_ATTRIBUTE = "ADD_ATTRIBUTE";
 export const DELETE_NEWS = "DELETE_NEWS";
 export const SET_VENDORS = "SET_VENDORS";
+export const DELETE_USER = "DELETE_USER";

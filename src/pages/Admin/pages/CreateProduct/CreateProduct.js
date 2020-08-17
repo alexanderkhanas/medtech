@@ -6,8 +6,11 @@ import Input from "../../../../misc/Inputs/Input/Input";
 import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
 import ProfileInput from "../../../../misc/Inputs/ProfileInput/ProfileInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../../misc/Button/Button";
+import { useHistory } from "react-router-dom";
+import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
+import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 
 const CreateProduct = (props) => {
   const [productInfo, setProductInfo] = useState({
@@ -62,10 +65,21 @@ const CreateProduct = (props) => {
     console.log("product ===", productInfo);
   }, [productInfo]);
 
+  const h = useHistory();
+
+  const breadCrumbsItems = [
+    {
+      name: "Адмін",
+      path: "/admin",
+    },
+    { name: "Створити товар" },
+  ];
+
   return (
     <div className={s.container}>
       <div className={s.title__container}>
         <h1 className={s.title}>Створення товару</h1>
+        <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
         <div className={s.body}>
@@ -122,6 +136,7 @@ const CreateProduct = (props) => {
           />
           <div className={s.submit__container}>
             <Button title="Створити" size="lg" />
+            <GoBackBtn />
           </div>
         </div>
       </FixedWrapper>

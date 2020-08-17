@@ -10,6 +10,7 @@ import { Formik } from "formik";
 import userDefaultAvatar from "../../../../assets/profile.png";
 import { registerAction } from "../../../../store/actions/profileActions";
 import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
+import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
 
 const CreateUser = ({ register }) => {
   const uploaderRef = useRef();
@@ -20,7 +21,7 @@ const CreateUser = ({ register }) => {
       name: "Адмін",
       path: "/admin",
     },
-    { name: "Створити користувача", path: "/admin/create-user" },
+    { name: "Створити користувача" },
   ];
 
   const handleImageUpload = (e) => {
@@ -256,6 +257,7 @@ const CreateUser = ({ register }) => {
                     size="lg"
                     title="Створити"
                   />
+                  <GoBackBtn />
                 </div>
               </div>
             );

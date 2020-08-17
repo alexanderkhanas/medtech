@@ -7,6 +7,7 @@ import { Link, useHistory } from "react-router-dom";
 import Button from "../../../../misc/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 
 const EditUser = (props) => {
   const uploadedImage = useRef(null);
@@ -30,10 +31,20 @@ const EditUser = (props) => {
     }
   };
   const h = useHistory();
+
+  const breadCrumbsItems = [
+    {
+      name: "Адмін",
+      path: "/admin",
+    },
+    { name: "Редагувати користувача" },
+  ];
+
   return (
     <div>
       <div className={s.title__container}>
         <h4 className={s.title}>Редагування користувача</h4>
+        <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
         <div className={s.image_upload}>

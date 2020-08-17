@@ -41,12 +41,16 @@ import {
   editVendorAction,
   deleteVendorAction,
 } from "../../store/actions/adminActions";
+import { logoutAction } from "../../store/actions/profileActions";
 import { getAllNewsAction } from "../../store/actions/newsActions";
 import { showAlertAction } from "../../store/actions/alertActions";
+import { showModalAction } from "../../store/actions/baseActions";
 
 const Admin = ({
   isLoading,
   showAlert,
+  showModal,
+  logout,
   allNews,
   allProducts,
   categories,
@@ -90,7 +94,9 @@ const Admin = ({
   ];
 
   const h = useHistory();
-
+  const showLogoutModal = () => {
+    showModal("Ви дійсно хочете вийти зі свого акаунту?", logout);
+  };
   useEffect(() => {
     (async () => {
       console.log("isLoading ===", isLoading);
@@ -144,7 +150,11 @@ const Admin = ({
               </Tab>
             ))}
             <div>
-              <Button title="Вийти з акаунту" className={s.logout__button}>
+              <Button
+                title="Вийти з акаунту"
+                className={s.logout__button}
+                onClick={showLogoutModal}
+              >
                 <FontAwesomeIcon
                   className={s.logout__icon}
                   icon={faSignOutAlt}
@@ -653,6 +663,9 @@ const mapDispatchToProps = (dispatch) => {
     createAttribute: (attribute) => dispatch(createAttributeAction(attribute)),
     editAttribute: (attribute) => dispatch(editAttributeAction(attribute)),
     editVendor: (vendor) => dispatch(editVendorAction(vendor)),
+    showModal: (content, onSubmit, onReject) =>
+      dispatch(showModalAction(content, onSubmit, onReject)),
+    logout: () => dispatch(logoutAction()),
     // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };

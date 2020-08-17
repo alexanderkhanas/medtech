@@ -28,6 +28,7 @@ import {
   setSelectedCityAction,
   setSelectedWarehouseAction,
 } from "../../../../store/actions/orderActions";
+import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
 
 const CreateOrder = ({
   products,
@@ -337,6 +338,7 @@ const CreateOrder = ({
                     size="lg"
                   />
                 </div>
+                <GoBackBtn />
               </div>
             </>
           )}

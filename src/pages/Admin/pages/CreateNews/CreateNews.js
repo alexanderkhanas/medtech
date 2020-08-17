@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Formik } from "formik";
 import { createNewsAction } from "../../../../store/actions/adminActions";
+import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
+import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 
 const CreateNews = ({ createNews }) => {
   const uploadInputRef = useRef();
@@ -24,11 +26,20 @@ const CreateNews = ({ createNews }) => {
     reader.readAsDataURL(files[0]);
   };
 
+  const breadCrumbsItems = [
+    {
+      name: "Адмін",
+      path: "/admin",
+    },
+    { name: "Створити новину" },
+  ];
+
   return (
     <div>
       <div className={s.container}>
         <div className={s.title__container}>
           <h1 className={s.title}>Створення новини</h1>
+          <BreadCrumbs items={breadCrumbsItems} />
         </div>
         <FixedWrapper>
           <Formik
@@ -110,6 +121,7 @@ const CreateNews = ({ createNews }) => {
                     size="lg"
                   />
                 </div>
+                <GoBackBtn />
               </form>
             )}
           </Formik>

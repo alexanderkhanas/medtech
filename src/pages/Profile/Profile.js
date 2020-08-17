@@ -273,7 +273,7 @@ const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
                             height: "100px",
                             width: "100px",
                           }}
-                          onClick={() => imageUploader.current.click()}
+                          // onClick={() => imageUploader.current.click()}
                         >
                           <img
                             ref={uploadedImage}

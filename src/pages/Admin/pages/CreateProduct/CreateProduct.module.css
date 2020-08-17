@@ -1,6 +1,3 @@
-.container {
-}
-
 .body {
   position: relative;
   max-width: 600px;
@@ -64,3 +61,4 @@
 .submit__container {
   margin-top: 30px;
 }
+

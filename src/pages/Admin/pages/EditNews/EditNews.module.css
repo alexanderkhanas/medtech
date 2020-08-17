@@ -59,13 +59,7 @@
   border: none;
   margin-left: 300px;
 } */
-.goBack__but {
-  color: gray;
-  padding-top: 10px;
-}
-.goBack {
-  margin-right: 2px;
-}
+
 @media (max-width: 600px) {
   .textarea {
     padding: 0 20px;

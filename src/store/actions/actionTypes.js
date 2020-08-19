@@ -42,3 +42,4 @@ export const DELETE_NEWS = "DELETE_NEWS";
 export const SET_VENDORS = "SET_VENDORS";
 export const DELETE_USER = "DELETE_USER";
 export const ADD_PRODUCT = "ADD_PRODUCT";
+export const DELETE_PRODUCT = "DELETE_PRODUCT";

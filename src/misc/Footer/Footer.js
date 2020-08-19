@@ -1,9 +1,6 @@
 import React from "react";
 import s from "./Footer.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import logo from "../../assets/logo.svg";
-import Input from "../Inputs/Input/Input";
-import Button from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInstagram, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import {

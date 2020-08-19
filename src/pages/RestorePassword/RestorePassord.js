@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import s from "./../Auth/Auth.module.css";
+import s from "./../RestorePassword/RestorePassord.module.css";
 import Input from "../../misc/Inputs/Input/Input";
 import Button from "../../misc/Button/Button";
 import { useHistory, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import _axios from "../../store/api/_axios";
+import GoBackBtn from "../../misc/GoBackBtn/GoBackBtn";
 
 const RestorePassord = () => {
   const h = useHistory();
@@ -48,15 +49,7 @@ const RestorePassord = () => {
                 <Button title="Sign in" onClick={handleSubmit} />
               </Link>
             </div>
-            <button
-              className={s.reg}
-              onClick={() => {
-                h.goBack();
-              }}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
-              Повернутись
-            </button>
+            <GoBackBtn />
           </div>
         </div>
       </div>

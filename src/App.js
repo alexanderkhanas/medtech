@@ -255,6 +255,7 @@ const App = ({
             <PrivateRoute
               condition={user.isAdmin}
               path="/admin/create-user/"
+              redirectTo="/admin"
               component={CreateUser}
             />
             <PrivateRoute

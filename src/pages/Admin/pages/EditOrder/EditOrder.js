@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 // import Select from "react-select";
 import Select from "../../../../misc/Select/Select";
+import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
+import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 
 const EditOrder = () => {
   console.log("edit order");
@@ -43,11 +45,19 @@ const EditOrder = () => {
   const onSortPayChange = (value) => {
     setPayType(value);
   };
+  const breadCrumbsItems = [
+    {
+      name: "Адмін",
+      path: "/admin",
+    },
+    { name: "Редагувати замовлення" },
+  ];
 
   return (
     <div>
       <div className={s.title__container}>
         <h4 className={s.title}>Редагування замовлення</h4>
+        <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
         <div className={s.body}>
@@ -84,15 +94,7 @@ const EditOrder = () => {
             <ProfileInput className={s.input} label="Загальна сума" />
           </div>
           <Button title="Змінити" />
-          <button
-            className={s.goBack__but}
-            onClick={() => {
-              h.goBack();
-            }}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
-            Повернутися
-          </button>
+          <GoBackBtn />
         </div>
       </FixedWrapper>
     </div>

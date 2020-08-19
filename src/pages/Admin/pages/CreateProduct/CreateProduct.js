@@ -337,6 +337,13 @@ const CreateProduct = ({
             </div>
           )}
           <Input
+            label="Артикул"
+            value={values.article}
+            name="article"
+            onChange={handleChange}
+            containerClass={s.input__container}
+          />
+          <Input
             label="Кількість"
             value={values.quantity}
             name="quantity"
@@ -357,8 +364,10 @@ const formikHOC = withFormik({
     title: "",
     desc: "",
     gallery: [],
+    galleryFiles: [],
     price: "",
     vendor: "",
+    article: "",
     quantity: 1,
     recommended: false,
     attributesLabels: [],
@@ -376,6 +385,7 @@ const formikHOC = withFormik({
       vendorID: val?.vendor?._id,
       categoryID: val?.category?._id,
       price: val.price,
+      article: val.article,
       recommended: val.recommended,
       quantity: val.quantity,
       visibility: true,

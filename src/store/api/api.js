@@ -14,21 +14,17 @@ export const searchProductsRequest = async (value) => {
   return _axios.get(`/products?search=${value}`);
 };
 
-export const fetchFilteredProducts = (categoriesArray, searchValue) => {
+export const fetchFilteredProducts = (categoriesArray, searchValue, page) => {
   let baseUrl = "/products?";
+  if (page) {
+    baseUrl += `page=${page}`;
+  }
   if (categoriesArray) {
-    baseUrl += "category=";
-    console.log("categoryIdsArray ===", categoriesArray);
-
+    baseUrl += "&category=";
     baseUrl += categoriesArray.map((category) => category.id).join(",");
-    // categoriesArray.forEach((category) => {
-    //   baseUrl += `${category.id}&`;
-    // });
   }
   if (searchValue) {
-    console.log("api search ===", searchValue);
-    baseUrl += `search=${searchValue}`;
-    console.log("baseUrl ===", baseUrl);
+    baseUrl += `&search=${searchValue}`;
   }
   return _axios.get(baseUrl);
 };
@@ -201,9 +197,18 @@ export const postProduct = (product, token) => {
   });
 };
 
+export const deleteProduct = (id, token) => {
+  return _axios.delete(`/product/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const postProductGallery = (gallery, id, token) => {
   return _axios.post(`/product/${id}/gallery`, gallery, {
     headers: {
+      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     },
   });

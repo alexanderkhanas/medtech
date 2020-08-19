@@ -3,17 +3,21 @@ import s from "./EditNews.module.css";
 import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
 import ProfileInput from "../../../../misc/Inputs/ProfileInput/ProfileInput";
 import Button from "../../../../misc/Button/Button";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { getSingleNewsAction } from "../../../../store/actions/newsActions";
+import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
+import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 
-const EditNews = ({ getSingleNews, match, singleNews }) => {
+const EditNews = ({ getSingleNews, singleNews }) => {
   const { title, gallery, desc, createdAt, _id } = singleNews;
   console.log(singleNews);
+
+  const { id } = useParams();
   useEffect(() => {
-    getSingleNews(match.params.id);
+    getSingleNews(id);
   }, []);
   console.log("singleNews ===", singleNews);
 
@@ -43,10 +47,18 @@ const EditNews = ({ getSingleNews, match, singleNews }) => {
     }
   };
   const h = useHistory();
+  const breadCrumbsItems = [
+    {
+      name: "Адмін",
+      path: "/admin",
+    },
+    { name: "Редагувати новину" },
+  ];
   return (
     <div>
       <div className={s.title__container}>
         <h4 className={s.title}>Редагування новини</h4>
+        <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
         <div className={s.input__container}>
@@ -91,15 +103,7 @@ const EditNews = ({ getSingleNews, match, singleNews }) => {
             <textarea className={s.textarea} defaultValue={desc} />
           </div>
           <Button title="Зберегти зміни" />
-          <button
-            className={s.goBack__but}
-            onClick={() => {
-              h.goBack();
-            }}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
-            Повернутися
-          </button>
+          <GoBackBtn />
         </div>
       </FixedWrapper>
     </div>

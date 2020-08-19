@@ -42,12 +42,18 @@ import {
   deleteVendorAction,
   deleteUserAction,
 } from "../../store/actions/adminActions";
+import { logoutAction } from "../../store/actions/profileActions";
 import { getAllNewsAction } from "../../store/actions/newsActions";
 import { showAlertAction } from "../../store/actions/alertActions";
+import { showModalAction } from "../../store/actions/baseActions";
+import ReactPaginate from "react-paginate";
+import ProductsView from "../../misc/Admin/ProductsView/ProductsView";
 
 const Admin = ({
   isLoading,
   showAlert,
+  showModal,
+  logout,
   allNews,
   allProducts,
   categories,
@@ -82,8 +88,6 @@ const Admin = ({
     setValues(value);
   };
 
-  const h = useHistory();
-
   const breadCrumbsItems = [
     {
       name: "Головна",
@@ -93,6 +97,10 @@ const Admin = ({
     { name: "Адмін", path: "/admin" },
   ];
 
+  const h = useHistory();
+  const showLogoutModal = () => {
+    showModal("Ви дійсно хочете вийти зі свого акаунту?", logout);
+  };
   useEffect(() => {
     // (async () => {
     console.log("isLoading ===", isLoading);
@@ -148,7 +156,11 @@ const Admin = ({
               </Tab>
             ))}
             <div>
-              <Button title="Вийти з акаунту" className={s.logout__button}>
+              <Button
+                title="Вийти з акаунту"
+                className={s.logout__button}
+                onClick={showLogoutModal}
+              >
                 <FontAwesomeIcon
                   className={s.logout__icon}
                   icon={faSignOutAlt}
@@ -191,21 +203,8 @@ const Admin = ({
                 <FontAwesomeIcon icon={faPlus} className={s.add__more__icon} />
               </Button>
             </Link>
-            <div className={s.products__container}>
-              {allProducts.map((product) => (
-                <Link
-                  key={product._id}
-                  to={`/admin/edit-product/${product._id}`}
-                >
-                  <OrderProductCard
-                    isSmall
-                    {...{ product }}
-                    key={product._id}
-                    className={s.container__}
-                  />
-                </Link>
-              ))}
-            </div>
+
+            <ProductsView />
           </TabPanel>
           <TabPanel>
             <Formik
@@ -658,6 +657,9 @@ const mapDispatchToProps = (dispatch) => {
     createAttribute: (attribute) => dispatch(createAttributeAction(attribute)),
     editAttribute: (attribute) => dispatch(editAttributeAction(attribute)),
     editVendor: (vendor) => dispatch(editVendorAction(vendor)),
+    showModal: (content, onSubmit, onReject) =>
+      dispatch(showModalAction(content, onSubmit, onReject)),
+    logout: () => dispatch(logoutAction()),
     // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };

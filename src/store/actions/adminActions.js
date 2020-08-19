@@ -18,6 +18,7 @@ import {
   fetchUserById,
   postProduct,
   postProductGallery,
+  deleteProduct,
 } from "../api/api";
 import { getToken, getAdminToken } from "../../utils/utils";
 import {
@@ -34,6 +35,7 @@ import {
   DELETE_USER,
   SET_LOADING,
   ADD_PRODUCT,
+  DELETE_PRODUCT,
 } from "./actionTypes";
 
 export const createCategoryAction = (category) => {
@@ -67,6 +69,8 @@ export const deleteCategoryAction = (id) => {
 export const createNewsAction = (body, gallery) => {
   return async (dispatch) => {
     const token = getAdminToken();
+    console.log("before request");
+
     const response = await createNews(body, token);
     console.log("news response ===", response.data);
     if (!gallery || !response?.data) {
@@ -275,5 +279,18 @@ export const createProductAction = (product, gallery) => {
     }
     dispatch({ type: SET_LOADING, isLoading: false });
     return productRes.status === 200;
+  };
+};
+
+export const deleteProductAction = (id) => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await deleteProduct(id, token);
+    console.log("delete response ===", response.data);
+    dispatch({ type: SET_LOADING, isLoading: false });
+    if (response.status === 200) {
+      dispatch({ type: DELETE_PRODUCT, id: response.data._id });
+    }
   };
 };

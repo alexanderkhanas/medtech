@@ -20,7 +20,7 @@ const ProductCard = ({ product, className }) => {
           className={s.card__img}
           onClick={redirectToSingleProduct}
           src={
-            gallery[0]?.includes("png")
+            gallery[0]
               ? gallery[0]
               : require("../../assets/image-placeholder.webp")
           }

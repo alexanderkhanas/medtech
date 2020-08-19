@@ -25,11 +25,11 @@ export const getProducts = () => {
     const response = await fetchProducts();
     dispatch({ type: SET_LOADING, isLoading: false });
     if (!response.data) return;
-    const { products } = response.data;
+    const { products, length } = response.data;
     dispatch({
       type: SET_PRODUCTS,
       products,
-      quantity: response.data.length,
+      quantity: length,
     });
     dispatch({
       type: SET_RECOMMENDED,
@@ -66,24 +66,35 @@ export const clearFilterAction = (products) => {
   return {
     type: SET_FILTERED_PRODUCTS,
     products,
+    quantity: 0,
   };
 };
 
-export const filterProductsAction = (categoryIdsArray, searchValue) => {
+export const filterProductsAction = (
+  categoryIdsArray,
+  searchValue,
+  page = 1
+) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING, isLoading: true });
-    const response = await fetchFilteredProducts(categoryIdsArray, searchValue);
+    const response = await fetchFilteredProducts(
+      categoryIdsArray,
+      searchValue,
+      page
+    );
     dispatch({ type: SET_LOADING, isLoading: false });
     console.log("response ===", response?.data);
     if (response?.data?.products) {
       dispatch({
         type: SET_FILTERED_PRODUCTS,
         products: response.data.products,
+        quantity: response.data.length,
       });
     } else {
       dispatch({
         type: SET_FILTERED_PRODUCTS,
         products: [],
+        quantity: 0,
       });
     }
   };

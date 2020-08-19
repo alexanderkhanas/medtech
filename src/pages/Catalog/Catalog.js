@@ -49,9 +49,11 @@ const Catalog = ({
   const [sortedCategories, setSortedCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isFilterAnimation, setFilterAnimation] = useState(true);
+  const [activePage, setActivePage] = useState(1);
 
   const onPageChange = ({ selected }) => {
-    getProductsByPage(selected + 1);
+    setActivePage(selected + 1);
+    // getProductsByPage(selected + 1);
     scrollToRef(containerRef);
   };
 
@@ -67,19 +69,31 @@ const Catalog = ({
   };
 
   const removeCategory = (categoryTitle) => {
-    setSelectedCategories((prev) =>
-      prev.filter((selectedCategory) => selectedCategory.name !== categoryTitle)
+    const filtered = selectedCategories.filter(
+      (selectedCategory) => selectedCategory.name !== categoryTitle
     );
+
+    setSelectedCategories(filtered);
+    if (!filtered?.length) {
+      clearFilter(products);
+    }
   };
 
-  const switchProductViewType = () =>
+  const switchProductViewType = () => {
     setProductViewType((prev) => (prev === "row" ? "column" : "row"));
+  };
 
   useEffect(() => {
     if (selectedCategories.length) {
-      filterProducts(selectedCategories, searchValue);
+      filterProducts(selectedCategories, searchValue, activePage);
     }
   }, [selectedCategories]);
+
+  useEffect(() => {
+    console.log("active page ===", activePage);
+
+    filterProducts(selectedCategories, searchValue, activePage);
+  }, [activePage]);
 
   useEffect(() => {
     let filtered = categories.map((category) => {
@@ -120,17 +134,7 @@ const Catalog = ({
     setSortedCategories(filtered);
   }, [categories]);
 
-  useEffect(() => {
-    if (!selectedCategories?.length) {
-      clearFilter(products);
-    }
-  }, [selectedCategories]);
-
   const isEmptyResults = !filteredProducts.length && !isLoading;
-
-  useEffect(() => {
-    console.log("selectedCategories ===", selectedCategories);
-  }, [selectedCategories]);
 
   /*
   array.map((el) => (
@@ -138,6 +142,8 @@ const Catalog = ({
     </div>
   ))
   */
+
+  console.log("filteredProductsQuantity ===", filteredProductsQuantity);
 
   const breadCrumbsItems = [
     {
@@ -273,7 +279,7 @@ const Catalog = ({
           </div>
         </div>
         <ReactPaginate
-          pageCount={filteredProductsQuantity / 20}
+          pageCount={Math.round(filteredProductsQuantity / 24)}
           pageRangeDisplayed={5}
           marginPagesDisplayed={1}
           {...{ onPageChange }}
@@ -302,9 +308,10 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    getProductsByPage: (page) => dispatch(getProductsByPage(page)),
-    filterProducts: (categoryId, searchValue) =>
-      dispatch(filterProductsAction(categoryId, searchValue)),
+    getProductsByPage: (page, categoryId, searchValue) =>
+      dispatch(getProductsByPage(page, categoryId, searchValue)),
+    filterProducts: (categoryId, searchValue, page) =>
+      dispatch(filterProductsAction(categoryId, searchValue, page)),
     setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
     getCategories: () => dispatch(getCategoriesAction()),
     clearFilter: (products) => dispatch(clearFilterAction(products)),

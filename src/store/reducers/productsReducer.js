@@ -10,6 +10,7 @@ import {
   ADD_CATEGORY,
   DELETE_CATEGORY,
   ADD_PRODUCT,
+  DELETE_PRODUCT,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -113,6 +114,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         all: [...state.all, action.product],
+      };
+    case DELETE_PRODUCT:
+      return {
+        ...state,
+        all: state.all.filter((product) => product._id !== action.id),
+        filtered: state.all.filter((product) => product._id !== action.id),
+        filteredQuantity: state.filteredQuantity - 1,
+        quantity: state.quantity - 1,
+        highRating: state.highRating.filter(
+          (product) => product._id !== action.id
+        ),
+        new: state.new.filter((product) => product._id !== action.id),
       };
     default:
       return state;

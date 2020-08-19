@@ -74,7 +74,7 @@ const SingleProduct = ({
   };
 
   const onCartButtonClick = () => {
-    if (!foundAttributes._id) {
+    if (!foundAttributes._id && attributes.length) {
       showAlert("Перед додаванням у корзину оберіть атрибути");
       if (window.innerWidth <= 575) {
         scrollToRef(attributesRef, -120);
@@ -127,7 +127,7 @@ const SingleProduct = ({
   }, [cartProducts, _id]);
 
   useEffect(() => {
-    if (attributes) {
+    if (attributes?.length) {
       const filteredObject = {};
       let minimumPrice = 0;
       Object.values(attributes).forEach((possibleAttribute, index) => {
@@ -162,7 +162,7 @@ const SingleProduct = ({
   }, []);
 
   useEffect(() => {
-    if (attributeOptions) {
+    if (attributeOptions?.length) {
       const attributeFound = attributeOptions.find((attributeObj) =>
         lodash.isEqual(
           { ...attributeObj, priceAttr: null, _id: null },
@@ -257,11 +257,13 @@ const SingleProduct = ({
                   />
                 );
               })}
-              <ProductAttribute
-                name="Країна виробника"
-                values={[vendorID.title]}
-              />
-              {!!categoryID && !!categoryID._id && (
+              {!!vendorID?._id && (
+                <ProductAttribute
+                  name="Країна виробника"
+                  values={[vendorID.title]}
+                />
+              )}
+              {!!categoryID?._id && (
                 <ProductAttribute
                   name="Категорія"
                   values={[categoryID.title]}

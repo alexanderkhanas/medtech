@@ -8,8 +8,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Formik } from "formik";
 import { createNewsAction } from "../../../../store/actions/adminActions";
+import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
+import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
+import { showAlertAction } from "../../../../store/actions/alertActions";
 
-const CreateNews = ({ createNews }) => {
+const CreateNews = ({ createNews, showAlert }) => {
   const uploadInputRef = useRef();
   const handleImages = ({ target: { files } }, values, setValues) => {
     const reader = new FileReader();
@@ -24,11 +27,20 @@ const CreateNews = ({ createNews }) => {
     reader.readAsDataURL(files[0]);
   };
 
+  const breadCrumbsItems = [
+    {
+      name: "Адмін",
+      path: "/admin",
+    },
+    { name: "Створити новину" },
+  ];
+
   return (
     <div>
       <div className={s.container}>
         <div className={s.title__container}>
           <h1 className={s.title}>Створення новини</h1>
+          <BreadCrumbs items={breadCrumbsItems} />
         </div>
         <FixedWrapper>
           <Formik
@@ -42,6 +54,11 @@ const CreateNews = ({ createNews }) => {
               { title, desc, gallery, galleryFile },
               { resetForm }
             ) => {
+              console.log("gallery file ===", galleryFile);
+
+              // if (!Object.keys(galleryFile).length) {
+              //   return;
+              // }
               const imageFormData = new FormData();
               console.log("gallery ===", gallery);
 
@@ -52,6 +69,14 @@ const CreateNews = ({ createNews }) => {
                 { title, desc },
                 imageFormData
               );
+              console.log("is news created ===", isNewsCreated);
+
+              if (isNewsCreated) {
+                showAlert("Новину створено успішно!", "success");
+              } else {
+                showAlert("Сталась помилка!", "error");
+              }
+
               console.log("is news created ===", isNewsCreated);
 
               resetForm({ title: "", desc: "", gallery: "", galleryFile: {} });
@@ -110,6 +135,7 @@ const CreateNews = ({ createNews }) => {
                     size="lg"
                   />
                 </div>
+                <GoBackBtn />
               </form>
             )}
           </Formik>
@@ -125,6 +151,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     createNews: (news, gallery) => dispatch(createNewsAction(news, gallery)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
   };
 };
 

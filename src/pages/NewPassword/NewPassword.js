@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import s from "./../Auth/Auth.module.css";
+import s from "./../NewPassword/NewPassword.module.css";
 import Input from "../../misc/Inputs/Input/Input";
 import Button from "../../misc/Button/Button";
 import { useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import _axios from "../../store/api/_axios";
+import GoBackBtn from "../../misc/GoBackBtn/GoBackBtn";
 
 const RestorePassord = () => {
   const h = useHistory();
@@ -26,7 +27,7 @@ const RestorePassord = () => {
       <div className={s.body}>
         <div className={s.container}>
           <div className={s.title__container}>
-            <h4 className={s.title}>ACCOUNT</h4>
+            <h4 className={s.title}>Відновлення паролю</h4>
           </div>
           <div className={s.login}>
             <h5>Відновлення паролю</h5>
@@ -50,15 +51,7 @@ const RestorePassord = () => {
             <div className={s.submit_button}>
               <Button title="Змінити пароль" onClick={handleSubmit} />
             </div>
-            <button
-              className={s.reg}
-              onClick={() => {
-                h.goBack();
-              }}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
-              Повернутись
-            </button>
+            <GoBackBtn />
           </div>
         </div>
       </div>

@@ -7,11 +7,13 @@ import { useHistory, useParams } from "react-router-dom";
 import Button from "../../../../misc/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 import userDefaultAvatar from "../../../../assets/profile.png";
 import { withFormik } from "formik";
 import { getUsersAction } from "../../../../store/actions/adminActions";
 import { connect } from "react-redux";
 import { patchUserAction } from "../../../../store/actions/profileActions";
+import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
 
 const EditUser = ({
   values,
@@ -33,7 +35,6 @@ const EditUser = ({
     uploaderRef.current.click();
   };
 
-  const h = useHistory();
   const { id } = useParams();
 
   const handleImageUpload = (e) => {
@@ -53,6 +54,15 @@ const EditUser = ({
       // setUserData((prev) => ({ ...prev, gallery: file }));
     }
   };
+  const h = useHistory();
+
+  const breadCrumbsItems = [
+    {
+      name: "Адмін",
+      path: "/admin",
+    },
+    { name: "Редагувати користувача" },
+  ];
   console.log("values ===", values);
 
   useEffect(() => {
@@ -74,6 +84,7 @@ const EditUser = ({
     <div>
       <div className={s.title__container}>
         <h4 className={s.title}>Редагування користувача</h4>
+        <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
         <div className={s.body}>
@@ -224,15 +235,7 @@ const EditUser = ({
             />
           </div>
           <div className={s.back__container}>
-            <button
-              className={s.goBack__but}
-              onClick={() => {
-                h.goBack();
-              }}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
-              Повернутися
-            </button>
+            <GoBackBtn />
           </div>
         </div>
       </FixedWrapper>

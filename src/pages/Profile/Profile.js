@@ -89,7 +89,10 @@ const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
   };
 
   const showLogoutModal = () => {
-    showModal("Ви дійсно хочете вийти зі свого акаунту?", logout);
+    showModal("Ви дійсно хочете вийти зі свого акаунту?", () => {
+      logout();
+      h.push("/login");
+    });
   };
 
   const handleRemovePhoto = (e) => {
@@ -294,7 +297,7 @@ const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
                         <h4 className={s.container_title}>Ваша адреса</h4>
                         <FontAwesomeIcon
                           icon={faSignOutAlt}
-                          //   onClick={logout}
+                          onClick={showLogoutModal}
                           className={s.profile__info__icon}
                         />
                       </div>

@@ -8,6 +8,7 @@ import {
   ADD_ATTRIBUTE,
   SET_VENDORS,
   DELETE_USER,
+  ADD_PRODUCT,
 } from "../actions/actionTypes";
 
 const initialState = {

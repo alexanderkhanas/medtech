@@ -13,7 +13,10 @@ import { getCategoriesAction } from "../../../../store/actions/productsActions";
 import {
   getVendorsAction,
   getAttributesAction,
+  createProductAction,
 } from "../../../../store/actions/adminActions";
+import Cartesian from "react-cartesian";
+import OrderAttributeOptions from "../../../../misc/Admin/OrderAttributeOptions/OrderAttributeOptions";
 
 const CreateProduct = ({
   getAttributes,
@@ -23,32 +26,37 @@ const CreateProduct = ({
   vendors,
   attributes,
   handleChange,
+  handleSubmit,
   values,
   setValues,
 }) => {
   const [filteredVendors, setFilteredVendors] = useState([]);
   const [filteredAttributes, setFilteredAttributes] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
-  const uploadedImage = useRef(null);
-  const imageUploader = useRef(null);
+  // const uploadedImage = useRef(null);
+  // const imageUploader = useRef(null);
 
   const handleImages = ({ target: { files } }) => {
+    const temp = [];
+
     Array.from(files).forEach((file) => {
       const reader = new FileReader();
+      console.log("files length ===", Array.from(files).length);
 
       reader.onload = ({ target: { result } }) => {
+        temp.push(result);
         setValues({
           ...values,
-          gallery: [...values.gallery, result],
+          gallery: temp,
+          galleryFiles: Array.from(files),
         });
-        console.log("result ===", result);
       };
       reader.readAsDataURL(file);
     });
   };
 
-  const onCategorySelect = (...rest) => {
-    console.log(rest);
+  const onCategorySelect = ({ value }) => {
+    setValues({ ...values, category: value });
   };
 
   const onCategoryInputChange = (value) => {
@@ -66,7 +74,7 @@ const CreateProduct = ({
       setValues({
         ...values,
         attributesLabels: [...values.attributesLabels, value],
-        attributes: { ...values.attributes, [value._id]: [] },
+        attributes: { ...values.attributes, [value.name]: [] },
       });
     }
   };
@@ -78,16 +86,34 @@ const CreateProduct = ({
     setFilteredAttributes(filtered);
   };
 
-  const onAttributeValueChange = (value, id, index) => {
-    const temp = [...values.attributes[id]];
+  const onAttributeValueChange = (value, id, index, name) => {
+    const temp = [...values.attributes[name]];
     temp[index] = value;
     setValues({
       ...values,
       attributes: {
         ...values.attributes,
-        [id]: temp,
+        [name]: temp,
       },
     });
+  };
+
+  console.log("attr ===", values.attributesLabels);
+
+  const setAttrOptions = (attrOptions) => {
+    setValues({ ...values, attrOptions });
+  };
+
+  const onAttributesCheckboxChange = (e) => {
+    console.log("e target ===", e?.target?.value);
+    setValues({
+      ...values,
+      isPriceChangesByAttributes: !values.isPriceChangesByAttributes,
+    });
+  };
+
+  const onVendorSelect = ({ value }) => {
+    setValues({ ...values, vendor: value });
   };
 
   const onVendorInputChange = (value) => {
@@ -127,7 +153,8 @@ const CreateProduct = ({
 
   console.log("vendor options ===", vendorsOptions);
   console.log("filtered vendor ===", filteredVendors);
-  console.log("attributes ===", attributes);
+  console.log("attributes ===", values.attributes);
+  console.log("gallery ===", values.gallery);
 
   useEffect(() => {
     if (!vendors.length) {
@@ -148,6 +175,13 @@ const CreateProduct = ({
   useEffect(() => {
     setFilteredAttributes(attributes);
   }, [attributes]);
+
+  // useEffect(() => {
+  //   const res = cartesianProduct(Object.values(values.attributes));
+  //   console.log("cartesianProduct ===", res);
+  // }, [values.attributes]);
+
+  console.log("category options ===", categoriesOptions);
 
   return (
     <div className={s.container}>
@@ -195,8 +229,9 @@ const CreateProduct = ({
           />
           <Input
             label="Ціна"
-            value={values.title}
+            value={values.price}
             placeholder="123"
+            name="price"
             onChange={handleChange}
             containerClass={s.input__container}
           />
@@ -205,6 +240,7 @@ const CreateProduct = ({
             value={values.vendor}
             withSearch
             noDefaultValue
+            onSelect={onVendorSelect}
             onSearchValueChange={onVendorInputChange}
             options={vendorsOptions}
             containerClass={s.input__container}
@@ -214,6 +250,7 @@ const CreateProduct = ({
             value={values.category}
             withSearch
             noDefaultValue
+            onSelect={onCategorySelect}
             onSearchValueChange={onCategoryInputChange}
             options={categoriesOptions}
             containerClass={s.input__container}
@@ -229,31 +266,76 @@ const CreateProduct = ({
             options={attributesOptions}
             containerClass={s.input__container}
           />
-          {values.attributesLabels.map(({ _id, name }) => {
-            console.log("length ===", [
-              ...Array(values.attributes[_id].length + 1).keys(),
-            ]);
-            console.log("values.attributes ===", values.attributes);
-
-            return (
-              <div key={_id} className={s.attribute}>
-                <p>{name}</p>
-                <div>
-                  {[...Array(values.attributes[_id].length + 1).keys()].map(
-                    (number) => (
-                      <Input
-                        placeholder="Значення атрибута"
-                        key={_id + number}
-                        onChange={({ target }) =>
-                          onAttributeValueChange(target.value, _id, number)
-                        }
-                      />
-                    )
-                  )}
-                </div>
+          {!!values.attributesLabels.length && (
+            <div className={s.attributes__container}>
+              <div className={s.attributes__checkbox__container}>
+                <input
+                  type="checkbox"
+                  checked={values.isPriceChangesByAttributes}
+                  className={s.attributes__checkbox}
+                  onChange={onAttributesCheckboxChange}
+                />
+                <p
+                  onClick={onAttributesCheckboxChange}
+                  className={s.attributes__checkbox__label}
+                >
+                  Ціна продукту не залежить від обраних атрибутів
+                </p>
               </div>
-            );
-          })}
+              {values.attributesLabels.map(({ _id, name }) => {
+                return (
+                  <div key={_id} className={s.attribute}>
+                    <p>{name}</p>
+                    <div>
+                      {[
+                        ...Array(values.attributes[name].length + 1).keys(),
+                      ].map((number) => (
+                        <Input
+                          placeholder="Значення атрибута"
+                          key={_id + number}
+                          onChange={({ target }) =>
+                            onAttributeValueChange(
+                              target.value,
+                              _id,
+                              number,
+                              name
+                            )
+                          }
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+              <OrderAttributeOptions
+                {...{ setAttrOptions }}
+                options={values.attributes}
+              />
+              {/* <Cartesian
+                cols={1}
+                className={"asdas"}
+                showProps
+                component={(props) => {
+                  console.log("props ===", props);
+                  return (
+                    <div>
+                      {Object.keys(props).map(
+                        (key, i) =>
+                          key !== "children" && (
+                            <div {...{ key }}>
+                              <span>{key}</span>
+                              <p>{props[key]}</p>
+                              <Input placeholder="100" label="Оберіть ціну" />
+                            </div>
+                          )
+                      )}
+                    </div>
+                  );
+                }}
+                props={values.attributes}
+              /> */}
+            </div>
+          )}
           <Input
             label="Кількість"
             value={values.quantity}
@@ -262,7 +344,7 @@ const CreateProduct = ({
             containerClass={s.input__container}
           />
           <div className={s.submit__container}>
-            <Button title="Створити" size="lg" />
+            <Button onClick={handleSubmit} title="Створити" size="lg" />
           </div>
         </form>
       </FixedWrapper>
@@ -280,8 +362,44 @@ const formikHOC = withFormik({
     quantity: 1,
     recommended: false,
     attributesLabels: [],
+    attrOptions: [],
     attributes: {},
+    isPriceChanges: false,
   }),
+  handleSubmit: async (val, { props: { createProduct } }) => {
+    console.log("values ===", val.vendor);
+    const productToSubmit = {
+      title: val.title,
+      desc: val.desc,
+      attr: val.attributesLabels.map((label) => label.name),
+      attrOptions: val.attrOptions,
+      vendorID: val?.vendor?._id,
+      categoryID: val?.category?._id,
+      price: val.price,
+      recommended: val.recommended,
+      quantity: val.quantity,
+      visibility: true,
+      reviews: [],
+    };
+
+    let galleryFormData = null;
+    // new FormData();
+    if (val.galleryFiles.length) {
+      galleryFormData = new FormData();
+      val.galleryFiles.forEach((image) => {
+        console.log("file ===", image);
+
+        galleryFormData.append("gallery", image);
+      });
+    }
+
+    // console.log("gallery form data ===", galleryFormData.entries());
+
+    const isSuccess = await createProduct(productToSubmit, galleryFormData);
+    console.log("is success ===", isSuccess);
+
+    console.log("productToSubmit ===", productToSubmit);
+  },
 })(CreateProduct);
 
 const mapStateToProps = (state) => {
@@ -296,6 +414,8 @@ const mapDispatchToProps = (dispatch) => {
     getCategories: () => dispatch(getCategoriesAction()),
     getVendors: () => dispatch(getVendorsAction()),
     getAttributes: () => dispatch(getAttributesAction()),
+    createProduct: (product, gallery) =>
+      dispatch(createProductAction(product, gallery)),
   };
 };
 

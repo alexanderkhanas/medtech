@@ -207,14 +207,22 @@ const SingleProduct = ({
         <div className={s.desktop__container}>
           <div className={s.carousel__container}>
             <ItemsCarousel arrows={false} dots slidesPerPage={1}>
-              {gallery.map((img, i) => (
+              {gallery?.length ? (
+                gallery.map((img, i) => (
+                  <img
+                    className={s.main__image}
+                    key={img + i}
+                    src={img || require("../../assets/image-placeholder.webp")}
+                    alt="loading"
+                  />
+                ))
+              ) : (
                 <img
+                  src={require("../../assets/image-placeholder.webp")}
                   className={s.main__image}
-                  key={img + i}
-                  src={img || require("../../assets/image-placeholder.webp")}
                   alt="loading"
                 />
-              ))}
+              )}
             </ItemsCarousel>
           </div>
           <div className={s.desktop__info__container}>
@@ -253,8 +261,11 @@ const SingleProduct = ({
                 name="Країна виробника"
                 values={[vendorID.title]}
               />
-              {!!categoryID && !!categoryID.desc && (
-                <ProductAttribute name="Категорія" values={[categoryID.desc]} />
+              {!!categoryID && !!categoryID._id && (
+                <ProductAttribute
+                  name="Категорія"
+                  values={[categoryID.title]}
+                />
               )}
               <ProductAttribute
                 name="Кількість"
@@ -271,9 +282,9 @@ const SingleProduct = ({
                 {["Опис товару", "Відгуки", "Доставка"].map((tab, i) => (
                   <Tab
                     onClick={() => setActiveTabIndex(i)}
-                    className={
-                      activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
-                    }
+                    className={classnames(s.tab, {
+                      [s.active__tab]: activeTabIndex === i,
+                    })}
                     key={i}
                   >
                     {tab}
@@ -359,14 +370,14 @@ const SingleProduct = ({
               itemType="http://schema.org/Person"
               itemScope
             >
-              <meta itemProp="name" content={reviews[0].userID.fName} />
+              <meta itemProp="name" content={reviews[0]?.userID?.fName} />
             </div>
             <div
               itemProp="reviewRating"
               itemType="http://schema.org/Rating"
               itemScope
             >
-              <meta itemProp="ratingValue" content={reviews[0].rating} />
+              <meta itemProp="ratingValue" content={reviews[0]?.rating} />
               <meta
                 itemProp="bestRating"
                 content={Math.max(reviews.map((review) => review.rating))}

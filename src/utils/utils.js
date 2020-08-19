@@ -36,3 +36,30 @@ export const getAdminToken = () => {
         .split("=")[1]
     : null;
 };
+
+export const cartesianProduct = (obj) => {
+  function product(args) {
+    if (!args.length) return [[]];
+    const prod = product(args.slice(1));
+    const r = [];
+    args[0].forEach((x) => {
+      prod.forEach((p) => {
+        r.push([x].concat(p));
+      });
+    });
+    return r;
+  }
+  const keys = Object.keys(obj);
+
+  const values = keys.map((x) => {
+    return obj[x];
+  });
+
+  return product(values).map((p) => {
+    const e = {};
+    keys.forEach((k, n) => {
+      e[k] = p[n];
+    });
+    return e;
+  });
+};

@@ -64,3 +64,26 @@
 .submit__container {
   margin-top: 30px;
 }
+
+.attributes__container {
+  padding: 15px 30px;
+  box-sizing: border-box;
+}
+
+.attribute {
+  margin-bottom: 10px;
+}
+
+.attributes__checkbox__container {
+  display: flex;
+  margin-bottom: 14px;
+  align-items: center;
+}
+
+.attributes__checkbox__label {
+  cursor: pointer;
+}
+
+.attributes__checkbox {
+  margin-right: 10px;
+}

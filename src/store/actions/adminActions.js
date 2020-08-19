@@ -16,6 +16,8 @@ import {
   patchVendor,
   fetchUserData,
   fetchUserById,
+  postProduct,
+  postProductGallery,
 } from "../api/api";
 import { getToken, getAdminToken } from "../../utils/utils";
 import {
@@ -31,6 +33,7 @@ import {
   SET_VENDORS,
   DELETE_USER,
   SET_LOADING,
+  ADD_PRODUCT,
 } from "./actionTypes";
 
 export const createCategoryAction = (category) => {
@@ -241,5 +244,36 @@ export const filterUsersAction = (searchValue, users) => {
   return {
     type: SET_FILTERED_USERS,
     users: filteredUsers,
+  };
+};
+
+export const createProductAction = (product, gallery) => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const productRes = await postProduct(product, token);
+    console.log("response ===", productRes?.data);
+    console.log("gallery ===", gallery);
+
+    if (productRes?.data) {
+      let productGallery = productRes.gallery;
+      if (gallery) {
+        const galleryResponse = await postProductGallery(
+          gallery,
+          productRes.data._id,
+          token
+        );
+        console.log("gallery res ===", galleryResponse?.data);
+        if (galleryResponse?.data) {
+          productGallery = galleryResponse.data;
+        }
+      }
+      dispatch({
+        type: ADD_PRODUCT,
+        product: { ...productRes.data, gallery: productGallery },
+      });
+    }
+    dispatch({ type: SET_LOADING, isLoading: false });
+    return productRes.status === 200;
   };
 };

@@ -193,6 +193,22 @@ export const patchVendor = (vendor, id, token) => {
   });
 };
 
+export const postProduct = (product, token) => {
+  return _axios.post(`/product`, product, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const postProductGallery = (gallery, id, token) => {
+  return _axios.post(`/product/${id}/gallery`, gallery, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const fetchCities = (filterValue, limit = 20) => {
   return axios.post("https://api.novaposhta.ua/v2.0/json/", {
     modelName: "AddressGeneral",

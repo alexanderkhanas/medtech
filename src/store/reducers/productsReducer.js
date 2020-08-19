@@ -9,6 +9,7 @@ import {
   SET_HIGHRATING_PRODUCTS,
   ADD_CATEGORY,
   DELETE_CATEGORY,
+  ADD_PRODUCT,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -107,6 +108,11 @@ export default (state = initialState, action) => {
         categories: state.categories.filter(
           (category) => category._id !== action.id
         ),
+      };
+    case ADD_PRODUCT:
+      return {
+        ...state,
+        all: [...state.all, action.product],
       };
     default:
       return state;

@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import s from "./EditNews.module.css";
 import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
-import ProfileInput from "../../../../misc/Inputs/ProfileInput/ProfileInput";
 import Button from "../../../../misc/Button/Button";
 import { useHistory, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,19 +9,44 @@ import { connect } from "react-redux";
 import { getSingleNewsAction } from "../../../../store/actions/newsActions";
 import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
 import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
+import { withFormik } from "formik";
+import Input from "../../../../misc/Inputs/Input/Input";
+import { editNewsAction } from "../../../../store/actions/adminActions";
+import { showAlertAction } from "../../../../store/actions/alertActions";
 
-const EditNews = ({ getSingleNews, singleNews }) => {
-  const { title, gallery, desc, createdAt, _id } = singleNews;
+const EditNews = ({
+  getSingleNews,
+  singleNews,
+  values,
+  setValues,
+  handleChange,
+  handleSubmit,
+}) => {
   console.log(singleNews);
-
   const { id } = useParams();
+
+  const uploadedImage = useRef(null);
+
+  const imageUploader = useRef(null);
+
   useEffect(() => {
     getSingleNews(id);
   }, []);
   console.log("singleNews ===", singleNews);
 
-  const uploadedImage = useRef(null);
-  const imageUploader = useRef(null);
+  useEffect(() => {
+    const { desc, title, gallery, _id } = singleNews;
+    if (singleNews._id) {
+      setValues({
+        ...values,
+        desc,
+        title,
+        gallery,
+        _id,
+      });
+    }
+  }, [singleNews]);
+
   // const [newsData, setNewsData] = useState({
   //   getSingleNews,
   //   match,
@@ -39,8 +63,9 @@ const EditNews = ({ getSingleNews, singleNews }) => {
       const reader = new FileReader();
       const { current } = uploadedImage;
       current.file = file;
-      reader.onload = (e) => {
-        current.src = e.target.result;
+      reader.onload = ({ target: { result } }) => {
+        current.src = result;
+        setValues({ ...values, gallery: result, galleryFile: file });
         // setNewsData((prev) => ({ ...prev, gallery: e.target.result }));
       };
       reader.readAsDataURL(file);
@@ -63,8 +88,13 @@ const EditNews = ({ getSingleNews, singleNews }) => {
       <FixedWrapper>
         <div className={s.input__container}>
           <div className={s.title__input}>
-            <span className={s.label}>Заголовок</span>
-            <input defaultValue={title} className={s.input} />
+            <Input
+              label="Заголовок"
+              value={values.title}
+              name="title"
+              className={s.input}
+              onChange={handleChange}
+            />
           </div>
           <div className={s.image__input}>
             <span className={s.label}>Натисніть на фото, щоб обрати нове</span>
@@ -75,22 +105,21 @@ const EditNews = ({ getSingleNews, singleNews }) => {
               ref={imageUploader}
               className={s.input__image}
             />
-            {/* <button
-              className={s.delete__photo}
-              onClick={handleRemovePhoto}
-              title="Видалити фотографію"
-            >
-              x
-            </button> */}
             <div
               className={s.upload__image}
               onClick={() => imageUploader.current.click()}
             >
+              {/* <button
+                className={s.delete__photo}
+                onClick={handleRemovePhoto}
+                title="Видалити фотографію"
+              >
+                x
+              </button> */}
               <img
                 alt="loading"
-                defaultValue={gallery}
                 ref={uploadedImage}
-                src={gallery}
+                src={values.gallery}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -99,24 +128,62 @@ const EditNews = ({ getSingleNews, singleNews }) => {
             </div>
           </div>
           <div className={s.news__content}>
-            <span className={s.label}>Текст новини</span>
-            <textarea className={s.textarea} defaultValue={desc} />
+            <Input
+              isTextarea
+              label="Текст новини"
+              name="desc"
+              className={s.textarea}
+              onChange={handleChange}
+              value={values.desc}
+            />
           </div>
-          <Button title="Зберегти зміни" />
+          <Button title="Зберегти зміни" type="submit" onClick={handleSubmit} />
           <GoBackBtn />
         </div>
       </FixedWrapper>
     </div>
   );
 };
+
+const formikHOC = withFormik({
+  mapPropsToValues: () => ({
+    title: "",
+    desc: "",
+    gallery: "",
+    galleryFile: {},
+    _id: "",
+  }),
+  handleSubmit: async (values, { props: { editNews, showAlert } }) => {
+    const { title, desc, gallery, galleryFile, _id } = values;
+    const imageFormData = new FormData();
+    console.log("gallery ===", gallery);
+
+    imageFormData.append("gallery", galleryFile);
+    console.log("image ===", imageFormData.get("gallery"));
+
+    const isNewsCreated = await editNews({ title, desc }, _id, imageFormData);
+    console.log("is news created ===", isNewsCreated);
+
+    if (isNewsCreated) {
+      showAlert("Новину створено успішно!", "success");
+    } else {
+      showAlert("Сталась помилка!", "error");
+    }
+  },
+})(EditNews);
+
 const mapStateToProps = (state) => {
   return {
     singleNews: state.news.single,
   };
 };
+
 const mapDispatchToProps = (dispatch) => {
   return {
     getSingleNews: (id) => dispatch(getSingleNewsAction(id)),
+    editNews: (news, id, image) => dispatch(editNewsAction(news, id, image)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(EditNews);
+
+export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);

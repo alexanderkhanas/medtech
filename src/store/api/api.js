@@ -139,6 +139,14 @@ export const createNews = (news, token) => {
   });
 };
 
+export const patchNews = (news, id, token) => {
+  return _axios.patch(`/new/${id}`, news, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const deleteNews = (id, token) => {
   return _axios.delete(`/new/${id}`, {
     headers: {

@@ -19,6 +19,7 @@ import {
   postProduct,
   postProductGallery,
   deleteProduct,
+  patchNews,
 } from "../api/api";
 import { getToken, getAdminToken } from "../../utils/utils";
 import {
@@ -41,11 +42,12 @@ import {
 export const createCategoryAction = (category) => {
   return async (dispatch) => {
     const token = getAdminToken();
-
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await createCategory(
       { ...category, desc: "", gallery: [""] },
       token
     );
+    dispatch({ type: SET_LOADING, isLoading: false });
     if (response?.data) {
       dispatch({ type: ADD_CATEGORY, category: response.data });
     }
@@ -57,7 +59,9 @@ export const createCategoryAction = (category) => {
 export const deleteCategoryAction = (id) => {
   return async (dispatch) => {
     const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await deleteCategory(id, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     if (response.status === 200) {
       dispatch({ type: DELETE_CATEGORY, id });
     }
@@ -70,8 +74,9 @@ export const createNewsAction = (body, gallery) => {
   return async (dispatch) => {
     const token = getAdminToken();
     console.log("before request");
-
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await createNews(body, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     console.log("news response ===", response.data);
     if (!gallery || !response?.data) {
       return false;
@@ -89,10 +94,13 @@ export const createNewsAction = (body, gallery) => {
     }
   };
 };
+
 export const deleteNewsAction = (id) => {
   return async (dispatch) => {
     const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await deleteNews(id, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     console.log("delete news ===", response?.data);
     if (response.status === 200) {
       dispatch({
@@ -104,10 +112,23 @@ export const deleteNewsAction = (id) => {
   };
 };
 
+export const editNewsAction = (news, id, imageFormData) => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await patchNews(news, id, token);
+    console.log("edit news ===", response?.data);
+    dispatch({ type: SET_LOADING, isLoading: false });
+    return response.status === 200;
+  };
+};
+
 export const createVendorAction = (vendor) => {
   return async (dispatch) => {
     const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await createVendor(vendor, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     return response.status === 200;
   };
 };
@@ -115,7 +136,9 @@ export const createVendorAction = (vendor) => {
 export const deleteVendorAction = (vendor) => {
   return async (dispatch) => {
     const token = getAdminToken();
-    const response = deleteVendor(vendor._id, token);
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await deleteVendor(vendor._id, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     console.log("delete vendor ===", response?.data);
     return response.status === 200;
   };
@@ -124,7 +147,9 @@ export const deleteVendorAction = (vendor) => {
 export const editVendorAction = (vendor) => {
   return async (dispatch) => {
     const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await patchVendor(vendor, vendor._id, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     console.log("patch vendor ===", response?.data);
     return response.status === 200;
   };
@@ -133,7 +158,9 @@ export const editVendorAction = (vendor) => {
 export const getAttributesAction = () => {
   return async (dispatch) => {
     const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchAttributes(token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     if (response?.data) {
       dispatch({
         type: SET_ATTRIBUTES,
@@ -148,7 +175,9 @@ export const getAttributesAction = () => {
 export const deleteAttributeAction = (id) => {
   return async (dispatch) => {
     const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await deleteAttribute(id, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     console.log("delete attribute ===", response?.data);
     if (response.status === 200) {
       dispatch({
@@ -163,7 +192,9 @@ export const deleteAttributeAction = (id) => {
 export const createAttributeAction = (attribute) => {
   return async (dispatch) => {
     const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await createAttribute(attribute, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     console.log("create response ===", response?.data);
     if (response?.data) {
       dispatch({
@@ -178,7 +209,10 @@ export const createAttributeAction = (attribute) => {
 export const editAttributeAction = (attribute) => {
   return async (dispatch) => {
     const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+
     const response = await patchAttribute(attribute, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     console.log("edit attribute ===", response?.data);
     return response.status === 200;
   };

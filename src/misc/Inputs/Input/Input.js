@@ -35,9 +35,10 @@ const Input = ({
         ) : (
           <textarea
             {...{ type }}
+            {...{ value }}
             {...{ onChange }}
             className={classnames(s.input, inputClass, {
-              isError: s.error__input,
+              [s.error__input]: isError,
             })}
             {...{ placeholder }}
             {...rest}

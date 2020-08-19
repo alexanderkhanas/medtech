@@ -12,7 +12,10 @@ import {
   uploadImageToNews,
   deleteNews,
   deleteVendor,
+  deleteUser,
   patchVendor,
+  fetchUserData,
+  fetchUserById,
 } from "../api/api";
 import { getToken, getAdminToken } from "../../utils/utils";
 import {
@@ -26,6 +29,8 @@ import {
   ADD_ATTRIBUTE,
   DELETE_NEWS,
   SET_VENDORS,
+  DELETE_USER,
+  SET_LOADING,
 } from "./actionTypes";
 
 export const createCategoryAction = (category) => {
@@ -175,11 +180,30 @@ export const editAttributeAction = (attribute) => {
 export const getUsersAction = () => {
   return async (dispatch) => {
     const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchUsers(token);
+    dispatch({ type: SET_LOADING, isLoading: false });
     if (response?.data) {
       dispatch({
         type: SET_USERS,
         users: response.data,
+      });
+    }
+  };
+};
+
+export const deleteUserAction = (id) => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await deleteUser(id, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
+    console.log("delete user ===", response.status);
+
+    if (response.status === 200) {
+      dispatch({
+        type: DELETE_USER,
+        id,
       });
     }
   };

@@ -255,7 +255,7 @@ const App = ({
             />
             <PrivateRoute
               condition={user.isAdmin}
-              path="/admin/edit-user/"
+              path="/admin/edit-user/:id"
               component={(props) => <EditUser {...props} />}
             />
             <PrivateRoute
@@ -278,7 +278,11 @@ const App = ({
               path="/admin/create-user/"
               component={(props) => <CreateUser {...props} />}
             />
-            <PrivateRoute path="/admin/create-order" component={CreateOrder} />
+            <PrivateRoute
+              path="/admin/create-order"
+              condition={user.isAdmin}
+              component={(props) => <CreateOrder {...props} />}
+            />
             <Route path="*">
               <NoMatchPage />
             </Route>

@@ -11,8 +11,9 @@ import userDefaultAvatar from "../../../../assets/profile.png";
 import { registerAction } from "../../../../store/actions/profileActions";
 import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
+import { showAlertAction } from "../../../../store/actions/alertActions";
 
-const CreateUser = ({ register }) => {
+const CreateUser = ({ register, showAlert }) => {
   const uploaderRef = useRef();
   const [userAvatar, setUserAvatar] = useState();
 
@@ -63,7 +64,7 @@ const CreateUser = ({ register }) => {
             warehouse: "",
             password: "",
           }}
-          onSubmit={(values) => {
+          onSubmit={async (values) => {
             console.log("values ===", values);
             let correctPhone = values.phone.replace(/-/gi, "");
             correctPhone = correctPhone.replace("+", "");
@@ -74,6 +75,18 @@ const CreateUser = ({ register }) => {
               lName: values.surname,
             });
             console.log("number ===", +correctPhone);
+            let isSuccess = false;
+            isSuccess = await register({
+              ...values,
+              phone: correctPhone,
+              fName: values.name,
+              lName: values.surname,
+            });
+            if (isSuccess) {
+              showAlert("Продавця змінено успішно!", "success");
+            } else {
+              showAlert("Сталась помилка!", "error");
+            }
           }}
           validate={(values) => {
             const errors = {};
@@ -274,6 +287,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     register: (user) => dispatch(registerAction(user)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
 
     // submitAvatar: (image) => dispatch()
   };

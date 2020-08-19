@@ -8,6 +8,7 @@ const Input = ({
   type = "text",
   placeholder,
   label,
+  value,
   onChange,
   containerClass,
   inputClass,
@@ -23,6 +24,7 @@ const Input = ({
         {!isTextarea ? (
           <input
             {...{ type }}
+            {...{ value }}
             {...{ onChange }}
             className={classnames(s.input, inputClass, {
               [s.error__input]: isError,

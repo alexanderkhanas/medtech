@@ -10,8 +10,9 @@ import { Formik } from "formik";
 import { createNewsAction } from "../../../../store/actions/adminActions";
 import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
 import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
+import { showAlertAction } from "../../../../store/actions/alertActions";
 
-const CreateNews = ({ createNews }) => {
+const CreateNews = ({ createNews, showAlert }) => {
   const uploadInputRef = useRef();
   const handleImages = ({ target: { files } }, values, setValues) => {
     const reader = new FileReader();
@@ -53,6 +54,9 @@ const CreateNews = ({ createNews }) => {
               { title, desc, gallery, galleryFile },
               { resetForm }
             ) => {
+              if (!Object.keys(galleryFile).length) {
+                return;
+              }
               const imageFormData = new FormData();
               console.log("gallery ===", gallery);
 
@@ -63,6 +67,12 @@ const CreateNews = ({ createNews }) => {
                 { title, desc },
                 imageFormData
               );
+              if (isNewsCreated) {
+                showAlert("Новину створено успішно!", "success");
+              } else {
+                showAlert("Сталась помилка!", "error");
+              }
+
               console.log("is news created ===", isNewsCreated);
 
               resetForm({ title: "", desc: "", gallery: "", galleryFile: {} });
@@ -137,6 +147,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     createNews: (news, gallery) => dispatch(createNewsAction(news, gallery)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
   };
 };
 

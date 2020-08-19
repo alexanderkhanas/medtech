@@ -89,8 +89,7 @@ header {
 }
 
 .logo {
-  width: 80px;
-  height: 44px;
+  height: 50px;
 }
 
 .mobile__header {
@@ -122,8 +121,6 @@ header {
 .menu_width {
   width: 30% !important;
   z-index: 0 !important;
-}
-.mobile__nav {
 }
 .mobile__nav__item {
   font-size: 14px;

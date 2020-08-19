@@ -6,50 +6,34 @@ import Input from "../../../../misc/Inputs/Input/Input";
 import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
 import ProfileInput from "../../../../misc/Inputs/ProfileInput/ProfileInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../../misc/Button/Button";
-import { useHistory } from "react-router-dom";
-import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
-import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
+import { Formik } from "formik";
 
 const CreateProduct = (props) => {
-  const [productInfo, setProductInfo] = useState({
-    title: "",
-    desc: "",
-    gallery: [],
-    price: "",
-    vendor: "",
-    quantity: 1,
-    recommended: false,
-  });
-
-  const onInputChange = ({ target: { name, value } }) => {
-    setProductInfo((prev) => ({ ...prev, [name]: value }));
-  };
-
   const uploadedImage = useRef(null);
   const imageUploader = useRef(null);
 
-  const handleImages = ({ target: { files } }) => {
+  const handleImages = ({ target: { files } }, setValues, prevValues) => {
     Array.from(files).forEach((file) => {
       const reader = new FileReader();
 
       reader.onload = ({ target: { result } }) => {
-        setProductInfo((prev) => ({
-          ...prev,
-          gallery: [...prev.gallery, result],
-        }));
+        setValues({
+          ...prevValues,
+          gallery: [...prevValues.gallery, result],
+        });
         console.log("result ===", result);
       };
       reader.readAsDataURL(file);
     });
   };
 
-  const deleteImage = (imageToDelete) => {
-    const filteredGallery = productInfo.gallery.filter(
+  const deleteImage = (imageToDelete, setValues, prevValues) => {
+    const filteredGallery = prevValues.gallery.filter(
       (image) => image !== imageToDelete
     );
-    setProductInfo((prev) => ({ ...prev, gallery: filteredGallery }));
+    setValues({ ...prevValues, gallery: filteredGallery });
   };
 
   const quantityOptions = [
@@ -61,84 +45,86 @@ const CreateProduct = (props) => {
     setSortQuantityType(value);
   };
 
-  useEffect(() => {
-    console.log("product ===", productInfo);
-  }, [productInfo]);
-
-  const h = useHistory();
-
-  const breadCrumbsItems = [
-    {
-      name: "Адмін",
-      path: "/admin",
-    },
-    { name: "Створити товар" },
-  ];
-
   return (
     <div className={s.container}>
       <div className={s.title__container}>
         <h1 className={s.title}>Створення товару</h1>
-        <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
-        <div className={s.body}>
-          <Input
-            label="Назва"
-            value={productInfo.title}
-            name="title"
-            onChange={onInputChange}
-            containerClass={s.input__container}
-          />
-          <div className={s.input__container}>
-            <p className={s.label}>Фото</p>
-            <div className={s.images__container}>
-              {productInfo.gallery.map((image) => (
-                <div className={s.image__container}>
-                  <FontAwesomeIcon
-                    icon={faTimes}
-                    className={s.delete__icon}
-                    onClick={() => deleteImage(image)}
-                  />
-                  <img className={s.image} src={image} alt="loading" />
+        <Formik
+          initialValues={{
+            title: "",
+            desc: "",
+            gallery: [],
+            price: "",
+            vendor: "",
+            quantity: 1,
+            recommended: false,
+          }}
+        >
+          {({ handleChange, values, setValues }) => (
+            <form className={s.body}>
+              <Input
+                label="Назва"
+                value={values.title}
+                name="title"
+                onChange={handleChange}
+                containerClass={s.input__container}
+              />
+              <div className={s.input__container}>
+                <p className={s.label}>Фото</p>
+                <div className={s.images__container}>
+                  {values.gallery.map((image) => (
+                    <div className={s.image__container}>
+                      <FontAwesomeIcon
+                        icon={faTimes}
+                        className={s.delete__icon}
+                        onClick={() => deleteImage(image, setValues, values)}
+                      />
+                      <img className={s.image} src={image} alt="loading" />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <input type="file" multiple onChange={handleImages} />
-          </div>
-          <Input
-            label="Опис"
-            value={productInfo.desc}
-            name="desc"
-            onChange={onInputChange}
-            containerClass={s.input__container}
-            isTextarea
-          />
-          <Input
-            label="Ціна"
-            value={productInfo.title}
-            onChange={onInputChange}
-            containerClass={s.input__container}
-          />
-          <Input
-            label="Країна виробника"
-            value={productInfo.vendor}
-            name="vendor"
-            onChange={onInputChange}
-            containerClass={s.input__container}
-          />
-          <Input
-            label="Кількість"
-            value={productInfo.quantity}
-            name="quantity"
-            onChange={onInputChange}
-            containerClass={s.input__container}
-          />
-          <div className={s.submit__container}>
-            <Button title="Створити" size="lg" />
-            <GoBackBtn />
-          </div>
-        </div>
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => handleImages(e, setValues, values)}
+                />
+              </div>
+              <Input
+                label="Опис"
+                value={values.desc}
+                name="desc"
+                onChange={handleChange}
+                containerClass={s.input__container}
+                isTextarea
+              />
+              <Input
+                label="Ціна"
+                value={values.title}
+                onChange={handleChange}
+                containerClass={s.input__container}
+              />
+              <Input
+                label="Країна виробника"
+                value={values.vendor}
+                name="vendor"
+                onChange={handleChange}
+                containerClass={s.input__container}
+              />
+              <Input
+                label="Кількість"
+                value={values.quantity}
+                name="quantity"
+                onChange={handleChange}
+                containerClass={s.input__container}
+              />
+              <div className={s.submit__container}>
+                <Button title="Створити" size="lg" />
+              </div>
+            </form>
+          )}
+        </Formik>
       </FixedWrapper>
     </div>
   );

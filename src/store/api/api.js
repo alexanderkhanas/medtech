@@ -59,6 +59,10 @@ export const loginRequest = (data) => {
     .catch((e) => console.error(e));
 };
 
+export const fetchUserById = (id) => {
+  return _axios.get(`user/${id}`);
+};
+
 export const patchUser = (user, token) => {
   return _axios.patch("/user", user, {
     headers: {
@@ -69,6 +73,14 @@ export const patchUser = (user, token) => {
 
 export const fetchUsers = (token) => {
   return _axios.get("/users", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteUser = (id, token) => {
+  return _axios.delete(`/user/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

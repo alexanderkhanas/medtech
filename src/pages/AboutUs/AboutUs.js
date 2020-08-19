@@ -2,7 +2,7 @@ import React from "react";
 import s from "./AboutUs.module.css";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import logo from "../../assets/logo.jpg";
+import logo from "../../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 

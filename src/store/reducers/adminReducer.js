@@ -7,6 +7,7 @@ import {
   DELETE_CATEGORY,
   ADD_ATTRIBUTE,
   SET_VENDORS,
+  DELETE_USER,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   filteredUsers: [],
   attributes: [],
   vendors: [],
+  userToEdit: {},
 };
 
 export default (state = initialState, action) => {
@@ -28,6 +30,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         filteredUsers: action.users,
+      };
+    case DELETE_USER:
+      return {
+        ...state,
+        users: state.users.filter((user) => user._id !== action.id),
+        filteredUsers: state.filteredUsers.filter(
+          (user) => user._id !== action.id
+        ),
       };
     case RESET_FILTERED_USERS:
       return {

@@ -9,7 +9,7 @@ import {
   faTimes,
   faShoppingBag,
 } from "@fortawesome/free-solid-svg-icons";
-import logo from "../../assets/logo.webp";
+import logo from "../../assets/logo.svg";
 import s from "./Header.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { Link, withRouter, useHistory } from "react-router-dom";

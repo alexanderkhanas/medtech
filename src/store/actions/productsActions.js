@@ -73,14 +73,16 @@ export const clearFilterAction = (products) => {
 export const filterProductsAction = (
   categoryIdsArray,
   searchValue,
-  page = 1
+  page = 1,
+  sortType
 ) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchFilteredProducts(
       categoryIdsArray,
       searchValue,
-      page
+      page,
+      sortType
     );
     dispatch({ type: SET_LOADING, isLoading: false });
     console.log("response ===", response?.data);
@@ -113,7 +115,7 @@ export const getCategoriesAction = () => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchCategories();
     console.log("categories ===", response.data);
-    // if (response?.data) {
+    // if (response.status === 200) {
     dispatch({ type: SET_CATEGORIES, categories: response?.data || [] });
     dispatch({ type: SET_LOADING, isLoading: false });
     // }
@@ -125,7 +127,7 @@ export const getHighRatingProductsAction = () => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchHighRatingProducts();
     dispatch({ type: SET_LOADING, isLoading: false });
-    if (response?.data) {
+    if (response.status === 200) {
       dispatch({ type: SET_HIGHRATING_PRODUCTS, products: response.data });
     }
   };

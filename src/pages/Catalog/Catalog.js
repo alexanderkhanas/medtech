@@ -25,8 +25,8 @@ import { CSSTransition } from "react-transition-group";
 
 const sortSelectOption = [
   { value: "recommended", label: "Рекомендовані" },
-  { value: "price to low", label: "За ціною, від меншої до більшої" },
-  { value: "price to high", label: "За ціною, від більшої до меншої" },
+  { value: "priceMinus", label: "За ціною, від меншої до більшої" },
+  { value: "price", label: "За ціною, від більшої до меншої" },
 ];
 
 const Catalog = ({
@@ -39,7 +39,6 @@ const Catalog = ({
   getCategories,
   categories,
   searchValue,
-  windowWidth,
   clearFilter,
   products,
 }) => {
@@ -83,17 +82,24 @@ const Catalog = ({
     setProductViewType((prev) => (prev === "row" ? "column" : "row"));
   };
 
-  useEffect(() => {
-    if (selectedCategories.length) {
-      filterProducts(selectedCategories, searchValue, activePage);
-    }
-  }, [selectedCategories]);
+  // useEffect(() => {
+  //   if (selectedCategories.length) {
+  //     filterProducts(
+  //       selectedCategories,
+  //       searchValue,
+  //       activePage,
+  //       sortType.value
+  //     );
+  //   }
+  // }, []);
 
   useEffect(() => {
     console.log("active page ===", activePage);
 
-    filterProducts(selectedCategories, searchValue, activePage);
-  }, [activePage]);
+    filterProducts(selectedCategories, searchValue, activePage, sortType.value);
+  }, [activePage, searchValue, sortType, selectedCategories]);
+
+  console.log("SORT TYPE ===", sortType);
 
   useEffect(() => {
     let filtered = categories.map((category) => {
@@ -178,7 +184,7 @@ const Catalog = ({
               >
                 Фільтр
               </h3>
-              {windowWidth >= 600 ? (
+              {window.innerWidth >= 600 ? (
                 <div className={s.filter__categories}>
                   {!!sortedCategories?.length &&
                     sortedCategories.map((parent) => (
@@ -267,7 +273,7 @@ const Catalog = ({
               <div className={s.carousel__container}>
                 <ItemsCarousel
                   arrows
-                  slidesPerPage={Math.floor(windowWidth / 450)}
+                  slidesPerPage={Math.floor(window.innerWidth / 450)}
                   infinite
                 >
                   {recommendedProducts.map((product, i) => (
@@ -310,8 +316,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getProductsByPage: (page, categoryId, searchValue) =>
       dispatch(getProductsByPage(page, categoryId, searchValue)),
-    filterProducts: (categoryId, searchValue, page) =>
-      dispatch(filterProductsAction(categoryId, searchValue, page)),
+    filterProducts: (categoryId, searchValue, page, sortType) =>
+      dispatch(filterProductsAction(categoryId, searchValue, page, sortType)),
     setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
     getCategories: () => dispatch(getCategoriesAction()),
     clearFilter: (products) => dispatch(clearFilterAction(products)),

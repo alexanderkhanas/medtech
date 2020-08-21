@@ -1,6 +1,29 @@
 import _axios from "./_axios";
 import axios from "axios";
 
+export const fetchCities = (filterValue, limit = 20) => {
+  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
+    modelName: "AddressGeneral",
+    calledMethod: "getCities",
+    methodProperties: {
+      FindByString: filterValue,
+      Limit: limit,
+    },
+    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
+  });
+};
+
+export const fetchWarehousesByCity = (CityName) => {
+  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
+    modelName: "AddressGeneral",
+    calledMethod: "getWarehouses",
+    methodProperties: {
+      CityName,
+    },
+    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
+  });
+};
+
 export const fetchProducts = () => _axios.get("/products");
 
 export const fetchProductsByPage = (page) =>
@@ -14,7 +37,12 @@ export const searchProductsRequest = async (value) => {
   return _axios.get(`/products?search=${value}`);
 };
 
-export const fetchFilteredProducts = (categoriesArray, searchValue, page) => {
+export const fetchFilteredProducts = (
+  categoriesArray,
+  searchValue,
+  page,
+  sortType
+) => {
   let baseUrl = "/products?";
   if (page) {
     baseUrl += `page=${page}`;
@@ -25,6 +53,9 @@ export const fetchFilteredProducts = (categoriesArray, searchValue, page) => {
   }
   if (searchValue) {
     baseUrl += `&search=${searchValue}`;
+  }
+  if (sortType) {
+    baseUrl += `&sort=${sortType}`;
   }
   return _axios.get(baseUrl);
 };
@@ -47,12 +78,21 @@ export const fetchUserData = (token) => {
 export const registerRequest = (data) => {
   return _axios.post("/register", data, {});
 };
+
 export const loginRequest = (data) => {
   return _axios
     .post("/login", data, {
       // withCredentials: true,
     })
     .catch((e) => console.error(e));
+};
+
+export const loginFacebookRequest = () => {
+  return _axios.get("https://medtechnika.te.ua/api/v1/login/fb");
+};
+
+export const loginGoogleRequest = () => {
+  return _axios.get("https://medtechnika.te.ua/api/v1/login/google");
 };
 
 export const fetchUserById = (id) => {
@@ -205,6 +245,14 @@ export const postProduct = (product, token) => {
   });
 };
 
+export const patchProduct = (product, id, token) => {
+  return _axios.patch(`/product/${id}`, product, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const deleteProduct = (id, token) => {
   return _axios.delete(`/product/${id}`, {
     headers: {
@@ -222,25 +270,46 @@ export const postProductGallery = (gallery, id, token) => {
   });
 };
 
-export const fetchCities = (filterValue, limit = 20) => {
-  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
-    modelName: "AddressGeneral",
-    calledMethod: "getCities",
-    methodProperties: {
-      FindByString: filterValue,
-      Limit: limit,
+export const fetchUserHistory = (id, token) => {
+  return _axios.get(`/order/history/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
   });
 };
 
-export const fetchWarehousesByCity = (CityName) => {
-  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
-    modelName: "AddressGeneral",
-    calledMethod: "getWarehouses",
-    methodProperties: {
-      CityName,
+export const postContactFormMessage = (message) => {
+  return _axios.post("/contact-us", message);
+};
+
+export const fetchContactFormMessages = (token) => {
+  return _axios.get("/contact-us", {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
+  });
+};
+
+export const patchMessage = (message, id, token) => {
+  return _axios.patch(`/contact-us/${id}`, message, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteMessage = (id, token) => {
+  return _axios.delete(`/contact-us/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const fetchOrders = (token) => {
+  return _axios.get("/orders", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };

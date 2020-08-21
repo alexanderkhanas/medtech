@@ -99,7 +99,7 @@ const Register = ({ register }) => {
           const correctPhone = phone.replace(/-/gi, "").replace("+", "");
           console.log("phone ===", correctPhone);
 
-          const user = await register({
+          const id = await register({
             fName,
             lName,
             fatherName,
@@ -107,8 +107,8 @@ const Register = ({ register }) => {
             password,
             email,
           });
-          if (user) {
-            h.push(`/profile/${user._id}`);
+          if (id) {
+            h.push(`/profile/${id}`);
           }
         }}
       >

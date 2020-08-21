@@ -49,7 +49,7 @@ const ProductsView = ({
         // </Link>
       ))}
       <Pagination
-        pageCount={Math.round(filteredProductsQuantity / 24)}
+        pageCount={Math.ceil(filteredProductsQuantity / 24)}
         {...{ onPageChange }}
       />
     </div>

@@ -148,6 +148,14 @@
   margin-bottom: 30px;
 }
 
+.not__read__message {
+  background: #2bbd8620;
+}
+
+.message {
+  cursor: pointer;
+}
+
 @media (max-width: 575px) {
   .order__header {
     display: none;

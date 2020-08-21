@@ -4,7 +4,7 @@ import { SET_NEWS, SET_SINGLE_NEWS } from "./actionTypes";
 export const getAllNewsAction = () => {
   return async (dispatch) => {
     const response = await fetchAllNews();
-    if (response?.data) {
+    if (response.status === 200) {
       const sortedRecent = response.data.sort(
         (news, nextNews) =>
           new Date(nextNews.createdAt) - new Date(news.createdAt)

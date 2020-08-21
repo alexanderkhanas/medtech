@@ -1,17 +1,3 @@
-.title__container {
-  padding: 35px 0;
-  background: rgba(240, 240, 240, 0.632);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.title {
-  text-align: center;
-  font-weight: 300;
-  padding: 0 0 10px 0;
-}
-
 .body {
   position: relative;
   max-width: 600px;
@@ -74,10 +60,27 @@
 
 .submit__container {
   margin-top: 30px;
-  justify-content: space-around;
 }
-.delete__btn {
-  background-color: red;
-  pointer-events: none;
-  margin-left: 10px;
+
+.attributes__container {
+  padding: 15px 30px;
+  box-sizing: border-box;
+}
+
+.attribute {
+  margin-bottom: 10px;
+}
+
+.attributes__checkbox__container {
+  display: flex;
+  margin-bottom: 14px;
+  align-items: center;
+}
+
+.attributes__checkbox__label {
+  cursor: pointer;
+}
+
+.attributes__checkbox {
+  margin-right: 10px;
 }

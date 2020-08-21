@@ -20,7 +20,7 @@ const PhoneNumberInput = ({
     {...{ onChange }}
   >
     {(inputProps) => (
-      <Input {...rest} {...inputProps} type="tel" disableUnderline>
+      <Input {...rest} {...inputProps} type="tel">
         {children}
       </Input>
     )}

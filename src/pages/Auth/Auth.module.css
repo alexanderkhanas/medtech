@@ -71,6 +71,7 @@
 }
 .logicon {
   font-size: 30px;
+  cursor: pointer;
 }
 .gl {
   margin-right: 10px;

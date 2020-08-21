@@ -2,12 +2,15 @@
   display: flex;
   margin-bottom: 15px;
   border: 1px solid #e4e4e4;
+  height: 200px;
+  width: 100%;
   flex-grow: 1;
 }
 
 .img {
-  width: 25%;
+  width: 200px;
   cursor: pointer;
+  object-fit: cover;
 }
 
 .main__content {
@@ -16,6 +19,7 @@
   flex-direction: column;
   justify-content: space-between;
   flex: 1;
+  overflow: hidden;
 }
 
 .main__content__sm {
@@ -28,6 +32,9 @@
 .title {
   cursor: pointer;
   color: #000;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .main__content__sm .title {

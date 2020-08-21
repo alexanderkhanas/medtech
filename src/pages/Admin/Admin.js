@@ -41,6 +41,8 @@ import {
   editVendorAction,
   deleteVendorAction,
   deleteUserAction,
+  getOrdersAction,
+  getOrderProductsAction,
 } from "../../store/actions/adminActions";
 import { logoutAction } from "../../store/actions/profileActions";
 import { getAllNewsAction } from "../../store/actions/newsActions";
@@ -48,6 +50,12 @@ import { showAlertAction } from "../../store/actions/alertActions";
 import { showModalAction } from "../../store/actions/baseActions";
 import ReactPaginate from "react-paginate";
 import ProductsView from "../../misc/Admin/ProductsView/ProductsView";
+import {
+  getContactMessagesAction,
+  readMessageAction,
+  deleteMessageAction,
+} from "../../store/actions/contactFormActions";
+import classnames from "classnames";
 
 const Admin = ({
   isLoading,
@@ -57,14 +65,19 @@ const Admin = ({
   allNews,
   allProducts,
   categories,
+  contactMessages,
   attributes,
   users,
   vendors,
+  orders,
   getCategories,
   getVendors,
   getAttributes,
   getUsers,
   getNews,
+  getOrders,
+  getContactMessages,
+  getOrderProducts,
   createCategory,
   createVendor,
   createAttribute,
@@ -73,8 +86,10 @@ const Admin = ({
   deleteNews,
   deleteVendor,
   deleteUser,
+  deleteMessage,
   editAttribute,
   editVendor,
+  readMessage,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [editing, setEditing] = useState({
@@ -82,6 +97,21 @@ const Admin = ({
     category: { _id: null },
     vendor: { _id: null },
   });
+  const [expandedMessagesIds, setExpandedMessagesIds] = useState([]);
+
+  const expandMessageHandler = (message) => {
+    const { _id } = message;
+    if (expandedMessagesIds.includes(_id)) {
+      setExpandedMessagesIds(
+        expandedMessagesIds.filter((msgId) => msgId !== _id)
+      );
+    } else {
+      setExpandedMessagesIds((prev) => [...prev, _id]);
+    }
+    if (!message.read) {
+      readMessage(message);
+    }
+  };
 
   const editingHandler = (type, setValues, body, value) => {
     setEditing((prev) => ({ ...prev, [type]: body }));
@@ -113,13 +143,11 @@ const Admin = ({
     getVendors();
     getUsers();
     getNews();
+    getContactMessages();
+    getOrders();
     // }
     // })();
   }, []);
-
-  console.log("render");
-
-  console.log("categories ===", categories);
 
   const isVendorEditing = !!editing.vendor._id;
   const isAttributeEditing = !!editing.attribute._id;
@@ -148,9 +176,9 @@ const Admin = ({
               <Tab
                 onClick={() => setActiveTabIndex(i)}
                 key={item}
-                className={
-                  activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
-                }
+                className={classnames(s.tab, {
+                  [s.tab__active]: activeTabIndex === i,
+                })}
               >
                 {item}
               </Tab>
@@ -181,21 +209,51 @@ const Admin = ({
               <span>Спосіб оплати</span>
               <span>Спосіб доставки</span>
               <span>Загальна сума</span>
+              <span>Дії</span>
             </div>
-            <Link to="/admin/edit-order/:id">
-              <OrderCard
-                orderNumber="qweqweqw"
-                createDate="14.123"
-                status="asdads"
-                delivery="asd"
-                orderSum="asdasd"
-                paymentType="65491"
-              />
-            </Link>
-            <OrderCard />
-            <OrderCard />
-            <OrderCard />
-            <OrderCard />
+            {orders.map((order, i) => {
+              const {
+                sum,
+                _id,
+                createdAt,
+                paymentType,
+                delivery,
+                status,
+                products,
+              } = order;
+              return (
+                <AdminRow
+                  items={[
+                    { title: i, key: `${_id}number` },
+                    {
+                      title: new Date(createdAt).toISOString().split("T")[0],
+                      key: `${_id}createdAt`,
+                    },
+                    {
+                      title: status,
+                      key: `${_id}status`,
+                    },
+                    {
+                      title: paymentType,
+                      key: `${_id}paymentType`,
+                    },
+                    {
+                      title: delivery,
+                      key: `${_id}delivery`,
+                    },
+                    {
+                      title: sum,
+                      key: `${_id}sum`,
+                    },
+                  ]}
+                  onEdit={() => {}}
+                  onDelete={() => {}}
+                  isExpanding
+                  onClick={() => getOrderProducts(order)}
+                  // expandingItems={[{title }]}
+                />
+              );
+            })}
           </TabPanel>
           <TabPanel>
             <Link to="/admin/create-product">
@@ -568,6 +626,7 @@ const Admin = ({
             </div>
             {users.map(({ fName, lName, phone, _id }) => (
               <AdminRow
+                key={_id}
                 items={[
                   { title: fName, key: `${_id}fName` },
                   { title: lName, key: `${_id}lName` },
@@ -616,7 +675,53 @@ const Admin = ({
               ))}
             </div>
           </TabPanel>
-          <TabPanel>123</TabPanel>
+          <TabPanel>
+            <div className={s.order__header}>
+              <span>Текст</span>
+              <span>Контакти</span>
+              <span>Дата створення</span>
+              <span>Дії</span>
+            </div>
+
+            {contactMessages.map((messageObj) => {
+              const {
+                message,
+                _id,
+                email = "",
+                createdAt,
+                phone = "",
+                read,
+              } = messageObj;
+              console.log("message ===", message);
+              const isExpanded = expandedMessagesIds.includes(_id);
+              return (
+                <AdminRow
+                  items={[
+                    {
+                      title: isExpanded
+                        ? message
+                        : `${message.slice(0, 20)}...`,
+                      key: `${_id}msg`,
+                    },
+                    {
+                      title: isExpanded ? `${email}\n${phone}` : email || phone,
+                      key: `${_id}contact`,
+                    },
+                    {
+                      title: new Date(createdAt).toISOString().split("T")[0],
+                      key: `${_id}date`,
+                    },
+                  ]}
+                  onClick={() => expandMessageHandler(messageObj)}
+                  className={classnames(s.message, {
+                    [s.not__read__message]: !read,
+                  })}
+                  onDelete={() => deleteMessage(_id)}
+                  key={_id}
+                />
+              );
+            })}
+          </TabPanel>
         </Tabs>
       </FixedWrapper>
     </div>
@@ -632,6 +737,8 @@ const mapStateToProps = (state) => {
     users: state.admin.users,
     vendors: state.admin.vendors,
     isLoading: state.base.isLoading,
+    contactMessages: state.contact.messages,
+    orders: state.admin.orders,
     // fullPrice: state.cart.fullPrice,
   };
 };
@@ -647,11 +754,15 @@ const mapDispatchToProps = (dispatch) => {
     getAttributes: () => dispatch(getAttributesAction()),
     getUsers: () => dispatch(getUsersAction()),
     getNews: () => dispatch(getAllNewsAction()),
+    getOrders: () => dispatch(getOrdersAction()),
+    getContactMessages: () => dispatch(getContactMessagesAction()),
+    getOrderProducts: (orderId) => dispatch(getOrderProductsAction(orderId)),
     deleteAttribute: (id) => dispatch(deleteAttributeAction(id)),
     deleteCategory: (id) => dispatch(deleteCategoryAction(id)),
     deleteNews: (id) => dispatch(deleteNewsAction(id)),
     deleteVendor: (id) => dispatch(deleteVendorAction(id)),
     deleteUser: (id) => dispatch(deleteUserAction(id)),
+    deleteMessage: (id) => dispatch(deleteMessageAction(id)),
     createCategory: (category) => dispatch(createCategoryAction(category)),
     createVendor: (vendor) => dispatch(createVendorAction(vendor)),
     createAttribute: (attribute) => dispatch(createAttributeAction(attribute)),
@@ -660,6 +771,7 @@ const mapDispatchToProps = (dispatch) => {
     showModal: (content, onSubmit, onReject) =>
       dispatch(showModalAction(content, onSubmit, onReject)),
     logout: () => dispatch(logoutAction()),
+    readMessage: (message) => dispatch(readMessageAction(message, message._id)),
     // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };

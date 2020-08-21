@@ -15,14 +15,25 @@ import {
 import Button from "../../misc/Button/Button";
 import { useHistory, Link } from "react-router-dom";
 import _axios from "../../store/api/_axios";
-import { loginAction } from "../../store/actions/profileActions";
+import {
+  loginAction,
+  loginGoogleAction,
+  loginFacebookAction,
+} from "../../store/actions/profileActions";
 import { connect } from "react-redux";
 import {
   showAlertAction,
   hideAlertAction,
 } from "../../store/actions/alertActions";
 
-const Auth = ({ login, hideAlert, showAlert, location }) => {
+const Auth = ({
+  login,
+  hideAlert,
+  showAlert,
+  location,
+  loginGoogle,
+  loginFacebook,
+}) => {
   const h = useHistory();
   const breadCrumbsItems = [
     {
@@ -193,10 +204,12 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
                     <div className={s.logwith}>
                       <FontAwesomeIcon
                         icon={faGoogle}
+                        onClick={loginGoogle}
                         className={`${s.logicon} ${s.gl}`}
                       />
                       <FontAwesomeIcon
                         icon={faFacebook}
+                        onClick={loginFacebook}
                         className={`${s.logicon} ${s.fb} `}
                       />
                     </div>
@@ -218,6 +231,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (data, isRemember) => dispatch(loginAction(data, isRemember)),
+    loginGoogle: () => dispatch(loginGoogleAction()),
+    loginFacebook: () => dispatch(loginFacebookAction()),
     showAlert: (content) => dispatch(showAlertAction(content)),
     hideAlert: () => dispatch(hideAlertAction()),
   };

@@ -8,6 +8,15 @@ import {
   faBars,
   faTimes,
   faShoppingBag,
+  faHome,
+  faBook,
+  faHeart,
+  faShoppingCart,
+  faNewspaper,
+  faKey,
+  faUser,
+  faListAlt,
+  faCogs,
 } from "@fortawesome/free-solid-svg-icons";
 // import { ReactComponent as LogoComponent } from "../../assets/logo.svg";
 import logo from "../../assets/logo.png";
@@ -146,6 +155,7 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <FontAwesomeIcon icon={faHome} className={s.header_icon} />
                 Головна
               </Link>
               <Link
@@ -156,6 +166,7 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <FontAwesomeIcon icon={faListAlt} className={s.header_icon} />
                 Каталог
               </Link>
               <Link
@@ -166,6 +177,7 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <FontAwesomeIcon icon={faHeart} className={s.header_icon} />
                 Улюблені
               </Link>
 
@@ -177,6 +189,10 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <FontAwesomeIcon
+                  icon={faShoppingCart}
+                  className={s.header_icon}
+                />
                 Кошик
               </Link>
               <Link
@@ -187,6 +203,7 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <FontAwesomeIcon icon={faNewspaper} className={s.header_icon} />
                 Новини
               </Link>
             </div>
@@ -200,7 +217,11 @@ const Header = ({
                 onChange={onSearchInputChange}
                 onFocus={onSearchInputFocus}
               />
-              <Button className={s.search__button} title="Знайти" />
+              <Link to="/catalog">
+                <Button className={s.search__button}>
+                  <FontAwesomeIcon icon={faSearch} />
+                </Button>
+              </Link>
               {!!foundProducts.length &&
                 isDropdownVisible &&
                 pathname !== "/catalog" && (
@@ -233,7 +254,7 @@ const Header = ({
             </div>
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
-                {user.isLogged && !user.isAdmin && (
+                {user.isLogged && !user.isAdmin && user._id && (
                   <Link
                     to={`/profile/${user._id}`}
                     style={{ marginRight: 0 }}
@@ -241,6 +262,7 @@ const Header = ({
                       [s.nav__link__active]: pathname.startsWith("/profile"),
                     })}
                   >
+                    <FontAwesomeIcon icon={faUser} className={s.header_icon} />
                     Мій профіль
                   </Link>
                 )}
@@ -252,6 +274,7 @@ const Header = ({
                       [s.nav__link__active]: pathname.startsWith("/login"),
                     })}
                   >
+                    <FontAwesomeIcon icon={faKey} className={s.header_icon} />
                     Увійти
                   </Link>
                 )}
@@ -263,6 +286,7 @@ const Header = ({
                       [s.nav__link__active]: pathname.startsWith("/admin"),
                     })}
                   >
+                    <FontAwesomeIcon icon={faCogs} className={s.header_icon} />
                     Адмін
                   </Link>
                 )}

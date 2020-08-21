@@ -1,8 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import s from "./SingleProduct.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import getSingleProductAction from "../../store/actions/singleProductActions";
+import {
+  getSingleProductAction,
+  clearSingleProductAction,
+} from "../../store/actions/singleProductActions";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import ProductAttribute from "../../misc/ProductAttribute/ProductAttribute";
 import lodash from "lodash";
@@ -32,9 +35,8 @@ const SingleProduct = ({
   cartProducts,
   addToCart,
   removeFromCart,
-  popularProducts,
   showAlert,
-  hideAlert,
+  clearProduct,
 }) => {
   //state
   const {
@@ -63,6 +65,11 @@ const SingleProduct = ({
 
   const mainContentRef = useRef();
   const attributesRef = useRef();
+
+  const isPriceChanges = useMemo(() => {
+    return !!attributeOptions?.filter((option) => !!option.priceAttr).length;
+  }, [attributeOptions]);
+  const isReview = !!reviews?.length;
 
   //functions
   const scrollTop = () => {
@@ -106,6 +113,12 @@ const SingleProduct = ({
   //effects
   useEffect(() => {
     getProduct(match.params.id);
+    const scrollListener = new ScrollListener();
+    scrollListener.addScrollHandler("1", onScroll);
+    return () => {
+      document.title = "Медтехніка";
+      clearProduct();
+    };
   }, []);
 
   useEffect(() => {
@@ -142,27 +155,21 @@ const SingleProduct = ({
         const map = Array.from(new Set(fil));
         filteredObject[possibleAttribute] = { all: map, active: null };
       });
-      setPriceInfo({
-        string: `Від ${minimumPrice}₴`,
-        value: null,
-      });
+      if (isPriceChanges) {
+        setPriceInfo({
+          string: `Від ${minimumPrice}₴`,
+          value: null,
+        });
+      }
       setFilteredAttributes(filteredObject);
     }
     if (_id) {
-      console.log("changing title");
-
       document.title = title;
     }
   }, [product]);
 
   useEffect(() => {
-    return () => {
-      document.title = "Медтехніка";
-    };
-  }, []);
-
-  useEffect(() => {
-    if (attributeOptions?.length) {
+    if (attributeOptions?.length && isPriceChanges) {
       const attributeFound = attributeOptions.find((attributeObj) =>
         lodash.isEqual(
           { ...attributeObj, priceAttr: null, _id: null },
@@ -180,11 +187,6 @@ const SingleProduct = ({
   }, [selectedAttributes]);
 
   console.log("product ===", product);
-
-  useEffect(() => {
-    const scrollListener = new ScrollListener();
-    scrollListener.addScrollHandler("1", onScroll);
-  }, []);
 
   //other
   let qtyMessage = "Залишилось мало";
@@ -260,13 +262,13 @@ const SingleProduct = ({
               {!!vendorID?._id && (
                 <ProductAttribute
                   name="Країна виробника"
-                  values={[vendorID.title]}
+                  values={[vendorID?.title]}
                 />
               )}
               {!!categoryID?._id && (
                 <ProductAttribute
                   name="Категорія"
-                  values={[categoryID.title]}
+                  values={[categoryID?.title]}
                 />
               )}
               <ProductAttribute
@@ -281,38 +283,44 @@ const SingleProduct = ({
           <Tabs>
             <div className={s.tabs__container}>
               <TabList className={s.tabs}>
-                {["Опис товару", "Відгуки", "Доставка"].map((tab, i) => (
-                  <Tab
-                    onClick={() => setActiveTabIndex(i)}
-                    className={classnames(s.tab, {
-                      [s.active__tab]: activeTabIndex === i,
-                    })}
-                    key={i}
-                  >
-                    {tab}
-                  </Tab>
-                ))}
+                {["Опис товару", "Відгуки", "Доставка"].map((tab, i) => {
+                  return !isReview && i === 1 ? (
+                    ""
+                  ) : (
+                    <Tab
+                      onClick={() => setActiveTabIndex(i)}
+                      className={classnames(s.tab, {
+                        [s.active__tab]: activeTabIndex === i,
+                      })}
+                      key={i}
+                    >
+                      {tab}
+                    </Tab>
+                  );
+                })}
               </TabList>
             </div>
             <TabPanel className={s.tab__content}>
               <p className={s.desc}>{desc}</p>
             </TabPanel>
-            <TabPanel className={s.tab__content}>
-              {reviews.map(
-                ({ userID, reviewTitle, reviewDesc, reviewrating }, i) => (
-                  <div key={i} className={s.review}>
-                    <div className={s.review__header}>
-                      <h4 className={s.review__admin}>{userID.fName}</h4>
+            {isReview && (
+              <TabPanel className={s.tab__content}>
+                {reviews.map(
+                  ({ userID, reviewTitle, reviewDesc, reviewrating }, i) => (
+                    <div key={i} className={s.review}>
+                      <div className={s.review__header}>
+                        <h4 className={s.review__admin}>{userID.fName}</h4>
 
-                      <Stars value={reviewrating} />
+                        <Stars value={reviewrating} />
+                      </div>
+                      <h5 className={s.review__title}>{reviewTitle}</h5>
+
+                      <p className={s.review__desc}>{reviewDesc}</p>
                     </div>
-                    <h5 className={s.review__title}>{reviewTitle}</h5>
-
-                    <p className={s.review__desc}>{reviewDesc}</p>
-                  </div>
-                )
-              )}
-            </TabPanel>
+                  )
+                )}
+              </TabPanel>
+            )}
             <TabPanel className={s.tab__content}>
               <p className={s.desc}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -349,7 +357,7 @@ const SingleProduct = ({
               itemType="http://schema.org/Organization"
               itemScope
             >
-              <meta itemProp="name" content={vendorID.title} />
+              <meta itemProp="name" content={vendorID?.title} />
             </div>
           </div>
           <div
@@ -405,6 +413,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getProduct: (id) => dispatch(getSingleProductAction(id)),
+    clearProduct: () => dispatch(clearSingleProductAction()),
     addToCart: (product, attributes) =>
       dispatch(addToCartAction(product, attributes)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),

@@ -27,12 +27,20 @@ import {
   getUserByIdAction,
   patchUserAction,
   logoutAction,
+  getUserHistoryAction,
 } from "../../store/actions/profileActions";
 import { showAlertAction } from "../../store/actions/alertActions";
 import { showModalAction } from "../../store/actions/baseActions";
 import { Formik } from "formik";
 
-const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
+const Profile = ({
+  user,
+  patchUser,
+  isLoading,
+  showModal,
+  logout,
+  getUserHistory,
+}) => {
   const { id } = useParams();
   const h = useHistory();
   const breadCrumbsItems = [
@@ -108,9 +116,15 @@ const Profile = ({ user, patchUser, isLoading, showModal, logout }) => {
     setUserData(user);
   }, [user]);
 
+  useEffect(() => {
+    if (id) {
+      getUserHistory(id);
+    }
+  }, [id]);
+
   console.log("user data ===", userData);
 
-  return !isLoading ? (
+  return !isLoading || user._id ? (
     <div className={s.body}>
       <div className={s.container}>
         <div className={s.title__container}>
@@ -395,6 +409,7 @@ const mapDispatchToProps = (dispatch) => {
     showModal: (content, onSubmit, onReject) =>
       dispatch(showModalAction(content, onSubmit, onReject)),
     logout: () => dispatch(logoutAction()),
+    getUserHistory: (id) => dispatch(getUserHistoryAction(id)),
   };
 };
 

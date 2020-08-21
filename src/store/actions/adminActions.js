@@ -20,6 +20,9 @@ import {
   postProductGallery,
   deleteProduct,
   patchNews,
+  patchProduct,
+  fetchOrders,
+  fetchSingleProduct,
 } from "../api/api";
 import { getToken, getAdminToken } from "../../utils/utils";
 import {
@@ -36,6 +39,7 @@ import {
   DELETE_USER,
   SET_LOADING,
   ADD_PRODUCT,
+  SET_ORDERS,
   DELETE_PRODUCT,
 } from "./actionTypes";
 
@@ -48,7 +52,7 @@ export const createCategoryAction = (category) => {
       token
     );
     dispatch({ type: SET_LOADING, isLoading: false });
-    if (response?.data) {
+    if (response.status === 200) {
       dispatch({ type: ADD_CATEGORY, category: response.data });
     }
     console.log("category response ===", response.data);
@@ -81,7 +85,7 @@ export const createNewsAction = (body, gallery) => {
     if (!gallery || !response?.data) {
       return false;
     }
-    if (response?.data) {
+    if (response.status === 200) {
       console.log("gallery ===", gallery);
 
       const imageResponse = await uploadImageToNews(
@@ -118,6 +122,14 @@ export const editNewsAction = (news, id, imageFormData) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await patchNews(news, id, token);
     console.log("edit news ===", response?.data);
+    if (response.status === 200) {
+      const imageResponse = await uploadImageToNews(
+        imageFormData,
+        response.data,
+        token
+      );
+      console.log("image res ===", imageResponse?.data);
+    }
     dispatch({ type: SET_LOADING, isLoading: false });
     return response.status === 200;
   };
@@ -161,7 +173,7 @@ export const getAttributesAction = () => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchAttributes(token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    if (response?.data) {
+    if (response.status === 200) {
       dispatch({
         type: SET_ATTRIBUTES,
         attributes: response.data,
@@ -196,7 +208,7 @@ export const createAttributeAction = (attribute) => {
     const response = await createAttribute(attribute, token);
     dispatch({ type: SET_LOADING, isLoading: false });
     console.log("create response ===", response?.data);
-    if (response?.data) {
+    if (response.status === 200) {
       dispatch({
         type: ADD_ATTRIBUTE,
         attribute: response.data,
@@ -224,7 +236,7 @@ export const getUsersAction = () => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchUsers(token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    if (response?.data) {
+    if (response.status === 200) {
       dispatch({
         type: SET_USERS,
         users: response.data,
@@ -255,7 +267,7 @@ export const getVendorsAction = () => {
     const token = getAdminToken();
     const response = await fetchVendors(token);
     console.log("response ===", response?.data);
-    if (response?.data) {
+    if (response.status === 200) {
       dispatch({
         type: SET_VENDORS,
         vendors: response.data,
@@ -316,6 +328,42 @@ export const createProductAction = (product, gallery) => {
   };
 };
 
+export const editProductAction = (product, gallery, id) => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const productRes = await patchProduct(product, id, token);
+    console.log("edit product res ===", productRes.data);
+
+    if (productRes.status === 200) {
+      let productGallery = productRes.gallery;
+      if (gallery) {
+        const galleryResponse = await postProductGallery(
+          gallery,
+          productRes.data._id,
+          token
+        );
+        console.log("gallery res ===", galleryResponse?.data);
+        if (galleryResponse?.data) {
+          productGallery = galleryResponse.data;
+        }
+        dispatch({
+          type: ADD_PRODUCT,
+          product: { ...productRes.data, gallery: productGallery },
+        });
+        dispatch({ type: SET_LOADING, isLoading: false });
+        return galleryResponse.status === 200;
+      }
+    }
+    dispatch({
+      type: ADD_PRODUCT,
+      product: { ...productRes.data, gallery: [] },
+    });
+    dispatch({ type: SET_LOADING, isLoading: false });
+    return productRes.status === 200;
+  };
+};
+
 export const deleteProductAction = (id) => {
   return async (dispatch) => {
     const token = getAdminToken();
@@ -326,5 +374,28 @@ export const deleteProductAction = (id) => {
     if (response.status === 200) {
       dispatch({ type: DELETE_PRODUCT, id: response.data._id });
     }
+  };
+};
+
+export const getOrdersAction = () => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await fetchOrders(token);
+    console.log("fetchOrders ===", response.data);
+    dispatch({ type: SET_LOADING, isLoading: false });
+    if (response.status === 200) {
+      dispatch({ type: SET_ORDERS, orders: response.data });
+    }
+  };
+};
+
+export const getOrderProductsAction = (order) => {
+  return async (dispatch) => {
+    const products = [];
+    order.products.forEach(async ({ id }) => {
+      fetchSingleProduct(id).then((res) => console.log("res ===", res.data));
+    });
+    console.log("products ===", products);
   };
 };

@@ -22,15 +22,18 @@ import { Formik } from "formik";
 import Input from "../../misc/Inputs/Input/Input";
 import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import GoCatalogBtn from "../../misc/GoCatalogBtn/GoCatalogBtn";
+import { createContactMessageAction } from "../../store/actions/contactFormActions";
+import { showAlertAction } from "../../store/actions/alertActions";
 
 const Home = ({
   products,
   recentNews,
-  windowWidth,
   getNews,
   getCategories,
   getHighRatingProducts,
   user,
+  createMessage,
+  showAlert,
 }) => {
   const {
     highRatingProducts,
@@ -52,7 +55,7 @@ const Home = ({
     })();
   }, []);
 
-  let slidesPerPage = Math.floor(windowWidth / 350);
+  let slidesPerPage = Math.floor(window.innerWidth / 350);
 
   if (slidesPerPage > 4) {
     slidesPerPage = 4;
@@ -186,21 +189,54 @@ const Home = ({
             validate={(values) => {
               const { email, phone } = values;
               const errors = {};
-              if (!email && !phone) {
+              if (!email) {
                 errors.email = "required";
               }
+              if (phone.length && phone.length !== 16) {
+                errors.phone = "required";
+              }
+              console.log("phone length ===", phone.length);
+
               return errors;
             }}
-            onSubmit={(values) => {
+            onSubmit={async (values, { resetForm }) => {
               console.log("values ===", values);
+              let correctPhone = values.phone.replace(/-/gi, "");
+              correctPhone = correctPhone.replace("+", "");
+              const isSuccess = await createMessage({
+                ...values,
+                read: false,
+                phone: correctPhone,
+              });
+              if (isSuccess) {
+                showAlert("Ваше повідомлення надіслано успішно", "success");
+                resetForm({
+                  email: "",
+                  name: "",
+                  phone: "",
+                  message: "",
+                });
+              } else {
+                showAlert(
+                  "Сталась помилка при надсиланні повідомлення, спробуйте пізніше"
+                );
+              }
             }}
           >
-            {({ values, handleChange, errors, touched, handleSubmit }) => (
+            {({
+              values,
+              handleChange,
+              errors,
+              touched,
+              handleSubmit,
+              handleBlur,
+            }) => (
               <form className={s.form}>
                 <Input
                   label="Електронна пошта"
                   name="email"
                   containerClass={s.input__container}
+                  onBlur={handleBlur}
                   isError={errors.email && touched.email}
                   value={values.email}
                   placeholder="joe.doe.example@gmail.com"
@@ -209,6 +245,8 @@ const Home = ({
                 <PhoneNumberInput
                   label="Номер телефону"
                   name="phone"
+                  onBlur={handleBlur}
+                  isError={errors.phone && touched.phone}
                   containerClass={s.input__container}
                   value={values.phone}
                   onChange={handleChange}
@@ -264,6 +302,8 @@ const mapDispatchToProps = (dispatch) => {
     getNews: () => dispatch(getAllNewsAction()),
     getCategories: () => dispatch(getCategoriesAction()),
     getHighRatingProducts: () => dispatch(getHighRatingProductsAction()),
+    createMessage: (msg) => dispatch(createContactMessageAction(msg)),
+    showAlert: (text, type) => dispatch(showAlertAction(text, type)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

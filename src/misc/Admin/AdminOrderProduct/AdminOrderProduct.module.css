@@ -70,6 +70,25 @@
   display: none;
 }
 
+.attributes {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+
+.attributes > div {
+  cursor: pointer;
+}
+
+.attribute {
+  padding: 10px;
+}
+
+.active__attribute {
+  outline: 1px solid #2bbd86;
+}
+
 @media (max-width: 575px) {
   .card {
     flex-direction: column;

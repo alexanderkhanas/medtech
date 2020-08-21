@@ -25,6 +25,8 @@ import {
   setSelectedWarehouseAction,
 } from "../../../../store/actions/orderActions";
 import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
+import classnames from "classnames";
+import AdminOrderProduct from "../../../../misc/Admin/AdminOrderProduct/AdminOrderProduct";
 
 const CreateOrder = ({
   values,
@@ -71,6 +73,67 @@ const CreateOrder = ({
 
   console.log("products ===", products);
 
+  const onAttributeSelect = (productId, i) => {
+    if (values.productsAttributes.length) {
+      setValues({
+        ...values,
+        productsAttributes: values.productsAttributes.map((attributeObj) => {
+          return attributeObj.id === productId
+            ? {
+                ...attributeObj,
+                id: productId,
+                attrOptions: `${i}`,
+              }
+            : attributeObj;
+        }),
+      });
+    } else {
+      setValues({
+        ...values,
+        productsAttributes: [
+          { id: productId, attrOptions: `${i}`, quantity: 1 },
+        ],
+      });
+    }
+  };
+
+  const onQuantityChange = (productId, quantity) => {
+    const isObjectAlreadyExist = !!values.productsAttributes.filter(
+      (attributeObj) => {
+        return attributeObj.id === productId;
+      }
+    ).length;
+    if (!isObjectAlreadyExist) {
+      setValues({
+        ...values,
+        productsAttributes: [
+          ...values.productsAttributes,
+          { id: productId, quantity },
+        ],
+      });
+    } else {
+      setValues({
+        ...values,
+        productsAttributes: values.productsAttributes.map((attributeObj) => {
+          return attributeObj.id === productId
+            ? {
+                ...attributeObj,
+                quantity,
+              }
+            : attributeObj;
+        }),
+      });
+    }
+  };
+
+  const onPaymentTypeSelect = (option) => {
+    setValues({ ...values, paymentType: option.value });
+  };
+
+  const onDeliveryTypeSelect = (option) => {
+    setValues({ ...values, paymentType: option.value });
+  };
+
   const onProductsMenuScroll = ({ target }) => {
     console.log("target ===", target);
   };
@@ -82,15 +145,15 @@ const CreateOrder = ({
     }
   };
 
-  const onProductSelect = (option, formValues, setFormValues) => {
-    setFormValues({
-      ...formValues,
-      products: [...formValues.products, option.value],
+  const onProductSelect = (option) => {
+    setValues({
+      ...values,
+      products: [...values.products, option.value],
     });
   };
 
-  const onUserSelect = (option, formValues, setFormValues) => {
-    setFormValues({ ...formValues, user: option.value });
+  const onUserSelect = (option) => {
+    setValues({ ...values, user: option.value });
   };
 
   const onUsersSearchChange = (searchValue) => {
@@ -161,6 +224,8 @@ const CreateOrder = ({
     getProducts();
   }, []);
 
+  console.log("values ===", values);
+
   return (
     <div className={s.container}>
       <div className={s.title__container}>
@@ -168,180 +233,163 @@ const CreateOrder = ({
         <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
-        <Formik
-          initialValues={{
-            price: "",
-            products: [],
-            user: {},
-            paymentType: {},
-            deliveryType: {},
-            fName: "",
-            sName: "",
-          }}
-          validate={(values) => {
-            console.log("values ===", values);
-          }}
-        >
-          {({ values, handleChange, setValues }) => (
-            <>
-              {values.products.map((product) => (
-                <CartProduct
-                  className={s.product}
-                  {...{ product }}
-                  key={product._id}
-                  isSmall
-                />
-              ))}
-              <div className={s.body}>
-                <Select
-                  noDefaultValue
-                  withSearch
-                  label="Додати товар"
-                  onSelect={(option) => {
-                    return onProductSelect(option, values, setValues);
-                  }}
-                  onSearchValueChange={onProductSearchChange}
-                  onMenuScroll={onProductsMenuScroll}
-                  options={productsOptions}
-                />
-                <Select
-                  noDefaultValue
-                  withSearch
-                  containerClass={s.input__container}
-                  label="Оберіть користувача"
-                  onSelect={(option) => onUserSelect(option, values, setValues)}
-                  onSearchValueChange={onUsersSearchChange}
-                  onMenuScroll={onProductsMenuScroll}
-                  options={usersOptions}
-                />
-                <div className={s.input__row}>
-                  <Input
-                    name="fName"
-                    inputClass={s.input}
-                    containerClass={s.input__container}
-                    value={values.user.fName}
-                    onChange={({ target }) => {
-                      return setValues({
-                        ...values,
-                        user: { ...values.user, fName: target.value },
-                      });
-                    }}
-                    label="Ім'я"
-                    placeholder="John"
-                  />
-                  <Input
-                    placeholder="Doe"
-                    name="lName"
-                    inputClass={s.input}
-                    containerClass={s.input__container}
-                    value={values.user.lName}
-                    onChange={({ target }) => {
-                      return setValues({
-                        ...values,
-                        user: { ...values.user, lName: target.value },
-                      });
-                    }}
-                    label="Прізвище"
-                  />
-                </div>
-                <div className={s.input__row}>
-                  <Input
-                    name="phone"
-                    inputClass={s.input}
-                    containerClass={s.input__container}
-                    value={values.user.phone}
-                    onChange={({ target }) => {
-                      return setValues({
-                        ...values,
-                        user: { ...values.user, phone: target.value },
-                      });
-                    }}
-                    label="Номер телефону"
-                    placeholder="0681231231"
-                  />
-                  <Input
-                    placeholder="example@gmail.com"
-                    name="email"
-                    inputClass={s.input}
-                    containerClass={s.input__container}
-                    value={values.user.email}
-                    onChange={({ target }) => {
-                      return setValues({
-                        ...values,
-                        user: { ...values.user, email: target.value },
-                      });
-                    }}
-                    label="Електронна пошта"
-                  />
-                </div>
-                <Select
-                  noDefaultValue
-                  containerClass={s.input__container}
-                  options={payOptions}
-                  onSelect={(option) => {
-                    return setValues({ ...values, paymentType: option });
-                  }}
-                  label="Тип оплати"
-                  value={values.paymentType.label}
-                />
-                <Select
-                  noDefaultValue
-                  containerClass={s.input__container}
-                  options={deliveryOptions}
-                  onSelect={(option) => {
-                    return setValues({ ...values, deliveryType: option });
-                  }}
-                  label="Тип доставки"
-                  value={values.deliveryType.label}
-                />
-                <Select
-                  containerClass={s.input__container}
-                  withSearch
-                  noDefaultValue
-                  onMenuScroll={onCitiesScroll}
-                  menuClass={s.select__menu}
-                  options={cities.map((city) => ({
-                    value: city.Description,
-                    label: city.Description,
-                  }))}
-                  onSelect={onCitySelect}
-                  onSearchValueChange={onCitySearchChange}
-                  label="Місто"
-                />
-                <Select
-                  containerClass={s.input__container}
-                  withSearch
-                  noDefaultValue
-                  onMenuScroll={onWarehousesScroll}
-                  menuClass={s.select__menu}
-                  options={warehouses.map((warehouse) => ({
-                    value: warehouse.Description,
-                    label: warehouse.Description,
-                  }))}
-                  onSelect={onWarehouseSelect}
-                  onSearchValueChange={onWarehouseSearchChange}
-                  label="Номер відділення"
-                />
-                <Input
-                  name="price"
-                  placeholder="10"
-                  label="Ціна"
-                  value={values.price}
-                  containerClass={s.input__container}
-                  onChange={handleChange}
-                />
-                <div className={s.submit__container}>
-                  <Button
-                    isDisabled={!values.user || !values.products.length}
-                    title="Створити"
-                    size="lg"
-                  />
-                </div>
-                <GoBackBtn />
-              </div>
-            </>
-          )}
-        </Formik>
+        {values.products.map((product) => {
+          const selectedAttributeObj = values.productsAttributes.filter(
+            (attributeObj) => attributeObj.id === product._id
+          )[0];
+          return (
+            <AdminOrderProduct
+              className={s.product}
+              {...{ product }}
+              selectedAttributeIndex={selectedAttributeObj?.attrOptions}
+              {...{ onQuantityChange }}
+              {...{ onAttributeSelect }}
+              {...{ selectedAttributeObj }}
+              key={product._id}
+            />
+          );
+        })}
+        <div className={s.body}>
+          <Select
+            noDefaultValue
+            withSearch
+            label="Додати товар"
+            onSelect={onProductSelect}
+            onSearchValueChange={onProductSearchChange}
+            onMenuScroll={onProductsMenuScroll}
+            options={productsOptions}
+          />
+          <Select
+            noDefaultValue
+            withSearch
+            containerClass={s.input__container}
+            label="Оберіть користувача"
+            onSelect={onUserSelect}
+            onSearchValueChange={onUsersSearchChange}
+            onMenuScroll={onProductsMenuScroll}
+            options={usersOptions}
+          />
+          <div className={s.input__row}>
+            <Input
+              name="fName"
+              inputClass={s.input}
+              containerClass={s.input__container}
+              value={values.user.fName}
+              onChange={({ target }) => {
+                return setValues({
+                  ...values,
+                  user: { ...values.user, fName: target.value },
+                });
+              }}
+              label="Ім'я"
+              placeholder="John"
+            />
+            <Input
+              placeholder="Doe"
+              name="lName"
+              inputClass={s.input}
+              containerClass={s.input__container}
+              value={values.user.lName}
+              onChange={({ target }) => {
+                return setValues({
+                  ...values,
+                  user: { ...values.user, lName: target.value },
+                });
+              }}
+              label="Прізвище"
+            />
+          </div>
+          <div className={s.input__row}>
+            <Input
+              name="phone"
+              inputClass={s.input}
+              containerClass={s.input__container}
+              value={values.user.phone}
+              onChange={({ target }) => {
+                return setValues({
+                  ...values,
+                  user: { ...values.user, phone: target.value },
+                });
+              }}
+              label="Номер телефону"
+              placeholder="0681231231"
+            />
+            <Input
+              placeholder="example@gmail.com"
+              name="email"
+              inputClass={s.input}
+              containerClass={s.input__container}
+              value={values.user.email}
+              onChange={({ target }) => {
+                return setValues({
+                  ...values,
+                  user: { ...values.user, email: target.value },
+                });
+              }}
+              label="Електронна пошта"
+            />
+          </div>
+          <Select
+            noDefaultValue
+            containerClass={s.input__container}
+            options={payOptions}
+            onSelect={onPaymentTypeSelect}
+            label="Тип оплати"
+            value={values.paymentType.label}
+          />
+          <Select
+            noDefaultValue
+            containerClass={s.input__container}
+            options={deliveryOptions}
+            onSelect={onDeliveryTypeSelect}
+            label="Тип доставки"
+            value={values.deliveryType.label}
+          />
+          <Select
+            containerClass={s.input__container}
+            withSearch
+            noDefaultValue
+            onMenuScroll={onCitiesScroll}
+            menuClass={s.select__menu}
+            options={cities.map((city) => ({
+              value: city.Description,
+              label: city.Description,
+            }))}
+            onSelect={onCitySelect}
+            onSearchValueChange={onCitySearchChange}
+            label="Місто"
+          />
+          <Select
+            containerClass={s.input__container}
+            withSearch
+            noDefaultValue
+            onMenuScroll={onWarehousesScroll}
+            menuClass={s.select__menu}
+            options={warehouses.map((warehouse) => ({
+              value: warehouse.Description,
+              label: warehouse.Description,
+            }))}
+            onSelect={onWarehouseSelect}
+            onSearchValueChange={onWarehouseSearchChange}
+            label="Номер відділення"
+          />
+          <Input
+            name="price"
+            placeholder="10"
+            label="Ціна"
+            value={values.price}
+            containerClass={s.input__container}
+            onChange={handleChange}
+          />
+          <div className={s.submit__container}>
+            <Button
+              isDisabled={!values.user || !values.products.length}
+              title="Створити"
+              size="lg"
+            />
+          </div>
+          <GoBackBtn />
+        </div>
       </FixedWrapper>
     </div>
   );
@@ -351,6 +399,7 @@ const formikHOC = withFormik({
   mapPropsToValues: () => ({
     price: "",
     products: [],
+    productsAttributes: [],
     user: {},
     paymentType: {},
     deliveryType: {},

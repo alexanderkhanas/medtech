@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from "react";
 import s from "./Select.module.css";
+import PropTypes from "prop-types";
 
 const Select = ({
-  options = [],
+  options,
   withSearch,
   label,
   clearInputOnSelect,
   noDefaultValue = false,
   containerClass = "",
   menuClass = "",
+  defaultSearchValue,
   onMenuScroll = () => {},
   onSearchValueChange = () => {},
   onSelect = () => {},
   value = "Оберіть значення",
 }) => {
+  let defaultValue = options[0]?.label;
+  if (defaultSearchValue) {
+    defaultValue = defaultSearchValue;
+  }
+  if (noDefaultValue) {
+    defaultValue = "";
+  }
   const [isMenuOpened, setMenuOpened] = useState(false);
-  const [searchValue, setSearchValue] = useState(
-    noDefaultValue ? "" : options[0]?.label
-  );
+  const [searchValue, setSearchValue] = useState(defaultValue);
 
   const switchMenuOpened = () => setMenuOpened((prev) => !prev);
   const closeMenu = () => setMenuOpened(false);
@@ -45,6 +52,10 @@ const Select = ({
   useEffect(() => {
     onSearchValueChange(searchValue);
   }, [searchValue]);
+
+  useEffect(() => {
+    setSearchValue(defaultValue);
+  }, [defaultSearchValue]);
   return (
     <div className={containerClass}>
       {!!label && <p className={s.label}>{label}</p>}
@@ -99,6 +110,19 @@ const Select = ({
       {isMenuOpened && <div className={s.overlay} onClick={closeMenu} />}
     </div>
   );
+};
+
+Select.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array,
+        PropTypes.string,
+      ]),
+      label: PropTypes.string,
+    })
+  ).isRequired,
 };
 
 export default Select;

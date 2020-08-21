@@ -97,7 +97,7 @@
   cursor: pointer;
 }
 
-.tab__active {
+.active__tab {
   border-bottom-width: 2px;
 }
 

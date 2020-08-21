@@ -16,6 +16,7 @@
   justify-content: space-around;
   align-items: center;
   color: black;
+  overflow: hidden;
 }
 
 .card__atrbutes > div {
@@ -26,7 +27,17 @@
   display: flex;
   justify-content: center;
   text-align: center;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
+
+.card__title__expanded {
+  white-space: initial;
+  text-overflow: initial;
+  overflow: initial;
+}
+
 .table__container {
   display: flex;
   justify-content: center;

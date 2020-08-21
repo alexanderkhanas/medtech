@@ -4,32 +4,29 @@ import { cartesianProduct } from "../../../utils/utils";
 import Input from "../../Inputs/Input/Input";
 import InputMask from "react-input-mask";
 import uuid from "react-uuid";
+import lodash from "lodash";
 
-const OrderAttributeOptions = ({ options, setAttrOptions }) => {
-  const [combinations, setCombinations] = useState([]);
-
+const OrderAttributeOptions = ({
+  options,
+  setAttrOptions,
+  attrOptions = [],
+}) => {
   const onCombinationInputChange = (value, i) => {
-    const combinationsCopy = [...combinations];
-    combinationsCopy[i] = { ...combinations[i], priceAttr: +value };
-    setCombinations(combinationsCopy);
+    const combinationsCopy = [...attrOptions];
+    combinationsCopy[i] = { ...attrOptions[i], priceAttr: +value };
+    setAttrOptions(combinationsCopy);
   };
 
   useEffect(() => {
     const cartesian = cartesianProduct(options);
     console.log("cartesian ===", cartesian);
-    setCombinations(cartesian.map((item) => ({ ...item, _id: uuid() })));
+    setAttrOptions(cartesian.map((item) => ({ ...item, _id: uuid() })));
   }, [options]);
-
-  useEffect(() => {
-    setAttrOptions(combinations);
-  }, [combinations]);
 
   return (
     <div>
       <div>
-        {combinations.map((combination, i) => {
-          console.log("combination ===", combination);
-
+        {attrOptions.map((combination, i) => {
           const combinationsJSX = Object.entries(combination).map(
             ([key, value]) =>
               key !== "priceAttr" && (

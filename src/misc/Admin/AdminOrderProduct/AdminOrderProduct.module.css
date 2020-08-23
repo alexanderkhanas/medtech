@@ -1,5 +1,8 @@
 .card {
   display: flex;
+}
+
+.card__container {
   padding: 25px 0;
   border: 1px solid #eeeeee;
 }
@@ -72,9 +75,8 @@
 
 .attributes {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
-  padding: 20px 0;
+  padding: 20px 30px;
 }
 
 .attributes > div {
@@ -82,7 +84,14 @@
 }
 
 .attribute {
-  padding: 10px;
+  padding: 1%;
+  flex-basis: 18%;
+  align-self: center;
+  text-align: center;
+}
+
+.attribute__key {
+  font-weight: bold;
 }
 
 .active__attribute {

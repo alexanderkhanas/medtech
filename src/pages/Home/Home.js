@@ -77,9 +77,6 @@ const Home = ({
             <h2 className={s.carousel__title}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </h2>
-            <p className={s.carousel__subtitle}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
             <div className={s.catalog__btn}>
               <GoCatalogBtn />
             </div>
@@ -106,14 +103,14 @@ const Home = ({
               )}
             </TabList>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
+              <ItemsCarousel arrows {...{ slidesPerPage }}>
                 {recommendedProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
             </TabPanel>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
+              <ItemsCarousel arrows {...{ slidesPerPage }}>
                 {popularProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
@@ -121,7 +118,7 @@ const Home = ({
             </TabPanel>
 
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel arrows offset={10} {...{ slidesPerPage }} infinite>
+              <ItemsCarousel arrows offset={10} {...{ slidesPerPage }}>
                 {highRatingProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
@@ -160,7 +157,7 @@ const Home = ({
         </div>
         <div className={s.section}>
           <h3 className={s.section__title}>Останні товари</h3>
-          <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
+          <ItemsCarousel arrows {...{ slidesPerPage }}>
             {newProducts.map((product, i) => (
               <ProductCard key={product._id} {...{ product }} />
             ))}

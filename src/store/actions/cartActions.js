@@ -29,7 +29,9 @@ export const removeFromCartAction = (product) => {
   console.log("remove from localCart ===", localCart);
   localStorage.setItem(
     "_cart",
-    localCart.filter((cartProduct) => cartProduct._id !== product._id)
+    JSON.stringify(
+      localCart.filter((cartProduct) => cartProduct._id !== product._id)
+    )
   );
   return {
     type: REMOVE_FROM_CART,

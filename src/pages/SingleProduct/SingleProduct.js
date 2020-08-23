@@ -25,8 +25,12 @@ import {
   hideAlertAction,
 } from "../../store/actions/alertActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUp, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import ScrollListener from "react-scroll-listener";
+import { Formik } from "formik";
+import Input from "../../misc/Inputs/Input/Input";
+import { createReviewAction } from "../../store/actions/productsActions";
+import { useHistory } from "react-router-dom";
 
 const SingleProduct = ({
   match,
@@ -37,6 +41,8 @@ const SingleProduct = ({
   removeFromCart,
   showAlert,
   clearProduct,
+  user,
+  createReview,
 }) => {
   //state
   const {
@@ -71,12 +77,17 @@ const SingleProduct = ({
   }, [attributeOptions]);
   const isReview = !!reviews?.length;
 
+  const h = useHistory();
+
   //functions
   const scrollTop = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
   const selectAttribute = (name, value) => {
+    console.log("attribute name ===", name);
+    console.log("attribute value ===", value);
+
     setSelectedAttributes((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -122,14 +133,6 @@ const SingleProduct = ({
   }, []);
 
   useEffect(() => {
-    console.log("price ===", priceInfo);
-  }, [priceInfo]);
-
-  useEffect(() => {
-    console.log("product ===", product);
-  }, [product]);
-
-  useEffect(() => {
     const productFromCart = cartProducts.filter(
       (cartProduct) => cartProduct._id === _id
     )[0];
@@ -169,14 +172,19 @@ const SingleProduct = ({
   }, [product]);
 
   useEffect(() => {
-    if (attributeOptions?.length && isPriceChanges) {
+    console.log("attributes ===", attributeOptions?.length);
+    console.log("isPriceChanges ===", isPriceChanges);
+
+    if (attributeOptions?.length) {
       const attributeFound = attributeOptions.find((attributeObj) =>
         lodash.isEqual(
           { ...attributeObj, priceAttr: null, _id: null },
           { ...selectedAttributes, priceAttr: null, _id: null }
         )
       );
-      if (attributeFound) {
+      console.log("attributeFound ===", attributeFound);
+
+      if (attributeFound && isPriceChanges) {
         setPriceInfo({
           value: attributeFound.priceAttr,
           string: `${attributeFound.priceAttr}₴`,
@@ -185,8 +193,6 @@ const SingleProduct = ({
       setFoundAttributes(attributeFound || {});
     }
   }, [selectedAttributes]);
-
-  console.log("product ===", product);
 
   //other
   let qtyMessage = "Залишилось мало";
@@ -202,6 +208,8 @@ const SingleProduct = ({
   } else if (quantity === 0) {
     qtyClassName = s.notInStock;
   }
+
+  console.log("user ===", user._id);
 
   return product ? (
     <FixedWrapper>
@@ -283,44 +291,106 @@ const SingleProduct = ({
           <Tabs>
             <div className={s.tabs__container}>
               <TabList className={s.tabs}>
-                {["Опис товару", "Відгуки", "Доставка"].map((tab, i) => {
-                  return !isReview && i === 1 ? (
-                    ""
-                  ) : (
-                    <Tab
-                      onClick={() => setActiveTabIndex(i)}
-                      className={classnames(s.tab, {
-                        [s.active__tab]: activeTabIndex === i,
-                      })}
-                      key={i}
-                    >
-                      {tab}
-                    </Tab>
-                  );
-                })}
+                {["Опис товару", "Відгуки", "Доставка"].map((tab, i) => (
+                  <Tab
+                    onClick={() => setActiveTabIndex(i)}
+                    className={classnames(s.tab, {
+                      [s.active__tab]: activeTabIndex === i,
+                    })}
+                    key={i}
+                  >
+                    {tab}
+                  </Tab>
+                ))}
               </TabList>
             </div>
             <TabPanel className={s.tab__content}>
               <p className={s.desc}>{desc}</p>
             </TabPanel>
-            {isReview && (
-              <TabPanel className={s.tab__content}>
-                {reviews.map(
-                  ({ userID, reviewTitle, reviewDesc, reviewrating }, i) => (
-                    <div key={i} className={s.review}>
-                      <div className={s.review__header}>
-                        <h4 className={s.review__admin}>{userID.fName}</h4>
+            <TabPanel className={s.tab__content}>
+              {reviews.map(
+                ({ userID, reviewTitle, reviewDesc, reviewrating }, i) => (
+                  <div key={i} className={s.review}>
+                    <div className={s.review__header}>
+                      <h4 className={s.review__admin}>{userID.fName}</h4>
 
-                        <Stars value={reviewrating} />
-                      </div>
-                      <h5 className={s.review__title}>{reviewTitle}</h5>
-
-                      <p className={s.review__desc}>{reviewDesc}</p>
+                      <Stars value={reviewrating} />
                     </div>
-                  )
+                    <h5 className={s.review__title}>{reviewTitle}</h5>
+
+                    <p className={s.review__desc}>{reviewDesc}</p>
+                  </div>
+                )
+              )}
+              <Formik
+                initialValues={{
+                  desc: "",
+                  title: "",
+                  rating: 5,
+                }}
+                onSubmit={async (values, { resetForm }) => {
+                  const reviewToSubmit = {
+                    ...values,
+                    productID: _id,
+                    userID: user._id,
+                  };
+                  const isSuccess = await createReview(reviewToSubmit);
+                  console.log("is success ===", isSuccess);
+                  if (isSuccess) {
+                    showAlert("Відгук створено успішно!", "success");
+                    resetForm({ desc: "", title: "", rating: 5 });
+                  } else {
+                    showAlert("Сталась помилка при створенні відгука.");
+                  }
+                }}
+              >
+                {({ handleChange, handleSubmit, values, setValues }) => (
+                  <form className={s.review__form}>
+                    <div className={s.review__form__inner}>
+                      <h1 className={s.review__form__title}>Залишіть відгук</h1>
+                      <Input
+                        label="Заголовок"
+                        name="title"
+                        placeholder="Інгалятором задоволений"
+                        containerClass={s.review__input__container}
+                        onChange={handleChange}
+                      />
+                      <Input
+                        label="Опишіть ваші враження"
+                        name="desc"
+                        isTextarea
+                        placeholder="Все сподобалось, інгалятор підійшов чудово!"
+                        containerClass={s.review__input__container}
+                        inputClass={s.review__textarea}
+                        onChange={handleChange}
+                      />
+                      <Stars
+                        value={values.rating}
+                        isStatic={false}
+                        setValue={(rating) => {
+                          console.log("click");
+
+                          setValues({ ...values, rating });
+                        }}
+                      />
+                      {/* <Button size="lg" title="Залишити відгук" /> */}
+                      <button
+                        className={s.save__profile__btn}
+                        onClick={handleSubmit}
+                      >
+                        Змінити
+                        <span className={s.profile__btn__overlay}>
+                          <FontAwesomeIcon
+                            icon={faPencilAlt}
+                            className={s.profile__btn__overlay__icon}
+                          />
+                        </span>
+                      </button>
+                    </div>
+                  </form>
                 )}
-              </TabPanel>
-            )}
+              </Formik>
+            </TabPanel>
             <TabPanel className={s.tab__content}>
               <p className={s.desc}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -370,7 +440,7 @@ const SingleProduct = ({
               itemProp="ratingValue"
               content={
                 reviews.reduce((prev, curr) => prev + curr.rating, 0) /
-                reviews.length
+                  reviews.length || 5
               }
             />
           </div>
@@ -408,6 +478,7 @@ const mapStateToProps = (state) => {
     product: state.single.product,
     cartProducts: state.cart.all,
     popularProducts: state.products.popular,
+    user: state.profile,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -417,8 +488,9 @@ const mapDispatchToProps = (dispatch) => {
     addToCart: (product, attributes) =>
       dispatch(addToCartAction(product, attributes)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
-    showAlert: (text) => dispatch(showAlertAction(text)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
     hideAlert: () => dispatch(hideAlertAction()),
+    createReview: (review) => dispatch(createReviewAction(review)),
   };
 };
 

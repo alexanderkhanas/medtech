@@ -1,3 +1,5 @@
+import { fetchExactProducts } from "../store/api/api";
+
 export const scrollToRef = (ref, range = 0) =>
   window.scroll({
     top: ref.current.offsetTop + range,
@@ -62,4 +64,19 @@ export const cartesianProduct = (obj) => {
     });
     return e;
   });
+};
+
+export const randomArrayShuffle = (array) => {
+  const temp = [...array];
+  let currentIndex = array.length;
+  let temporaryValue;
+  let randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    temp[currentIndex] = array[randomIndex];
+    temp[randomIndex] = temporaryValue;
+  }
+  return temp.slice(0, 20);
 };

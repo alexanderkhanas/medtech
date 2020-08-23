@@ -43,6 +43,7 @@ import {
   deleteUserAction,
   getOrdersAction,
   getOrderProductsAction,
+  deleteOrderAction,
 } from "../../store/actions/adminActions";
 import { logoutAction } from "../../store/actions/profileActions";
 import { getAllNewsAction } from "../../store/actions/newsActions";
@@ -64,6 +65,7 @@ const Admin = ({
   logout,
   allNews,
   allProducts,
+  ordersProducts,
   categories,
   contactMessages,
   attributes,
@@ -87,6 +89,7 @@ const Admin = ({
   deleteVendor,
   deleteUser,
   deleteMessage,
+  deleteOrder,
   editAttribute,
   editVendor,
   readMessage,
@@ -145,6 +148,7 @@ const Admin = ({
     getNews();
     getContactMessages();
     getOrders();
+
     // }
     // })();
   }, []);
@@ -247,11 +251,17 @@ const Admin = ({
                     },
                   ]}
                   onEdit={() => {}}
-                  onDelete={() => {}}
+                  onDelete={() => deleteOrder(_id)}
                   isExpanding
                   onClick={() => getOrderProducts(order)}
-                  // expandingItems={[{title }]}
-                />
+                >
+                  {ordersProducts[order._id]?.map((product) => (
+                    <OrderProductCard
+                      key={`${product._id}order`}
+                      {...{ product }}
+                    />
+                  ))}
+                </AdminRow>
               );
             })}
           </TabPanel>
@@ -692,7 +702,6 @@ const Admin = ({
                 phone = "",
                 read,
               } = messageObj;
-              console.log("message ===", message);
               const isExpanded = expandedMessagesIds.includes(_id);
               return (
                 <AdminRow
@@ -739,6 +748,7 @@ const mapStateToProps = (state) => {
     isLoading: state.base.isLoading,
     contactMessages: state.contact.messages,
     orders: state.admin.orders,
+    ordersProducts: state.admin.ordersProducts,
     // fullPrice: state.cart.fullPrice,
   };
 };
@@ -756,13 +766,14 @@ const mapDispatchToProps = (dispatch) => {
     getNews: () => dispatch(getAllNewsAction()),
     getOrders: () => dispatch(getOrdersAction()),
     getContactMessages: () => dispatch(getContactMessagesAction()),
-    getOrderProducts: (orderId) => dispatch(getOrderProductsAction(orderId)),
+    getOrderProducts: (order) => dispatch(getOrderProductsAction(order)),
     deleteAttribute: (id) => dispatch(deleteAttributeAction(id)),
     deleteCategory: (id) => dispatch(deleteCategoryAction(id)),
     deleteNews: (id) => dispatch(deleteNewsAction(id)),
     deleteVendor: (id) => dispatch(deleteVendorAction(id)),
     deleteUser: (id) => dispatch(deleteUserAction(id)),
     deleteMessage: (id) => dispatch(deleteMessageAction(id)),
+    deleteOrder: (id) => dispatch(deleteOrderAction(id)),
     createCategory: (category) => dispatch(createCategoryAction(category)),
     createVendor: (vendor) => dispatch(createVendorAction(vendor)),
     createAttribute: (attribute) => dispatch(createAttributeAction(attribute)),

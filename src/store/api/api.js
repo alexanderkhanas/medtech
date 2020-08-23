@@ -26,6 +26,11 @@ export const fetchWarehousesByCity = (CityName) => {
 
 export const fetchProducts = () => _axios.get("/products");
 
+export const fetchExactProducts = async (idsString) => {
+  const response = await _axios.get(`/exact?productsArray=${idsString}`);
+  return response?.data || [];
+};
+
 export const fetchProductsByPage = (page) =>
   _axios.get(`/products?page=${page}`);
 
@@ -44,18 +49,19 @@ export const fetchFilteredProducts = (
   sortType
 ) => {
   let baseUrl = "/products?";
-  if (page) {
-    baseUrl += `page=${page}`;
-  }
-  if (categoriesArray) {
-    baseUrl += "&category=";
-    baseUrl += categoriesArray.map((category) => category.id).join(",");
-  }
   if (searchValue) {
-    baseUrl += `&search=${searchValue}`;
+    baseUrl += `search=${searchValue}&`;
   }
+  if (page) {
+    baseUrl += `page=${page}&`;
+  }
+  if (categoriesArray?.length) {
+    baseUrl += "category=";
+    baseUrl += `${categoriesArray.map((category) => category.id).join(",")}&`;
+  }
+
   if (sortType) {
-    baseUrl += `&sort=${sortType}`;
+    baseUrl += `sort=${sortType}`;
   }
   return _axios.get(baseUrl);
 };
@@ -308,6 +314,30 @@ export const deleteMessage = (id, token) => {
 
 export const fetchOrders = (token) => {
   return _axios.get("/orders", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const postOrder = (order, token) => {
+  return _axios.post("/order", order, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteOrder = (id, token) => {
+  return _axios.delete(`/order/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const postReview = (review, token) => {
+  return _axios.post(`/review`, review, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

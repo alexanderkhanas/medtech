@@ -97,7 +97,7 @@ const Catalog = ({
     console.log("active page ===", activePage);
 
     filterProducts(selectedCategories, searchValue, activePage, sortType.value);
-  }, [activePage, searchValue, sortType, selectedCategories]);
+  }, [activePage, sortType, selectedCategories]);
 
   console.log("SORT TYPE ===", sortType);
 

@@ -4,6 +4,7 @@ import {
   SET_RECOMMENDED,
   SET_NEW,
   SET_FILTERED_PRODUCTS,
+  SET_POPULAR,
   SET_CATEGORIES,
   SET_SEARCH_VALUE,
   SET_HIGHRATING_PRODUCTS,
@@ -15,38 +16,7 @@ import {
 
 const initialState = {
   recommended: [],
-  popular: [
-    {
-      title: "toothbrush",
-      gallery: ["https://www.randomlists.com/img/things/toothbrush.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "glow stick",
-      gallery: ["https://www.randomlists.com/img/things/glow_stick.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "vase",
-      gallery: ["https://www.randomlists.com/img/things/vase.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "pencil",
-      gallery: ["https://www.randomlists.com/img/things/pencil.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-    {
-      title: "fridge",
-      gallery: ["https://www.randomlists.com/img/things/fridge.webp"],
-      price: Math.floor(Math.random() * 10000) + 1,
-      id: uuid(),
-    },
-  ],
+  popular: [],
   highRating: [],
   new: [],
   all: [],
@@ -76,6 +46,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         new: action.newProducts,
+      };
+    case SET_POPULAR:
+      return {
+        ...state,
+        popular: action.popularProducts,
       };
     case SET_FILTERED_PRODUCTS:
       return {

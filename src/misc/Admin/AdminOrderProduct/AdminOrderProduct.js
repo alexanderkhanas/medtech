@@ -9,13 +9,13 @@ import classnames from "classnames";
 const CartProduct = ({
   product,
   selectedAttributeIndex,
+  price,
   onAttributeSelect,
   onQuantityChange,
   selectedAttributeObj = {},
 }) => {
-  const { gallery, title, price, _id, desc, attrOptions } = product;
+  const { gallery, title, _id, desc, attrOptions } = product;
   const { quantity = 1 } = selectedAttributeObj;
-  const [selectedAttributePrice, setSelectedAttributePrice] = useState(price);
 
   const onCounterChange = (value) => {
     onQuantityChange(_id, value);
@@ -24,7 +24,7 @@ const CartProduct = ({
   useEffect(() => {}, []);
 
   return (
-    <div>
+    <div className={s.card__container}>
       <div className={classnames(s.card, s.small)}>
         <div className={s.main}>
           <img
@@ -45,9 +45,7 @@ const CartProduct = ({
           </div>
         </div>
         <div className={s.fullprice__container}>
-          <span className={s.fullprice}>
-            {+quantity * +selectedAttributePrice || 0}₴
-          </span>
+          <span className={s.fullprice}>{+quantity * +price || 0}₴</span>
         </div>
         <div className={s.mobile}>
           <div className={s.fullprice__container}>
@@ -65,26 +63,29 @@ const CartProduct = ({
         {attrOptions?.map((option, i) => {
           console.log("option ===", option);
 
-          return Object.keys(option).map((key) => {
+          const innerAttributesDom = Object.keys(option).map((key) => {
             return (
-              key !== "_id" && (
-                <div
-                  className={classnames(s.attribute, {
-                    [s.active__attribute]: selectedAttributeIndex === `${i}`,
-                  })}
-                  onClick={() => {
-                    onAttributeSelect(product._id, i);
-                    if (option.priceAttr) {
-                      setSelectedAttributePrice(option.priceAttr);
-                    }
-                  }}
-                >
-                  <span>{key}:</span>
-                  <p>{option[key]}</p>
+              key !== "_id" &&
+              key !== "priceAttr" && (
+                <div>
+                  <span className={s.attribute__key}>{key}:</span>
+                  <span className={s.attribute__value}>{option[key]}</span>
                 </div>
               )
             );
           });
+          return (
+            <div
+              className={classnames(s.attribute, {
+                [s.active__attribute]: selectedAttributeIndex === `${i}`,
+              })}
+              onClick={() => {
+                onAttributeSelect(product._id, i, option.priceAttr);
+              }}
+            >
+              {innerAttributesDom}
+            </div>
+          );
         })}
       </div>
     </div>

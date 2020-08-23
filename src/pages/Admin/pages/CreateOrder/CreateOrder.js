@@ -23,10 +23,12 @@ import {
   getWarehousesAction,
   setSelectedCityAction,
   setSelectedWarehouseAction,
+  submitOrderAction,
 } from "../../../../store/actions/orderActions";
 import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
 import classnames from "classnames";
 import AdminOrderProduct from "../../../../misc/Admin/AdminOrderProduct/AdminOrderProduct";
+import { showAlertAction } from "../../../../store/actions/alertActions";
 
 const CreateOrder = ({
   values,
@@ -48,9 +50,11 @@ const CreateOrder = ({
   selectedWarehouse,
   selectedCity,
   filteredUsers,
-  getProducts,
+  getProductsByPage,
+  errors,
+  handleSubmit,
 }) => {
-  const [activePage, setActivePage] = useState(1);
+  const [activeProductsPage, setActiveProductsPage] = useState(1);
 
   const payOptions = [
     { value: "cash", label: "Наложений платіж" },
@@ -73,7 +77,7 @@ const CreateOrder = ({
 
   console.log("products ===", products);
 
-  const onAttributeSelect = (productId, i) => {
+  const onAttributeSelect = (productId, i, priceAttr) => {
     if (values.productsAttributes.length) {
       setValues({
         ...values,
@@ -86,6 +90,10 @@ const CreateOrder = ({
               }
             : attributeObj;
         }),
+        productsPrices: {
+          ...values.productsPrices,
+          [productId]: priceAttr || values.productsPrices[productId],
+        },
       });
     } else {
       setValues({
@@ -93,6 +101,10 @@ const CreateOrder = ({
         productsAttributes: [
           { id: productId, attrOptions: `${i}`, quantity: 1 },
         ],
+        productsPrices: {
+          ...values.productsPrices,
+          [productId]: priceAttr || values.productsPrices[productId],
+        },
       });
     }
   };
@@ -127,14 +139,23 @@ const CreateOrder = ({
   };
 
   const onPaymentTypeSelect = (option) => {
-    setValues({ ...values, paymentType: option.value });
+    setValues({ ...values, paymentType: option });
   };
 
   const onDeliveryTypeSelect = (option) => {
-    setValues({ ...values, paymentType: option.value });
+    setValues({ ...values, deliveryType: option });
   };
 
   const onProductsMenuScroll = ({ target }) => {
+    console.log("scroll ===", target.scrollTop);
+    console.log("scrollHeight ===", target.scrollHeight);
+
+    if (
+      target.scrollHeight - target.scrollTop < 400 &&
+      products.length % 24 === 0
+    ) {
+      setActiveProductsPage((prev) => prev + 1);
+    }
     console.log("target ===", target);
   };
 
@@ -145,10 +166,11 @@ const CreateOrder = ({
     }
   };
 
-  const onProductSelect = (option) => {
+  const onProductSelect = ({ value }) => {
     setValues({
       ...values,
-      products: [...values.products, option.value],
+      products: [...values.products, value],
+      productsPrices: { ...values.productsPrices, [value._id]: value.price },
     });
   };
 
@@ -221,8 +243,13 @@ const CreateOrder = ({
 
   useEffect(() => {
     getUsers();
-    getProducts();
   }, []);
+
+  useEffect(() => {
+    console.log("active products page ===", activeProductsPage);
+
+    getProductsByPage(activeProductsPage);
+  }, [activeProductsPage]);
 
   console.log("values ===", values);
 
@@ -242,6 +269,7 @@ const CreateOrder = ({
               className={s.product}
               {...{ product }}
               selectedAttributeIndex={selectedAttributeObj?.attrOptions}
+              price={values.productsPrices[product._id]}
               {...{ onQuantityChange }}
               {...{ onAttributeSelect }}
               {...{ selectedAttributeObj }}
@@ -252,6 +280,7 @@ const CreateOrder = ({
         <div className={s.body}>
           <Select
             noDefaultValue
+            clearInputOnSelect
             withSearch
             label="Додати товар"
             onSelect={onProductSelect}
@@ -269,66 +298,6 @@ const CreateOrder = ({
             onMenuScroll={onProductsMenuScroll}
             options={usersOptions}
           />
-          <div className={s.input__row}>
-            <Input
-              name="fName"
-              inputClass={s.input}
-              containerClass={s.input__container}
-              value={values.user.fName}
-              onChange={({ target }) => {
-                return setValues({
-                  ...values,
-                  user: { ...values.user, fName: target.value },
-                });
-              }}
-              label="Ім'я"
-              placeholder="John"
-            />
-            <Input
-              placeholder="Doe"
-              name="lName"
-              inputClass={s.input}
-              containerClass={s.input__container}
-              value={values.user.lName}
-              onChange={({ target }) => {
-                return setValues({
-                  ...values,
-                  user: { ...values.user, lName: target.value },
-                });
-              }}
-              label="Прізвище"
-            />
-          </div>
-          <div className={s.input__row}>
-            <Input
-              name="phone"
-              inputClass={s.input}
-              containerClass={s.input__container}
-              value={values.user.phone}
-              onChange={({ target }) => {
-                return setValues({
-                  ...values,
-                  user: { ...values.user, phone: target.value },
-                });
-              }}
-              label="Номер телефону"
-              placeholder="0681231231"
-            />
-            <Input
-              placeholder="example@gmail.com"
-              name="email"
-              inputClass={s.input}
-              containerClass={s.input__container}
-              value={values.user.email}
-              onChange={({ target }) => {
-                return setValues({
-                  ...values,
-                  user: { ...values.user, email: target.value },
-                });
-              }}
-              label="Електронна пошта"
-            />
-          </div>
           <Select
             noDefaultValue
             containerClass={s.input__container}
@@ -383,9 +352,11 @@ const CreateOrder = ({
           />
           <div className={s.submit__container}>
             <Button
-              isDisabled={!values.user || !values.products.length}
+              isDisabled={errors.user || errors.products || errors.price}
               title="Створити"
               size="lg"
+              onClick={handleSubmit}
+              type="submit"
             />
           </div>
           <GoBackBtn />
@@ -400,12 +371,56 @@ const formikHOC = withFormik({
     price: "",
     products: [],
     productsAttributes: [],
+    productsPrices: {},
     user: {},
     paymentType: {},
     deliveryType: {},
-    fName: "",
-    sName: "",
   }),
+  validate: (values) => {
+    const { price, products, user } = values;
+    const errors = {};
+    if (!price) {
+      errors.price = "required";
+    }
+    if (!products.length) {
+      errors.products = "required";
+    }
+    if (!user._id) {
+      errors.user = "required";
+    }
+    return errors;
+  },
+  handleSubmit: async (
+    values,
+    { props: { submitOrder, showAlert }, resetForm }
+  ) => {
+    const orderToSubmit = {
+      products: values.productsAttributes,
+      userID: values.user._id,
+      paymentType: values.paymentType.value,
+      deliveryType: values.deliveryType.value,
+      status: "created",
+      sum: values.price,
+    };
+
+    const isSuccess = await submitOrder(orderToSubmit);
+
+    if (isSuccess) {
+      resetForm({
+        price: "",
+        products: [],
+        productsAttributes: [],
+        productsPrices: {},
+        user: {},
+        paymentType: {},
+        deliveryType: {},
+      });
+      showAlert("Замовлення успішно створено!", "success");
+    } else {
+      showAlert("Сталась помилка при створенні замовлення, спробуйте пізніше");
+    }
+    console.log("isSuccess ===", isSuccess);
+  },
 })(CreateOrder);
 
 const mapStateToProps = (state) => {
@@ -439,7 +454,8 @@ const mapDispatchToProps = (dispatch) => {
     setSelectedCity: (city) => dispatch(setSelectedCityAction(city)),
     setSelectedWarehouse: (warehouse) =>
       dispatch(setSelectedWarehouseAction(warehouse)),
-    getProducts: () => dispatch(getProducts()),
+    submitOrder: (order) => dispatch(submitOrderAction(order, "admin")),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
   };
 };
 

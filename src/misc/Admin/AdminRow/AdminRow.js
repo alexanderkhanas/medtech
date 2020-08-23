@@ -11,6 +11,7 @@ const AdminRow = ({
   onClick = () => {},
   isExpanding,
   expandingItems = [],
+  children,
 }) => {
   const [isExpanded, setExpanded] = useState(false);
   const clickHandler = (e) => {
@@ -57,12 +58,7 @@ const AdminRow = ({
           </div>
         </div>
       </div>
-      {isExpanded &&
-        expandingItems.map(({ title, key }) => (
-          <div {...{ key }}>
-            <p className={s.card__title}>{title}</p>
-          </div>
-        ))}
+      {isExpanded && children}
     </div>
   );
 };

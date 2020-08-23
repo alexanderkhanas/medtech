@@ -23,6 +23,9 @@ const OrderAttributeOptions = ({
     setAttrOptions(cartesian.map((item) => ({ ...item, _id: uuid() })));
   }, [options]);
 
+  console.log("attr options", attrOptions);
+  console.log("options", options);
+
   return (
     <div>
       <div>

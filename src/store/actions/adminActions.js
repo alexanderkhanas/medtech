@@ -23,6 +23,8 @@ import {
   patchProduct,
   fetchOrders,
   fetchSingleProduct,
+  deleteOrder,
+  fetchExactProducts,
 } from "../api/api";
 import { getToken, getAdminToken } from "../../utils/utils";
 import {
@@ -41,6 +43,7 @@ import {
   ADD_PRODUCT,
   SET_ORDERS,
   DELETE_PRODUCT,
+  SET_ORDERS_PRODUCTS,
 } from "./actionTypes";
 
 export const createCategoryAction = (category) => {
@@ -392,10 +395,23 @@ export const getOrdersAction = () => {
 
 export const getOrderProductsAction = (order) => {
   return async (dispatch) => {
-    const products = [];
-    order.products.forEach(async ({ id }) => {
-      fetchSingleProduct(id).then((res) => console.log("res ===", res.data));
-    });
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const productsIds = order.products.map(({ id }) => id).join(",");
+    console.log("productsIds ===", productsIds);
+
+    const products = await fetchExactProducts(productsIds);
+    dispatch({ type: SET_LOADING, isLoading: false });
     console.log("products ===", products);
+    dispatch({ type: SET_ORDERS_PRODUCTS, products, orderId: order._id });
+  };
+};
+
+export const deleteOrderAction = (id) => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await deleteOrder(token);
+    dispatch({ type: SET_LOADING, isLoading: false });
+    return response.status === 200;
   };
 };

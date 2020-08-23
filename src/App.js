@@ -17,6 +17,7 @@ import NoMatchPage from "./pages/404/404";
 import { getAllNewsAction } from "./store/actions/newsActions";
 import Alert from "./misc/Alert/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { fetchExactProducts } from "./store/api/api";
 import { getLocalCart, debounce } from "./utils/utils";
 import { getUserByIdAction, loginAction } from "./store/actions/profileActions";
 import Modal from "./misc/Modal/Modal";
@@ -65,8 +66,11 @@ const PrivateRoute = ({
   ...rest
 }) => (
   <Route {...rest}>
-    {/* {condition ? ( */}
-    {true ? <Component /> : <Redirect to={{ pathname: redirectTo, state }} />}
+    {condition ? (
+      <Component />
+    ) : (
+      <Redirect to={{ pathname: redirectTo, state }} />
+    )}
   </Route>
 );
 
@@ -77,6 +81,7 @@ const App = ({
   getUser,
   autologin,
   getProducts,
+  setFullPrice,
   user,
 }) => {
   const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");
@@ -142,39 +147,45 @@ const App = ({
   }, []);
 
   useEffect(() => {
-    const localCart = getLocalCart();
-    // const cartProducts = cartIds
-    //   ? allProducts.filter((product) => cartIds.includes(product._id))
-    //   : [];
-    const cartProducts = [];
-    let fullPrice = 0;
-    allProducts.forEach((product) => {
-      localCart.forEach((cartProduct) => {
-        if (product._id === cartProduct._id) {
-          cartProducts.push({
-            ...product,
-            selectedAttributesId: cartProduct.attributes._id,
-            selectedAttributesPrice: cartProduct.attributes.priceAttr,
-            numberInCart: cartProduct.numberInCart,
-          });
-          fullPrice +=
-            cartProduct.numberInCart * cartProduct.attributes.priceAttr ||
-            product.price;
-        }
+    (async () => {
+      const localCart = getLocalCart();
+      console.log("local cart ===", localCart);
+      const ids = localCart.map((item) => item._id);
+      console.log("ids ===", ids);
+
+      const productsByIds = await fetchExactProducts(ids);
+      console.log("productsByIds ===", productsByIds);
+
+      let fullPrice = 0;
+      const cartProducts = productsByIds.map((product) => {
+        console.log("here");
+        const localCartObj = localCart.filter(
+          (item) => item._id === product._id
+        )[0];
+        fullPrice +=
+          localCartObj.numberInCart * localCartObj.attributes.priceAttr ||
+          product.price;
+        console.log("local cart obj ===", productsByIds);
+
+        return {
+          ...product,
+          ...localCartObj,
+        };
       });
-    });
-    console.log("cart products ===", cartProducts);
+      console.log("full price ===", fullPrice);
 
-    setCart(cartProducts);
+      console.log("cart products ===", cartProducts);
+      setCart(cartProducts);
+      setFullPrice(fullPrice);
+      const wishlistIds = getLocalWishlist();
+      console.log("all products ===", allProducts);
 
-    const wishlistIds = getLocalWishlist();
-    console.log("all products ===", allProducts);
-
-    const wishlistProducts = wishlistIds
-      ? allProducts.filter((product) => wishlistIds.includes(product._id))
-      : [];
-    console.log("wishlist ===", wishlistProducts);
-    setWishlist(wishlistProducts);
+      const wishlistProducts = wishlistIds
+        ? allProducts.filter((product) => wishlistIds.includes(product._id))
+        : [];
+      console.log("wishlist ===", wishlistProducts);
+      setWishlist(wishlistProducts);
+    })();
   }, [allProducts]);
   return (
     <Router>

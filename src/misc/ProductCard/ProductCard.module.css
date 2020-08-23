@@ -61,6 +61,14 @@
 }
 
 .wishlist__button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+}
+
+.cart__button__icon {
+  margin-right: 8px;
 }
 
 .wishlist__container {

@@ -192,6 +192,90 @@
   right: 10px;
 }
 
+.review__form {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.review__textarea {
+  height: 100px;
+}
+
+.review__form__title {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.review__form__inner {
+  max-width: 600px;
+  flex-grow: 1;
+  padding: 40px 30px 100px 30px;
+  -webkit-box-shadow: 0px 1px 9px -2px #63636314;
+  -moz-box-shadow: 0px 1px 9px -2px #63636314;
+  box-shadow: 0px 1px 9px 0px #63636349;
+  border-radius: 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+.review__input__container {
+  margin-bottom: 20px;
+}
+
+.save__profile__btn {
+  background-color: #2bbd86;
+  border: none;
+  border-radius: 0 0 25px 25px;
+  padding: 10px 20px;
+  color: white;
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  left: 0;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+.profile__btn__overlay {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  bottom: -100%;
+  left: 0;
+  z-index: 20;
+  background-color: #404040;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save__profile__btn:hover .profile__btn__overlay {
+  bottom: 0;
+}
+
+.profile__btn__overlay__icon {
+  position: relative;
+  animation: move 2s infinite alternate linear;
+  /* transform: rotateZ(10deg); */
+}
+
+@media (max-width: 1350px) {
+  .desktop__container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .desktop__info__container {
+    width: 600px;
+  }
+}
+
 @media (max-width: 900px) {
   .desktop__info__container {
     width: initial;
@@ -249,5 +333,38 @@
   }
   .attributes__wrapper {
     padding: 20px 0;
+  }
+}
+
+@keyframes move {
+  0% {
+    left: -2.5px;
+    top: -2px;
+    transform: rotateZ(0deg);
+  }
+
+  25% {
+    left: 2.5px;
+    top: 0;
+    transform: rotateZ(10deg);
+  }
+
+  50% {
+    left: -2.5px;
+    top: 0;
+    transform: rotateZ(0deg);
+  }
+
+  75% {
+    left: 0;
+    top: 2px;
+    transform: rotateZ(10deg);
+  }
+
+  100% {
+    left: 2.5px;
+    top: 0;
+
+    transform: rotateZ(0deg);
   }
 }

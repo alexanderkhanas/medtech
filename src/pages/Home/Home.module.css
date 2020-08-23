@@ -89,12 +89,18 @@
 .carousel__title {
   margin-bottom: 10px;
   color: #eeeeee;
+  -webkit-text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
+  -moz-text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
+  text-shadow: 2px 1px 3px rgba(0, 0, 0, 0.6);
+  margin-bottom: 20px;
 }
 
 .carousel__subtitle {
-  margin-bottom: 20px;
   color: #eeeeee;
   font-weight: lighter;
+  -webkit-text-shadow: 2px 0 3px rgba(0, 0, 0, 0.3);
+  -moz-text-shadow: 2px 0 3px rgba(0, 0, 0, 0.3);
+  text-shadow: 2px 0px 3px rgba(0, 0, 0, 0.3);
 }
 .catalog__btn {
 }

@@ -2,7 +2,10 @@ import React from "react";
 import s from "./Alert.module.css";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimesCircle,
+  faCheckCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import classnames from "classnames";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 
@@ -18,7 +21,10 @@ const Alert = ({ content, isVisible, type = "error" }) => {
     >
       <FixedWrapper>
         <div className={s.inner}>
-          <FontAwesomeIcon icon={faTimesCircle} className={s.icon} />
+          <FontAwesomeIcon
+            icon={type !== "error" ? faCheckCircle : faTimesCircle}
+            className={s.icon}
+          />
           <p className={s.content}>{content}</p>
         </div>
       </FixedWrapper>

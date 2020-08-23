@@ -49,3 +49,5 @@ export const SET_MESSAGES = "SET_MESSAGES";
 export const EDIT_MESSAGE = "EDIT_MESSAGE";
 export const DELETE_MESSAGE = "DELETE_MESSAGE";
 export const SET_ORDERS = "SET_ORDERS";
+export const SET_POPULAR = "SET_POPULAR";
+export const SET_ORDERS_PRODUCTS = "SET_ORDERS_PRODUCTS";

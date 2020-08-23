@@ -380,16 +380,47 @@ const Header = ({
         itemClassName={s.mobile__nav__item}
         onStateChange={onStateMenuChange}
       >
-        <Link to="/">Головна</Link>
-        <Link to="/catalog">Каталог</Link>
-        <Link to="/wishlist">Улюблені</Link>
-        <Link to="/cart">Кошик</Link>
-        <Link to="/news">Новини</Link>
+        <Link to="/" className={s.mobile__logo__container}>
+          <img src={logo} className={s.mobile__logo} alt="logo" />
+        </Link>
+        <Link to="/">
+          <FontAwesomeIcon icon={faHome} className={s.header_icon} />
+          Головна
+        </Link>
+        <Link to="/catalog">
+          <FontAwesomeIcon icon={faListAlt} className={s.header_icon} />
+          Каталог
+        </Link>
+        <Link to="/wishlist">
+          <FontAwesomeIcon icon={faHeart} className={s.header_icon} />
+          Улюблені
+        </Link>
+        <Link to="/cart">
+          <FontAwesomeIcon icon={faShoppingCart} className={s.header_icon} />
+          Кошик
+        </Link>
+        <Link to="/news">
+          <FontAwesomeIcon icon={faNewspaper} className={s.header_icon} />
+          Новини
+        </Link>
         {user.isLogged && !user.isAdmin && (
-          <Link to={`/profile/${user._id}`}>Мій профіль</Link>
+          <Link to={`/profile/${user._id}`}>
+            <FontAwesomeIcon icon={faUser} className={s.header_icon} />
+            Мій профіль
+          </Link>
         )}
-        {!user.isLogged && <Link to="/login">Увійти</Link>}
-        {user.isAdmin && <Link to="/admin">Адмін</Link>}
+        {!user.isLogged && (
+          <Link to="/login">
+            <FontAwesomeIcon icon={faKey} className={s.header_icon} />
+            Увійти
+          </Link>
+        )}
+        {user.isAdmin && (
+          <Link to="/admin">
+            <FontAwesomeIcon icon={faCogs} className={s.header_icon} />
+            Адмін
+          </Link>
+        )}
       </Menu>
     </>
   );

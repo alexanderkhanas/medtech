@@ -12,3 +12,7 @@
   font-weight: 300;
   text-align: center;
 }
+
+.products__container {
+  margin-top: 20px;
+}

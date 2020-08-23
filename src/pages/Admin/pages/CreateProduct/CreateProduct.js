@@ -17,6 +17,7 @@ import {
 } from "../../../../store/actions/adminActions";
 import Cartesian from "react-cartesian";
 import OrderAttributeOptions from "../../../../misc/Admin/OrderAttributeOptions/OrderAttributeOptions";
+import { showAlertAction } from "../../../../store/actions/alertActions";
 
 const CreateProduct = ({
   getAttributes,
@@ -310,6 +311,7 @@ const CreateProduct = ({
               <OrderAttributeOptions
                 {...{ setAttrOptions }}
                 options={values.attributes}
+                attrOptions={values.attrOptions}
               />
               {/* <Cartesian
                 cols={1}
@@ -375,7 +377,10 @@ const formikHOC = withFormik({
     attributes: {},
     isPriceChanges: false,
   }),
-  handleSubmit: async (val, { props: { createProduct } }) => {
+  handleSubmit: async (
+    val,
+    { props: { createProduct, showAlert }, resetForm }
+  ) => {
     console.log("values ===", val.vendor);
     const productToSubmit = {
       title: val.title,
@@ -406,6 +411,27 @@ const formikHOC = withFormik({
     // console.log("gallery form data ===", galleryFormData.entries());
 
     const isSuccess = await createProduct(productToSubmit, galleryFormData);
+
+    if (isSuccess) {
+      resetForm({
+        title: "",
+        desc: "",
+        gallery: [],
+        galleryFiles: [],
+        price: "",
+        vendor: "",
+        article: "",
+        quantity: 1,
+        recommended: false,
+        attributesLabels: [],
+        attrOptions: [],
+        attributes: {},
+        isPriceChanges: false,
+      });
+      showAlert("Товар створено успішно", "success");
+    } else {
+      showAlert("Сталась помилка при створенні товару");
+    }
     console.log("is success ===", isSuccess);
 
     console.log("productToSubmit ===", productToSubmit);
@@ -426,6 +452,7 @@ const mapDispatchToProps = (dispatch) => {
     getAttributes: () => dispatch(getAttributesAction()),
     createProduct: (product, gallery) =>
       dispatch(createProductAction(product, gallery)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
   };
 };
 

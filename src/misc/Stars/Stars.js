@@ -3,12 +3,21 @@ import s from "./Stars.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
+import classnames from "classnames";
 
-const Stars = ({ containerClass, value, isStatic = true, setValue }) => {
+const Stars = ({
+  containerClass,
+  value,
+  isStatic = true,
+  setValue,
+  size = "md",
+}) => {
+  console.log("value ===", value);
+
   return (
     <div className={`${s.container} ${containerClass}`}>
       {[1, 2, 3, 4, 5].map((item, i) => {
-        const isActive = i < value;
+        const isActive = item <= value;
         console.log("is active ===", isActive);
 
         return (
@@ -16,7 +25,11 @@ const Stars = ({ containerClass, value, isStatic = true, setValue }) => {
             key={i}
             onClick={!isStatic ? () => setValue(item) : () => {}}
             icon={isActive ? faStar : farStar}
-            className={s.star__icon}
+            className={classnames(s.star__icon, {
+              [s.md]: size === "md",
+              [s.sm]: size === "sm",
+              [s.lg]: size === "lg",
+            })}
           />
         );
       })}

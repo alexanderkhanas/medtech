@@ -1,6 +1,7 @@
 .card {
   display: flex;
   padding: 25px 0;
+  position: relative;
   border: 1px solid #eeeeee;
 }
 
@@ -99,6 +100,12 @@
   }
   .title {
     padding: 0;
+  }
+
+  .remove__icon__wrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 }
 

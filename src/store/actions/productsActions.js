@@ -5,6 +5,7 @@ import {
   fetchFilteredProducts,
   fetchCategories,
   fetchHighRatingProducts,
+  postReview,
 } from "../api/api";
 import {
   SET_PRODUCTS,
@@ -16,16 +17,29 @@ import {
   SET_CATEGORIES,
   SET_SEARCH_VALUE,
   SET_HIGHRATING_PRODUCTS,
+  SET_POPULAR,
 } from "./actionTypes";
 import _axios from "../api/_axios";
+import { randomArrayShuffle, getToken } from "../../utils/utils";
 
 export const getProducts = () => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchProducts();
     dispatch({ type: SET_LOADING, isLoading: false });
-    if (!response.data) return;
+    if (!response?.data) return;
     const { products, length } = response.data;
+    const recommendedProducts = products.filter(
+      (product) => product.recommended
+    );
+    const newProducts = products.sort(
+      (product, nextProduct) =>
+        new Date(product.createdAt) - new Date(nextProduct.createdAt)
+    );
+    const popularProducts = randomArrayShuffle([
+      ...recommendedProducts,
+      ...newProducts,
+    ]);
     dispatch({
       type: SET_PRODUCTS,
       products,
@@ -33,17 +47,16 @@ export const getProducts = () => {
     });
     dispatch({
       type: SET_RECOMMENDED,
-      recommendedProducts: products.filter((product) => product.recommended),
+      recommendedProducts,
     });
     dispatch({
       type: SET_NEW,
-      newProducts: products.sort(
-        (product, nextProduct) =>
-          new Date(product.createdAt) - new Date(nextProduct.createdAt)
-      ),
+      newProducts,
     });
-    const popularProducts = [];
-    products.forEach((product, i) => {});
+    dispatch({
+      type: SET_POPULAR,
+      popularProducts,
+    });
   };
 };
 
@@ -73,7 +86,7 @@ export const clearFilterAction = (products) => {
 export const filterProductsAction = (
   categoryIdsArray,
   searchValue,
-  page = 1,
+  page,
   sortType
 ) => {
   return async (dispatch) => {
@@ -130,6 +143,17 @@ export const getHighRatingProductsAction = () => {
     if (response.status === 200) {
       dispatch({ type: SET_HIGHRATING_PRODUCTS, products: response.data });
     }
+  };
+};
+
+export const createReviewAction = (review) => {
+  return async (dispatch) => {
+    const token = getToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await postReview(review, token);
+    console.log("res ===", response?.data);
+
+    dispatch({ type: SET_LOADING, isLoading: false });
   };
 };
 

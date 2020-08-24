@@ -15,6 +15,11 @@
   font-weight: 300;
   padding: 0 0 10px 0;
 }
+.bread__crumbs {
+  width: 1rem;
+  fill: #acacac;
+  vertical-align: -0.1em;
+}
 .tabs {
   display: flex;
   flex-wrap: wrap;
@@ -98,6 +103,9 @@
 
 .add__more__icon {
   margin-right: 5px;
+  fill: white;
+  width: 1rem;
+  vertical-align: -0.125em;
 }
 
 .add__button {
@@ -142,10 +150,21 @@
 
 .logout__icon {
   margin-right: 7px;
+  fill: white;
+  width: 1rem;
+  vertical-align: -0.125em;
 }
 
 .form {
   margin-bottom: 30px;
+}
+
+.not__read__message {
+  background: #2bbd8620;
+}
+
+.message {
+  cursor: pointer;
 }
 
 @media (max-width: 575px) {

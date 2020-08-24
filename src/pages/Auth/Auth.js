@@ -2,38 +2,44 @@ import React, { useState } from "react";
 import s from "./Auth.module.css";
 import Input from "../../misc/Inputs/Input/Input";
 import { Formik, ErrorMessage } from "formik";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
-import {
-  faCheckCircle,
-  faExclamationCircle,
-  faKey,
-  faArrowLeft,
-  faHome,
-} from "@fortawesome/free-solid-svg-icons";
 import Button from "../../misc/Button/Button";
 import { useHistory, Link } from "react-router-dom";
 import _axios from "../../store/api/_axios";
-import { loginAction } from "../../store/actions/profileActions";
+import {
+  loginAction,
+  loginGoogleAction,
+  loginFacebookAction,
+} from "../../store/actions/profileActions";
 import { connect } from "react-redux";
 import {
   showAlertAction,
   hideAlertAction,
 } from "../../store/actions/alertActions";
+import GoBackBtn from "../../misc/GoBackBtn/GoBackBtn";
+import { ReactComponent as Google } from "../../assets/google.svg";
+import { ReactComponent as Facebook } from "../../assets/facebook.svg";
+import { ReactComponent as CheckCircle } from "../../assets/check-circle.svg";
+import { ReactComponent as ExclamationCircle } from "../../assets/exclamation-circle.svg";
+import { ReactComponent as Home } from "../../assets/home.svg";
 
-const Auth = ({ login, hideAlert, showAlert, location }) => {
+const Auth = ({
+  login,
+  hideAlert,
+  showAlert,
+  location,
+  loginGoogle,
+  loginFacebook,
+}) => {
   const h = useHistory();
   const breadCrumbsItems = [
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Увійти", path: "/login" },
   ];
-
-  console.log("location ===", location?.state);
 
   return (
     <div>
@@ -41,7 +47,6 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
         initialValues={{ email: "", password: "", isRemember: false }}
         validate={(values) => {
           const errors = {};
-          console.log("is remember ===", values.isRemember);
 
           if (values.password.length <= 5) {
             errors.password = "Занадто короткий пароль";
@@ -58,7 +63,6 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
         onSubmit={async (values, { setSubmitting }) => {
           const { email, password } = values;
           const userId = await login({ email, password }, values.isRemember);
-          console.log("userId ===", userId);
 
           if (userId === "admin") {
             h.push("/admin");
@@ -83,16 +87,10 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
           setValues,
         }) => {
           const SuccessIcon = () => (
-            <FontAwesomeIcon
-              icon={faCheckCircle}
-              className={`${s.icon} ${s.success__icon}`}
-            />
+            <CheckCircle className={`${s.icon} ${s.success__icon}`} />
           );
           const ErrorIcon = () => (
-            <FontAwesomeIcon
-              icon={faExclamationCircle}
-              className={`${s.icon} ${s.error__icon}`}
-            />
+            <ExclamationCircle className={`${s.icon} ${s.error__icon}`} />
           );
           return (
             <form>
@@ -108,7 +106,6 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
                         <Input
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          // Icon={!errors.email ? SuccessIcon : ErrorIcon}
                           name="email"
                           value={values.email}
                           type="email"
@@ -127,7 +124,6 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             type="password"
-                            // Icon={!errors.password ? SuccessIcon : ErrorIcon}
                             name="password"
                             value={values.password}
                             placeholder="••••••••"
@@ -172,33 +168,13 @@ const Auth = ({ login, hideAlert, showAlert, location }) => {
                     </div>
                     <div className={s.fbt}>
                       <Link to="/register">
-                        <button className={s.reg}>
-                          Зареєструватись
-                          {/* <FontAwesomeIcon icon={faKey} className={s.faKey} /> */}
-                        </button>
+                        <button className={s.reg}>Зареєструватись</button>
                       </Link>
-                      <button
-                        className={s.reg}
-                        onClick={() => {
-                          h.goBack();
-                        }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faArrowLeft}
-                          className={s.goBack}
-                        />
-                        Продовжити покупки
-                      </button>
+                      <GoBackBtn />
                     </div>
                     <div className={s.logwith}>
-                      <FontAwesomeIcon
-                        icon={faGoogle}
-                        className={`${s.logicon} ${s.gl}`}
-                      />
-                      <FontAwesomeIcon
-                        icon={faFacebook}
-                        className={`${s.logicon} ${s.fb} `}
-                      />
+                      <Google className={`${s.logicon} ${s.gl}`} />
+                      <Facebook className={`${s.logicon} ${s.fb} `} />
                     </div>
                   </div>
                 </div>
@@ -218,6 +194,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (data, isRemember) => dispatch(loginAction(data, isRemember)),
+    loginGoogle: () => dispatch(loginGoogleAction()),
+    loginFacebook: () => dispatch(loginFacebookAction()),
     showAlert: (content) => dispatch(showAlertAction(content)),
     hideAlert: () => dispatch(hideAlertAction()),
   };

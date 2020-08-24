@@ -9,7 +9,6 @@ import { getLocalCart } from "../../utils/utils";
 
 export const addToCartAction = (product, attributes) => {
   const localCart = getLocalCart();
-  console.log("add to localCart ===", localCart);
 
   localStorage.setItem(
     "_cart",
@@ -26,10 +25,11 @@ export const addToCartAction = (product, attributes) => {
 
 export const removeFromCartAction = (product) => {
   const localCart = getLocalCart();
-  console.log("remove from localCart ===", localCart);
   localStorage.setItem(
     "_cart",
-    localCart.filter((cartProduct) => cartProduct._id !== product._id)
+    JSON.stringify(
+      localCart.filter((cartProduct) => cartProduct._id !== product._id)
+    )
   );
   return {
     type: REMOVE_FROM_CART,

@@ -19,3 +19,8 @@ h1 {
   color: #7b7b7b;
   font-weight: 300;
 }
+.bread__crumbs {
+  width: 1rem;
+  fill: #acacac;
+  vertical-align: -0.1em;
+}

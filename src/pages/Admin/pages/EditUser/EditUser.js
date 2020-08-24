@@ -5,8 +5,6 @@ import Input from "../../../../misc/Inputs/Input/Input";
 import PhoneNumberInput from "../../../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import { useHistory, useParams } from "react-router-dom";
 import Button from "../../../../misc/Button/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 import userDefaultAvatar from "../../../../assets/profile.png";
 import { withFormik } from "formik";
@@ -46,12 +44,8 @@ const EditUser = ({
       reader.onload = (event) => {
         const img = event.target.result;
         current.src = img;
-        // console.log("photo ===", img);
-        // patchUser({ ...userData, gallery: img }, token);
-        // setUserData((prev) => ({ ...prev, gallery: img }));
       };
       reader.readAsDataURL(file);
-      // setUserData((prev) => ({ ...prev, gallery: file }));
     }
   };
   const h = useHistory();
@@ -63,17 +57,14 @@ const EditUser = ({
     },
     { name: "Редагувати користувача" },
   ];
-  console.log("values ===", values);
 
   useEffect(() => {
     getUsers();
   }, []);
 
   useEffect(() => {
-    console.log("users ===", users);
     if (users?.length) {
       const userToEdit = users.filter((user) => user._id === id)[0];
-      console.log("user to edit ===", userToEdit);
       if (userToEdit) {
         setValues({ ...values, ...userToEdit });
       }

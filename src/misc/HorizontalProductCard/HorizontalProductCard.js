@@ -1,8 +1,6 @@
 import React from "react";
 import s from "./HorizontalProductCard.module.css";
 import { connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import {
   addToCartAction,
   removeFromCartAction,

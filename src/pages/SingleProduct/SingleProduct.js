@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import s from "./SingleProduct.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import getSingleProductAction from "../../store/actions/singleProductActions";
+import {
+  getSingleProductAction,
+  clearSingleProductAction,
+} from "../../store/actions/singleProductActions";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import ProductAttribute from "../../misc/ProductAttribute/ProductAttribute";
-import lodash from "lodash";
 import _axios from "../../store/api/_axios";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import Stars from "../../misc/Stars/Stars";
@@ -15,15 +17,19 @@ import {
   removeFromCartAction,
 } from "../../store/actions/cartActions";
 import classnames from "classnames";
-import { scrollToRef } from "../../utils/utils";
+import { scrollToRef, isEqual } from "../../utils/utils";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import {
   showAlertAction,
   hideAlertAction,
 } from "../../store/actions/alertActions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import ScrollListener from "react-scroll-listener";
+import { Formik } from "formik";
+import Input from "../../misc/Inputs/Input/Input";
+import { createReviewAction } from "../../store/actions/productsActions";
+import { useHistory } from "react-router-dom";
+import { ReactComponent as ArrowUp } from "../../assets/arrow-up.svg";
+import { ReactComponent as PencilAlt } from "../../assets/pencil-alt.svg";
 
 const SingleProduct = ({
   match,
@@ -32,9 +38,10 @@ const SingleProduct = ({
   cartProducts,
   addToCart,
   removeFromCart,
-  popularProducts,
   showAlert,
-  hideAlert,
+  clearProduct,
+  user,
+  createReview,
 }) => {
   //state
   const {
@@ -63,6 +70,13 @@ const SingleProduct = ({
 
   const mainContentRef = useRef();
   const attributesRef = useRef();
+
+  const isPriceChanges = useMemo(() => {
+    return !!attributeOptions?.filter((option) => !!option.priceAttr).length;
+  }, [attributeOptions]);
+  const isReview = !!reviews?.length;
+
+  const h = useHistory();
 
   //functions
   const scrollTop = () => {
@@ -95,7 +109,6 @@ const SingleProduct = ({
 
   const onScroll = () => {
     const scrollTopValue = window.pageYOffset;
-    // itemTranslate = Math.min(0, scrollTop / 3 - 60);
     if (scrollTopValue >= 600) {
       setTopButtonVisible(true);
     } else if (scrollTopValue < 600) {
@@ -106,22 +119,18 @@ const SingleProduct = ({
   //effects
   useEffect(() => {
     getProduct(match.params.id);
+    const scrollListener = new ScrollListener();
+    scrollListener.addScrollHandler("1", onScroll);
+    return () => {
+      document.title = "Медтехніка";
+      clearProduct();
+    };
   }, []);
-
-  useEffect(() => {
-    console.log("price ===", priceInfo);
-  }, [priceInfo]);
-
-  useEffect(() => {
-    console.log("product ===", product);
-  }, [product]);
 
   useEffect(() => {
     const productFromCart = cartProducts.filter(
       (cartProduct) => cartProduct._id === _id
     )[0];
-
-    console.log("iproductFromCart ===", productFromCart);
 
     setInCart(!!productFromCart);
   }, [cartProducts, _id]);
@@ -142,34 +151,29 @@ const SingleProduct = ({
         const map = Array.from(new Set(fil));
         filteredObject[possibleAttribute] = { all: map, active: null };
       });
-      setPriceInfo({
-        string: `Від ${minimumPrice}₴`,
-        value: null,
-      });
+      if (isPriceChanges) {
+        setPriceInfo({
+          string: `Від ${minimumPrice}₴`,
+          value: null,
+        });
+      }
       setFilteredAttributes(filteredObject);
     }
     if (_id) {
-      console.log("changing title");
-
       document.title = title;
     }
   }, [product]);
 
   useEffect(() => {
-    return () => {
-      document.title = "Медтехніка";
-    };
-  }, []);
-
-  useEffect(() => {
     if (attributeOptions?.length) {
       const attributeFound = attributeOptions.find((attributeObj) =>
-        lodash.isEqual(
+        isEqual(
           { ...attributeObj, priceAttr: null, _id: null },
           { ...selectedAttributes, priceAttr: null, _id: null }
         )
       );
-      if (attributeFound) {
+
+      if (attributeFound && isPriceChanges) {
         setPriceInfo({
           value: attributeFound.priceAttr,
           string: `${attributeFound.priceAttr}₴`,
@@ -178,13 +182,6 @@ const SingleProduct = ({
       setFoundAttributes(attributeFound || {});
     }
   }, [selectedAttributes]);
-
-  console.log("product ===", product);
-
-  useEffect(() => {
-    const scrollListener = new ScrollListener();
-    scrollListener.addScrollHandler("1", onScroll);
-  }, []);
 
   //other
   let qtyMessage = "Залишилось мало";
@@ -260,13 +257,13 @@ const SingleProduct = ({
               {!!vendorID?._id && (
                 <ProductAttribute
                   name="Країна виробника"
-                  values={[vendorID.title]}
+                  values={[vendorID?.title]}
                 />
               )}
               {!!categoryID?._id && (
                 <ProductAttribute
                   name="Категорія"
-                  values={[categoryID.title]}
+                  values={[categoryID?.title]}
                 />
               )}
               <ProductAttribute
@@ -299,12 +296,21 @@ const SingleProduct = ({
             </TabPanel>
             <TabPanel className={s.tab__content}>
               {reviews.map(
-                ({ userID, reviewTitle, reviewDesc, reviewrating }, i) => (
-                  <div key={i} className={s.review}>
+                (
+                  {
+                    userID: reviewUserID,
+                    _id: reviewId,
+                    title: reviewTitle,
+                    desc: reviewDesc,
+                    rating,
+                  },
+                  i
+                ) => (
+                  <div key={reviewId} className={s.review}>
                     <div className={s.review__header}>
-                      <h4 className={s.review__admin}>{userID.fName}</h4>
+                      <h4 className={s.review__admin}>{reviewUserID.fName}</h4>
 
-                      <Stars value={reviewrating} />
+                      <Stars value={rating} />
                     </div>
                     <h5 className={s.review__title}>{reviewTitle}</h5>
 
@@ -312,6 +318,70 @@ const SingleProduct = ({
                   </div>
                 )
               )}
+              <Formik
+                initialValues={{
+                  desc: "",
+                  title: "",
+                  rating: 5,
+                }}
+                onSubmit={async (values, { resetForm }) => {
+                  const reviewToSubmit = {
+                    ...values,
+                    productID: _id,
+                    userID: user._id,
+                  };
+                  const isSuccess = await createReview(reviewToSubmit);
+                  if (isSuccess) {
+                    showAlert("Відгук створено успішно!", "success");
+                    resetForm({ desc: "", title: "", rating: 5 });
+                  } else {
+                    showAlert("Сталась помилка при створенні відгука.");
+                  }
+                }}
+              >
+                {({ handleChange, handleSubmit, values, setValues }) => (
+                  <form className={s.review__form}>
+                    <div className={s.review__form__inner}>
+                      <h1 className={s.review__form__title}>Залишіть відгук</h1>
+                      <Input
+                        label="Заголовок"
+                        name="title"
+                        placeholder="Інгалятором задоволений"
+                        containerClass={s.review__input__container}
+                        onChange={handleChange}
+                      />
+                      <Input
+                        label="Опишіть ваші враження"
+                        name="desc"
+                        isTextarea
+                        placeholder="Все сподобалось, інгалятор підійшов чудово!"
+                        containerClass={s.review__input__container}
+                        inputClass={s.review__textarea}
+                        onChange={handleChange}
+                      />
+                      <Stars
+                        value={values.rating}
+                        isStatic={false}
+                        setValue={(rating) => {
+                          setValues({ ...values, rating });
+                        }}
+                      />
+                      {/* <Button size="lg" title="Залишити відгук" /> */}
+                      <button
+                        className={s.save__profile__btn}
+                        onClick={handleSubmit}
+                      >
+                        Змінити
+                        <span className={s.profile__btn__overlay}>
+                          <PencilAlt
+                            className={s.profile__btn__overlay__icon}
+                          />
+                        </span>
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </Formik>
             </TabPanel>
             <TabPanel className={s.tab__content}>
               <p className={s.desc}>
@@ -330,7 +400,7 @@ const SingleProduct = ({
 
       {isTopButtonVisible && (
         <Button className={s.arrow__button} onClick={scrollTop}>
-          <FontAwesomeIcon icon={faArrowUp} className={s.arrow__button__icon} />
+          <ArrowUp className={s.arrow__button__icon} />
         </Button>
       )}
       <div>
@@ -349,7 +419,7 @@ const SingleProduct = ({
               itemType="http://schema.org/Organization"
               itemScope
             >
-              <meta itemProp="name" content={vendorID.title} />
+              <meta itemProp="name" content={vendorID?.title} />
             </div>
           </div>
           <div
@@ -362,7 +432,7 @@ const SingleProduct = ({
               itemProp="ratingValue"
               content={
                 reviews.reduce((prev, curr) => prev + curr.rating, 0) /
-                reviews.length
+                  reviews.length || 5
               }
             />
           </div>
@@ -400,16 +470,19 @@ const mapStateToProps = (state) => {
     product: state.single.product,
     cartProducts: state.cart.all,
     popularProducts: state.products.popular,
+    user: state.profile,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     getProduct: (id) => dispatch(getSingleProductAction(id)),
+    clearProduct: () => dispatch(clearSingleProductAction()),
     addToCart: (product, attributes) =>
       dispatch(addToCartAction(product, attributes)),
     removeFromCart: (product) => dispatch(removeFromCartAction(product)),
-    showAlert: (text) => dispatch(showAlertAction(text)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
     hideAlert: () => dispatch(hideAlertAction()),
+    createReview: (review) => dispatch(createReviewAction(review)),
   };
 };
 

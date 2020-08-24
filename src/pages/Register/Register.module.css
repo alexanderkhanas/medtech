@@ -58,7 +58,8 @@
   justify-content: center;
 }
 .logicon {
-  font-size: 30px;
+  width: 2rem;
+  cursor: pointer;
 }
 .gl {
   margin-right: 10px;
@@ -72,14 +73,14 @@
 .icon {
   position: absolute;
   right: 15px;
-  font-size: 25px;
+  width: 1.5rem;
 }
 
 .error__icon {
-  color: #e80000;
+  fill: #e80000;
 }
 .success__icon {
-  color: #00d231;
+  fill: #00d231;
 }
 
 .reg,
@@ -113,5 +114,13 @@ button {
   padding-bottom: 10px;
 }
 .faArrowLeft {
+  fill: #acacac;
+  height: 1em;
+  vertical-align: -0.125em;
   margin-right: 2px;
+}
+.bread__crumbs {
+  width: 1rem;
+  fill: #acacac;
+  vertical-align: -0.1em;
 }

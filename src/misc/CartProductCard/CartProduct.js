@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import s from "./CartProduct.module.css";
 import { connect } from "react-redux";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Counter from "../Counter/Counter";
 import {
   changeNumberInCartAction,
@@ -10,6 +8,7 @@ import {
 } from "../../store/actions/cartActions";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
+import { ReactComponent as Times } from "../../assets/times.svg";
 
 const CartProduct = ({
   product,
@@ -70,11 +69,7 @@ const CartProduct = ({
         </span>
       </div>
       <div className={s.remove__icon__wrapper}>
-        <FontAwesomeIcon
-          icon={faTimes}
-          onClick={removeFromCartHandler}
-          className={s.remove__icon}
-        />
+        <Times onClick={removeFromCartHandler} className={s.remove__icon} />
       </div>
 
       <div className={s.mobile}>

@@ -1,6 +1,7 @@
 .card {
   display: flex;
   padding: 25px 0;
+  position: relative;
   border: 1px solid #eeeeee;
 }
 
@@ -42,6 +43,7 @@
 .img {
   width: 200px;
   height: 200px;
+  object-fit: cover;
 }
 
 .small .img {
@@ -56,8 +58,8 @@
 }
 
 .remove__icon {
-  font-size: 25px;
-  color: #404040;
+  width: 1.5rem;
+  fill: #404040;
   cursor: pointer;
 }
 
@@ -98,6 +100,12 @@
   }
   .title {
     padding: 0;
+  }
+
+  .remove__icon__wrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 }
 

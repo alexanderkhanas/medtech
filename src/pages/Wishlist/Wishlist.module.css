@@ -50,3 +50,8 @@
 .catalog__btn {
   margin-top: 20px;
 }
+.bread__crumbs {
+  width: 1rem;
+  fill: #acacac;
+  vertical-align: -0.1em;
+}

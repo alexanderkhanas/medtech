@@ -22,6 +22,12 @@
 }
 .icon_ft {
   margin-right: 10px;
+  fill: white;
+  width: 1rem;
+  vertical-align: -0.125em;
+}
+.icon_ft :hover {
+  fill: #019682;
 }
 .a div {
   padding: 10px;

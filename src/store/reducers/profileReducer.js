@@ -3,6 +3,8 @@ import {
   LOGOUT,
   SET_LOGGED_IN,
   SET_ADMIN,
+  SET_ORDER_HISTORY,
+  SET_USER_ORDERS_PRODUCTS,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -14,6 +16,8 @@ const initialState = {
   token: "",
   _id: "",
   isLogged: false,
+  orders: [],
+  ordersProducts: {},
 };
 
 export default (state = initialState, action) => {
@@ -43,6 +47,21 @@ export default (state = initialState, action) => {
         ...state,
         isLogged: true,
         isAdmin: true,
+      };
+
+    case SET_ORDER_HISTORY:
+      return {
+        ...state,
+        orders: action.orders,
+      };
+
+    case SET_USER_ORDERS_PRODUCTS:
+      return {
+        ...state,
+        ordersProducts: {
+          ...state.ordersProducts,
+          [action.orderId]: action.products,
+        },
       };
     default:
       return state;

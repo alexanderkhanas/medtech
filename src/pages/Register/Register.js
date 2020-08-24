@@ -2,17 +2,6 @@ import React, { useState } from "react";
 import s from "./Register.module.css";
 import Input from "../../misc/Inputs/Input/Input";
 import Button from "../../misc/Button/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
-import {
-  faEye,
-  faEyeSlash,
-  faCheckCircle,
-  faExclamationCircle,
-  faArrowLeft,
-  faHome,
-  faCheck,
-} from "@fortawesome/free-solid-svg-icons";
 import { Formik, ErrorMessage } from "formik";
 import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import { useHistory, Link } from "react-router-dom";
@@ -20,6 +9,13 @@ import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import _axios from "../../store/api/_axios";
 import { registerAction } from "../../store/actions/profileActions";
 import { connect } from "react-redux";
+import { ReactComponent as Home } from "../../assets/home.svg";
+import { ReactComponent as CheckCircle } from "../../assets/check-circle.svg";
+import { ReactComponent as ExclamationCircle } from "../../assets/exclamation-circle.svg";
+import { ReactComponent as ArrowLeft } from "../../assets/arrow-left.svg";
+import { ReactComponent as Google } from "../../assets/google.svg";
+import { ReactComponent as Facebook } from "../../assets/facebook.svg";
+import { ReactComponent as Check } from "../../assets/check.svg";
 
 const Register = ({ register }) => {
   const [isRegister, setRegister] = useState(false);
@@ -28,7 +24,6 @@ const Register = ({ register }) => {
 
   const [isAgree, setIsAgree] = useState(false);
   const agreeCheckbox = ({ target: { checked } }) => {
-    console.log(isAgree, checked);
     setIsAgree(checked);
   };
   const h = useHistory();
@@ -37,7 +32,7 @@ const Register = ({ register }) => {
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Реєстрація", path: "/register" },
   ];
@@ -97,9 +92,8 @@ const Register = ({ register }) => {
         onSubmit={async (values, { setSubmitting }) => {
           const { fName, lName, fatherName, phone, password, email } = values;
           const correctPhone = phone.replace(/-/gi, "").replace("+", "");
-          console.log("phone ===", correctPhone);
 
-          const user = await register({
+          const id = await register({
             fName,
             lName,
             fatherName,
@@ -107,8 +101,8 @@ const Register = ({ register }) => {
             password,
             email,
           });
-          if (user) {
-            h.push(`/profile/${user._id}`);
+          if (id) {
+            h.push(`/profile/${id}`);
           }
         }}
       >
@@ -124,16 +118,10 @@ const Register = ({ register }) => {
           validateOnBlur,
         }) => {
           const SuccessIcon = () => (
-            <FontAwesomeIcon
-              icon={faCheckCircle}
-              className={`${s.icon} ${s.success__icon}`}
-            />
+            <CheckCircle className={`${s.icon} ${s.success__icon}`} />
           );
           const ErrorIcon = () => (
-            <FontAwesomeIcon
-              icon={faExclamationCircle}
-              className={`${s.icon} ${s.error__icon}`}
-            />
+            <ExclamationCircle className={`${s.icon} ${s.error__icon}`} />
           );
           return (
             <form onSubmit={handleSubmit}>
@@ -266,7 +254,7 @@ const Register = ({ register }) => {
                       </div>
                       <div className={s.check_box}>
                         <input
-                          icon={faCheck}
+                          icon={Check}
                           className={s.faCheck}
                           type="checkbox"
                           name="chexbox"
@@ -299,21 +287,12 @@ const Register = ({ register }) => {
                           h.goBack();
                         }}
                       >
-                        <FontAwesomeIcon
-                          icon={faArrowLeft}
-                          className={s.faArrowLeft}
-                        />
+                        <ArrowLeft className={s.faArrowLeft} />
                         Продовжити покупки
                       </button>
                       <div className={s.logwith}>
-                        <FontAwesomeIcon
-                          icon={faGoogle}
-                          className={`${s.logicon} ${s.gl}`}
-                        />
-                        <FontAwesomeIcon
-                          icon={faFacebook}
-                          className={`${s.logicon} ${s.fb} `}
-                        />
+                        <Google className={`${s.logicon} ${s.gl}`} />
+                        <Facebook className={`${s.logicon} ${s.fb} `} />
                       </div>
                     </div>
                   </div>

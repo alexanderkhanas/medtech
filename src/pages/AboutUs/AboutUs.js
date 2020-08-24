@@ -3,15 +3,14 @@ import s from "./AboutUs.module.css";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import logo from "../../assets/logo.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { ReactComponent as Home } from "../../assets/home.svg";
 
 const AboutUs = (props) => {
   const breadCrumbsItems = [
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Про нас", path: "/about-us" },
   ];

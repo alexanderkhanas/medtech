@@ -9,12 +9,11 @@ import {
 import CartProduct from "../../misc/CartProductCard/CartProduct";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import Button from "../../misc/Button/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import { useHistory } from "react-router-dom";
 import { showAlertAction } from "../../store/actions/alertActions";
 import GoCatalogBtn from "../../misc/GoCatalogBtn/GoCatalogBtn";
+import { ReactComponent as Home } from "../../assets/home.svg";
 
 const Cart = ({ cartProducts, fullPrice, setFullPrice, showAlert, user }) => {
   const h = useHistory();
@@ -44,7 +43,7 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice, showAlert, user }) => {
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Кошик", path: "/cart" },
   ];

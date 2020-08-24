@@ -17,6 +17,12 @@
   text-align: center;
   padding: 50px;
 }
+.bread__crumbs {
+  width: 1rem;
+  fill: #acacac;
+  vertical-align: -0.1em;
+}
+
 .profile {
   position: relative;
   height: 100%;
@@ -40,7 +46,6 @@
 }
 .profile__main img {
   object-fit: contain;
-  width: 25%;
 }
 
 .profile__info__fields {
@@ -79,10 +84,10 @@
 }
 
 .profile__info__icon {
-  font-size: 1.5rem;
+  width: 1.5rem;
   padding: 10px;
   background: #2bbd86;
-  color: white;
+  fill: white;
   border-radius: 25px;
   cursor: pointer;
 }
@@ -125,6 +130,8 @@
 }
 
 .profile__btn__overlay__icon {
+  fill: white;
+  width: 1.5rem;
   position: relative;
   animation: move 2s infinite alternate linear;
   /* transform: rotateZ(10deg); */
@@ -187,6 +194,34 @@ p {
   position: absolute;
   margin-left: 35px;
 }
+
+.orders {
+  margin-top: 30px;
+  min-height: 50vh;
+}
+
+.orders__header {
+  display: flex;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #cccccc80;
+  margin-bottom: 10px;
+}
+
+.icon {
+  margin-right: 8px;
+  width: 20px;
+  max-height: 25px;
+}
+
+.orders__header span {
+  flex: 1;
+  font-weight: lighter;
+  color: rgb(150, 150, 150);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .title__container {
   padding: 35px 0;
   background: rgba(240, 240, 240, 0.632);
@@ -202,6 +237,10 @@ p {
 }
 .container_title.mobile {
   display: none;
+}
+
+.order__content {
+  max-width: 700px;
 }
 
 @keyframes move {

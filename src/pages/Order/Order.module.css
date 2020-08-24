@@ -15,6 +15,11 @@
   font-weight: 300;
   padding: 0 0 10px 0;
 }
+.bread__crumbs {
+  width: 1rem;
+  fill: #acacac;
+  vertical-align: -0.1em;
+}
 .order__container {
   display: flex;
   justify-content: space-between;

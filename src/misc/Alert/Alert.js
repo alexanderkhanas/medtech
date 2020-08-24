@@ -1,10 +1,10 @@
 import React from "react";
 import s from "./Alert.module.css";
 import { connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import classnames from "classnames";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
+import { ReactComponent as Check } from "../../assets/check.svg";
+import { ReactComponent as TimesCircle } from "../../assets/times-circle.svg";
 
 const Alert = ({ content, isVisible, type = "error" }) => {
   return (
@@ -18,7 +18,11 @@ const Alert = ({ content, isVisible, type = "error" }) => {
     >
       <FixedWrapper>
         <div className={s.inner}>
-          <FontAwesomeIcon icon={faTimesCircle} className={s.icon} />
+          {type !== "error" ? (
+            <Check className={s.icon} />
+          ) : (
+            <TimesCircle className={s.icon} />
+          )}
           <p className={s.content}>{content}</p>
         </div>
       </FixedWrapper>

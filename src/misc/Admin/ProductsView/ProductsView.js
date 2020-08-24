@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import { scrollToRef } from "../../../utils/utils";
 import { filterProductsAction } from "../../../store/actions/productsActions";
 import { deleteProductAction } from "../../../store/actions/adminActions";
+import Input from "../../Inputs/Input/Input";
 
 const ProductsView = ({
   filteredProducts,
@@ -14,21 +15,43 @@ const ProductsView = ({
   filterProducts,
   deleteProduct,
 }) => {
-  const h = useHistory();
   const [activePage, setActivePage] = useState(1);
+  const [isSearchValueChanged, setSearchValueChanged] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
+  const h = useHistory();
   const containerRef = useRef();
+
+  const onSearchValueChange = ({ target }) => {
+    setSearchValue(target.value);
+    if (!isSearchValueChanged) {
+      setSearchValueChanged(true);
+    }
+  };
 
   const onPageChange = ({ selected }) => {
     setActivePage(selected + 1);
-    // getProductsByPage(selected + 1);
     scrollToRef(containerRef);
   };
 
   useEffect(() => {
-    filterProducts([], "", activePage);
+    filterProducts([], searchValue, activePage);
   }, [activePage]);
+
+  useEffect(() => {
+    if (isSearchValueChanged) {
+      filterProducts([], searchValue, activePage);
+    }
+  }, [searchValue]);
+
   return (
     <div className={s.products__container} ref={containerRef}>
+      <Input
+        value={searchValue}
+        onChange={onSearchValueChange}
+        placeholder="Інгалятор"
+        label="Пошук"
+      />
       <div className={s.order__header}>
         <span>Назва</span>
         <span>Ціна</span>
@@ -36,7 +59,6 @@ const ProductsView = ({
         <span>Дії</span>
       </div>
       {filteredProducts.map(({ _id, title, price, article }) => (
-        // <Link key={_id} >
         <AdminRow
           items={[
             { title, key: `${_id}title` },
@@ -46,10 +68,9 @@ const ProductsView = ({
           onDelete={() => deleteProduct(_id)}
           onEdit={() => h.push(`/admin/edit-product/${_id}`)}
         />
-        // </Link>
       ))}
       <Pagination
-        pageCount={Math.round(filteredProductsQuantity / 24)}
+        pageCount={Math.ceil(filteredProductsQuantity / 24)}
         {...{ onPageChange }}
       />
     </div>

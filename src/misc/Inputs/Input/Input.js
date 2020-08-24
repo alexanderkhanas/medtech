@@ -1,7 +1,6 @@
 import React from "react";
 import s from "./Input.module.css";
 import classnames from "classnames";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Input = ({
   Icon,

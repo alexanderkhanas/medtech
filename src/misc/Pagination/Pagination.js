@@ -9,7 +9,6 @@ const Pagination = ({ pageCount, onPageChange }) => {
       marginPagesDisplayed={1}
       {...{ pageCount }}
       {...{ onPageChange }}
-      //   onPageChange={({ selected }) => console.log("e ===", selected)}
       containerClassName={s.pagination__container}
       activeClassName={s.pagination__active__link}
       previousLabel=""

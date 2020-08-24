@@ -4,13 +4,12 @@ import { connect } from "react-redux";
 import Input from "../../../../misc/Inputs/Input/Input";
 import Button from "../../../../misc/Button/Button";
 import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Formik } from "formik";
 import { createNewsAction } from "../../../../store/actions/adminActions";
 import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
 import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 import { showAlertAction } from "../../../../store/actions/alertActions";
+import { ReactComponent as Times } from "../../../../assets/times.svg";
 
 const CreateNews = ({ createNews, showAlert }) => {
   const uploadInputRef = useRef();
@@ -54,31 +53,17 @@ const CreateNews = ({ createNews, showAlert }) => {
               { title, desc, gallery, galleryFile },
               { resetForm }
             ) => {
-              console.log("gallery file ===", galleryFile);
-
-              // if (!Object.keys(galleryFile).length) {
-              //   return;
-              // }
               const imageFormData = new FormData();
-              console.log("gallery ===", gallery);
-
               imageFormData.append("gallery", galleryFile);
-              console.log("image ===", imageFormData.get("gallery"));
-
               const isNewsCreated = await createNews(
                 { title, desc },
                 imageFormData
               );
-              console.log("is news created ===", isNewsCreated);
-
               if (isNewsCreated) {
                 showAlert("Новину створено успішно!", "success");
               } else {
                 showAlert("Сталась помилка!", "error");
               }
-
-              console.log("is news created ===", isNewsCreated);
-
               resetForm({ title: "", desc: "", gallery: "", galleryFile: {} });
             }}
           >
@@ -96,8 +81,7 @@ const CreateNews = ({ createNews, showAlert }) => {
                   <div className={s.images__container}>
                     {values.gallery && (
                       <div className={s.image__container}>
-                        <FontAwesomeIcon
-                          icon={faTimes}
+                        <Times
                           className={s.delete__icon}
                           onClick={() => {
                             uploadInputRef.current.value = null;

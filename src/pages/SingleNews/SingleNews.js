@@ -1,22 +1,19 @@
 import React, { useEffect } from "react";
 import s from "./SingleNews.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
-import vadim from "../../assets/vadim.jpg";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import NewsCard from "../../misc/NewsCard/NewsCard";
 import { getSingleNewsAction } from "../../store/actions/newsActions";
 import { connect } from "react-redux";
+import { ReactComponent as Home } from "../../assets/home.svg";
 
 const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
   const { title, gallery, desc, createdAt, _id } = singleNews;
-  console.log(singleNews);
   const breadCrumbsItems = [
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Новина", path: "/single-news/:id" },
   ];
@@ -25,10 +22,6 @@ const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
       getSingleNews(match.params.id);
     }
   }, [match.params?.id]);
-  console.log("match.params.id ===", match.params.id);
-
-  console.log("singleNews ===", singleNews);
-  console.log("created at ===", createdAt);
 
   return (
     !!_id && (

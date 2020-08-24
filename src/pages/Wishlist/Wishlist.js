@@ -4,23 +4,19 @@ import { connect } from "react-redux";
 import HorizontalProductCard from "../../misc/HorizontalProductCard/HorizontalProductCard";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import ProductCard from "../../misc/ProductCard/ProductCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faStoreAlt } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
-import { Link } from "react-router-dom";
-import Button from "../../misc/Button/Button";
 import GoCatalogBtn from "../../misc/GoCatalogBtn/GoCatalogBtn";
+import { ReactComponent as Home } from "../../assets/home.svg";
 
 const Wishlist = ({ wishlistProducts }) => {
   const breadCrumbsItems = [
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Улюблені", path: "/wishlist" },
   ];
-  console.log("wishlistProducts ===", wishlistProducts);
 
   return (
     <>

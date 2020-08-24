@@ -14,23 +14,27 @@ import {
   getCategoriesAction,
   getProducts,
   getHighRatingProductsAction,
+  getRecommendedProductsAction,
 } from "../../store/actions/productsActions";
 import Button from "../../misc/Button/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStoreAlt, faMailBulk } from "@fortawesome/free-solid-svg-icons";
 import { Formik } from "formik";
 import Input from "../../misc/Inputs/Input/Input";
 import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 import GoCatalogBtn from "../../misc/GoCatalogBtn/GoCatalogBtn";
+import { createContactMessageAction } from "../../store/actions/contactFormActions";
+import { showAlertAction } from "../../store/actions/alertActions";
+import { ReactComponent as MailBulk } from "../../assets/mail-bulk.svg";
 
 const Home = ({
   products,
   recentNews,
-  windowWidth,
   getNews,
   getCategories,
   getHighRatingProducts,
+  getRecommendedProducts,
   user,
+  createMessage,
+  showAlert,
 }) => {
   const {
     highRatingProducts,
@@ -45,14 +49,15 @@ const Home = ({
   useEffect(() => {
     (async () => {
       if (!allProducts.length) {
-        await getCategories();
         await getHighRatingProducts();
+        await getRecommendedProducts();
+        await getCategories();
         await getNews();
       }
     })();
   }, []);
 
-  let slidesPerPage = Math.floor(windowWidth / 350);
+  let slidesPerPage = Math.floor(window.innerWidth / 350);
 
   if (slidesPerPage > 4) {
     slidesPerPage = 4;
@@ -74,9 +79,6 @@ const Home = ({
             <h2 className={s.carousel__title}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </h2>
-            <p className={s.carousel__subtitle}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
             <div className={s.catalog__btn}>
               <GoCatalogBtn />
             </div>
@@ -103,14 +105,14 @@ const Home = ({
               )}
             </TabList>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
+              <ItemsCarousel arrows {...{ slidesPerPage }}>
                 {recommendedProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
             </TabPanel>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
+              <ItemsCarousel arrows {...{ slidesPerPage }}>
                 {popularProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
@@ -118,7 +120,7 @@ const Home = ({
             </TabPanel>
 
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel arrows offset={10} {...{ slidesPerPage }} infinite>
+              <ItemsCarousel arrows offset={10} {...{ slidesPerPage }}>
                 {highRatingProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
@@ -157,7 +159,7 @@ const Home = ({
         </div>
         <div className={s.section}>
           <h3 className={s.section__title}>Останні товари</h3>
-          <ItemsCarousel arrows {...{ slidesPerPage }} infinite>
+          <ItemsCarousel arrows {...{ slidesPerPage }}>
             {newProducts.map((product, i) => (
               <ProductCard key={product._id} {...{ product }} />
             ))}
@@ -186,21 +188,52 @@ const Home = ({
             validate={(values) => {
               const { email, phone } = values;
               const errors = {};
-              if (!email && !phone) {
+              if (!email) {
                 errors.email = "required";
               }
+              if (phone.length && phone.length !== 16) {
+                errors.phone = "required";
+              }
+
               return errors;
             }}
-            onSubmit={(values) => {
-              console.log("values ===", values);
+            onSubmit={async (values, { resetForm }) => {
+              let correctPhone = values.phone.replace(/-/gi, "");
+              correctPhone = correctPhone.replace("+", "");
+              const isSuccess = await createMessage({
+                ...values,
+                read: false,
+                phone: correctPhone,
+              });
+              if (isSuccess) {
+                showAlert("Ваше повідомлення надіслано успішно", "success");
+                resetForm({
+                  email: "",
+                  name: "",
+                  phone: "",
+                  message: "",
+                });
+              } else {
+                showAlert(
+                  "Сталась помилка при надсиланні повідомлення, спробуйте пізніше"
+                );
+              }
             }}
           >
-            {({ values, handleChange, errors, touched, handleSubmit }) => (
+            {({
+              values,
+              handleChange,
+              errors,
+              touched,
+              handleSubmit,
+              handleBlur,
+            }) => (
               <form className={s.form}>
                 <Input
                   label="Електронна пошта"
                   name="email"
                   containerClass={s.input__container}
+                  onBlur={handleBlur}
                   isError={errors.email && touched.email}
                   value={values.email}
                   placeholder="joe.doe.example@gmail.com"
@@ -209,6 +242,8 @@ const Home = ({
                 <PhoneNumberInput
                   label="Номер телефону"
                   name="phone"
+                  onBlur={handleBlur}
+                  isError={errors.phone && touched.phone}
                   containerClass={s.input__container}
                   value={values.phone}
                   onChange={handleChange}
@@ -231,10 +266,7 @@ const Home = ({
                   onChange={handleChange}
                 />
                 <Button title="Надіслати повідомлення" onClick={handleSubmit}>
-                  <FontAwesomeIcon
-                    icon={faMailBulk}
-                    className={s.submit__button__icon}
-                  />
+                  <MailBulk className={s.submit__button__icon} />
                 </Button>
               </form>
             )}
@@ -264,6 +296,9 @@ const mapDispatchToProps = (dispatch) => {
     getNews: () => dispatch(getAllNewsAction()),
     getCategories: () => dispatch(getCategoriesAction()),
     getHighRatingProducts: () => dispatch(getHighRatingProductsAction()),
+    getRecommendedProducts: () => dispatch(getRecommendedProductsAction()),
+    createMessage: (msg) => dispatch(createContactMessageAction(msg)),
+    showAlert: (text, type) => dispatch(showAlertAction(text, type)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

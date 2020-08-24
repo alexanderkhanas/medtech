@@ -1,15 +1,14 @@
 import React from "react";
 import s from "./Politics.module.css";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
+import { ReactComponent as Home } from "../../assets/home.svg";
 
 const Politics = () => {
   const breadCrumbsItems = [
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Політика конфіденційності", path: "/politics" },
   ];

@@ -1,4 +1,4 @@
-import { SET_PRODUCT } from "../actions/actionTypes";
+import { SET_PRODUCT, CLEAR_PRODUCT } from "../actions/actionTypes";
 
 const initialState = {
   product: null,
@@ -7,13 +7,15 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_PRODUCT:
-      // console.log();
-
       return {
         ...state,
         product: action.product,
       };
-
+    case CLEAR_PRODUCT:
+      return {
+        ...state,
+        product: null,
+      };
     default:
       return state;
   }

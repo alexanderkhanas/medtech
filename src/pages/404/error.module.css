@@ -16,6 +16,11 @@
   color: white;
   padding: 20px 35px;
 }
+.goBack__icon {
+  width: 1rem;
+  fill: white;
+  vertical-align: -0.125em;
+}
 
 .button {
   padding-top: 100px;

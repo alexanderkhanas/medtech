@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import s from "./Counter.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import InputMask from "react-input-mask";
+import { ReactComponent as Minus } from "../../assets/minus.svg";
+import { ReactComponent as Plus } from "../../assets/plus.svg";
 
 const Counter = ({ onChange, initialValue }) => {
   const [value, setValue] = useState(initialValue);
@@ -19,7 +19,7 @@ const Counter = ({ onChange, initialValue }) => {
   return (
     <div className={s.container}>
       <div onClick={onMinusClick} className={s.sign__icon__container}>
-        <FontAwesomeIcon className={s.icon} icon={faMinus} />
+        <Minus className={s.icon} />
       </div>
       <InputMask
         maskChar=""
@@ -30,7 +30,7 @@ const Counter = ({ onChange, initialValue }) => {
         {(rest) => <input {...rest} className={s.input} disableUnderline />}
       </InputMask>
       <div onClick={onPlusClick} className={s.sign__icon__container}>
-        <FontAwesomeIcon className={s.icon} icon={faPlus} />
+        <Plus className={s.icon} />
       </div>
     </div>
   );

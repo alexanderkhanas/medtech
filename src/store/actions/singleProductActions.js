@@ -1,7 +1,7 @@
 import { fetchSingleProduct } from "../api/api";
-import { SET_PRODUCT, SET_LOADING } from "./actionTypes";
+import { SET_PRODUCT, SET_LOADING, CLEAR_PRODUCT } from "./actionTypes";
 
-export default (id) => {
+export const getSingleProductAction = (id) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchSingleProduct(id);
@@ -12,4 +12,8 @@ export default (id) => {
       product: response.data,
     });
   };
+};
+
+export const clearSingleProductAction = () => {
+  return { type: CLEAR_PRODUCT };
 };

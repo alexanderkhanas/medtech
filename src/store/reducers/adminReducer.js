@@ -9,6 +9,8 @@ import {
   SET_VENDORS,
   DELETE_USER,
   ADD_PRODUCT,
+  SET_ORDERS,
+  SET_ORDERS_PRODUCTS,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -17,6 +19,8 @@ const initialState = {
   attributes: [],
   vendors: [],
   userToEdit: {},
+  orders: [],
+  ordersProducts: {},
 };
 
 export default (state = initialState, action) => {
@@ -64,6 +68,19 @@ export default (state = initialState, action) => {
       return {
         ...state,
         vendors: action.vendors,
+      };
+    case SET_ORDERS:
+      return {
+        ...state,
+        orders: action.orders,
+      };
+    case SET_ORDERS_PRODUCTS:
+      return {
+        ...state,
+        ordersProducts: {
+          ...state.ordersProducts,
+          [action.orderId]: action.products,
+        },
       };
     default:
       return state;

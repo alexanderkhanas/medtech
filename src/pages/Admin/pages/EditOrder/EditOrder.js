@@ -1,20 +1,14 @@
 import React, { useState } from "react";
 import s from "./EditOrder.module.css";
 import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
-import Input from "../../../../misc/Inputs/Input/Input";
 import ProfileInput from "../../../../misc/Inputs/ProfileInput/ProfileInput";
 import Button from "../../../../misc/Button/Button";
 import { useHistory } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-// import Select from "react-select";
 import Select from "../../../../misc/Select/Select";
 import GoBackBtn from "../../../../misc/GoBackBtn/GoBackBtn";
 import BreadCrumbs from "../../../../misc/BreadCrumbs/BreadCrumbs";
 
 const EditOrder = () => {
-  console.log("edit order");
-
   const h = useHistory();
   const statusOptions = [
     { value: "wait", label: "Очікує оплати" },

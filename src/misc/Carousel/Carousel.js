@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import s from "./Carousel.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronRight,
-  faChevronLeft,
-  faStoreAlt,
-} from "@fortawesome/free-solid-svg-icons";
 import { Transition } from "react-transition-group";
-import { Link } from "react-router-dom";
-import Button from "../Button/Button";
+import { ReactComponent as ChevronLeft } from "../../assets/chevron-left.svg";
+import { ReactComponent as ChevronRight } from "../../assets/chevron-right.svg";
 
 const Carousel = ({ images, className, children }) => {
   const [activeImageId, setActiveImageId] = useState(0);
@@ -46,14 +40,12 @@ const Carousel = ({ images, className, children }) => {
         }}
       </Transition>
 
-      <FontAwesomeIcon
+      <ChevronLeft
         onClick={setNextImage}
-        icon={faChevronLeft}
         className={`${s.switch__button} ${s.switch__button__left}`}
       />
-      <FontAwesomeIcon
+      <ChevronRight
         onClick={setPreviousImage}
-        icon={faChevronRight}
         className={`${s.switch__button} ${s.switch__button__right}`}
       />
       {children}

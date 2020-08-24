@@ -9,6 +9,11 @@
   flex-direction: column;
   align-items: center;
 }
+.bread__crumbs {
+  width: 1rem;
+  fill: #acacac;
+  vertical-align: -0.1em;
+}
 
 .title {
   text-align: center;

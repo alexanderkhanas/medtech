@@ -16,22 +16,36 @@
   justify-content: space-around;
   align-items: center;
   color: black;
+  overflow: hidden;
+  flex-wrap: wrap;
 }
 
 .card__atrbutes > div {
   flex: 1;
+  min-width: 100px;
 }
 
 .card__title {
   display: flex;
   justify-content: center;
   text-align: center;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
+
+.card__title__expanded {
+  white-space: initial;
+  text-overflow: initial;
+  overflow: initial;
+}
+
 .table__container {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  flex-wrap: wrap;
   /* margin-left: 20px; */
 }
 
@@ -52,13 +66,10 @@
   .card__atrbutes {
     justify-content: space-around;
   }
-  .card__title {
-    width: 10%;
-  }
   .card__subtitle {
     margin-right: 10px;
   }
   .buttons {
-    margin-right: 20px;
+    margin-top: 20px;
   }
 }

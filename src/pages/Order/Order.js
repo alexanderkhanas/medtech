@@ -5,25 +5,39 @@ import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import Select from "../../misc/Select/Select";
 import Button from "../../misc/Button/Button";
 import { useHistory } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import CartProduct from "../../misc/CartProductCard/CartProduct";
 import {
   addToCartAction,
   removeFromCartAction,
   setFullPriceAction,
+  setCart,
 } from "../../store/actions/cartActions";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
-import { Formik } from "formik";
+import { Formik, withFormik } from "formik";
 import Input from "../../misc/Inputs/Input/Input";
 import {
   getCitiesAction,
   getWarehousesAction,
   setSelectedCityAction,
   setSelectedWarehouseAction,
+  submitOrderAction,
 } from "../../store/actions/orderActions";
 import OrderProductCard from "../../misc/OrderProductCard/OrderProductCard";
 import { patchUserAction } from "../../store/actions/profileActions";
+import { showAlertAction } from "../../store/actions/alertActions";
+import GoBackBtn from "../../misc/GoBackBtn/GoBackBtn";
+import { ReactComponent as ShoppingCart } from "../../assets/shopping-cart.svg";
+
+const deliveryOptions = [
+  { value: "self-pickup", label: "Самовивіз" },
+  { value: "np", label: "Нова пошта" },
+  { value: "up", label: "Укр пошта" },
+];
+
+const payOptions = [
+  { value: "cash", label: "Наложений платіж" },
+  { value: "card", label: "Картою" },
+];
 
 const CreateOrder = ({
   cartProducts,
@@ -41,38 +55,27 @@ const CreateOrder = ({
   selectedCity,
   user,
   patchUser,
+  handleChange,
+  values,
+  setValues,
+  handleSubmit,
 }) => {
-  const deliveryOptions = [
-    { value: "self-pickup", label: "Самовивіз" },
-    { value: "np", label: "Нова пошта" },
-    { value: "up", label: "Укр пошта" },
-  ];
-
-  const payOptions = [
-    { value: "cash", label: "Наложений платіж" },
-    { value: "card", label: "Картою" },
-  ];
-
   const breadCrumbsItems = [
     {
       name: "Кошик",
       path: "/cart",
-      icon: <FontAwesomeIcon icon={faShoppingCart} />,
+      icon: <ShoppingCart className={s.bread__crumbs} />,
     },
     { name: "Замовлення", path: "/order" },
   ];
 
-  const [name, setName] = useState(user.fName);
-  const [surname, setSurname] = useState(user.lName);
-  const [isSaveUser, setSaveUser] = useState(false);
-  const [deliveryType, setDeliveryType] = useState(deliveryOptions[0]);
-  const [paymentType, setPaymentType] = useState(payOptions[0]);
+  const switchSaveUser = () => {
+    setValues({ ...values, isSaveUser: !values.isSaveUser });
+  };
 
-  const onNameInputChange = ({ target }) => setName(target.value);
-  const onSurnameInputChange = ({ target }) => setSurname(target.value);
-
-  const onSaveUserCheckboxChange = ({ target }) => setSaveUser(target.value);
-  const switchSaveUser = () => setSaveUser((prev) => !prev);
+  const selectHandler = (option, type) => {
+    setValues({ ...values, [type]: option });
+  };
 
   const onCitiesScroll = ({ target }, searchValue) => {
     if (
@@ -105,25 +108,13 @@ const CreateOrder = ({
     }
   };
 
-  const onWarehouseSearchChange = (value) => {
-    // setWarehouseSearchValue(value);
-    // if (warehouses.length === 1 && value === warehouses[0].Description) {
-    //   setSelectedWarehouse(value);
-    // }
-    // filterWarehouses(value);
-  };
+  const onWarehouseSearchChange = (value) => {};
 
   const onWarehouseSelect = (option) => {
     setSelectedWarehouse(option.label);
   };
 
   const h = useHistory();
-
-  const submit = () => {
-    if (isSaveUser) {
-      patchUser({ ...user, fName: name, lName: surname });
-    }
-  };
 
   useEffect(() => {
     setFullPrice(
@@ -140,6 +131,10 @@ const CreateOrder = ({
   useEffect(() => {
     getCities();
   }, []);
+
+  useEffect(() => {
+    setValues({ ...values, fName: user.fName, lName: user.lName });
+  }, [user]);
 
   return (
     <div className={s.container}>
@@ -166,34 +161,34 @@ const CreateOrder = ({
                   name="fName"
                   inputClass={s.input}
                   containerClass={s.input__container}
-                  value={name}
-                  onChange={onNameInputChange}
+                  value={values.fName}
+                  onChange={handleChange}
                   label="Ім'я"
                   placeholder="John"
                 />
                 <Input
                   placeholder="Doe"
-                  name="sName"
+                  name="lName"
                   inputClass={s.input}
                   containerClass={s.input__container}
-                  value={surname}
-                  onChange={onSurnameInputChange}
+                  value={values.lName}
+                  onChange={handleChange}
                   label="Прізвище"
                 />
               </div>
               <Select
                 containerClass={s.section}
                 options={payOptions}
-                onSelect={setPaymentType}
+                onSelect={(option) => selectHandler(option, "paymentType")}
                 label="Тип оплати"
-                value={paymentType.label}
+                value={values.paymentType.label}
               />
               <Select
                 containerClass={s.section}
                 options={deliveryOptions}
-                onSelect={setDeliveryType}
+                onSelect={(option) => selectHandler(option, "deliveryType")}
                 label="Тип доставки"
-                value={deliveryType.label}
+                value={values.deliveryType.label}
               />
               <Select
                 containerClass={s.section}
@@ -227,8 +222,9 @@ const CreateOrder = ({
                 <div className={s.save__user__container}>
                   <input
                     type="checkbox"
-                    onChange={onSaveUserCheckboxChange}
-                    checked={isSaveUser}
+                    name="isSaveUser"
+                    onChange={handleChange}
+                    checked={values.isSaveUser}
                     className={s.save__user__checkbox}
                   />
                   <p className={s.save__user__desc} onClick={switchSaveUser}>
@@ -238,21 +234,12 @@ const CreateOrder = ({
                 <div className={s.submit__btn__container}>
                   <Button
                     title="Підтвердити замовлення"
-                    onClick={submit}
-                    isDisabled={!selectedCity || !selectedWarehouse}
-                    disabled={!selectedCity || !selectedWarehouse}
+                    onClick={handleSubmit}
+                    isDisabled={!user._id || !values.fName || !values.lName}
                     className={s.submit__btn}
                   />
                 </div>
-                <button
-                  className={s.goBack__but}
-                  onClick={() => {
-                    h.goBack();
-                  }}
-                >
-                  <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
-                  Повернутися
-                </button>
+                <GoBackBtn />
               </div>
             </div>
           </div>
@@ -261,6 +248,64 @@ const CreateOrder = ({
     </div>
   );
 };
+
+const formikHOC = withFormik({
+  mapPropsToValues: (props) => ({
+    lName: props.user.fName,
+    fName: props.user.lName,
+    deliveryType: deliveryOptions[0],
+    paymentType: payOptions[0],
+    isSaveUser: false,
+  }),
+  handleSubmit: async (
+    values,
+    {
+      props: {
+        cartProducts,
+        patchUser,
+        user,
+        createOrder,
+        fullPrice,
+        showAlert,
+        setCart,
+      },
+      resetForm,
+    }
+  ) => {
+    const products = cartProducts.map(
+      ({ selectedAttributesId, _id, quantity }) => ({
+        attrOptions: selectedAttributesId,
+        id: _id,
+        quantity,
+      })
+    );
+    if (values.isSaveUser) {
+      patchUser({ ...user, fName: values.fName, lName: values.lName });
+    }
+    const isSuccess = await createOrder({
+      products,
+      delivery: values.deliveryType.value,
+      paymentType: values.paymentType.value,
+      sum: fullPrice,
+      userID: user._id,
+      status: "created",
+    });
+    if (isSuccess) {
+      showAlert("Замовлення створено успішно!", "success");
+      setCart([]);
+      localStorage.removeItem("_cart");
+      resetForm({
+        lName: "",
+        fName: "",
+        deliveryType: deliveryOptions[0],
+        paymentType: payOptions[0],
+        isSaveUser: false,
+      });
+    } else {
+      showAlert("Сталась помилка при створенні замовлення.");
+    }
+  },
+})(CreateOrder);
 
 const mapStateToProps = (state) => {
   return {
@@ -288,7 +333,10 @@ const mapDispatchToProps = (dispatch) => {
     setSelectedWarehouse: (warehouse) =>
       dispatch(setSelectedWarehouseAction(warehouse)),
     patchUser: (user, token) => dispatch(patchUserAction(user, token)),
+    createOrder: (order) => dispatch(submitOrderAction(order)),
+    showAlert: (content, type) => dispatch(showAlertAction(content, type)),
+    setCart: (cart) => dispatch(setCart(cart)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);

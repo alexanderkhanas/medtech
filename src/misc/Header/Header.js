@@ -1,15 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPhone,
-  faEnvelope,
-  faLocationArrow,
-  faSearch,
-  faBars,
-  faTimes,
-  faShoppingBag,
-} from "@fortawesome/free-solid-svg-icons";
-// import { ReactComponent as LogoComponent } from "../../assets/logo.svg";
+import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import logo from "../../assets/logo.png";
 import s from "./Header.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
@@ -26,6 +17,20 @@ import { connect } from "react-redux";
 import HorizontalProductCard from "../HorizontalProductCard/HorizontalProductCard";
 import classnames from "classnames";
 import ProfileModal from "../ProfileModal/ProfileModal";
+import phone from "../../assets/phone.svg";
+import { ReactComponent as Phone } from "../../assets/phone.svg";
+import { ReactComponent as Envelope } from "../../assets/envelope.svg";
+import { ReactComponent as LocationArrow } from "../../assets/location-arrow.svg";
+import { ReactComponent as Home } from "../../assets/home.svg";
+import { ReactComponent as ListAlt } from "../../assets/list-alt.svg";
+import { ReactComponent as Heart } from "../../assets/heart.svg";
+import { ReactComponent as ShoppingCart } from "../../assets/shopping-cart.svg";
+import { ReactComponent as Newspaper } from "../../assets/newspaper.svg";
+import { ReactComponent as Search } from "../../assets/search.svg";
+import { ReactComponent as Key } from "../../assets/key.svg";
+import { ReactComponent as Cogs } from "../../assets/cogs.svg";
+import { ReactComponent as ShoppingBag } from "../../assets/shopping-bag.svg";
+import { ReactComponent as User } from "../../assets/user.svg";
 
 const Header = ({
   searchProductsByValue,
@@ -46,8 +51,6 @@ const Header = ({
   const hideProfileModal = () => setProfileModalVisible(false);
 
   const openSidebar = () => {
-    console.log("open");
-
     setBarOpen(true);
   };
   const closeSidebar = () => setBarOpen(false);
@@ -72,14 +75,9 @@ const Header = ({
       setDropdownVisible(true);
       searchProductsByValue(searchValue);
     }
-    // if (!searchValue.length) {
-    //   searchProductsByValue("");
-    // }
   }, [searchValue]);
 
   useEffect(() => {
-    console.log("is bar open ===", isBarOpen);
-
     if (typeof isBarOpen !== "boolean") return;
     setAnimation((prev) => !prev);
     setTimeout(() => {
@@ -100,14 +98,6 @@ const Header = ({
 
   const isLogged = document.cookie.includes("token");
 
-  console.log("isLogged ===", isLogged);
-
-  console.log("found products ===", foundProducts);
-
-  console.log("isDropdownVisible ===", isDropdownVisible);
-
-  console.log("user ===", user);
-
   return (
     <>
       <FixedWrapper>
@@ -120,18 +110,15 @@ const Header = ({
             </Link>
             <div className={s.contact}>
               <button className={s.header__info__tag}>
-                <FontAwesomeIcon icon={faPhone} className={s.header_icon} />
+                <Phone className={s.header_icon} />
                 +380-68-6358-298
               </button>
               <button className={s.header__info__tag}>
-                <FontAwesomeIcon icon={faEnvelope} className={s.header_icon} />
+                <Envelope className={s.header_icon} />
                 info@somedomain.com
               </button>
               <button className={s.header__info__tag}>
-                <FontAwesomeIcon
-                  icon={faLocationArrow}
-                  className={s.header_icon}
-                />
+                <LocationArrow className={s.header_icon} />
                 Розташування магазину
               </button>
             </div>
@@ -146,6 +133,7 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <Home className={s.header_icon} />
                 Головна
               </Link>
               <Link
@@ -156,6 +144,7 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <ListAlt className={s.header_icon} />
                 Каталог
               </Link>
               <Link
@@ -166,6 +155,7 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <Heart className={s.header_icon} />
                 Улюблені
               </Link>
 
@@ -177,6 +167,7 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <ShoppingCart className={s.header_icon} />
                 Кошик
               </Link>
               <Link
@@ -187,6 +178,7 @@ const Header = ({
                     : s.nav__link
                 }
               >
+                <Newspaper className={s.header_icon} />
                 Новини
               </Link>
             </div>
@@ -200,7 +192,11 @@ const Header = ({
                 onChange={onSearchInputChange}
                 onFocus={onSearchInputFocus}
               />
-              <Button className={s.search__button} title="Знайти" />
+              <Link to="/catalog">
+                <Button className={s.search__button}>
+                  <Search className={s.search__icon} />
+                </Button>
+              </Link>
               {!!foundProducts.length &&
                 isDropdownVisible &&
                 pathname !== "/catalog" && (
@@ -233,7 +229,7 @@ const Header = ({
             </div>
             <div className={s.small_menu_item}>
               <div className={s.small_menu_button}>
-                {user.isLogged && !user.isAdmin && (
+                {user.isLogged && !user.isAdmin && user._id && (
                   <Link
                     to={`/profile/${user._id}`}
                     style={{ marginRight: 0 }}
@@ -241,6 +237,7 @@ const Header = ({
                       [s.nav__link__active]: pathname.startsWith("/profile"),
                     })}
                   >
+                    <User className={s.header_icon} />
                     Мій профіль
                   </Link>
                 )}
@@ -252,6 +249,7 @@ const Header = ({
                       [s.nav__link__active]: pathname.startsWith("/login"),
                     })}
                   >
+                    <Key className={s.header_icon} />
                     Увійти
                   </Link>
                 )}
@@ -263,6 +261,7 @@ const Header = ({
                       [s.nav__link__active]: pathname.startsWith("/admin"),
                     })}
                   >
+                    <Cogs className={s.header_icon} />
                     Адмін
                   </Link>
                 )}
@@ -273,7 +272,6 @@ const Header = ({
                   hide={hideProfileModal}
                 />
               </div>
-              {/* <FontAwesomeIcon icon={faSearch} className={s.navbar__icon} /> */}
             </div>
           </div>
         </div>
@@ -306,7 +304,7 @@ const Header = ({
               onFocus={onSearchInputFocus}
             />
             <Button className={s.search__button} onClick={onMobileSearchClick}>
-              <FontAwesomeIcon icon={faSearch} />
+              <Search className={s.search__icon} />
             </Button>
             {!!foundProducts.length &&
               isDropdownVisible &&
@@ -339,7 +337,7 @@ const Header = ({
               )}
           </div>
           <Link to="/cart">
-            <FontAwesomeIcon icon={faShoppingBag} className={s.cart__icon} />
+            <ShoppingBag className={s.cart__icon} />
           </Link>
         </div>
       </FixedWrapper>
@@ -356,16 +354,47 @@ const Header = ({
         itemClassName={s.mobile__nav__item}
         onStateChange={onStateMenuChange}
       >
-        <Link to="/">Головна</Link>
-        <Link to="/catalog">Каталог</Link>
-        <Link to="/wishlist">Улюблені</Link>
-        <Link to="/cart">Кошик</Link>
-        <Link to="/news">Новини</Link>
+        <Link to="/" className={s.mobile__logo__container}>
+          <img src={logo} className={s.mobile__logo} alt="logo" />
+        </Link>
+        <Link to="/">
+          <Home className={s.header_icon} />
+          Головна
+        </Link>
+        <Link to="/catalog">
+          <ListAlt className={s.header_icon} />
+          Каталог
+        </Link>
+        <Link to="/wishlist">
+          <Heart className={s.header_icon} />
+          Улюблені
+        </Link>
+        <Link to="/cart">
+          <ShoppingCart className={s.header_icon} />
+          Кошик
+        </Link>
+        <Link to="/news">
+          <Newspaper className={s.header_icon} />
+          Новини
+        </Link>
         {user.isLogged && !user.isAdmin && (
-          <Link to={`/profile/${user._id}`}>Мій профіль</Link>
+          <Link to={`/profile/${user._id}`}>
+            <User className={s.header_icon} />
+            Мій профіль
+          </Link>
         )}
-        {!user.isLogged && <Link to="/login">Увійти</Link>}
-        {user.isAdmin && <Link to="/admin">Адмін</Link>}
+        {!user.isLogged && (
+          <Link to="/login">
+            <Key className={s.header_icon} />
+            Увійти
+          </Link>
+        )}
+        {user.isAdmin && (
+          <Link to="/admin">
+            <Cogs className={s.header_icon} />
+            Адмін
+          </Link>
+        )}
       </Menu>
     </>
   );

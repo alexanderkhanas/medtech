@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import s from "./Admin.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
-import {
-  faHome,
-  faPlus,
-  faSignOutAlt,
-  faMinus,
-} from "@fortawesome/free-solid-svg-icons";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { TabList, Tabs, Tab, TabPanel } from "react-tabs";
 import OrderCard from "../../misc/Admin/OrderCard/OrderCard";
@@ -41,6 +34,9 @@ import {
   editVendorAction,
   deleteVendorAction,
   deleteUserAction,
+  getOrdersAction,
+  getOrderProductsAction,
+  deleteOrderAction,
 } from "../../store/actions/adminActions";
 import { logoutAction } from "../../store/actions/profileActions";
 import { getAllNewsAction } from "../../store/actions/newsActions";
@@ -48,6 +44,16 @@ import { showAlertAction } from "../../store/actions/alertActions";
 import { showModalAction } from "../../store/actions/baseActions";
 import ReactPaginate from "react-paginate";
 import ProductsView from "../../misc/Admin/ProductsView/ProductsView";
+import {
+  getContactMessagesAction,
+  readMessageAction,
+  deleteMessageAction,
+} from "../../store/actions/contactFormActions";
+import classnames from "classnames";
+import { ReactComponent as SignOutAlt } from "../../assets/sign-out-alt.svg";
+import { ReactComponent as Home } from "../../assets/home.svg";
+import { ReactComponent as Plus } from "../../assets/plus.svg";
+import { ReactComponent as Minus } from "../../assets/minus.svg";
 
 const Admin = ({
   isLoading,
@@ -56,15 +62,21 @@ const Admin = ({
   logout,
   allNews,
   allProducts,
+  ordersProducts,
   categories,
+  contactMessages,
   attributes,
   users,
   vendors,
+  orders,
   getCategories,
   getVendors,
   getAttributes,
   getUsers,
   getNews,
+  getOrders,
+  getContactMessages,
+  getOrderProducts,
   createCategory,
   createVendor,
   createAttribute,
@@ -73,8 +85,11 @@ const Admin = ({
   deleteNews,
   deleteVendor,
   deleteUser,
+  deleteMessage,
+  deleteOrder,
   editAttribute,
   editVendor,
+  readMessage,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [editing, setEditing] = useState({
@@ -82,6 +97,21 @@ const Admin = ({
     category: { _id: null },
     vendor: { _id: null },
   });
+  const [expandedMessagesIds, setExpandedMessagesIds] = useState([]);
+
+  const expandMessageHandler = (message) => {
+    const { _id } = message;
+    if (expandedMessagesIds.includes(_id)) {
+      setExpandedMessagesIds(
+        expandedMessagesIds.filter((msgId) => msgId !== _id)
+      );
+    } else {
+      setExpandedMessagesIds((prev) => [...prev, _id]);
+    }
+    if (!message.read) {
+      readMessage(message);
+    }
+  };
 
   const editingHandler = (type, setValues, body, value) => {
     setEditing((prev) => ({ ...prev, [type]: body }));
@@ -92,7 +122,7 @@ const Admin = ({
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Адмін", path: "/admin" },
   ];
@@ -102,24 +132,16 @@ const Admin = ({
     showModal("Ви дійсно хочете вийти зі свого акаунту?", logout);
   };
   useEffect(() => {
-    // (async () => {
-    console.log("isLoading ===", isLoading);
-
-    // if (!isLoading && !attributes?.length) {
-    console.log("here");
-
-    getAttributes();
-    getCategories();
-    getVendors();
-    getUsers();
-    getNews();
-    // }
-    // })();
+    (async () => {
+      await getCategories();
+      await getAttributes();
+      await getVendors();
+      await getUsers();
+      await getNews();
+      await getContactMessages();
+      await getOrders();
+    })();
   }, []);
-
-  console.log("render");
-
-  console.log("categories ===", categories);
 
   const isVendorEditing = !!editing.vendor._id;
   const isAttributeEditing = !!editing.attribute._id;
@@ -148,9 +170,9 @@ const Admin = ({
               <Tab
                 onClick={() => setActiveTabIndex(i)}
                 key={item}
-                className={
-                  activeTabIndex === i ? `${s.tab} ${s.tab__active}` : s.tab
-                }
+                className={classnames(s.tab, {
+                  [s.tab__active]: activeTabIndex === i,
+                })}
               >
                 {item}
               </Tab>
@@ -161,17 +183,14 @@ const Admin = ({
                 className={s.logout__button}
                 onClick={showLogoutModal}
               >
-                <FontAwesomeIcon
-                  className={s.logout__icon}
-                  icon={faSignOutAlt}
-                />
+                <SignOutAlt className={s.logout__icon} />
               </Button>
             </div>
           </TabList>
           <TabPanel>
             <Link to="/admin/create-order">
               <Button className={s.add__button} title="Створити замовлення">
-                <FontAwesomeIcon icon={faPlus} className={s.add__more__icon} />
+                <Plus className={s.add__more__icon} />
               </Button>
             </Link>
             <div className={s.order__header}>
@@ -181,26 +200,66 @@ const Admin = ({
               <span>Спосіб оплати</span>
               <span>Спосіб доставки</span>
               <span>Загальна сума</span>
+              <span>Дії</span>
             </div>
-            <Link to="/admin/edit-order/:id">
-              <OrderCard
-                orderNumber="qweqweqw"
-                createDate="14.123"
-                status="asdads"
-                delivery="asd"
-                orderSum="asdasd"
-                paymentType="65491"
-              />
-            </Link>
-            <OrderCard />
-            <OrderCard />
-            <OrderCard />
-            <OrderCard />
+            {orders.map((order, i) => {
+              const {
+                sum,
+                _id,
+                createdAt,
+                paymentType,
+                delivery,
+                status,
+                products,
+              } = order;
+
+              return (
+                <AdminRow
+                  items={[
+                    { title: i, key: `${_id}number` },
+                    {
+                      title: new Date(createdAt).toISOString().split("T")[0],
+                      key: `${_id}createdAt`,
+                    },
+                    {
+                      title: status,
+                      key: `${_id}status`,
+                    },
+                    {
+                      title: paymentType,
+                      key: `${_id}paymentType`,
+                    },
+                    {
+                      title: delivery,
+                      key: `${_id}delivery`,
+                    },
+                    {
+                      title: sum,
+                      key: `${_id}sum`,
+                    },
+                  ]}
+                  onDelete={() => deleteOrder(_id)}
+                  isExpanding
+                  onClick={() => {
+                    if (!ordersProducts[order._id]) {
+                      getOrderProducts(order);
+                    }
+                  }}
+                >
+                  {ordersProducts[order._id]?.map((product) => (
+                    <OrderProductCard
+                      key={`${product._id}order`}
+                      {...{ product }}
+                    />
+                  ))}
+                </AdminRow>
+              );
+            })}
           </TabPanel>
           <TabPanel>
             <Link to="/admin/create-product">
               <Button title="Додати товар">
-                <FontAwesomeIcon icon={faPlus} className={s.add__more__icon} />
+                <Plus className={s.add__more__icon} />
               </Button>
             </Link>
 
@@ -255,10 +314,6 @@ const Admin = ({
                 values,
                 setValues,
               }) => {
-                console.log("example category ===", categories[1]);
-
-                console.log("values ===", values);
-
                 return (
                   <form
                     onSubmit={handleSubmit}
@@ -281,8 +336,6 @@ const Admin = ({
                       <Select
                         label="Назва батьківської категорії"
                         containerClass={s.add__category__select__container}
-                        // withSearch
-                        // noDefaultValue
                         value={values.parentCategoryLabel}
                         onSelect={(selectedOption) => {
                           setValues({
@@ -290,7 +343,6 @@ const Admin = ({
                             parentCategory: selectedOption.value,
                             parentCategoryLabel: selectedOption.label,
                           });
-                          console.log("value ===", selectedOption);
                         }}
                         options={categories
                           .filter(({ sub }) => !sub?.length)
@@ -317,10 +369,7 @@ const Admin = ({
                       className={s.add__button}
                       title="Додати категорію"
                     >
-                      <FontAwesomeIcon
-                        className={s.add__more__icon}
-                        icon={faPlus}
-                      />
+                      <Plus className={s.add__more__icon} />
                     </Button>
                   </form>
                 );
@@ -401,10 +450,7 @@ const Admin = ({
                       }
                       type="submit"
                     >
-                      <FontAwesomeIcon
-                        className={s.add__more__icon}
-                        icon={faPlus}
-                      />
+                      <Plus className={s.add__more__icon} />
                     </Button>
                     {isAttributeEditing && (
                       <Button
@@ -420,10 +466,7 @@ const Admin = ({
                         isSecondary
                         type="submit"
                       >
-                        <FontAwesomeIcon
-                          className={s.add__more__icon}
-                          icon={faMinus}
-                        />
+                        <Minus className={s.add__more__icon} />
                       </Button>
                     )}
                   </form>
@@ -458,8 +501,6 @@ const Admin = ({
                 let isSuccess = false;
                 if (isVendorEditing) {
                   //ASD
-                  console.log("editing vendor ===", editing.vendor);
-
                   isSuccess = await editVendor({
                     ...editing.vendor,
                     title,
@@ -468,8 +509,6 @@ const Admin = ({
                 } else {
                   isSuccess = await createVendor({ title });
                 }
-                console.log("is success ===", isSuccess);
-
                 if (isSuccess) {
                   resetForm({ title: "" });
                   if (isVendorEditing) {
@@ -506,10 +545,7 @@ const Admin = ({
                       }
                       type="submit"
                     >
-                      <FontAwesomeIcon
-                        className={s.add__more__icon}
-                        icon={faPlus}
-                      />
+                      <Plus className={s.add__more__icon} />
                     </Button>
                     {isVendorEditing && (
                       <Button
@@ -520,10 +556,7 @@ const Admin = ({
                         title="Зупинити редагування"
                         type="submit"
                       >
-                        <FontAwesomeIcon
-                          className={s.add__more__icon}
-                          icon={faMinus}
-                        />
+                        <Minus className={s.add__more__icon} />
                       </Button>
                     )}
                     <div className={s.order__header}>
@@ -553,10 +586,7 @@ const Admin = ({
             <div className={s.create__container}>
               <Link to="/admin/create-user">
                 <Button title="Створити користувача" className={s.create__btn}>
-                  <FontAwesomeIcon
-                    icon={faPlus}
-                    className={s.add__more__icon}
-                  />
+                  <Plus className={s.add__more__icon} />
                 </Button>
               </Link>
             </div>
@@ -568,6 +598,7 @@ const Admin = ({
             </div>
             {users.map(({ fName, lName, phone, _id }) => (
               <AdminRow
+                key={_id}
                 items={[
                   { title: fName, key: `${_id}fName` },
                   { title: lName, key: `${_id}lName` },
@@ -582,10 +613,7 @@ const Admin = ({
             <div className={s.create__container}>
               <Link to="/admin/create-news">
                 <Button title="Створити новину" className={s.create__btn}>
-                  <FontAwesomeIcon
-                    icon={faPlus}
-                    className={s.add__more__icon}
-                  />
+                  <Plus className={s.add__more__icon} />
                 </Button>
               </Link>
             </div>
@@ -616,7 +644,52 @@ const Admin = ({
               ))}
             </div>
           </TabPanel>
-          <TabPanel>123</TabPanel>
+          <TabPanel>
+            <div className={s.order__header}>
+              <span>Текст</span>
+              <span>Контакти</span>
+              <span>Дата створення</span>
+              <span>Дії</span>
+            </div>
+
+            {contactMessages.map((messageObj) => {
+              const {
+                message,
+                _id,
+                email = "",
+                createdAt,
+                phone = "",
+                read,
+              } = messageObj;
+              const isExpanded = expandedMessagesIds.includes(_id);
+              return (
+                <AdminRow
+                  items={[
+                    {
+                      title: isExpanded
+                        ? message
+                        : `${message.slice(0, 20)}...`,
+                      key: `${_id}msg`,
+                    },
+                    {
+                      title: isExpanded ? `${email}\n${phone}` : email || phone,
+                      key: `${_id}contact`,
+                    },
+                    {
+                      title: new Date(createdAt).toISOString().split("T")[0],
+                      key: `${_id}date`,
+                    },
+                  ]}
+                  onClick={() => expandMessageHandler(messageObj)}
+                  className={classnames(s.message, {
+                    [s.not__read__message]: !read,
+                  })}
+                  onDelete={() => deleteMessage(_id)}
+                  key={_id}
+                />
+              );
+            })}
+          </TabPanel>
         </Tabs>
       </FixedWrapper>
     </div>
@@ -632,7 +705,9 @@ const mapStateToProps = (state) => {
     users: state.admin.users,
     vendors: state.admin.vendors,
     isLoading: state.base.isLoading,
-    // fullPrice: state.cart.fullPrice,
+    contactMessages: state.contact.messages,
+    orders: state.admin.orders,
+    ordersProducts: state.admin.ordersProducts,
   };
 };
 
@@ -647,11 +722,16 @@ const mapDispatchToProps = (dispatch) => {
     getAttributes: () => dispatch(getAttributesAction()),
     getUsers: () => dispatch(getUsersAction()),
     getNews: () => dispatch(getAllNewsAction()),
+    getOrders: () => dispatch(getOrdersAction()),
+    getContactMessages: () => dispatch(getContactMessagesAction()),
+    getOrderProducts: (order) => dispatch(getOrderProductsAction(order)),
     deleteAttribute: (id) => dispatch(deleteAttributeAction(id)),
     deleteCategory: (id) => dispatch(deleteCategoryAction(id)),
     deleteNews: (id) => dispatch(deleteNewsAction(id)),
     deleteVendor: (id) => dispatch(deleteVendorAction(id)),
     deleteUser: (id) => dispatch(deleteUserAction(id)),
+    deleteMessage: (id) => dispatch(deleteMessageAction(id)),
+    deleteOrder: (id) => dispatch(deleteOrderAction(id)),
     createCategory: (category) => dispatch(createCategoryAction(category)),
     createVendor: (vendor) => dispatch(createVendorAction(vendor)),
     createAttribute: (attribute) => dispatch(createAttributeAction(attribute)),
@@ -660,7 +740,7 @@ const mapDispatchToProps = (dispatch) => {
     showModal: (content, onSubmit, onReject) =>
       dispatch(showModalAction(content, onSubmit, onReject)),
     logout: () => dispatch(logoutAction()),
-    // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
+    readMessage: (message) => dispatch(readMessageAction(message, message._id)),
   };
 };
 

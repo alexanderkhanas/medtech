@@ -16,8 +16,6 @@ const Modal = ({
   onReject = () => {},
 }) => {
   const submitHandler = () => {
-    console.log("on submit ===", onSubmit);
-
     onSubmit();
     hide();
   };

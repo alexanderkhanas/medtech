@@ -19,7 +19,7 @@
 
 .switch__button {
   margin: 0 3px;
-  font-size: 30px;
+  width: 1rem;
   position: absolute;
   display: flex;
   justify-content: center;

@@ -7,6 +7,11 @@
   text-align: center;
   justify-content: center;
 }
+.bread__crumbs {
+  width: 1rem;
+  fill: #acacac;
+  vertical-align: -0.1em;
+}
 .body h4 {
   font-size: 30px;
 }
@@ -70,7 +75,8 @@
   justify-content: center;
 }
 .logicon {
-  font-size: 30px;
+  width: 2rem;
+  cursor: pointer;
 }
 .gl {
   margin-right: 10px;
@@ -83,10 +89,10 @@
 }
 
 .error__icon {
-  color: #e80000;
+  fill: #e80000;
 }
 .success__icon {
-  color: #00d231;
+  fill: #00d231;
 }
 .restore {
   margin-top: 10px;
@@ -117,7 +123,7 @@ button {
 .icon {
   position: absolute;
   right: 15px;
-  font-size: 25px;
+  width: 1.5rem;
 }
 
 .remember__container {

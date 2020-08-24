@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import s from "./ProductCard.module.css";
 import { connect } from "react-redux";
 import {
@@ -8,6 +8,8 @@ import {
 import { useHistory } from "react-router-dom";
 import classnames from "classnames";
 import WishlistButton from "../WishlistButton/WishlistButton";
+import Button from "../Button/Button";
+import { ReactComponent as ShoppingCart } from "../../assets/shopping-cart.svg";
 
 const ProductCard = ({ product, className }) => {
   const { gallery, title, price, _id } = product;
@@ -15,11 +17,13 @@ const ProductCard = ({ product, className }) => {
   const redirectToSingleProduct = () => history.push(`/product/${_id}`);
   return (
     <div className={classnames(s.card, className)}>
+      <WishlistButton {...{ product }} className={s.wishlist__button} />
       <div className={s.card__main}>
         <img
           className={s.card__img}
           onClick={redirectToSingleProduct}
           src={
+            // "https://www.silverdisc.co.uk/sites/default/files/sd_importer/lion_webp_10.webp"
             gallery[0]
               ? gallery[0]
               : require("../../assets/image-placeholder.webp")
@@ -34,8 +38,9 @@ const ProductCard = ({ product, className }) => {
         <div className={s.card__price__container}>
           <span className={s.card__price}>{`${price} ₴`}</span>
           <div>
-            <WishlistButton {...{ product }} className={s.wishlist__button} />
-            {/* <CartButton {...{ product }} {...{ showAttributesAlert }} /> */}
+            <Button size="lg" title="Купити" onClick={redirectToSingleProduct}>
+              <ShoppingCart className={s.cart__button__icon} />
+            </Button>
           </div>
         </div>
       </div>

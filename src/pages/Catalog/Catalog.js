@@ -19,14 +19,14 @@ import Select from "../../misc/Select/Select";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import { setLoadingAction } from "../../store/actions/baseActions";
 import CategoryAccordion from "../../misc/CategoryAccordion/CategoryAccordion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import { CSSTransition } from "react-transition-group";
+import { ReactComponent as Home } from "../../assets/home.svg";
 
 const sortSelectOption = [
   { value: "recommended", label: "Рекомендовані" },
-  { value: "price to low", label: "За ціною, від меншої до більшої" },
-  { value: "price to high", label: "За ціною, від більшої до меншої" },
+  { value: "priceMinus", label: "За ціною, від меншої до більшої" },
+  { value: "price", label: "За ціною, від більшої до меншої" },
 ];
 
 const Catalog = ({
@@ -39,7 +39,6 @@ const Catalog = ({
   getCategories,
   categories,
   searchValue,
-  windowWidth,
   clearFilter,
   products,
 }) => {
@@ -53,7 +52,6 @@ const Catalog = ({
 
   const onPageChange = ({ selected }) => {
     setActivePage(selected + 1);
-    // getProductsByPage(selected + 1);
     scrollToRef(containerRef);
   };
 
@@ -84,16 +82,8 @@ const Catalog = ({
   };
 
   useEffect(() => {
-    if (selectedCategories.length) {
-      filterProducts(selectedCategories, searchValue, activePage);
-    }
-  }, [selectedCategories]);
-
-  useEffect(() => {
-    console.log("active page ===", activePage);
-
-    filterProducts(selectedCategories, searchValue, activePage);
-  }, [activePage]);
+    filterProducts(selectedCategories, searchValue, activePage, sortType.value);
+  }, [activePage, sortType, selectedCategories]);
 
   useEffect(() => {
     let filtered = categories.map((category) => {
@@ -143,13 +133,11 @@ const Catalog = ({
   ))
   */
 
-  console.log("filteredProductsQuantity ===", filteredProductsQuantity);
-
   const breadCrumbsItems = [
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Каталог", path: "/catalog" },
   ];
@@ -159,8 +147,6 @@ const Catalog = ({
       getCategories();
     }
   }, []);
-
-  console.log("filtered ===", filteredProducts);
 
   return (
     <div>
@@ -178,7 +164,7 @@ const Catalog = ({
               >
                 Фільтр
               </h3>
-              {windowWidth >= 600 ? (
+              {window.innerWidth >= 600 ? (
                 <div className={s.filter__categories}>
                   {!!sortedCategories?.length &&
                     sortedCategories.map((parent) => (
@@ -267,7 +253,7 @@ const Catalog = ({
               <div className={s.carousel__container}>
                 <ItemsCarousel
                   arrows
-                  slidesPerPage={Math.floor(windowWidth / 450)}
+                  slidesPerPage={Math.floor(window.innerWidth / 450)}
                   infinite
                 >
                   {recommendedProducts.map((product, i) => (
@@ -283,7 +269,6 @@ const Catalog = ({
           pageRangeDisplayed={5}
           marginPagesDisplayed={1}
           {...{ onPageChange }}
-          //   onPageChange={({ selected }) => console.log("e ===", selected)}
           containerClassName={s.pagination__container}
           activeClassName={s.pagination__active__link}
           previousLabel=""
@@ -310,8 +295,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getProductsByPage: (page, categoryId, searchValue) =>
       dispatch(getProductsByPage(page, categoryId, searchValue)),
-    filterProducts: (categoryId, searchValue, page) =>
-      dispatch(filterProductsAction(categoryId, searchValue, page)),
+    filterProducts: (categoryId, searchValue, page, sortType) =>
+      dispatch(filterProductsAction(categoryId, searchValue, page, sortType)),
     setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
     getCategories: () => dispatch(getCategoriesAction()),
     clearFilter: (products) => dispatch(clearFilterAction(products)),

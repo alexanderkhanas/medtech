@@ -27,8 +27,8 @@
 }
 
 .icon {
-  color: #808080;
+  fill: #808080;
   cursor: pointer;
-  font-size: 10px;
+  width: 0.8rem;
   font-weight: lighter;
 }

@@ -1,14 +1,12 @@
 import React from "react";
 import s from "./Footer.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInstagram, faFacebook } from "@fortawesome/free-brands-svg-icons";
-import {
-  faPhone,
-  faClock,
-  faCopyright,
-} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { ReactComponent as Phone } from "../../assets/phone.svg";
+import { ReactComponent as Instagram } from "../../assets/instagram.svg";
+import { ReactComponent as Facebook } from "../../assets/facebook.svg";
+import { ReactComponent as Clock } from "../../assets/clock.svg";
+import { ReactComponent as Copyright } from "../../assets/copyright.svg";
 
 const Footer = () => {
   return (
@@ -18,19 +16,19 @@ const Footer = () => {
           <div className={s.contact}>
             <h4>Зв'язатися з нами</h4>
             <div className={s.row}>
-              <FontAwesomeIcon icon={faPhone} className={s.icon_ft} />
+              <Phone className={s.icon_ft} />
               <span className={s.phone}>+ 38 (067) 208 81 45</span>
             </div>
             <div className={s.row}>
-              <FontAwesomeIcon icon={faInstagram} className={s.icon_ft} />
+              <Instagram className={s.icon_ft} />
               <span className={s.social}>Instagram</span>
             </div>
             <div className={s.row}>
-              <FontAwesomeIcon icon={faFacebook} className={s.icon_ft} />
+              <Facebook className={s.icon_ft} />
               <span className={s.social}>Facebook</span>
             </div>
             <div className={s.row}>
-              <FontAwesomeIcon icon={faClock} className={s.icon_ft} />
+              <Clock className={s.icon_ft} />
               <div className={s.hours__container}>
                 <p className={s.hours}>Пн-Пт: 09:00 - 19:00</p>
                 <p className={s.hours}> Сб-Нд: 10:00 -17:00</p>
@@ -60,29 +58,6 @@ const Footer = () => {
               </Link>
             </button>
           </div>
-          {/* <div className={s.popular}>
-            <h4>Популярні категорії</h4>
-            <button>
-              <Link to="/public-offer" className={s.btn_cl}>
-                <p>Контакти</p>
-              </Link>
-            </button>
-            <button>
-              <Link to="/public-offer" className={s.btn_cl}>
-                <p>Контакти</p>
-              </Link>
-            </button>
-            <button>
-              <Link to="/public-offer" className={s.btn_cl}>
-                <p>Контакти</p>
-              </Link>
-            </button>
-            <button>
-              <Link to="/public-offer" className={s.btn_cl}>
-                <p>Контакти</p>
-              </Link>
-            </button>
-          </div> */}
           <div className={s.inf}>
             <h4>Корисна інформація</h4>
             <button>
@@ -113,7 +88,7 @@ const Footer = () => {
           </div>
         </div>
         <div className={s.copyright}>
-          <FontAwesomeIcon icon={faCopyright} /> 1999-2020. Всі права захищені
+          <Copyright className={s.icon_ft} /> 1999-2020. Всі права захищені
         </div>
       </FixedWrapper>
     </footer>

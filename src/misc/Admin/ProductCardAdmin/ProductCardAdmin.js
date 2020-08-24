@@ -12,7 +12,6 @@ const ProductCard = ({ getCategories, categories }) => {
         <span>Спосіб доставки</span>
         <span>Загальна сума</span>
       </div>
-      {/* <FontAwesomeIcon icon={faPencilAlt} className={s.faPencil} /> */}
     </div>
   );
 };

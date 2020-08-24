@@ -1,7 +1,35 @@
 import _axios from "./_axios";
 import axios from "axios";
 
+export const fetchCities = (filterValue, limit = 20) => {
+  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
+    modelName: "AddressGeneral",
+    calledMethod: "getCities",
+    methodProperties: {
+      FindByString: filterValue,
+      Limit: limit,
+    },
+    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
+  });
+};
+
+export const fetchWarehousesByCity = (CityName) => {
+  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
+    modelName: "AddressGeneral",
+    calledMethod: "getWarehouses",
+    methodProperties: {
+      CityName,
+    },
+    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
+  });
+};
+
 export const fetchProducts = () => _axios.get("/products");
+
+export const fetchExactProducts = async (idsString) => {
+  const response = await _axios.get(`/exact?productsArray=${idsString}`);
+  return response?.data || [];
+};
 
 export const fetchProductsByPage = (page) =>
   _axios.get(`/products?page=${page}`);
@@ -9,22 +37,29 @@ export const fetchProductsByPage = (page) =>
 export const fetchSingleProduct = (id) => _axios.get(`/product/${id}`);
 
 export const searchProductsRequest = async (value) => {
-  console.log("url ===", `/products?search=${value}`);
-
   return _axios.get(`/products?search=${value}`);
 };
 
-export const fetchFilteredProducts = (categoriesArray, searchValue, page) => {
+export const fetchFilteredProducts = (
+  categoriesArray,
+  searchValue,
+  page,
+  sortType
+) => {
   let baseUrl = "/products?";
-  if (page) {
-    baseUrl += `page=${page}`;
-  }
-  if (categoriesArray) {
-    baseUrl += "&category=";
-    baseUrl += categoriesArray.map((category) => category.id).join(",");
-  }
   if (searchValue) {
-    baseUrl += `&search=${searchValue}`;
+    baseUrl += `search=${searchValue}&`;
+  }
+  if (page) {
+    baseUrl += `page=${page}&`;
+  }
+  if (categoriesArray?.length) {
+    baseUrl += "category=";
+    baseUrl += `${categoriesArray.map((category) => category.id).join(",")}&`;
+  }
+
+  if (sortType) {
+    baseUrl += `sort=${sortType}`;
   }
   return _axios.get(baseUrl);
 };
@@ -47,12 +82,17 @@ export const fetchUserData = (token) => {
 export const registerRequest = (data) => {
   return _axios.post("/register", data, {});
 };
+
 export const loginRequest = (data) => {
-  return _axios
-    .post("/login", data, {
-      // withCredentials: true,
-    })
-    .catch((e) => console.error(e));
+  return _axios.post("/login", data, {}).catch((e) => console.error(e));
+};
+
+export const loginFacebookRequest = () => {
+  return _axios.get("https://medtechnika.te.ua/api/v1/login/fb");
+};
+
+export const loginGoogleRequest = () => {
+  return _axios.get("https://medtechnika.te.ua/api/v1/login/google");
 };
 
 export const fetchUserById = (id) => {
@@ -155,8 +195,6 @@ export const deleteNews = (id, token) => {
   });
 };
 export const uploadImageToNews = (gallery, id, token) => {
-  console.log("gallery ===", gallery);
-
   return _axios.post(`/new/upload/${id}`, gallery, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -205,6 +243,14 @@ export const postProduct = (product, token) => {
   });
 };
 
+export const patchProduct = (product, id, token) => {
+  return _axios.patch(`/product/${id}`, product, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const deleteProduct = (id, token) => {
   return _axios.delete(`/product/${id}`, {
     headers: {
@@ -213,34 +259,79 @@ export const deleteProduct = (id, token) => {
   });
 };
 
-export const postProductGallery = (gallery, id, token) => {
-  return _axios.post(`/product/${id}/gallery`, gallery, {
+export const postProductGallery = (gallery, id, token, isThumbnail) => {
+  return _axios.post(
+    `/product/${id}/${isThumbnail ? "thumbnail" : "gallery"}`,
+    gallery,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const fetchUserHistory = (id, token) => {
+  return _axios.get(`/order/history`);
+};
+
+export const postContactFormMessage = (message) => {
+  return _axios.post("/contact-us", message);
+};
+
+export const fetchContactFormMessages = (token) => {
+  return _axios.get("/contact-us", {
     headers: {
-      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     },
   });
 };
 
-export const fetchCities = (filterValue, limit = 20) => {
-  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
-    modelName: "AddressGeneral",
-    calledMethod: "getCities",
-    methodProperties: {
-      FindByString: filterValue,
-      Limit: limit,
+export const patchMessage = (message, id, token) => {
+  return _axios.patch(`/contact-us/${id}`, message, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
   });
 };
 
-export const fetchWarehousesByCity = (CityName) => {
-  return axios.post("https://api.novaposhta.ua/v2.0/json/", {
-    modelName: "AddressGeneral",
-    calledMethod: "getWarehouses",
-    methodProperties: {
-      CityName,
+export const deleteMessage = (id, token) => {
+  return _axios.delete(`/contact-us/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
+  });
+};
+
+export const fetchOrders = (token) => {
+  return _axios.get("/orders", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const postOrder = (order, token) => {
+  return _axios.post("/order", order, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteOrder = (id, token) => {
+  return _axios.delete(`/order/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const postReview = (review, token) => {
+  return _axios.post(`/review`, review, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };

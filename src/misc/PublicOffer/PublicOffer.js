@@ -1,15 +1,14 @@
 import React from "react";
 import s from "./PublicOffer.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
+import { ReactComponent as Home } from "../../assets/home.svg";
 
 const PublicOffer = () => {
   const breadCrumbsItems = [
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Публічна оферта", path: "/public-offer" },
   ];

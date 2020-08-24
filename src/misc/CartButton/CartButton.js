@@ -26,9 +26,6 @@ const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
     setAnimation(true);
     setTimeout(() => {
       setAnimation(false);
-      //   setActiveCartIcon((prev) =>
-      //     prev === faShoppingBag ? faCheck : faShoppingBag
-      //   );
     }, 500);
   };
 

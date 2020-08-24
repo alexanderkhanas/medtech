@@ -22,6 +22,7 @@
   width: 100%;
   cursor: pointer;
   height: 300px;
+  object-fit: cover;
 }
 
 .card__title {
@@ -30,7 +31,15 @@
   font-weight: bold;
   margin: 15px 0;
   font-size: 1.3rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
   cursor: pointer;
+}
+
+.card__footer {
+  overflow: hidden;
 }
 
 .card__price {
@@ -52,6 +61,16 @@
 }
 
 .wishlist__button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+}
+
+.cart__button__icon {
+  margin-right: 8px;
+  fill: white;
+  width: 1rem;
 }
 
 .wishlist__container {

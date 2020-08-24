@@ -7,6 +7,9 @@ import {
   faPlus,
   faMinus,
 } from "@fortawesome/free-solid-svg-icons";
+import { ReactComponent as Minus } from "../../assets/minus.svg";
+import { ReactComponent as Plus } from "../../assets/plus.svg";
+import { ReactComponent as PlusSquare } from "../../assets/plus-square.svg";
 
 const CategoryAccordion = ({
   parent,
@@ -15,7 +18,6 @@ const CategoryAccordion = ({
   selectedCategories,
 }) => {
   const [parentExpandedState, setParentExpandedState] = useState(false);
-  // key - id, value - bool
   const [subchildExpandedState, setSubchildExpandedState] = useState({});
   const { childs } = parent;
   const { subchilds } = parent;
@@ -49,10 +51,15 @@ const CategoryAccordion = ({
         >
           {parent.title}
         </p>
-        {!!subchilds.length && (
-          <FontAwesomeIcon
+        {!!subchilds.length && parentExpandedState && (
+          <Minus
             onClick={() => setParentExpandedState((prev) => !prev)}
-            icon={parentExpandedState ? faMinus : faPlus}
+            className={s.category__item__btn}
+          />
+        )}
+        {!!subchilds.length && !parentExpandedState && (
+          <Plus
+            onClick={() => setParentExpandedState((prev) => !prev)}
             className={s.category__item__btn}
           />
         )}

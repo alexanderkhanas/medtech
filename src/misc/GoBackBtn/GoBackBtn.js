@@ -1,8 +1,7 @@
 import React from "react";
 import s from "./GoBackBtn.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
+import { ReactComponent as ArrowLeft } from "../../assets/arrow-left.svg";
 
 const GoBackBtn = (props) => {
   const h = useHistory();
@@ -14,7 +13,7 @@ const GoBackBtn = (props) => {
           h.goBack();
         }}
       >
-        <FontAwesomeIcon icon={faArrowLeft} className={s.goBack} />
+        <ArrowLeft className={s.goBack} />
         Повернутися
       </button>
     </div>

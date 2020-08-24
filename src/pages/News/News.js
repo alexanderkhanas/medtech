@@ -1,23 +1,21 @@
 import React, { useEffect } from "react";
 import s from "./News.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import { connect } from "react-redux";
 import NewsCard from "../../misc/NewsCard/NewsCard";
 import { getAllNewsAction } from "../../store/actions/newsActions";
+import { ReactComponent as Home } from "../../assets/home.svg";
 
 const News = ({ recentNews, getNews }) => {
   const breadCrumbsItems = [
     {
       name: "Головна",
       path: "/",
-      icon: <FontAwesomeIcon icon={faHome} />,
+      icon: <Home className={s.bread__crumbs} />,
     },
     { name: "Новини", path: "/news" },
   ];
-  console.log("recent news ===", recentNews);
   useEffect(() => {
     getNews();
   }, []);

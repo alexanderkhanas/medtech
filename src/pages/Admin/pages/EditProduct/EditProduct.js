@@ -118,7 +118,7 @@ const CreateProduct = (props) => {
           />
           <Input
             label="Ціна"
-            value={productInfo.title}
+            value={productInfo.price}
             onChange={onInputChange}
             containerClass={s.input__container}
           />

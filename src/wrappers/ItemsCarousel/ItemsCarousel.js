@@ -9,7 +9,7 @@ const ItemsCarousel = ({
   slidesPerPage = Math.floor(window.innerWidth / 350) || 1,
 }) => {
   return (
-    <Carousel {...{ arrows }} {...{ dots }} {...{ slidesPerPage }} infinite>
+    <Carousel {...{ arrows }} {...{ dots }} {...{ slidesPerPage }}>
       {children}
     </Carousel>
   );

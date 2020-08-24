@@ -8,7 +8,6 @@ import {
 } from "../../store/actions/singleProductActions";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import ProductAttribute from "../../misc/ProductAttribute/ProductAttribute";
-import lodash from "lodash";
 import _axios from "../../store/api/_axios";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import Stars from "../../misc/Stars/Stars";
@@ -18,7 +17,7 @@ import {
   removeFromCartAction,
 } from "../../store/actions/cartActions";
 import classnames from "classnames";
-import { scrollToRef } from "../../utils/utils";
+import { scrollToRef, isEqual } from "../../utils/utils";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import {
   showAlertAction,
@@ -85,9 +84,6 @@ const SingleProduct = ({
   };
 
   const selectAttribute = (name, value) => {
-    console.log("attribute name ===", name);
-    console.log("attribute value ===", value);
-
     setSelectedAttributes((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -113,7 +109,6 @@ const SingleProduct = ({
 
   const onScroll = () => {
     const scrollTopValue = window.pageYOffset;
-    // itemTranslate = Math.min(0, scrollTop / 3 - 60);
     if (scrollTopValue >= 600) {
       setTopButtonVisible(true);
     } else if (scrollTopValue < 600) {
@@ -136,8 +131,6 @@ const SingleProduct = ({
     const productFromCart = cartProducts.filter(
       (cartProduct) => cartProduct._id === _id
     )[0];
-
-    console.log("iproductFromCart ===", productFromCart);
 
     setInCart(!!productFromCart);
   }, [cartProducts, _id]);
@@ -172,17 +165,13 @@ const SingleProduct = ({
   }, [product]);
 
   useEffect(() => {
-    console.log("attributes ===", attributeOptions?.length);
-    console.log("isPriceChanges ===", isPriceChanges);
-
     if (attributeOptions?.length) {
       const attributeFound = attributeOptions.find((attributeObj) =>
-        lodash.isEqual(
+        isEqual(
           { ...attributeObj, priceAttr: null, _id: null },
           { ...selectedAttributes, priceAttr: null, _id: null }
         )
       );
-      console.log("attributeFound ===", attributeFound);
 
       if (attributeFound && isPriceChanges) {
         setPriceInfo({
@@ -208,8 +197,6 @@ const SingleProduct = ({
   } else if (quantity === 0) {
     qtyClassName = s.notInStock;
   }
-
-  console.log("user ===", user._id);
 
   return product ? (
     <FixedWrapper>
@@ -309,12 +296,21 @@ const SingleProduct = ({
             </TabPanel>
             <TabPanel className={s.tab__content}>
               {reviews.map(
-                ({ userID, reviewTitle, reviewDesc, reviewrating }, i) => (
-                  <div key={i} className={s.review}>
+                (
+                  {
+                    userID: reviewUserID,
+                    _id: reviewId,
+                    title: reviewTitle,
+                    desc: reviewDesc,
+                    rating,
+                  },
+                  i
+                ) => (
+                  <div key={reviewId} className={s.review}>
                     <div className={s.review__header}>
-                      <h4 className={s.review__admin}>{userID.fName}</h4>
+                      <h4 className={s.review__admin}>{reviewUserID.fName}</h4>
 
-                      <Stars value={reviewrating} />
+                      <Stars value={rating} />
                     </div>
                     <h5 className={s.review__title}>{reviewTitle}</h5>
 
@@ -335,7 +331,6 @@ const SingleProduct = ({
                     userID: user._id,
                   };
                   const isSuccess = await createReview(reviewToSubmit);
-                  console.log("is success ===", isSuccess);
                   if (isSuccess) {
                     showAlert("Відгук створено успішно!", "success");
                     resetForm({ desc: "", title: "", rating: 5 });
@@ -368,8 +363,6 @@ const SingleProduct = ({
                         value={values.rating}
                         isStatic={false}
                         setValue={(rating) => {
-                          console.log("click");
-
                           setValues({ ...values, rating });
                         }}
                       />

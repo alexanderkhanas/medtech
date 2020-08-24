@@ -37,8 +37,6 @@ export const fetchProductsByPage = (page) =>
 export const fetchSingleProduct = (id) => _axios.get(`/product/${id}`);
 
 export const searchProductsRequest = async (value) => {
-  console.log("url ===", `/products?search=${value}`);
-
   return _axios.get(`/products?search=${value}`);
 };
 
@@ -86,11 +84,7 @@ export const registerRequest = (data) => {
 };
 
 export const loginRequest = (data) => {
-  return _axios
-    .post("/login", data, {
-      // withCredentials: true,
-    })
-    .catch((e) => console.error(e));
+  return _axios.post("/login", data, {}).catch((e) => console.error(e));
 };
 
 export const loginFacebookRequest = () => {
@@ -201,8 +195,6 @@ export const deleteNews = (id, token) => {
   });
 };
 export const uploadImageToNews = (gallery, id, token) => {
-  console.log("gallery ===", gallery);
-
   return _axios.post(`/new/upload/${id}`, gallery, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -267,21 +259,21 @@ export const deleteProduct = (id, token) => {
   });
 };
 
-export const postProductGallery = (gallery, id, token) => {
-  return _axios.post(`/product/${id}/gallery`, gallery, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const postProductGallery = (gallery, id, token, isThumbnail) => {
+  return _axios.post(
+    `/product/${id}/${isThumbnail ? "thumbnail" : "gallery"}`,
+    gallery,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 };
 
 export const fetchUserHistory = (id, token) => {
-  return _axios.get(`/order/history/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  return _axios.get(`/order/history`);
 };
 
 export const postContactFormMessage = (message) => {

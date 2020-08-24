@@ -28,10 +28,17 @@ import {
   patchUserAction,
   logoutAction,
   getUserHistoryAction,
+  getUserOrderProductsAction,
 } from "../../store/actions/profileActions";
 import { showAlertAction } from "../../store/actions/alertActions";
 import { showModalAction } from "../../store/actions/baseActions";
 import { Formik } from "formik";
+import OrderCardProfile from "../../misc/OrderCardProfile/OrderCardProfile";
+import { ReactComponent as CalendarIcon } from "../../assets/calendar-alt-regular.svg";
+import { ReactComponent as CashIcon } from "../../assets/money-bill.svg";
+import { ReactComponent as CoinIcon } from "../../assets/coins.svg";
+import { ReactComponent as CarIcon } from "../../assets/truck-solid.svg";
+import { ReactComponent as DotsIcon } from "../../assets/ellipsis.svg";
 
 const Profile = ({
   user,
@@ -40,6 +47,9 @@ const Profile = ({
   showModal,
   logout,
   getUserHistory,
+  getOrdersProducts,
+  ordersProducts,
+  orders,
 }) => {
   const { id } = useParams();
   const h = useHistory();
@@ -62,7 +72,6 @@ const Profile = ({
     return null;
   }, [document.cookie]);
 
-  //   const { oderData, oderAddress, oderHistory } = userData;
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const uploadedImage = useRef(null);
   const imageUploader = useRef(null);
@@ -81,7 +90,6 @@ const Profile = ({
         setUserData((prev) => ({ ...prev, gallery: img }));
       };
       reader.readAsDataURL(file);
-      // setUserData((prev) => ({ ...prev, gallery: file }));
     }
   };
   const handleSubmit = () => {
@@ -112,6 +120,12 @@ const Profile = ({
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const onOrderCardExpand = (order) => {
+    if (!ordersProducts[order._id]) {
+      getOrdersProducts(order);
+    }
+  };
+
   useEffect(() => {
     setUserData(user);
   }, [user]);
@@ -121,8 +135,6 @@ const Profile = ({
       getUserHistory(id);
     }
   }, [id]);
-
-  console.log("user data ===", userData);
 
   return !isLoading || user._id ? (
     <div className={s.body}>
@@ -200,7 +212,6 @@ const Profile = ({
                         </div>
                         <FontAwesomeIcon
                           icon={faSignOutAlt}
-                          //   onClick={logout}
                           onClick={showLogoutModal}
                           className={s.profile__info__icon}
                         />
@@ -290,7 +301,6 @@ const Profile = ({
                             height: "100px",
                             width: "100px",
                           }}
-                          // onClick={() => imageUploader.current.click()}
                         >
                           <img
                             ref={uploadedImage}
@@ -303,7 +313,6 @@ const Profile = ({
                               width: "100%",
                               height: "100%",
                               borderRadius: "50px",
-                              // backgroundColor: "gray",
                             }}
                             alt=""
                           />
@@ -322,7 +331,6 @@ const Profile = ({
                           name="city"
                           placeholder="Тернопіль"
                           icon={faCity}
-                          //   defaultValue={profileInfo.firstName}
                           onChange={onInputChange}
                         />
                       </div>
@@ -332,7 +340,6 @@ const Profile = ({
                           name="street"
                           placeholder="Руська"
                           icon={faStreetView}
-                          //   defaultValue={profileInfo.lastName}
                           onChange={onInputChange}
                         />
                       </div>
@@ -342,7 +349,6 @@ const Profile = ({
                           name="house"
                           placeholder="12"
                           icon={faHouseUser}
-                          //   defaultValue={profileInfo.lastName}
                           onChange={onInputChange}
                         />
                       </div>
@@ -382,7 +388,78 @@ const Profile = ({
                 </div>
               </div>
             </TabPanel>
-            <TabPanel></TabPanel>
+            <TabPanel>
+              <div className={`${s.profile} container cont__margin`}>
+                <div className={s.profile__main}>
+                  <div className={s.profile__info}>
+                    <div
+                      className={`${s.profile__info__fields} ${s.order__content}`}
+                    >
+                      <div className={s.profile__info__title}>
+                        <div
+                          style={{
+                            height: "100px",
+                            width: "100px",
+                          }}
+                        >
+                          <img
+                            ref={uploadedImage}
+                            src={
+                              userData.gallery?.length
+                                ? userData.gallery
+                                : userPhotoIcon
+                            }
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              borderRadius: "50px",
+                            }}
+                            alt=""
+                          />
+                        </div>
+                        <h4 className={s.container_title}>Ваша історія</h4>
+                        <FontAwesomeIcon
+                          icon={faSignOutAlt}
+                          onClick={showLogoutModal}
+                          className={s.profile__info__icon}
+                        />
+                      </div>
+                      <div className={s.orders}>
+                        <div className={s.orders__header}>
+                          <span>
+                            <CalendarIcon className={s.icon} />
+                            Дата
+                          </span>
+                          <span>
+                            <CashIcon className={s.icon} />
+                            Оплата
+                          </span>
+                          <span>
+                            <CarIcon className={s.icon} />
+                            Доставка
+                          </span>
+                          <span>
+                            <CoinIcon className={s.icon} />
+                            Сума
+                          </span>
+                          <span>
+                            <DotsIcon className={s.icon} />
+                          </span>
+                        </div>
+                        {orders?.map((order) => (
+                          <OrderCardProfile
+                            onExpanding={() => onOrderCardExpand(order)}
+                            {...{ order }}
+                            products={ordersProducts[order._id]}
+                            key={order._id}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabPanel>
           </Tabs>
         </div>
       </div>
@@ -398,6 +475,8 @@ const mapStateToProps = (state) => {
   return {
     user: state.profile,
     isLoading: state.base.isLoading,
+    orders: state.profile.orders,
+    ordersProducts: state.profile.ordersProducts,
   };
 };
 
@@ -410,6 +489,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(showModalAction(content, onSubmit, onReject)),
     logout: () => dispatch(logoutAction()),
     getUserHistory: (id) => dispatch(getUserHistoryAction(id)),
+    getOrdersProducts: (order) => dispatch(getUserOrderProductsAction(order)),
   };
 };
 

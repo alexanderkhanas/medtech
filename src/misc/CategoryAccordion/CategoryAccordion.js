@@ -15,7 +15,6 @@ const CategoryAccordion = ({
   selectedCategories,
 }) => {
   const [parentExpandedState, setParentExpandedState] = useState(false);
-  // key - id, value - bool
   const [subchildExpandedState, setSubchildExpandedState] = useState({});
   const { childs } = parent;
   const { subchilds } = parent;

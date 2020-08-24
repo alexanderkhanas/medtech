@@ -28,7 +28,6 @@ const Register = ({ register }) => {
 
   const [isAgree, setIsAgree] = useState(false);
   const agreeCheckbox = ({ target: { checked } }) => {
-    console.log(isAgree, checked);
     setIsAgree(checked);
   };
   const h = useHistory();
@@ -97,7 +96,6 @@ const Register = ({ register }) => {
         onSubmit={async (values, { setSubmitting }) => {
           const { fName, lName, fatherName, phone, password, email } = values;
           const correctPhone = phone.replace(/-/gi, "").replace("+", "");
-          console.log("phone ===", correctPhone);
 
           const id = await register({
             fName,

@@ -44,15 +44,12 @@ const Auth = ({
     { name: "Увійти", path: "/login" },
   ];
 
-  console.log("location ===", location?.state);
-
   return (
     <div>
       <Formik
         initialValues={{ email: "", password: "", isRemember: false }}
         validate={(values) => {
           const errors = {};
-          console.log("is remember ===", values.isRemember);
 
           if (values.password.length <= 5) {
             errors.password = "Занадто короткий пароль";
@@ -69,7 +66,6 @@ const Auth = ({
         onSubmit={async (values, { setSubmitting }) => {
           const { email, password } = values;
           const userId = await login({ email, password }, values.isRemember);
-          console.log("userId ===", userId);
 
           if (userId === "admin") {
             h.push("/admin");
@@ -119,7 +115,6 @@ const Auth = ({
                         <Input
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          // Icon={!errors.email ? SuccessIcon : ErrorIcon}
                           name="email"
                           value={values.email}
                           type="email"
@@ -138,7 +133,6 @@ const Auth = ({
                             onChange={handleChange}
                             onBlur={handleBlur}
                             type="password"
-                            // Icon={!errors.password ? SuccessIcon : ErrorIcon}
                             name="password"
                             value={values.password}
                             placeholder="••••••••"

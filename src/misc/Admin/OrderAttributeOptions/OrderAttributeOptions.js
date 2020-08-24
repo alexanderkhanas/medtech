@@ -4,7 +4,6 @@ import { cartesianProduct } from "../../../utils/utils";
 import Input from "../../Inputs/Input/Input";
 import InputMask from "react-input-mask";
 import uuid from "react-uuid";
-import lodash from "lodash";
 
 const OrderAttributeOptions = ({
   options,
@@ -19,12 +18,8 @@ const OrderAttributeOptions = ({
 
   useEffect(() => {
     const cartesian = cartesianProduct(options);
-    console.log("cartesian ===", cartesian);
     setAttrOptions(cartesian.map((item) => ({ ...item, _id: uuid() })));
   }, [options]);
-
-  console.log("attr options", attrOptions);
-  console.log("options", options);
 
   return (
     <div>

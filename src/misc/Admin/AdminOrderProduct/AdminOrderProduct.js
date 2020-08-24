@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import s from "./AdminOrderProduct.module.css";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Counter from "../../Counter/Counter";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
@@ -61,8 +59,6 @@ const CartProduct = ({
       </div>
       <div className={s.attributes}>
         {attrOptions?.map((option, i) => {
-          console.log("option ===", option);
-
           const innerAttributesDom = Object.keys(option).map((key) => {
             return (
               key !== "_id" &&

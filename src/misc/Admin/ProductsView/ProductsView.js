@@ -31,7 +31,6 @@ const ProductsView = ({
 
   const onPageChange = ({ selected }) => {
     setActivePage(selected + 1);
-    // getProductsByPage(selected + 1);
     scrollToRef(containerRef);
   };
 
@@ -60,7 +59,6 @@ const ProductsView = ({
         <span>Дії</span>
       </div>
       {filteredProducts.map(({ _id, title, price, article }) => (
-        // <Link key={_id} >
         <AdminRow
           items={[
             { title, key: `${_id}title` },
@@ -70,7 +68,6 @@ const ProductsView = ({
           onDelete={() => deleteProduct(_id)}
           onEdit={() => h.push(`/admin/edit-product/${_id}`)}
         />
-        // </Link>
       ))}
       <Pagination
         pageCount={Math.ceil(filteredProductsQuantity / 24)}

@@ -18,6 +18,7 @@ import {
 import Cartesian from "react-cartesian";
 import OrderAttributeOptions from "../../../../misc/Admin/OrderAttributeOptions/OrderAttributeOptions";
 import { showAlertAction } from "../../../../store/actions/alertActions";
+import Resizer from "react-image-file-resizer";
 
 const CreateProduct = ({
   getAttributes,
@@ -34,17 +35,33 @@ const CreateProduct = ({
   const [filteredVendors, setFilteredVendors] = useState([]);
   const [filteredAttributes, setFilteredAttributes] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
-  // const uploadedImage = useRef(null);
-  // const imageUploader = useRef(null);
 
   const handleImages = ({ target: { files } }) => {
     const temp = [];
 
-    Array.from(files).forEach((file) => {
+    Array.from(files).forEach((file, i) => {
       const reader = new FileReader();
-      console.log("files length ===", Array.from(files).length);
 
-      reader.onload = ({ target: { result } }) => {
+      reader.onload = async ({ target: { result } }) => {
+        if (i === 0) {
+          const output = await Resizer.imageFileResizer(
+            file,
+            300,
+            300,
+            "JPEG",
+            100,
+            0,
+            (uri) => {
+              setValues({
+                ...values,
+                gallery: temp,
+                galleryFiles: Array.from(files),
+                thumbnail: uri,
+              });
+            },
+            "blob"
+          );
+        }
         temp.push(result);
         setValues({
           ...values,
@@ -99,14 +116,11 @@ const CreateProduct = ({
     });
   };
 
-  console.log("attr ===", values.attributesLabels);
-
   const setAttrOptions = (attrOptions) => {
     setValues({ ...values, attrOptions });
   };
 
   const onAttributesCheckboxChange = (e) => {
-    console.log("e target ===", e?.target?.value);
     setValues({
       ...values,
       isPriceChangesByAttributes: !values.isPriceChangesByAttributes,
@@ -152,11 +166,6 @@ const CreateProduct = ({
     }));
   }, [filteredAttributes]);
 
-  console.log("vendor options ===", vendorsOptions);
-  console.log("filtered vendor ===", filteredVendors);
-  console.log("attributes ===", values.attributes);
-  console.log("gallery ===", values.gallery);
-
   useEffect(() => {
     if (!vendors.length) {
       getAttributes();
@@ -176,13 +185,6 @@ const CreateProduct = ({
   useEffect(() => {
     setFilteredAttributes(attributes);
   }, [attributes]);
-
-  // useEffect(() => {
-  //   const res = cartesianProduct(Object.values(values.attributes));
-  //   console.log("cartesianProduct ===", res);
-  // }, [values.attributes]);
-
-  console.log("category options ===", categoriesOptions);
 
   return (
     <div className={s.container}>
@@ -313,29 +315,6 @@ const CreateProduct = ({
                 options={values.attributes}
                 attrOptions={values.attrOptions}
               />
-              {/* <Cartesian
-                cols={1}
-                className={"asdas"}
-                showProps
-                component={(props) => {
-                  console.log("props ===", props);
-                  return (
-                    <div>
-                      {Object.keys(props).map(
-                        (key, i) =>
-                          key !== "children" && (
-                            <div {...{ key }}>
-                              <span>{key}</span>
-                              <p>{props[key]}</p>
-                              <Input placeholder="100" label="Оберіть ціну" />
-                            </div>
-                          )
-                      )}
-                    </div>
-                  );
-                }}
-                props={values.attributes}
-              /> */}
             </div>
           )}
           <Input
@@ -376,12 +355,12 @@ const formikHOC = withFormik({
     attrOptions: [],
     attributes: {},
     isPriceChanges: false,
+    thumbnail: {},
   }),
   handleSubmit: async (
     val,
     { props: { createProduct, showAlert }, resetForm }
   ) => {
-    console.log("values ===", val.vendor);
     const productToSubmit = {
       title: val.title,
       desc: val.desc,
@@ -398,19 +377,21 @@ const formikHOC = withFormik({
     };
 
     let galleryFormData = null;
-    // new FormData();
+    let thumbnailFormData = null;
     if (val.galleryFiles.length) {
       galleryFormData = new FormData();
       val.galleryFiles.forEach((image) => {
-        console.log("file ===", image);
-
         galleryFormData.append("gallery", image);
       });
+      thumbnailFormData = new FormData();
+      thumbnailFormData.append("gallery", val.thumbnail);
     }
 
-    // console.log("gallery form data ===", galleryFormData.entries());
-
-    const isSuccess = await createProduct(productToSubmit, galleryFormData);
+    const isSuccess = await createProduct(
+      productToSubmit,
+      galleryFormData,
+      thumbnailFormData
+    );
 
     if (isSuccess) {
       resetForm({
@@ -432,9 +413,6 @@ const formikHOC = withFormik({
     } else {
       showAlert("Сталась помилка при створенні товару");
     }
-    console.log("is success ===", isSuccess);
-
-    console.log("productToSubmit ===", productToSubmit);
   },
 })(CreateProduct);
 
@@ -450,8 +428,8 @@ const mapDispatchToProps = (dispatch) => {
     getCategories: () => dispatch(getCategoriesAction()),
     getVendors: () => dispatch(getVendorsAction()),
     getAttributes: () => dispatch(getAttributesAction()),
-    createProduct: (product, gallery) =>
-      dispatch(createProductAction(product, gallery)),
+    createProduct: (product, gallery, thumbnail) =>
+      dispatch(createProductAction(product, gallery, thumbnail)),
     showAlert: (content, type) => dispatch(showAlertAction(content, type)),
   };
 };

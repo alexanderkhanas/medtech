@@ -13,7 +13,6 @@ const composeEnhancers = composeWithDevTools({});
 
 const store = createStore(
   rootReducer,
-  // applyMiddleware(thunk),
   composeEnhancers(applyMiddleware(thunk))
 );
 
@@ -23,10 +22,5 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
-
-// <React.StrictMode>
-/* <Provider> */
-/* </Provider> */
-// </React.StrictMode>,
 
 serviceWorker.unregister();

@@ -21,7 +21,6 @@ export const getAllNewsAction = () => {
 export const getSingleNewsAction = (id) => {
   return async (dispatch) => {
     const response = await fetchSingleNews(id);
-    console.log("single response ===", response.data);
     dispatch({ type: SET_SINGLE_NEWS, singleNews: response.data });
   };
 };

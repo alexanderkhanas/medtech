@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import s from "./../NewPassword/NewPassword.module.css";
+import s from "./NewPassword.module.css";
 import Input from "../../misc/Inputs/Input/Input";
 import Button from "../../misc/Button/Button";
 import { useHistory } from "react-router-dom";
@@ -14,14 +14,11 @@ const RestorePassord = () => {
   const handleSubmit = () => {
     _axios
       .post("/change/password", { password })
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch(function (error) {
         console.log(error);
       });
   };
-  console.log(password);
   return (
     <>
       <div className={s.body}>

@@ -1,49 +1,36 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import s from "./ProductCard.module.css";
 import { connect } from "react-redux";
 import {
   addToCartAction,
   removeFromCartAction,
 } from "../../store/actions/cartActions";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import classnames from "classnames";
 import WishlistButton from "../WishlistButton/WishlistButton";
 import Button from "../Button/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import Image from "react-image-resizer";
-import Resizer from "react-image-file-resizer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ProductCard = ({ product, className }) => {
   const { gallery, title, price, _id } = product;
-  const [resizedPhoto, setResizedPhoto] = useState("");
   const history = useHistory();
   const redirectToSingleProduct = () => history.push(`/product/${_id}`);
   return (
     <div className={classnames(s.card, className)}>
       <WishlistButton {...{ product }} className={s.wishlist__button} />
       <div className={s.card__main}>
-        <Image
-          src={
-            "https://www.silverdisc.co.uk/sites/default/files/sd_importer/lion_webp_10.webp"
-            // gallery[0]
-            //   ? gallery[0]
-            //   : require("../../assets/image-placeholder.webp")
-          }
-          width={310}
-          height={300}
-          // style={style.image}
-        />
-        {/* <img
+        <img
           className={s.card__img}
           onClick={redirectToSingleProduct}
           src={
+            // "https://www.silverdisc.co.uk/sites/default/files/sd_importer/lion_webp_10.webp"
             gallery[0]
               ? gallery[0]
               : require("../../assets/image-placeholder.webp")
           }
           alt="loading..."
-        /> */}
+        />
       </div>
       <div className={s.card__footer}>
         <h4 className={s.card__title} onClick={redirectToSingleProduct}>

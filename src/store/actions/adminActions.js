@@ -58,7 +58,6 @@ export const createCategoryAction = (category) => {
     if (response.status === 200) {
       dispatch({ type: ADD_CATEGORY, category: response.data });
     }
-    console.log("category response ===", response.data);
     return response.status === 200;
   };
 };
@@ -72,7 +71,6 @@ export const deleteCategoryAction = (id) => {
     if (response.status === 200) {
       dispatch({ type: DELETE_CATEGORY, id });
     }
-    console.log("delete category ===", response?.data);
     return response.status === 200;
   };
 };
@@ -80,17 +78,13 @@ export const deleteCategoryAction = (id) => {
 export const createNewsAction = (body, gallery) => {
   return async (dispatch) => {
     const token = getAdminToken();
-    console.log("before request");
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await createNews(body, token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("news response ===", response.data);
     if (!gallery || !response?.data) {
       return false;
     }
     if (response.status === 200) {
-      console.log("gallery ===", gallery);
-
       const imageResponse = await uploadImageToNews(
         gallery,
         response.data,
@@ -108,7 +102,6 @@ export const deleteNewsAction = (id) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await deleteNews(id, token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("delete news ===", response?.data);
     if (response.status === 200) {
       dispatch({
         type: DELETE_NEWS,
@@ -124,14 +117,12 @@ export const editNewsAction = (news, id, imageFormData) => {
     const token = getAdminToken();
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await patchNews(news, id, token);
-    console.log("edit news ===", response?.data);
     if (response.status === 200) {
       const imageResponse = await uploadImageToNews(
         imageFormData,
         response.data,
         token
       );
-      console.log("image res ===", imageResponse?.data);
     }
     dispatch({ type: SET_LOADING, isLoading: false });
     return response.status === 200;
@@ -154,7 +145,6 @@ export const deleteVendorAction = (vendor) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await deleteVendor(vendor._id, token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("delete vendor ===", response?.data);
     return response.status === 200;
   };
 };
@@ -165,7 +155,6 @@ export const editVendorAction = (vendor) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await patchVendor(vendor, vendor._id, token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("patch vendor ===", response?.data);
     return response.status === 200;
   };
 };
@@ -182,7 +171,6 @@ export const getAttributesAction = () => {
         attributes: response.data,
       });
     }
-    console.log("attributes ===", response?.data);
     return response.status === 200;
   };
 };
@@ -193,7 +181,6 @@ export const deleteAttributeAction = (id) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await deleteAttribute(id, token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("delete attribute ===", response?.data);
     if (response.status === 200) {
       dispatch({
         type: DELETE_ATTRIBUTE,
@@ -210,7 +197,6 @@ export const createAttributeAction = (attribute) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await createAttribute(attribute, token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("create response ===", response?.data);
     if (response.status === 200) {
       dispatch({
         type: ADD_ATTRIBUTE,
@@ -228,7 +214,6 @@ export const editAttributeAction = (attribute) => {
 
     const response = await patchAttribute(attribute, token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("edit attribute ===", response?.data);
     return response.status === 200;
   };
 };
@@ -254,7 +239,6 @@ export const deleteUserAction = (id) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await deleteUser(id, token);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("delete user ===", response.status);
 
     if (response.status === 200) {
       dispatch({
@@ -269,7 +253,6 @@ export const getVendorsAction = () => {
   return async (dispatch) => {
     const token = getAdminToken();
     const response = await fetchVendors(token);
-    console.log("response ===", response?.data);
     if (response.status === 200) {
       dispatch({
         type: SET_VENDORS,
@@ -300,14 +283,11 @@ export const filterUsersAction = (searchValue, users) => {
   };
 };
 
-export const createProductAction = (product, gallery) => {
+export const createProductAction = (product, gallery, thumbnail) => {
   return async (dispatch) => {
     const token = getAdminToken();
     dispatch({ type: SET_LOADING, isLoading: true });
     const productRes = await postProduct(product, token);
-    console.log("response ===", productRes?.data);
-    console.log("gallery ===", gallery);
-
     if (productRes?.data) {
       let productGallery = productRes.gallery;
       if (gallery) {
@@ -316,10 +296,17 @@ export const createProductAction = (product, gallery) => {
           productRes.data._id,
           token
         );
-        console.log("gallery res ===", galleryResponse?.data);
         if (galleryResponse?.data) {
           productGallery = galleryResponse.data;
         }
+      }
+      if (thumbnail) {
+        const thumbnailResponse = await postProductGallery(
+          thumbnail,
+          productRes.data._id,
+          token,
+          true
+        );
       }
       dispatch({
         type: ADD_PRODUCT,
@@ -336,7 +323,6 @@ export const editProductAction = (product, gallery, id) => {
     const token = getAdminToken();
     dispatch({ type: SET_LOADING, isLoading: true });
     const productRes = await patchProduct(product, id, token);
-    console.log("edit product res ===", productRes.data);
 
     if (productRes.status === 200) {
       let productGallery = productRes.gallery;
@@ -346,7 +332,6 @@ export const editProductAction = (product, gallery, id) => {
           productRes.data._id,
           token
         );
-        console.log("gallery res ===", galleryResponse?.data);
         if (galleryResponse?.data) {
           productGallery = galleryResponse.data;
         }
@@ -372,7 +357,6 @@ export const deleteProductAction = (id) => {
     const token = getAdminToken();
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await deleteProduct(id, token);
-    console.log("delete response ===", response.data);
     dispatch({ type: SET_LOADING, isLoading: false });
     if (response.status === 200) {
       dispatch({ type: DELETE_PRODUCT, id: response.data._id });
@@ -385,7 +369,6 @@ export const getOrdersAction = () => {
     const token = getAdminToken();
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchOrders(token);
-    console.log("fetchOrders ===", response.data);
     dispatch({ type: SET_LOADING, isLoading: false });
     if (response.status === 200) {
       dispatch({ type: SET_ORDERS, orders: response.data });
@@ -397,11 +380,9 @@ export const getOrderProductsAction = (order) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const productsIds = order.products.map(({ id }) => id).join(",");
-    console.log("productsIds ===", productsIds);
 
     const products = await fetchExactProducts(productsIds);
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("products ===", products);
     dispatch({ type: SET_ORDERS_PRODUCTS, products, orderId: order._id });
   };
 };

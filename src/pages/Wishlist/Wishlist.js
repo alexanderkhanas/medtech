@@ -20,7 +20,6 @@ const Wishlist = ({ wishlistProducts }) => {
     },
     { name: "Улюблені", path: "/wishlist" },
   ];
-  console.log("wishlistProducts ===", wishlistProducts);
 
   return (
     <>

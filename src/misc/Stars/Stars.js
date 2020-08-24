@@ -12,13 +12,10 @@ const Stars = ({
   setValue,
   size = "md",
 }) => {
-  console.log("value ===", value);
-
   return (
     <div className={`${s.container} ${containerClass}`}>
       {[1, 2, 3, 4, 5].map((item, i) => {
         const isActive = item <= value;
-        console.log("is active ===", isActive);
 
         return (
           <FontAwesomeIcon

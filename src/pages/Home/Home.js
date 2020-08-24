@@ -14,6 +14,7 @@ import {
   getCategoriesAction,
   getProducts,
   getHighRatingProductsAction,
+  getRecommendedProductsAction,
 } from "../../store/actions/productsActions";
 import Button from "../../misc/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,6 +32,7 @@ const Home = ({
   getNews,
   getCategories,
   getHighRatingProducts,
+  getRecommendedProducts,
   user,
   createMessage,
   showAlert,
@@ -48,8 +50,9 @@ const Home = ({
   useEffect(() => {
     (async () => {
       if (!allProducts.length) {
-        await getCategories();
         await getHighRatingProducts();
+        await getRecommendedProducts();
+        await getCategories();
         await getNews();
       }
     })();
@@ -192,12 +195,10 @@ const Home = ({
               if (phone.length && phone.length !== 16) {
                 errors.phone = "required";
               }
-              console.log("phone length ===", phone.length);
 
               return errors;
             }}
             onSubmit={async (values, { resetForm }) => {
-              console.log("values ===", values);
               let correctPhone = values.phone.replace(/-/gi, "");
               correctPhone = correctPhone.replace("+", "");
               const isSuccess = await createMessage({
@@ -299,6 +300,7 @@ const mapDispatchToProps = (dispatch) => {
     getNews: () => dispatch(getAllNewsAction()),
     getCategories: () => dispatch(getCategoriesAction()),
     getHighRatingProducts: () => dispatch(getHighRatingProductsAction()),
+    getRecommendedProducts: () => dispatch(getRecommendedProductsAction()),
     createMessage: (msg) => dispatch(createContactMessageAction(msg)),
     showAlert: (text, type) => dispatch(showAlertAction(text, type)),
   };

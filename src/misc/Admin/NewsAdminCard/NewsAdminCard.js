@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import s from "./NewsAdminCard.module.css";
-import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../../Button/Button";
 import _axios from "../../../store/api/_axios";
 import { Link } from "react-router-dom";
@@ -27,7 +25,6 @@ const NewsAdminCard = ({ newsItem, showModal }) => {
                 size="sm"
                 title="Видалити"
                 className={s.delete__btn}
-                // onClick={showDeleteModal}
               />
             </div>
           </div>

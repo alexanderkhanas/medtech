@@ -22,7 +22,6 @@ const EditNews = ({
   handleChange,
   handleSubmit,
 }) => {
-  console.log(singleNews);
   const { id } = useParams();
 
   const uploadedImage = useRef(null);
@@ -32,7 +31,6 @@ const EditNews = ({
   useEffect(() => {
     getSingleNews(id);
   }, []);
-  console.log("singleNews ===", singleNews);
 
   useEffect(() => {
     const { desc, title, gallery, _id } = singleNews;
@@ -47,16 +45,6 @@ const EditNews = ({
     }
   }, [singleNews]);
 
-  // const [newsData, setNewsData] = useState({
-  //   getSingleNews,
-  //   match,
-  //   singleNews,
-  // });
-
-  // const handleRemovePhoto = (e) => {
-  //   setNewsData((prev) => ({ ...prev, gallery: [] }));
-  // };
-
   const handleImageUpload = (e) => {
     const [file] = e.target.files;
     if (file) {
@@ -66,7 +54,6 @@ const EditNews = ({
       reader.onload = ({ target: { result } }) => {
         current.src = result;
         setValues({ ...values, gallery: result, galleryFile: file });
-        // setNewsData((prev) => ({ ...prev, gallery: e.target.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -156,13 +143,10 @@ const formikHOC = withFormik({
   handleSubmit: async (values, { props: { editNews, showAlert } }) => {
     const { title, desc, gallery, galleryFile, _id } = values;
     const imageFormData = new FormData();
-    console.log("gallery ===", gallery);
 
     imageFormData.append("gallery", galleryFile);
-    console.log("image ===", imageFormData.get("gallery"));
 
     const isNewsCreated = await editNews({ title, desc }, _id, imageFormData);
-    console.log("is news created ===", isNewsCreated);
 
     if (isNewsCreated) {
       showAlert("Новину створено успішно!", "success");

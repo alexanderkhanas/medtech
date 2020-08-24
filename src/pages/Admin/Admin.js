@@ -135,22 +135,15 @@ const Admin = ({
     showModal("Ви дійсно хочете вийти зі свого акаунту?", logout);
   };
   useEffect(() => {
-    // (async () => {
-    console.log("isLoading ===", isLoading);
-
-    // if (!isLoading && !attributes?.length) {
-    console.log("here");
-
-    getAttributes();
-    getCategories();
-    getVendors();
-    getUsers();
-    getNews();
-    getContactMessages();
-    getOrders();
-
-    // }
-    // })();
+    (async () => {
+      await getCategories();
+      await getAttributes();
+      await getVendors();
+      await getUsers();
+      await getNews();
+      await getContactMessages();
+      await getOrders();
+    })();
   }, []);
 
   const isVendorEditing = !!editing.vendor._id;
@@ -225,6 +218,7 @@ const Admin = ({
                 status,
                 products,
               } = order;
+
               return (
                 <AdminRow
                   items={[
@@ -250,10 +244,13 @@ const Admin = ({
                       key: `${_id}sum`,
                     },
                   ]}
-                  onEdit={() => {}}
                   onDelete={() => deleteOrder(_id)}
                   isExpanding
-                  onClick={() => getOrderProducts(order)}
+                  onClick={() => {
+                    if (!ordersProducts[order._id]) {
+                      getOrderProducts(order);
+                    }
+                  }}
                 >
                   {ordersProducts[order._id]?.map((product) => (
                     <OrderProductCard
@@ -323,10 +320,6 @@ const Admin = ({
                 values,
                 setValues,
               }) => {
-                console.log("example category ===", categories[1]);
-
-                console.log("values ===", values);
-
                 return (
                   <form
                     onSubmit={handleSubmit}
@@ -349,8 +342,6 @@ const Admin = ({
                       <Select
                         label="Назва батьківської категорії"
                         containerClass={s.add__category__select__container}
-                        // withSearch
-                        // noDefaultValue
                         value={values.parentCategoryLabel}
                         onSelect={(selectedOption) => {
                           setValues({
@@ -358,7 +349,6 @@ const Admin = ({
                             parentCategory: selectedOption.value,
                             parentCategoryLabel: selectedOption.label,
                           });
-                          console.log("value ===", selectedOption);
                         }}
                         options={categories
                           .filter(({ sub }) => !sub?.length)
@@ -526,8 +516,6 @@ const Admin = ({
                 let isSuccess = false;
                 if (isVendorEditing) {
                   //ASD
-                  console.log("editing vendor ===", editing.vendor);
-
                   isSuccess = await editVendor({
                     ...editing.vendor,
                     title,
@@ -536,8 +524,6 @@ const Admin = ({
                 } else {
                   isSuccess = await createVendor({ title });
                 }
-                console.log("is success ===", isSuccess);
-
                 if (isSuccess) {
                   resetForm({ title: "" });
                   if (isVendorEditing) {
@@ -749,7 +735,6 @@ const mapStateToProps = (state) => {
     contactMessages: state.contact.messages,
     orders: state.admin.orders,
     ordersProducts: state.admin.ordersProducts,
-    // fullPrice: state.cart.fullPrice,
   };
 };
 
@@ -783,7 +768,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(showModalAction(content, onSubmit, onReject)),
     logout: () => dispatch(logoutAction()),
     readMessage: (message) => dispatch(readMessageAction(message, message._id)),
-    // setFullPrice: (fullPrice) => dispatch(setFullPriceAction(fullPrice)),
   };
 };
 

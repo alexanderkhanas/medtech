@@ -1,7 +1,5 @@
 import React from "react";
 import s from "./OrderCard.module.css";
-import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const OrderCard = ({
   orderNumber,
@@ -21,7 +19,6 @@ const OrderCard = ({
         <span className={s.delivery}>{delivery}</span>
         <span>{orderSum}</span>
       </div>
-      {/* <FontAwesomeIcon icon={faPencilAlt} className={s.faPencil} /> */}
     </div>
   );
 };

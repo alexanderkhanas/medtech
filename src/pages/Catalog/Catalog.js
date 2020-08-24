@@ -52,7 +52,6 @@ const Catalog = ({
 
   const onPageChange = ({ selected }) => {
     setActivePage(selected + 1);
-    // getProductsByPage(selected + 1);
     scrollToRef(containerRef);
   };
 
@@ -82,24 +81,9 @@ const Catalog = ({
     setProductViewType((prev) => (prev === "row" ? "column" : "row"));
   };
 
-  // useEffect(() => {
-  //   if (selectedCategories.length) {
-  //     filterProducts(
-  //       selectedCategories,
-  //       searchValue,
-  //       activePage,
-  //       sortType.value
-  //     );
-  //   }
-  // }, []);
-
   useEffect(() => {
-    console.log("active page ===", activePage);
-
     filterProducts(selectedCategories, searchValue, activePage, sortType.value);
   }, [activePage, sortType, selectedCategories]);
-
-  console.log("SORT TYPE ===", sortType);
 
   useEffect(() => {
     let filtered = categories.map((category) => {
@@ -149,8 +133,6 @@ const Catalog = ({
   ))
   */
 
-  console.log("filteredProductsQuantity ===", filteredProductsQuantity);
-
   const breadCrumbsItems = [
     {
       name: "Головна",
@@ -165,8 +147,6 @@ const Catalog = ({
       getCategories();
     }
   }, []);
-
-  console.log("filtered ===", filteredProducts);
 
   return (
     <div>
@@ -289,7 +269,6 @@ const Catalog = ({
           pageRangeDisplayed={5}
           marginPagesDisplayed={1}
           {...{ onPageChange }}
-          //   onPageChange={({ selected }) => console.log("e ===", selected)}
           containerClassName={s.pagination__container}
           activeClassName={s.pagination__active__link}
           previousLabel=""

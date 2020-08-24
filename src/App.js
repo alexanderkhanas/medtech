@@ -149,41 +149,33 @@ const App = ({
   useEffect(() => {
     (async () => {
       const localCart = getLocalCart();
-      console.log("local cart ===", localCart);
+
       const ids = localCart.map((item) => item._id);
-      console.log("ids ===", ids);
 
       const productsByIds = await fetchExactProducts(ids);
-      console.log("productsByIds ===", productsByIds);
 
       let fullPrice = 0;
       const cartProducts = productsByIds.map((product) => {
-        console.log("here");
         const localCartObj = localCart.filter(
           (item) => item._id === product._id
         )[0];
         fullPrice +=
           localCartObj.numberInCart * localCartObj.attributes.priceAttr ||
           product.price;
-        console.log("local cart obj ===", productsByIds);
 
         return {
           ...product,
           ...localCartObj,
         };
       });
-      console.log("full price ===", fullPrice);
 
-      console.log("cart products ===", cartProducts);
       setCart(cartProducts);
       setFullPrice(fullPrice);
       const wishlistIds = getLocalWishlist();
-      console.log("all products ===", allProducts);
 
       const wishlistProducts = wishlistIds
         ? allProducts.filter((product) => wishlistIds.includes(product._id))
         : [];
-      console.log("wishlist ===", wishlistProducts);
       setWishlist(wishlistProducts);
     })();
   }, [allProducts]);

@@ -75,8 +75,6 @@ const CreateOrder = ({
     { name: "Створити замовлення", path: "/admin/create-order" },
   ];
 
-  console.log("products ===", products);
-
   const onAttributeSelect = (productId, i, priceAttr) => {
     if (values.productsAttributes.length) {
       setValues({
@@ -147,20 +145,15 @@ const CreateOrder = ({
   };
 
   const onProductsMenuScroll = ({ target }) => {
-    console.log("scroll ===", target.scrollTop);
-    console.log("scrollHeight ===", target.scrollHeight);
-
     if (
       target.scrollHeight - target.scrollTop < 400 &&
       products.length % 24 === 0
     ) {
       setActiveProductsPage((prev) => prev + 1);
     }
-    console.log("target ===", target);
   };
 
   const onProductSearchChange = (searchValue) => {
-    console.log("search ===", searchValue);
     if (searchValue) {
       filterProducts(null, searchValue);
     }
@@ -213,13 +206,7 @@ const CreateOrder = ({
     }
   };
 
-  const onWarehouseSearchChange = (value) => {
-    // setWarehouseSearchValue(value);
-    // if (warehouses.length === 1 && value === warehouses[0].Description) {
-    //   setSelectedWarehouse(value);
-    // }
-    // filterWarehouses(value);
-  };
+  const onWarehouseSearchChange = (value) => {};
 
   const onWarehouseSelect = (option) => {
     setSelectedWarehouse(option.label);
@@ -239,19 +226,13 @@ const CreateOrder = ({
     }));
   }, [products]);
 
-  console.log("users ===", users);
-
   useEffect(() => {
     getUsers();
   }, []);
 
   useEffect(() => {
-    console.log("active products page ===", activeProductsPage);
-
     getProductsByPage(activeProductsPage);
   }, [activeProductsPage]);
-
-  console.log("values ===", values);
 
   return (
     <div className={s.container}>
@@ -419,7 +400,6 @@ const formikHOC = withFormik({
     } else {
       showAlert("Сталась помилка при створенні замовлення, спробуйте пізніше");
     }
-    console.log("isSuccess ===", isSuccess);
   },
 })(CreateOrder);
 

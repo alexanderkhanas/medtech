@@ -54,31 +54,17 @@ const CreateNews = ({ createNews, showAlert }) => {
               { title, desc, gallery, galleryFile },
               { resetForm }
             ) => {
-              console.log("gallery file ===", galleryFile);
-
-              // if (!Object.keys(galleryFile).length) {
-              //   return;
-              // }
               const imageFormData = new FormData();
-              console.log("gallery ===", gallery);
-
               imageFormData.append("gallery", galleryFile);
-              console.log("image ===", imageFormData.get("gallery"));
-
               const isNewsCreated = await createNews(
                 { title, desc },
                 imageFormData
               );
-              console.log("is news created ===", isNewsCreated);
-
               if (isNewsCreated) {
                 showAlert("Новину створено успішно!", "success");
               } else {
                 showAlert("Сталась помилка!", "error");
               }
-
-              console.log("is news created ===", isNewsCreated);
-
               resetForm({ title: "", desc: "", gallery: "", galleryFile: {} });
             }}
           >

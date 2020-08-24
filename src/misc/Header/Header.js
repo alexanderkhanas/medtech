@@ -18,7 +18,6 @@ import {
   faListAlt,
   faCogs,
 } from "@fortawesome/free-solid-svg-icons";
-// import { ReactComponent as LogoComponent } from "../../assets/logo.svg";
 import logo from "../../assets/logo.png";
 import s from "./Header.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
@@ -55,8 +54,6 @@ const Header = ({
   const hideProfileModal = () => setProfileModalVisible(false);
 
   const openSidebar = () => {
-    console.log("open");
-
     setBarOpen(true);
   };
   const closeSidebar = () => setBarOpen(false);
@@ -81,14 +78,9 @@ const Header = ({
       setDropdownVisible(true);
       searchProductsByValue(searchValue);
     }
-    // if (!searchValue.length) {
-    //   searchProductsByValue("");
-    // }
   }, [searchValue]);
 
   useEffect(() => {
-    console.log("is bar open ===", isBarOpen);
-
     if (typeof isBarOpen !== "boolean") return;
     setAnimation((prev) => !prev);
     setTimeout(() => {
@@ -108,14 +100,6 @@ const Header = ({
   }, [pathname]);
 
   const isLogged = document.cookie.includes("token");
-
-  console.log("isLogged ===", isLogged);
-
-  console.log("found products ===", foundProducts);
-
-  console.log("isDropdownVisible ===", isDropdownVisible);
-
-  console.log("user ===", user);
 
   return (
     <>

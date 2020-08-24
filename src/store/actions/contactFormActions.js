@@ -43,7 +43,6 @@ export const readMessageAction = (message, id) => {
     if (response.status === 200) {
       dispatch({ type: EDIT_MESSAGE, message: { ...message, read: true } });
     }
-    console.log("patch msg response ===", response?.data);
   };
 };
 

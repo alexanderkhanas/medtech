@@ -46,12 +46,8 @@ const EditUser = ({
       reader.onload = (event) => {
         const img = event.target.result;
         current.src = img;
-        // console.log("photo ===", img);
-        // patchUser({ ...userData, gallery: img }, token);
-        // setUserData((prev) => ({ ...prev, gallery: img }));
       };
       reader.readAsDataURL(file);
-      // setUserData((prev) => ({ ...prev, gallery: file }));
     }
   };
   const h = useHistory();
@@ -63,17 +59,14 @@ const EditUser = ({
     },
     { name: "Редагувати користувача" },
   ];
-  console.log("values ===", values);
 
   useEffect(() => {
     getUsers();
   }, []);
 
   useEffect(() => {
-    console.log("users ===", users);
     if (users?.length) {
       const userToEdit = users.filter((user) => user._id === id)[0];
-      console.log("user to edit ===", userToEdit);
       if (userToEdit) {
         setValues({ ...values, ...userToEdit });
       }

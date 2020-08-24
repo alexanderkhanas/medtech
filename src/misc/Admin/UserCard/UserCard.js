@@ -9,7 +9,6 @@ const UserCard = () => {
   const [show, setShow] = useState(false);
   const openModal = () => setShow(true);
   const closeModal = () => setShow(false);
-  // const [userData, setUserData] = useState({ ...user });
 
   return (
     <div className={s.card}>

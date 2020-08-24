@@ -6,14 +6,21 @@ import {
   fetchUserHistory,
   loginGoogleRequest,
   loginFacebookRequest,
+  fetchExactProducts,
 } from "../api/api";
-import { SET_USER_DATA, SET_LOADING, LOGOUT, SET_ADMIN } from "./actionTypes";
+import {
+  SET_USER_DATA,
+  SET_LOADING,
+  LOGOUT,
+  SET_ADMIN,
+  SET_ORDER_HISTORY,
+  SET_USER_ORDERS_PRODUCTS,
+} from "./actionTypes";
 import { getToken } from "../../utils/utils";
 
 export const registerAction = (data) => {
   return async (dispatch) => {
     const response = await registerRequest(data);
-    console.log("register response ===", response.data);
     if (response.status === 200) {
       dispatch({ type: SET_USER_DATA, user: response.data.user });
       const { token, aToken } = response.data;
@@ -31,16 +38,12 @@ export const registerAction = (data) => {
 export const loginAction = (data, isRemember) => {
   return async (dispatch) => {
     const response = await loginRequest(data);
-    // console.log("login response ===", response.data);
     if (response.status === 200) {
-      console.log("is remember ===", isRemember);
-
       if (isRemember) {
         localStorage.setItem("_login", JSON.stringify(data));
       }
       const { token, aToken, isAdmin } = response.data;
       if (aToken && isAdmin) {
-        // document.cookie = `aToken=${aToken}; expires=Fri, 31 Dec 1999 23:59:59 GMT; path=/;`;
         document.cookie = `aToken=${aToken}; path=/;`;
         dispatch({ type: SET_ADMIN });
         return "admin";
@@ -48,7 +51,6 @@ export const loginAction = (data, isRemember) => {
       dispatch({ type: SET_USER_DATA, user: response.data.user });
 
       if (token) {
-        // document.cookie = `token=${token}; expires=Fri, 31 Dec 1999 23:59:59 GMT; path=/;`;
         document.cookie = `token=${token}; path=/;`;
       }
     }
@@ -71,7 +73,6 @@ export const getUserByIdAction = (token) => {
     if (response.status === 200) {
       dispatch({ type: SET_USER_DATA, user: response.data });
     }
-    console.log("response status ===", response.status);
 
     dispatch({ type: SET_LOADING, isLoading: false });
     return response.status === 200;
@@ -104,7 +105,26 @@ export const getUserHistoryAction = (id) => {
     const token = getToken();
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchUserHistory(id, token);
-    console.log("response ===", response?.data);
     dispatch({ type: SET_LOADING, isLoading: false });
+    if (response.status === 200) {
+      dispatch({ type: SET_ORDER_HISTORY, orders: response.data });
+    }
+    return response.status === 200;
+  };
+};
+
+export const getUserOrderProductsAction = (order) => {
+  return async (dispatch) => {
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const productIds = order.products.map(({ id }) => id).join(",");
+    const products = await fetchExactProducts(productIds);
+    dispatch({ type: SET_LOADING, isLoading: false });
+    if (products) {
+      dispatch({
+        type: SET_USER_ORDERS_PRODUCTS,
+        orderId: order._id,
+        products,
+      });
+    }
   };
 };

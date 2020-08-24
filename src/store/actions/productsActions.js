@@ -29,25 +29,17 @@ export const getProducts = () => {
     dispatch({ type: SET_LOADING, isLoading: false });
     if (!response?.data) return;
     const { products, length } = response.data;
-    const recommendedProducts = products.filter(
-      (product) => product.recommended
-    );
-    const newProducts = products.sort(
-      (product, nextProduct) =>
-        new Date(product.createdAt) - new Date(nextProduct.createdAt)
-    );
-    const popularProducts = randomArrayShuffle([
-      ...recommendedProducts,
-      ...newProducts,
-    ]);
+    const newProducts = products
+      .sort(
+        (product, nextProduct) =>
+          new Date(product.createdAt) - new Date(nextProduct.createdAt)
+      )
+      .slice(0, 11);
+    const popularProducts = randomArrayShuffle(newProducts);
     dispatch({
       type: SET_PRODUCTS,
       products,
       quantity: length,
-    });
-    dispatch({
-      type: SET_RECOMMENDED,
-      recommendedProducts,
     });
     dispatch({
       type: SET_NEW,
@@ -62,11 +54,9 @@ export const getProducts = () => {
 
 export const getProductsByPage = (page) => {
   return async (dispatch) => {
-    console.log("page ===", page);
     dispatch({ type: SET_LOADING, isLoading: true });
 
     const response = await fetchProductsByPage(page);
-    console.log("page products ===", response);
     dispatch({ type: SET_LOADING, isLoading: false });
 
     if (!response.data) return;
@@ -98,7 +88,6 @@ export const filterProductsAction = (
       sortType
     );
     dispatch({ type: SET_LOADING, isLoading: false });
-    console.log("response ===", response?.data);
     if (response?.data?.products) {
       dispatch({
         type: SET_FILTERED_PRODUCTS,
@@ -118,7 +107,6 @@ export const filterProductsAction = (
 export const getProductsBySearch = (value) => {
   return async (dispatch) => {
     const response = await searchProductsRequest(value);
-    console.log("search response ===", response.data);
     dispatch({ type: SET_SEARCH, products: response.data });
   };
 };
@@ -127,11 +115,22 @@ export const getCategoriesAction = () => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchCategories();
-    console.log("categories ===", response.data);
-    // if (response.status === 200) {
     dispatch({ type: SET_CATEGORIES, categories: response?.data || [] });
     dispatch({ type: SET_LOADING, isLoading: false });
-    // }
+  };
+};
+
+export const getRecommendedProductsAction = () => {
+  return async (dispatch) => {
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await fetchFilteredProducts([], "", null, "recommended");
+    dispatch({ type: SET_LOADING, isLoading: false });
+    if (response.status === 200) {
+      dispatch({
+        type: SET_RECOMMENDED,
+        recommendedProducts: response.data.products,
+      });
+    }
   };
 };
 
@@ -151,9 +150,10 @@ export const createReviewAction = (review) => {
     const token = getToken();
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await postReview(review, token);
-    console.log("res ===", response?.data);
 
     dispatch({ type: SET_LOADING, isLoading: false });
+
+    return response.status === 200;
   };
 };
 

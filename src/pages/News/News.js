@@ -17,7 +17,6 @@ const News = ({ recentNews, getNews }) => {
     },
     { name: "Новини", path: "/news" },
   ];
-  console.log("recent news ===", recentNews);
   useEffect(() => {
     getNews();
   }, []);

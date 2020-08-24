@@ -108,13 +108,7 @@ const CreateOrder = ({
     }
   };
 
-  const onWarehouseSearchChange = (value) => {
-    // setWarehouseSearchValue(value);
-    // if (warehouses.length === 1 && value === warehouses[0].Description) {
-    //   setSelectedWarehouse(value);
-    // }
-    // filterWarehouses(value);
-  };
+  const onWarehouseSearchChange = (value) => {};
 
   const onWarehouseSelect = (option) => {
     setSelectedWarehouse(option.label);
@@ -137,10 +131,6 @@ const CreateOrder = ({
   useEffect(() => {
     getCities();
   }, []);
-
-  useEffect(() => {
-    console.log("values ===", values);
-  }, [values]);
 
   useEffect(() => {
     setValues({ ...values, fName: user.fName, lName: user.lName });
@@ -245,11 +235,7 @@ const CreateOrder = ({
                   <Button
                     title="Підтвердити замовлення"
                     onClick={handleSubmit}
-                    isDisabled={
-                      // !selectedCity ||
-                      // !selectedWarehouse ||
-                      !user._id || !values.fName || !values.lName
-                    }
+                    isDisabled={!user._id || !values.fName || !values.lName}
                     className={s.submit__btn}
                   />
                 </div>

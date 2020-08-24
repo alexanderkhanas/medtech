@@ -41,15 +41,12 @@ const EditProduct = ({
   const [filteredVendors, setFilteredVendors] = useState([]);
   const [filteredAttributes, setFilteredAttributes] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
-  // const uploadedImage = useRef(null);
-  // const imageUploader = useRef(null);
 
   const handleImages = ({ target: { files } }) => {
     const temp = [];
 
     Array.from(files).forEach((file) => {
       const reader = new FileReader();
-      console.log("files length ===", Array.from(files).length);
 
       reader.onload = ({ target: { result } }) => {
         temp.push(result);
@@ -113,7 +110,6 @@ const EditProduct = ({
   };
 
   const onAttributesCheckboxChange = (e) => {
-    console.log("e target ===", e?.target?.value);
     setValues({
       ...values,
       isPriceChangesByAttributes: !values.isPriceChangesByAttributes,
@@ -126,9 +122,6 @@ const EditProduct = ({
 
   const onVendorInputChange = (value = "") => {
     const filtered = vendors.filter((vendor) => {
-      console.log("vendor ===", vendor);
-      console.log("title ===", vendor.title);
-
       return vendor.title
         .trim()
         .toLowerCase()
@@ -192,7 +185,6 @@ const EditProduct = ({
   }, []);
 
   useEffect(() => {
-    console.log("product ===", product);
     if (!product) {
       return;
     }
@@ -201,7 +193,6 @@ const EditProduct = ({
     const tempAttributesLabels = [];
 
     product.attrOptions.forEach((option) => {
-      console.log("option ===", option);
       Object.keys(option).forEach((key) => {
         if (key === "_id" || key === "priceAttr") return;
         if (!tempAttributes[key]) {
@@ -216,11 +207,8 @@ const EditProduct = ({
         if (isLabelAlreadyExist) {
           tempAttributesLabels.push({ name: key, _id: uuid() });
         }
-        console.log("key ===", key);
       });
     });
-
-    console.log("temp ===", tempAttributes);
 
     setValues({
       ...values,
@@ -240,15 +228,6 @@ const EditProduct = ({
       _id: product._id,
     });
   }, [product]);
-
-  useEffect(() => {
-    console.log("values ===", values);
-  }, [values]);
-
-  // useEffect(() => {
-  //   const res = cartesianProduct(Object.values(values.attributes));
-  //   console.log("cartesianProduct ===", res);
-  // }, [values.attributes]);
 
   return (
     <div className={s.container}>
@@ -350,10 +329,6 @@ const EditProduct = ({
                 </p>
               </div>
               {values.attributesLabels.map(({ _id, name }) => {
-                console.log(
-                  "values.attributes[name] ===",
-                  values.attributes[name]
-                );
                 const attributeValues = values.attributes[name];
 
                 return (
@@ -433,7 +408,6 @@ const formikHOC = withFormik({
     val,
     { props: { editProduct, showAlert }, resetForm }
   ) => {
-    console.log("values ===", val.vendor);
     const productToSubmit = {
       title: val.title,
       desc: val.desc,
@@ -450,24 +424,18 @@ const formikHOC = withFormik({
     };
 
     let galleryFormData = null;
-    // new FormData();
     if (val.galleryFiles.length) {
       galleryFormData = new FormData();
       val.galleryFiles.forEach((image) => {
-        console.log("file ===", image);
-
         galleryFormData.append("gallery", image);
       });
     }
-
-    // console.log("gallery form data ===", galleryFormData.entries());
 
     const isSuccess = await editProduct(
       productToSubmit,
       galleryFormData,
       val._id
     );
-    console.log("is success ===", isSuccess);
 
     if (isSuccess) {
       showAlert("Товар змінено успішно!", "success");
@@ -492,8 +460,6 @@ const formikHOC = withFormik({
       isPriceChanges: false,
       _id: "",
     });
-
-    console.log("productToSubmit ===", productToSubmit);
   },
 })(EditProduct);
 

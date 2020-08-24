@@ -45,7 +45,6 @@ const Select = ({
   };
 
   const onSearchInputChange = ({ target }) => {
-    console.log("value ===", target.value);
     setSearchValue(target.value);
   };
 

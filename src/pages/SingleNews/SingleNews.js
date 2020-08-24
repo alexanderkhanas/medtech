@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 
 const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
   const { title, gallery, desc, createdAt, _id } = singleNews;
-  console.log(singleNews);
   const breadCrumbsItems = [
     {
       name: "Головна",
@@ -25,10 +24,6 @@ const SingleNews = ({ recentNews, getSingleNews, match, singleNews }) => {
       getSingleNews(match.params.id);
     }
   }, [match.params?.id]);
-  console.log("match.params.id ===", match.params.id);
-
-  console.log("singleNews ===", singleNews);
-  console.log("created at ===", createdAt);
 
   return (
     !!_id && (

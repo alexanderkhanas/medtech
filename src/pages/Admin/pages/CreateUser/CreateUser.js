@@ -65,7 +65,6 @@ const CreateUser = ({ register, showAlert }) => {
             password: "",
           }}
           onSubmit={async (values) => {
-            console.log("values ===", values);
             let correctPhone = values.phone.replace(/-/gi, "");
             correctPhone = correctPhone.replace("+", "");
             register({
@@ -74,7 +73,6 @@ const CreateUser = ({ register, showAlert }) => {
               fName: values.name,
               lName: values.surname,
             });
-            console.log("number ===", +correctPhone);
             let isSuccess = false;
             isSuccess = await register({
               ...values,
@@ -119,10 +117,6 @@ const CreateUser = ({ register, showAlert }) => {
             touched,
             handleBlur,
           }) => {
-            console.log("values ===", values);
-            console.log("errors ===", errors);
-            console.log("touched ===", touched);
-
             return (
               <div className={s.body}>
                 <div className={s.image_upload}>
@@ -288,8 +282,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     register: (user) => dispatch(registerAction(user)),
     showAlert: (content, type) => dispatch(showAlertAction(content, type)),
-
-    // submitAvatar: (image) => dispatch()
   };
 };
 

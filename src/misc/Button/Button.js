@@ -1,6 +1,5 @@
 import React from "react";
 import s from "./Button.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classnames from "classnames";
 
 const Button = ({
@@ -11,7 +10,6 @@ const Button = ({
   children,
   size = "md",
   isUppercase,
-  icon,
   isSecondary,
   isCapitalize,
   isDisabled,
@@ -30,7 +28,7 @@ const Button = ({
       {...{ onClick }}
       className={`${classes} ${s[`button__${size}`]}`}
     >
-      {!!icon && <FontAwesomeIcon className={s.icon} {...{ icon }} />}
+      {/* {!!icon && <FontAwesomeIcon className={s.icon} {...{ icon }} />} */}
       {children}
       {!!title && <span>{title}</span>}
     </button>

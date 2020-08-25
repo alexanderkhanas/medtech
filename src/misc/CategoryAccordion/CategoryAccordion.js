@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import s from "./CategoryAccordion.module.css";
 import { connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlusSquare,
-  faPlus,
-  faMinus,
-} from "@fortawesome/free-solid-svg-icons";
 import { ReactComponent as Minus } from "../../assets/minus.svg";
 import { ReactComponent as Plus } from "../../assets/plus.svg";
 import { ReactComponent as PlusSquare } from "../../assets/plus-square.svg";
@@ -96,20 +90,30 @@ const CategoryAccordion = ({
                 >
                   {subchild.title}
                 </p>
-                {!!childs[subchild._id]?.length && (
-                  <FontAwesomeIcon
-                    onClick={() =>
-                      setSubchildExpandedState((prev) => ({
-                        ...prev,
-                        [subchild._id]: !prev[subchild._id],
-                      }))
-                    }
-                    icon={
-                      subchildExpandedState[subchild._id] ? faMinus : faPlus
-                    }
-                    className={s.category__item__btn}
-                  />
-                )}
+                {!!childs[subchild._id]?.length &&
+                  subchildExpandedState[subchild._id] && (
+                    <Minus
+                      onClick={() =>
+                        setSubchildExpandedState((prev) => ({
+                          ...prev,
+                          [subchild._id]: !prev[subchild._id],
+                        }))
+                      }
+                      className={s.category__item__btn}
+                    />
+                  )}
+                {!!childs[subchild._id]?.length &&
+                  !subchildExpandedState[subchild._id] && (
+                    <Plus
+                      onClick={() =>
+                        setSubchildExpandedState((prev) => ({
+                          ...prev,
+                          [subchild._id]: !prev[subchild._id],
+                        }))
+                      }
+                      className={s.category__item__btn}
+                    />
+                  )}
               </div>
               {/*childs*/}
               <div

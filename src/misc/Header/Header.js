@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import s from "./Header.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import { Link, withRouter, useHistory } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { stack as Menu } from "react-burger-menu";
 import { CSSTransition } from "react-transition-group";
 import Input from "../Inputs/Input/Input";
@@ -17,7 +15,6 @@ import { connect } from "react-redux";
 import HorizontalProductCard from "../HorizontalProductCard/HorizontalProductCard";
 import classnames from "classnames";
 import ProfileModal from "../ProfileModal/ProfileModal";
-import phone from "../../assets/phone.svg";
 import { ReactComponent as Phone } from "../../assets/phone.svg";
 import { ReactComponent as Envelope } from "../../assets/envelope.svg";
 import { ReactComponent as LocationArrow } from "../../assets/location-arrow.svg";
@@ -31,6 +28,8 @@ import { ReactComponent as Key } from "../../assets/key.svg";
 import { ReactComponent as Cogs } from "../../assets/cogs.svg";
 import { ReactComponent as ShoppingBag } from "../../assets/shopping-bag.svg";
 import { ReactComponent as User } from "../../assets/user.svg";
+import { ReactComponent as Times } from "../../assets/times.svg";
+import { ReactComponent as Bars } from "../../assets/bars.svg";
 
 const Header = ({
   searchProductsByValue,
@@ -38,11 +37,12 @@ const Header = ({
   history,
   setSearchValue,
   searchValue,
+  numberInCart,
   user,
 }) => {
   const [isBarOpen, setBarOpen] = useState(null);
   const [isAnimation, setAnimation] = useState(false);
-  const [sidebarIcon, setSidebarIcon] = useState(faBars);
+  const [sidebarIcon, setSidebarIcon] = useState(false);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [isFirstLoad, setFirstLoad] = useState(false);
 
@@ -81,7 +81,7 @@ const Header = ({
     if (typeof isBarOpen !== "boolean") return;
     setAnimation((prev) => !prev);
     setTimeout(() => {
-      setSidebarIcon((prev) => (prev === faBars ? faTimes : faBars));
+      setSidebarIcon((prev) => !prev);
     }, 200);
   }, [isBarOpen]);
 
@@ -161,6 +161,7 @@ const Header = ({
 
               <Link
                 to="/cart"
+                style={{ position: "relative" }}
                 className={
                   pathname === "/cart"
                     ? `${s.nav__link} ${s.nav__link__active}`
@@ -287,11 +288,17 @@ const Header = ({
               exitDone: s.burger__icon__exited,
             }}
           >
-            <FontAwesomeIcon
-              icon={sidebarIcon}
-              className={s.burger__icon}
-              onClick={isBarOpen ? closeSidebar : openSidebar}
-            />
+            {sidebarIcon ? (
+              <Times
+                onClick={isBarOpen ? closeSidebar : openSidebar}
+                className={s.burger__icon}
+              />
+            ) : (
+              <Bars
+                onClick={isBarOpen ? closeSidebar : openSidebar}
+                className={s.burger__icon}
+              />
+            )}
           </CSSTransition>
           <div className={s.search__container}>
             {isDropdownVisible && pathname !== "/catalog" && (
@@ -336,7 +343,13 @@ const Header = ({
                 </div>
               )}
           </div>
-          <Link to="/cart">
+          <Link to="/cart" style={{ position: "relative" }}>
+            {!!numberInCart && (
+              <div className={s.cart__counter}>
+                <span>{numberInCart}</span>
+              </div>
+            )}
+
             <ShoppingBag className={s.cart__icon} />
           </Link>
         </div>
@@ -405,6 +418,7 @@ const mapStateToProps = (state) => {
     foundProducts: state.products.filtered,
     searchValue: state.products.searchValue,
     user: state.profile,
+    numberInCart: state.cart.all?.length,
   };
 };
 

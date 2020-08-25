@@ -164,6 +164,15 @@
   visibility: initial;
 }
 
+.view__icon {
+  width: 1.5rem;
+}
+
+.view__button {
+  display: flex;
+  align-items: center;
+}
+
 @media (min-width: 550px) and (max-width: 750px) {
   .product__card {
     height: initial;

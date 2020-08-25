@@ -1,8 +1,7 @@
 import React from "react";
 import s from "./Stars.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
+import { ReactComponent as StarSolid } from "../../assets/star-solid.svg";
+import { ReactComponent as StarRegular } from "../../assets/star-regular.svg";
 import classnames from "classnames";
 
 const Stars = ({
@@ -17,11 +16,18 @@ const Stars = ({
       {[1, 2, 3, 4, 5].map((item, i) => {
         const isActive = item <= value;
 
-        return (
-          <FontAwesomeIcon
-            key={i}
+        return isActive ? (
+          <StarSolid
+            className={classnames(s.star__icon, {
+              [s.md]: size === "md",
+              [s.sm]: size === "sm",
+              [s.lg]: size === "lg",
+            })}
             onClick={!isStatic ? () => setValue(item) : () => {}}
-            icon={isActive ? faStar : farStar}
+          />
+        ) : (
+          <StarRegular
+            onClick={!isStatic ? () => setValue(item) : () => {}}
             className={classnames(s.star__icon, {
               [s.md]: size === "md",
               [s.sm]: size === "sm",

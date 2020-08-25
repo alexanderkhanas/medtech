@@ -2,14 +2,14 @@ import React, { useState, useMemo } from "react";
 import s from "./CartButton.module.css";
 import Button from "../Button/Button";
 import { CSSTransition } from "react-transition-group";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 import {
   addToCartAction,
   removeFromCartAction,
 } from "../../store/actions/cartActions";
 import { connect } from "react-redux";
 import classnames from "classnames";
+import { ReactComponent as Check } from "../../assets/check.svg";
+import { ReactComponent as Bag } from "../../assets/shopping-bag.svg";
 
 const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
   const { _id } = product;
@@ -39,9 +39,6 @@ const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
     addToCart({ ...product, numberInCart: 1 });
   };
 
-  let activeCartIcon = isInCart ? faCheck : faShoppingBag;
-  if (isAnimation) activeCartIcon = isInCart ? faShoppingBag : faCheck;
-
   return (
     <Button
       className={classnames(s.card__button, {
@@ -61,7 +58,7 @@ const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
           exitDone: s.cart__icon__exited,
         }}
       >
-        <FontAwesomeIcon icon={activeCartIcon} className={s.card__cart__icon} />
+        {isInCart ? <Check /> : <Bag />}}
       </CSSTransition>
     </Button>
   );

@@ -102,12 +102,32 @@ header {
 .burger__icon {
   font-size: 25px;
   transition: 0.2s;
+  width: 1.2rem;
   cursor: pointer;
   color: #575757;
 }
 
 .logo {
   height: 50px;
+}
+
+.cart__counter {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2bbd86;
+  position: absolute;
+  bottom: -10px;
+  left: -10px;
+  color: #000;
+}
+
+.cart__counter span {
+  line-height: 20px;
+  color: #fff;
 }
 
 .mobile__header {
@@ -200,7 +220,7 @@ header {
 .search__button {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-  height: 37px;
+  height: 40px;
   z-index: 3;
 }
 .search__icon {

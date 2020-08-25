@@ -213,6 +213,13 @@ p {
   max-height: 25px;
 }
 
+.input__icon {
+  fill: #6a6a6a;
+  margin-right: 0;
+  max-height: initial;
+  width: 1.5rem;
+}
+
 .orders__header span {
   flex: 1;
   font-weight: lighter;

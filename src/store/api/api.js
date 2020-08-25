@@ -288,6 +288,14 @@ export const fetchContactFormMessages = (token) => {
   });
 };
 
+export const postAvatar = (avatar, token) => {
+  return _axios.post("/user/avatar", avatar, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const patchMessage = (message, id, token) => {
   return _axios.patch(`/contact-us/${id}`, message, {
     headers: {

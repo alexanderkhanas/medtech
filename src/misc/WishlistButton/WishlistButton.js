@@ -1,8 +1,7 @@
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as fasHeart } from "@fortawesome/free-regular-svg-icons";
+import { ReactComponent as HeartSolid } from "../../assets/heart-solid.svg";
+import { ReactComponent as HeartRegular } from "../../assets/heart-regular.svg";
 import s from "./WishlistButton.module.css";
 import {
   addToWishlistAction,
@@ -26,9 +25,14 @@ const WishlistButton = ({
   const switchWishlist = () => {
     return isInWishlist ? removeFromWishlist(product) : addToWishlist(product);
   };
-  return (
-    <FontAwesomeIcon
-      icon={isInWishlist ? faHeart : fasHeart}
+  return isInWishlist ? (
+    <HeartSolid
+      onClick={switchWishlist}
+      className={`${s.icon} ${className}`}
+      {...rest}
+    />
+  ) : (
+    <HeartRegular
       onClick={switchWishlist}
       className={`${s.icon} ${className}`}
       {...rest}

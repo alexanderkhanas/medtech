@@ -14,7 +14,6 @@ import {
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import { scrollToRef } from "../../utils/utils";
 import Button from "../../misc/Button/Button";
-import { faTh, faList, faHome } from "@fortawesome/free-solid-svg-icons";
 import Select from "../../misc/Select/Select";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import { setLoadingAction } from "../../store/actions/baseActions";
@@ -22,6 +21,8 @@ import CategoryAccordion from "../../misc/CategoryAccordion/CategoryAccordion";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import { CSSTransition } from "react-transition-group";
 import { ReactComponent as Home } from "../../assets/home.svg";
+import { ReactComponent as Th } from "../../assets/th-solid.svg";
+import { ReactComponent as List } from "../../assets/list-solid.svg";
 
 const sortSelectOption = [
   { value: "recommended", label: "Рекомендовані" },
@@ -209,16 +210,20 @@ const Catalog = ({
                 <div>
                   <Button
                     onClick={switchProductViewType}
-                    icon={faTh}
+                    className={s.view__button}
                     isSecondary={productViewType === "column"}
-                  />
+                  >
+                    <Th className={s.view__icon} />
+                  </Button>
                 </div>
                 <div>
                   <Button
                     onClick={switchProductViewType}
-                    icon={faList}
+                    className={s.view__button}
                     isSecondary={productViewType === "row"}
-                  />
+                  >
+                    <List className={s.view__icon} />
+                  </Button>
                 </div>
               </div>
               <div className={s.sort__container}>

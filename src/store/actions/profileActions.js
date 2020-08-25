@@ -7,6 +7,7 @@ import {
   loginGoogleRequest,
   loginFacebookRequest,
   fetchExactProducts,
+  postAvatar,
 } from "../api/api";
 import {
   SET_USER_DATA,
@@ -64,6 +65,15 @@ export const loginGoogleAction = () => {
 
 export const loginFacebookAction = () => {
   return async () => loginFacebookRequest();
+};
+
+export const uploadAvatarAction = (avatar) => {
+  return async (dispatch) => {
+    const token = getToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await postAvatar(avatar, token);
+    dispatch({ type: SET_LOADING, isLoading: false });
+  };
 };
 
 export const getUserByIdAction = (token) => {

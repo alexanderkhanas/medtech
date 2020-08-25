@@ -1,22 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import s from "./Profile.module.css";
-import {
-  faHome,
-  faSignOutAlt,
-  faAddressCard,
-  faEnvelope,
-  faPhoneAlt,
-  faPencilAlt,
-  faUser,
-  faCity,
-  faStreetView,
-  faHouseUser,
-  faBuilding,
-  faKeyboard,
-  faMailBulk,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import ProfileInput from "../../misc/Inputs/ProfileInput/ProfileInput";
 import { useHistory, useParams } from "react-router-dom";
@@ -29,6 +13,7 @@ import {
   logoutAction,
   getUserHistoryAction,
   getUserOrderProductsAction,
+  uploadAvatarAction,
 } from "../../store/actions/profileActions";
 import { showAlertAction } from "../../store/actions/alertActions";
 import { showModalAction } from "../../store/actions/baseActions";
@@ -43,6 +28,14 @@ import { ReactComponent as Home } from "../../assets/home.svg";
 import { ReactComponent as SignOutAlt } from "../../assets/sign-out-alt.svg";
 import { ReactComponent as PencilAlt } from "../../assets/pencil-alt.svg";
 import { ReactComponent as AddressCard } from "../../assets/address-card.svg";
+import { ReactComponent as User } from "../../assets/user.svg";
+import { ReactComponent as City } from "../../assets/city-solid.svg";
+import { ReactComponent as StreetView } from "../../assets/street-view-solid.svg";
+import { ReactComponent as Building } from "../../assets/building-regular.svg";
+import { ReactComponent as Mail } from "../../assets/mail-bulk-solid.svg";
+import { ReactComponent as HouseUser } from "../../assets/house-user-solid.svg";
+import { ReactComponent as Phone } from "../../assets/phone.svg";
+import { ReactComponent as Envelope } from "../../assets/envelope-solid.svg";
 
 const Profile = ({
   user,
@@ -52,6 +45,7 @@ const Profile = ({
   logout,
   getUserHistory,
   getOrdersProducts,
+  uploadAvatar,
   ordersProducts,
   orders,
 }) => {
@@ -90,7 +84,9 @@ const Profile = ({
       reader.onload = (event) => {
         const img = event.target.result;
         current.src = img;
-        patchUser({ ...userData, gallery: img }, token);
+        const formData = new FormData();
+        formData.append("gallery", file);
+        uploadAvatar(formData);
         setUserData((prev) => ({ ...prev, gallery: img }));
       };
       reader.readAsDataURL(file);
@@ -223,23 +219,25 @@ const Profile = ({
                         <ProfileInput
                           label="Ім'я"
                           val="firstName"
-                          icon={faUser}
                           name="fName"
                           value={userData.fName}
                           placeholder="John"
                           onChange={onInputChange}
-                        />
+                        >
+                          <User className={`${s.icon} ${s.input__icon}`} />
+                        </ProfileInput>
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Прізвище"
                           val="lName"
                           placeholder="Smith"
-                          icon={faAddressCard}
                           name="lName"
                           value={userData.lName}
                           onChange={onInputChange}
-                        />
+                        >
+                          <User className={`${s.icon} ${s.input__icon}`} />
+                        </ProfileInput>
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
@@ -247,10 +245,13 @@ const Profile = ({
                           val="fatherName"
                           placeholder="JohnDoevich"
                           value={userData.fatherName}
-                          icon={faAddressCard}
                           name="fatherName"
                           onChange={onInputChange}
-                        />
+                        >
+                          <AddressCard
+                            className={`${s.icon} ${s.input__icon}`}
+                          />
+                        </ProfileInput>
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
@@ -259,10 +260,11 @@ const Profile = ({
                           placeholder="+380991234567"
                           type="tel"
                           value={userData.phone}
-                          icon={faPhoneAlt}
                           name="phone"
                           onChange={onInputChange}
-                        />
+                        >
+                          <Phone className={`${s.icon} ${s.input__icon}`} />
+                        </ProfileInput>
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
@@ -271,9 +273,10 @@ const Profile = ({
                           placeholder="johndoe@gmail.com"
                           name="email"
                           value={userData.email}
-                          icon={faEnvelope}
                           onChange={onInputChange}
-                        />
+                        >
+                          <Envelope className={`${s.icon} ${s.input__icon}`} />
+                        </ProfileInput>
                       </div>
 
                       <button
@@ -331,45 +334,52 @@ const Profile = ({
                           label="Місто"
                           name="city"
                           placeholder="Тернопіль"
-                          icon={faCity}
                           onChange={onInputChange}
-                        />
+                        >
+                          <City className={`${s.icon} ${s.input__icon}`} />
+                        </ProfileInput>
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Вулиця"
                           name="street"
                           placeholder="Руська"
-                          icon={faStreetView}
                           onChange={onInputChange}
-                        />
+                        >
+                          <StreetView
+                            className={`${s.icon} ${s.input__icon}`}
+                          />
+                        </ProfileInput>
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Будинок"
                           name="house"
                           placeholder="12"
-                          icon={faHouseUser}
                           onChange={onInputChange}
-                        />
+                        >
+                          <HouseUser className={`${s.icon} ${s.input__icon}`} />
+                        </ProfileInput>
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Квартира"
                           name="flat"
                           placeholder="81"
-                          icon={faBuilding}
                           onChange={onInputChange}
-                        />
+                        >
+                          <Building className={`${s.icon} ${s.input__icon}`} />
+                        </ProfileInput>
                       </div>
                       <div className={s.profile__info__field}>
                         <ProfileInput
                           label="Склад Нової пошти"
                           name="warehouse"
                           placeholder="1"
-                          icon={faMailBulk}
                           onChange={onInputChange}
-                        />
+                        >
+                          <Mail className={`${s.icon} ${s.input__icon}`} />
+                        </ProfileInput>
                       </div>
 
                       <button
@@ -489,6 +499,7 @@ const mapDispatchToProps = (dispatch) => {
     logout: () => dispatch(logoutAction()),
     getUserHistory: (id) => dispatch(getUserHistoryAction(id)),
     getOrdersProducts: (order) => dispatch(getUserOrderProductsAction(order)),
+    uploadAvatar: (avatar) => dispatch(uploadAvatarAction(avatar)),
   };
 };
 

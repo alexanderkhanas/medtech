@@ -10,6 +10,9 @@
 .input__container p {
   margin-bottom: 0.4rem;
   color: #747474;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .input__icon {

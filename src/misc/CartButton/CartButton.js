@@ -58,7 +58,7 @@ const CartButton = ({ product, cartProducts, removeFromCart, addToCart }) => {
           exitDone: s.cart__icon__exited,
         }}
       >
-        {isInCart ? <Check /> : <Bag />}}
+        {isInCart ? <Check /> : <Bag />}
       </CSSTransition>
     </Button>
   );

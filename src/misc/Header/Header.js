@@ -117,10 +117,14 @@ const Header = ({
                 <Envelope className={s.header_icon} />
                 info@somedomain.com
               </button>
-              <button className={s.header__info__tag}>
+
+              <a
+                href="https://www.google.com.ua/maps/place/вулиця+Гуго+Коллонтая,+2,+Тернопіль,+Тернопільська+область,+46000/@49.5460574,25.5971626,17z/data=!3m1!4b1!4m5!3m4!1s0x473036ae389f3535:0xc367270d0888dda0!8m2!3d49.5460574!4d25.5993513"
+                className={s.header__info__tag}
+              >
                 <LocationArrow className={s.header_icon} />
-                Розташування магазину
-              </button>
+                вулиця Гуго Коллонтая 2
+              </a>
             </div>
           </header>
           <div className={s.menu_main_wrapper}>

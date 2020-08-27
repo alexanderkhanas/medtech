@@ -173,7 +173,9 @@ const App = ({
 
       setCart(cartProducts);
       setFullPrice(fullPrice);
-      setWishlist(wishlistProductsByIds);
+      if (wishlistProductsByIds?.length) {
+        setWishlist(wishlistProductsByIds);
+      }
     })();
   }, [allProducts]);
   return (

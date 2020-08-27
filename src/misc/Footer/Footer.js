@@ -7,6 +7,8 @@ import { ReactComponent as Instagram } from "../../assets/instagram.svg";
 import { ReactComponent as Facebook } from "../../assets/facebook.svg";
 import { ReactComponent as Clock } from "../../assets/clock.svg";
 import { ReactComponent as Copyright } from "../../assets/copyright.svg";
+import { ReactComponent as Visa } from "../../assets/cc-visa.svg";
+import { ReactComponent as Mastercard } from "../../assets/cc-mastercard.svg";
 
 const Footer = () => {
   return (
@@ -17,7 +19,7 @@ const Footer = () => {
             <h4>Зв'язатися з нами</h4>
             <div className={s.row}>
               <Phone className={s.icon_ft} />
-              <span className={s.phone}>+ 38 (067) 208 81 45</span>
+              <span className={s.phone}>+ 380(96) 39 55 491</span>
             </div>
             <div className={s.row}>
               <Instagram className={s.icon_ft} />
@@ -89,6 +91,10 @@ const Footer = () => {
         </div>
         <div className={s.copyright}>
           <Copyright className={s.icon_ft} /> 1999-2020. Всі права захищені
+          <div className={s.pay}>
+            <Visa className={s.pay__type} />
+            <Mastercard className={s.pay__type} />
+          </div>
         </div>
       </FixedWrapper>
     </footer>

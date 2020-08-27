@@ -27,6 +27,7 @@ import { patchUserAction } from "../../store/actions/profileActions";
 import { showAlertAction } from "../../store/actions/alertActions";
 import GoBackBtn from "../../misc/GoBackBtn/GoBackBtn";
 import { ReactComponent as ShoppingCart } from "../../assets/shopping-cart.svg";
+import { ReactComponent as LiqPay } from "../../assets/logo-liqpay-main.svg";
 
 const deliveryOptions = [
   { value: "self-pickup", label: "Самовивіз" },
@@ -36,7 +37,7 @@ const deliveryOptions = [
 
 const payOptions = [
   { value: "cash", label: "Наложений платіж" },
-  { value: "card", label: "Картою" },
+  { value: "card", label: "Картою (LiqPay)" },
 ];
 
 const CreateOrder = ({
@@ -231,14 +232,32 @@ const CreateOrder = ({
                     Оновити мій профіль
                   </p>
                 </div>
-                <div className={s.submit__btn__container}>
-                  <Button
-                    title="Підтвердити замовлення"
-                    onClick={handleSubmit}
-                    isDisabled={!user._id || !values.fName || !values.lName}
-                    className={s.submit__btn}
-                  />
-                </div>
+                {/* {values.paymentType.value === "card" && (
+                  <a
+                    href="https://www.liqpay.ua/documentation/uk/api/aquiring/widget/"
+                    className={s.liqpay}
+                  >
+                    <LiqPay />
+                  </a>
+                )} */}
+                {values.paymentType?.value === "card" && (
+                  <a
+                    href="https://www.liqpay.ua/documentation/uk/api/aquiring/widget/"
+                    className={s.liqpay}
+                  >
+                    <LiqPay />
+                  </a>
+                )}
+                {values.paymentType?.value === "cash" && (
+                  <div className={s.submit__btn__container}>
+                    <Button
+                      title="Підтвердити замовлення"
+                      onClick={handleSubmit}
+                      isDisabled={!user._id || !values.fName || !values.lName}
+                      className={s.submit__btn}
+                    />
+                  </div>
+                )}
                 <GoBackBtn />
               </div>
             </div>

@@ -171,7 +171,11 @@
 .save__user__checkbox {
   margin-right: 10px;
 }
-
+.liqpay {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
 @media (max-width: 1000px) {
   .order__container {
     flex-direction: column;

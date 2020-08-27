@@ -94,8 +94,8 @@ const Profile = ({
   };
   const handleSubmit = () => {
     const submitData = { ...userData };
-    if (!Number.isNaN(submitData.phone)) {
-      if (submitData.phone.startsWith("0")) {
+    if (submitData.phone && !Number.isNaN(submitData.phone)) {
+      if (submitData.phone?.startsWith("0")) {
         submitData.phone = +`38${submitData.phone}`;
       } else {
         submitData.phone = +submitData.phone;

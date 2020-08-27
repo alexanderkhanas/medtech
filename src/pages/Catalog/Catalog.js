@@ -10,6 +10,7 @@ import {
   getCategoriesAction,
   getProducts,
   clearFilterAction,
+  getRecommendedProductsAction,
 } from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
 import { scrollToRef } from "../../utils/utils";
@@ -42,6 +43,7 @@ const Catalog = ({
   searchValue,
   clearFilter,
   products,
+  getRecommendedProducts,
 }) => {
   const [productViewType, setProductViewType] = useState("row");
   const [sortType, setSortType] = useState(sortSelectOption[0]);
@@ -146,6 +148,9 @@ const Catalog = ({
   useEffect(() => {
     if (!categories?.length) {
       getCategories();
+    }
+    if (!recommendedProducts?.length) {
+      getRecommendedProducts();
     }
   }, []);
 
@@ -258,8 +263,7 @@ const Catalog = ({
               <div className={s.carousel__container}>
                 <ItemsCarousel
                   arrows
-                  slidesPerPage={Math.floor(window.innerWidth / 450)}
-                  infinite
+                  slidesPerPage={Math.floor(window.innerWidth / 550)}
                 >
                   {recommendedProducts.map((product, i) => (
                     <ProductCard {...{ product }} key={product._id} />
@@ -305,6 +309,7 @@ const mapDispatchToProps = (dispatch) => {
     setLoading: (isLoading) => dispatch(setLoadingAction(isLoading)),
     getCategories: () => dispatch(getCategoriesAction()),
     clearFilter: (products) => dispatch(clearFilterAction(products)),
+    getRecommendedProducts: () => dispatch(getRecommendedProductsAction()),
   };
 };
 

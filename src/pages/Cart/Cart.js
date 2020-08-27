@@ -19,12 +19,7 @@ const Cart = ({ cartProducts, fullPrice, setFullPrice, showAlert, user }) => {
   const h = useHistory();
 
   const onSubmit = () => {
-    if (!user?._id) {
-      showAlert("Увійдіть, щоб зробити замовлення", "warning");
-      h.push({ pathname: "/login", state: { redirectTo: "/order" } });
-    } else {
       h.push("/order");
-    }
   };
 
   useEffect(() => {

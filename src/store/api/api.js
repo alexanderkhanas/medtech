@@ -9,7 +9,7 @@ export const fetchCities = (filterValue, limit = 20) => {
       FindByString: filterValue,
       Limit: limit,
     },
-    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
+    apiKey: "d17f3d73671e792f7bab4aa87ccce31f",
   });
 };
 
@@ -20,7 +20,7 @@ export const fetchWarehousesByCity = (CityName) => {
     methodProperties: {
       CityName,
     },
-    apiKey: "17b3c01a45f21ae7d45c3bc91e7f9fa6",
+    apiKey: "d17f3d73671e792f7bab4aa87ccce31f",
   });
 };
 

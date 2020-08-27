@@ -149,13 +149,15 @@ const App = ({
   useEffect(() => {
     (async () => {
       const localCart = getLocalCart();
+      const wishlistIds = getLocalWishlist();
 
-      const ids = localCart.map((item) => item._id);
+      const cartIds = localCart.map((item) => item._id);
 
-      const productsByIds = await fetchExactProducts(ids);
+      const cartProductsByIds = await fetchExactProducts(cartIds);
+      const wishlistProductsByIds = await fetchExactProducts(wishlistIds);
 
       let fullPrice = 0;
-      const cartProducts = productsByIds.map((product) => {
+      const cartProducts = cartProductsByIds.map((product) => {
         const localCartObj = localCart.filter(
           (item) => item._id === product._id
         )[0];
@@ -171,12 +173,7 @@ const App = ({
 
       setCart(cartProducts);
       setFullPrice(fullPrice);
-      const wishlistIds = getLocalWishlist();
-
-      const wishlistProducts = wishlistIds
-        ? allProducts.filter((product) => wishlistIds.includes(product._id))
-        : [];
-      setWishlist(wishlistProducts);
+      setWishlist(wishlistProductsByIds);
     })();
   }, [allProducts]);
   return (

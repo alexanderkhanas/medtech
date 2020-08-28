@@ -155,7 +155,6 @@ const App = ({
 
             const cartProductsByIds = await fetchExactProducts(cartIds);
             if (wishlistIds) {
-
                 const wishlistProductsByIds = await fetchExactProducts(wishlistIds);
                 setWishlist(wishlistProductsByIds);
             }

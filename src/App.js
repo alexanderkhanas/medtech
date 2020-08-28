@@ -154,7 +154,10 @@ const App = ({
       const cartIds = localCart.map((item) => item._id);
 
       const cartProductsByIds = await fetchExactProducts(cartIds);
-      const wishlistProductsByIds = await fetchExactProducts(wishlistIds);
+      if (wishlistIds) {
+        const wishlistProductsByIds = await fetchExactProducts(wishlistIds);
+        setWishlist(wishlistProductsByIds);
+      }
 
       let fullPrice = 0;
       const cartProducts = cartProductsByIds.map((product) => {
@@ -173,9 +176,6 @@ const App = ({
 
       setCart(cartProducts);
       setFullPrice(fullPrice);
-      if (wishlistProductsByIds?.length) {
-        setWishlist(wishlistProductsByIds);
-      }
     })();
   }, [allProducts]);
   return (
@@ -218,13 +218,7 @@ const App = ({
               redirectTo={`profile/${user._id}`}
               component={RestorePassword}
             />
-            <PrivateRoute
-              condition={!!user._id}
-              path="/order"
-              redirectTo="/login"
-              state={{ redirectTo: "/order" }}
-              component={Order}
-            />
+            <Route path="/order" component={Order} />
 
             {/* <Route
               path="/admin"

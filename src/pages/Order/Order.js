@@ -28,11 +28,11 @@ import { showAlertAction } from "../../store/actions/alertActions";
 import GoBackBtn from "../../misc/GoBackBtn/GoBackBtn";
 import { ReactComponent as ShoppingCart } from "../../assets/shopping-cart.svg";
 import { ReactComponent as LiqPay } from "../../assets/logo-liqpay-main.svg";
+import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
 
 const deliveryOptions = [
   { value: "self-pickup", label: "Самовивіз" },
-  { value: "np", label: "Нова пошта" },
-  { value: "up", label: "Укр пошта" },
+  { value: "NovaPoshta", label: "Нова пошта" },
 ];
 
 const payOptions = [
@@ -134,9 +134,13 @@ const CreateOrder = ({
   }, []);
 
   useEffect(() => {
-    setValues({ ...values, fName: user.fName, lName: user.lName });
+    setValues({
+      ...values,
+      fName: user.fName,
+      lName: user.lName,
+      phone: user.phone,
+    });
   }, [user]);
-
   return (
     <div className={s.container}>
       <div className={s.title__container}>
@@ -169,12 +173,21 @@ const CreateOrder = ({
                 />
                 <Input
                   placeholder="Doe"
-                  name="lName"
+                  name="outline: none;"
                   inputClass={s.input}
                   containerClass={s.input__container}
                   value={values.lName}
                   onChange={handleChange}
                   label="Прізвище"
+                />
+              </div>
+              <div className={s.phone__container}>
+                <PhoneNumberInput
+                  name="phone"
+                  value={values.phone}
+                  onChange={handleChange}
+                  className={s.phone__input}
+                  label="Номер телефону"
                 />
               </div>
               <Select
@@ -219,6 +232,7 @@ const CreateOrder = ({
                 onSearchValueChange={onWarehouseSearchChange}
                 label="Номер відділення"
               />
+
               <div className={s.actions__container}>
                 <div className={s.save__user__container}>
                   <input
@@ -232,14 +246,6 @@ const CreateOrder = ({
                     Оновити мій профіль
                   </p>
                 </div>
-                {/* {values.paymentType.value === "card" && (
-                  <a
-                    href="https://www.liqpay.ua/documentation/uk/api/aquiring/widget/"
-                    className={s.liqpay}
-                  >
-                    <LiqPay />
-                  </a>
-                )} */}
                 {values.paymentType?.value === "card" && (
                   <a
                     href="https://www.liqpay.ua/documentation/uk/api/aquiring/widget/"
@@ -253,7 +259,12 @@ const CreateOrder = ({
                     <Button
                       title="Підтвердити замовлення"
                       onClick={handleSubmit}
-                      isDisabled={!user._id || !values.fName || !values.lName}
+                      isDisabled={
+                        !user._id ||
+                        !values.fName ||
+                        !values.lName ||
+                        !values.phone
+                      }
                       className={s.submit__btn}
                     />
                   </div>
@@ -272,6 +283,7 @@ const formikHOC = withFormik({
   mapPropsToValues: (props) => ({
     lName: props.user.fName,
     fName: props.user.lName,
+    phone: props.user.phone,
     deliveryType: deliveryOptions[0],
     paymentType: payOptions[0],
     isSaveUser: false,
@@ -287,6 +299,8 @@ const formikHOC = withFormik({
         fullPrice,
         showAlert,
         setCart,
+        selectedCity,
+        selectedWarehouse,
       },
       resetForm,
     }
@@ -299,11 +313,24 @@ const formikHOC = withFormik({
       })
     );
     if (values.isSaveUser) {
-      patchUser({ ...user, fName: values.fName, lName: values.lName });
+      patchUser({
+        ...user,
+        fName: values.fName,
+        lName: values.lName,
+        phone: values.phone,
+      });
     }
+    console.log("selectedWarehouse ===", selectedWarehouse);
+    console.log("selectedCity ===", selectedCity);
     const isSuccess = await createOrder({
       products,
       delivery: values.deliveryType.value,
+      phone: 99135713,
+      deliveryCity: selectedCity,
+      deliveryHouse: null,
+      deliveryStreet: null,
+      deliveryApartament: null,
+      deliveryWarehouse: selectedWarehouse,
       paymentType: values.paymentType.value,
       sum: fullPrice,
       userID: user._id,
@@ -316,6 +343,7 @@ const formikHOC = withFormik({
       resetForm({
         lName: "",
         fName: "",
+        phone: "",
         deliveryType: deliveryOptions[0],
         paymentType: payOptions[0],
         isSaveUser: false,

@@ -421,6 +421,7 @@ const formikHOC = withFormik({
     };
 
     let galleryFormData = null;
+    console.log("gallery files length ===", val.galleryFiles.length)
     if (val.galleryFiles.length) {
       galleryFormData = new FormData();
       val.galleryFiles.forEach((image) => {
@@ -436,27 +437,28 @@ const formikHOC = withFormik({
 
     if (isSuccess) {
       showAlert("Товар змінено успішно!", "success");
+      resetForm({
+        title: "",
+        desc: "",
+        gallery: [],
+        galleryFiles: [],
+        price: "",
+        article: "",
+        quantity: 1,
+        recommended: false,
+        attributesLabels: [],
+        attrOptions: [],
+        attributes: {},
+        vendor: {},
+        category: {},
+        isPriceChanges: false,
+        _id: "",
+      });
     } else {
       showAlert("Сталась помилка!", "error");
     }
 
-    resetForm({
-      title: "",
-      desc: "",
-      gallery: [],
-      galleryFiles: [],
-      price: "",
-      article: "",
-      quantity: 1,
-      recommended: false,
-      attributesLabels: [],
-      attrOptions: [],
-      attributes: {},
-      vendor: {},
-      category: {},
-      isPriceChanges: false,
-      _id: "",
-    });
+
   },
 })(EditProduct);
 
@@ -475,7 +477,6 @@ const mapDispatchToProps = (dispatch) => {
     getAttributes: () => dispatch(getAttributesAction()),
     getProduct: (id) => dispatch(getSingleProductAction(id)),
     showAlert: (content, type) => dispatch(showAlertAction(content, type)),
-
     editProduct: (product, gallery, id) =>
       dispatch(editProductAction(product, gallery, id)),
   };

@@ -99,3 +99,5 @@ export const isEqual = (a, b) => {
 
   return true;
 };
+
+export const getLocalWishlist = () => localStorage.getItem("_wishlist")?.split(" ");

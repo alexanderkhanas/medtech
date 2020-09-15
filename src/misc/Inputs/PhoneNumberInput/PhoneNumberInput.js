@@ -1,4 +1,5 @@
 import React from "react";
+import s from "./PhoneNumberInput.module.css";
 import InputMask from "react-input-mask";
 import Input from "../Input/Input";
 
@@ -8,6 +9,7 @@ const PhoneNumberInput = ({
   onFocus = () => {},
   onBlur = () => {},
   children,
+  label,
   ...rest
 }) => (
   <InputMask
@@ -18,6 +20,7 @@ const PhoneNumberInput = ({
     {...{ onFocus }}
     {...{ onBlur }}
     {...{ onChange }}
+    {...{ label }}
   >
     {(inputProps) => (
       <Input {...rest} {...inputProps} type="tel">

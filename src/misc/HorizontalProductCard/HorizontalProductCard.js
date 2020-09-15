@@ -18,12 +18,12 @@ const HorizontalProductCard = ({ product, isSmall, className }) => {
 
   return (
     <div className={`${s.container} ${className}`}>
-      <img
-        onClick={redirectToSingle}
-        src={gallery[0] || require("../../assets/image-placeholder.webp")}
-        alt="loading"
-        className={s.img}
-      />
+      {!isSmall && <img
+          onClick={redirectToSingle}
+          src={gallery && gallery[0] || require("../../assets/image-placeholder.webp")}
+          alt="loading"
+          className={s.img}
+      />}
       <div
         className={
           isSmall
@@ -33,7 +33,7 @@ const HorizontalProductCard = ({ product, isSmall, className }) => {
       >
         <div className={s.info__container}>
           <h3 className={s.title} onClick={redirectToSingle}>
-            {title}
+            {isSmall ? title?.slice(0, 40) : title}
           </h3>
           <h2 className={s.price}>{price}₴</h2>
           {!isSmall && <p className={s.desc}>{desc.slice(0, 40)}</p>}

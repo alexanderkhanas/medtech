@@ -4,7 +4,7 @@ import {
   SET_LOGGED_IN,
   SET_ADMIN,
   SET_ORDER_HISTORY,
-  SET_USER_ORDERS_PRODUCTS,
+  SET_USER_ORDERS_PRODUCTS, ADD_HISTORY_ITEM,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -54,6 +54,12 @@ export default (state = initialState, action) => {
         ...state,
         orders: action.orders,
       };
+
+    case ADD_HISTORY_ITEM:
+      return {
+        ...state,
+        orders: [...state.orders, action.order]
+      }
 
     case SET_USER_ORDERS_PRODUCTS:
       return {

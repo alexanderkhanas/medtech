@@ -33,7 +33,7 @@ const OrderProductCard = ({
           <Link to={`/product/${_id}`}>
             <img
               className={s.img}
-              src={gallery[0] || require("../../assets/image-placeholder.webp")}
+              src={gallery && gallery[0]|| require("../../assets/image-placeholder.webp")}
               alt="loading"
             />
           </Link>

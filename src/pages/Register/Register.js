@@ -291,8 +291,12 @@ const Register = ({ register }) => {
                         Продовжити покупки
                       </button>
                       <div className={s.logwith}>
-                        <Google className={`${s.logicon} ${s.gl}`} />
-                        <Facebook className={`${s.logicon} ${s.fb} `} />
+                        <a href="https://medtechnika.te.ua/api/v1/login/google">
+                          <Google className={`${s.logicon} ${s.gl}`} />
+                        </a>
+                        <a href="https://medtechnika.te.ua/api/v1/login/fb">
+                          <Facebook className={`${s.logicon} ${s.fb} `} />
+                        </a>
                       </div>
                     </div>
                   </div>

@@ -158,7 +158,9 @@ const Home = ({
           </div>
         </div>
         <div className={s.section}>
-          <h3 className={s.section__title}>Останні товари</h3>
+          <Link to="/catalog">
+            <h3 className={s.section__title}>Останні товари</h3>
+          </Link>
           <ItemsCarousel arrows {...{ slidesPerPage }}>
             {newProducts.map((product, i) => (
               <ProductCard key={product._id} {...{ product }} />

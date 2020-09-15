@@ -1,11 +1,10 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useEffect} from "react";
 import s from "./Order.module.css";
 import {connect} from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import Select from "../../misc/Select/Select";
 import Button from "../../misc/Button/Button";
-import {useHistory} from "react-router-dom";
-import CartProduct from "../../misc/CartProductCard/CartProduct";
+import {Redirect, withRouter} from "react-router-dom";
 import {
     addToCartAction,
     removeFromCartAction,
@@ -13,7 +12,7 @@ import {
     setCart,
 } from "../../store/actions/cartActions";
 import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
-import {Formik, withFormik} from "formik";
+import {withFormik} from "formik";
 import Input from "../../misc/Inputs/Input/Input";
 import {
     getCitiesAction,
@@ -27,6 +26,8 @@ import {patchUserAction} from "../../store/actions/profileActions";
 import {showAlertAction} from "../../store/actions/alertActions";
 import GoBackBtn from "../../misc/GoBackBtn/GoBackBtn";
 import {ReactComponent as ShoppingCart} from "../../assets/shopping-cart.svg";
+import PhoneNumberInput from "../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
+import {LiqPayPay} from "react-liqpay";
 
 const deliveryOptions = [
     {value: "self-pickup", label: "Самовивіз"},
@@ -35,7 +36,7 @@ const deliveryOptions = [
 
 const payOptions = [
     {value: "cash", label: "Наложений платіж"},
-    {value: "card", label: "Картою"},
+    {value: "card", label: "Картою (LiqPay)"},
 ];
 
 const CreateOrder = ({
@@ -50,14 +51,12 @@ const CreateOrder = ({
                          setSelectedCity,
                          warehouses,
                          filterWarehouses,
-                         selectedWarehouse,
-                         selectedCity,
                          user,
-                         patchUser,
                          handleChange,
                          values,
                          setValues,
                          handleSubmit,
+                         isLoading
                      }) => {
     const breadCrumbsItems = [
         {
@@ -87,14 +86,14 @@ const CreateOrder = ({
 
     const onCitySearchChange = (value) => {
         if (cities.length === 1 && value === cities[0].Description) {
-            setSelectedCity(value);
+            setValues({...values, selectedCity: value})
             getWarehouses(value);
         }
         filterCities(value);
     };
 
     const onCitySelect = (option) => {
-        setSelectedCity(option.label);
+        setValues({...values, selectedCity: option.label})
         getWarehouses(option.label);
     };
 
@@ -107,14 +106,9 @@ const CreateOrder = ({
         }
     };
 
-    const onWarehouseSearchChange = (value) => {
-    };
-
     const onWarehouseSelect = (option) => {
-        setSelectedWarehouse(option.label);
+        setValues({...values, selectedWarehouse: option.value})
     };
-
-    const h = useHistory();
 
     useEffect(() => {
         setFullPrice(
@@ -133,10 +127,16 @@ const CreateOrder = ({
     }, []);
 
     useEffect(() => {
-        setValues({...values, fName: user.fName, lName: user.lName});
+        setValues({
+            ...values,
+            fName: user.fName,
+            lName: user.lName,
+            phone: user.phone,
+        });
     }, [user]);
-
-    return (
+    return !cartProducts.length && !isLoading ? (
+        <Redirect to="/" />
+    ) : (
         <div className={s.container}>
             <div className={s.title__container}>
                 <h4 className={s.title}>Замовлення</h4>
@@ -174,6 +174,15 @@ const CreateOrder = ({
                                     value={values.lName}
                                     onChange={handleChange}
                                     label="Прізвище"
+                                />
+                            </div>
+                            <div className={s.phone__container}>
+                                <PhoneNumberInput
+                                    name="phone"
+                                    value={values.phone}
+                                    onChange={handleChange}
+                                    className={s.phone__input}
+                                    label="Номер телефону"
                                 />
                             </div>
                             <Select
@@ -215,9 +224,9 @@ const CreateOrder = ({
                                     label: warehouse.Description,
                                 }))}
                                 onSelect={onWarehouseSelect}
-                                onSearchValueChange={onWarehouseSearchChange}
                                 label="Номер відділення"
                             />
+
                             <div className={s.actions__container}>
                                 <div className={s.save__user__container}>
                                     <input
@@ -232,10 +241,26 @@ const CreateOrder = ({
                                     </p>
                                 </div>
                                 <div className={s.submit__btn__container}>
+                                    {/*<LiqPayPay*/}
+                                    {/*    publicKey="sandbox_i7961872980"*/}
+                                    {/*    privateKey="sandbox_igIHtRIrF2IT63rResIB5zLosOTjJvEGEnI419Y8"*/}
+                                    {/*    amount={`${fullPrice}`}*/}
+                                    {/*    description="Оплата замовлення"*/}
+                                    {/*    currency="UAH"*/}
+                                    {/*    orderId={""}*/}
+                                    {/*    product_description="Оплата замовлення"*/}
+                                    {/*    style={{ margin: "8px" }}*/}
+                                    {/*    extra={[<Button title={`Оплатити ${fullPrice} грн. (LiquidPay)`} />]}*/}
+                                    {/*/>*/}
                                     <Button
                                         title="Підтвердити замовлення"
                                         onClick={handleSubmit}
-                                        isDisabled={!values.fName || !values.lName}
+                                        isDisabled={
+                                            // !user._id ||
+                                            !values.fName ||
+                                            !values.lName ||
+                                            !values.phone
+                                        }
                                         className={s.submit__btn}
                                     />
                                 </div>
@@ -253,9 +278,12 @@ const formikHOC = withFormik({
     mapPropsToValues: (props) => ({
         lName: props.user.fName,
         fName: props.user.lName,
+        phone: props.user.phone,
         deliveryType: deliveryOptions[0],
         paymentType: payOptions[0],
         isSaveUser: false,
+        selectedWarehouse: "",
+        selectedCity: ""
     }),
     handleSubmit: async (
         values,
@@ -268,8 +296,7 @@ const formikHOC = withFormik({
                 fullPrice,
                 showAlert,
                 setCart,
-                selectedCity,
-                selectedWarehouse
+                history
             },
             resetForm,
         }
@@ -281,42 +308,60 @@ const formikHOC = withFormik({
                 quantity,
             })
         );
-        if (values.isSaveUser) {
-            patchUser({...user, fName: values.fName, lName: values.lName});
+        let correctPhone = values.phone
+        if (values.phone && !Number.isNaN(values.phone)) {
+            if (values.phone?.startsWith("0")) {
+                correctPhone = +`38${values.phone}`;
+            } else {
+                correctPhone = +values.phone;
+            }
         }
-        console.log("selectedWarehouse ===", selectedWarehouse)
-        console.log("selectedCity ===", selectedCity)
-        const isSuccess = await createOrder({
+        if (values.isSaveUser) {
+            patchUser({
+                ...user,
+                fName: values.fName,
+                lName: values.lName,
+                phone: values.phone,
+            });
+        }
+
+        const orderData = await createOrder({
             products,
-            delivery:
-            values.deliveryType.value,
-            phone: 99135713,
-            deliveryCity: selectedCity,
+            phone: values.phone,
+            deliveryCity: values.selectedCity,
             deliveryHouse: null,
             deliveryStreet: null,
             deliveryApartament: null,
-            deliveryWarehouse: selectedWarehouse,
+            deliveryWarehouse: values.selectedWarehouse,
             paymentType: values.paymentType.value,
             sum: fullPrice,
-            userID: user._id,
-            status: "created",
+            userID: user._id || null,
+            status: values.paymentType.value === "card" ? "waitForPayment" : "created",
         });
-        if (isSuccess) {
+        if (orderData) {
+            console.log("order data ===", orderData)
             showAlert("Замовлення створено успішно!", "success");
+
             setCart([]);
             localStorage.removeItem("_cart");
             resetForm({
                 lName: "",
                 fName: "",
+                phone: "",
                 deliveryType: deliveryOptions[0],
                 paymentType: payOptions[0],
                 isSaveUser: false,
             });
+            if (values.paymentType.value === "card") {
+                history.push(`/order/payment/${orderData._id}/${orderData.sum}`)
+            }
         } else {
             showAlert("Сталась помилка при створенні замовлення.");
         }
     },
 })(CreateOrder);
+
+const routerHOC = withRouter(formikHOC)
 
 const mapStateToProps = (state) => {
     return {
@@ -324,8 +369,7 @@ const mapStateToProps = (state) => {
         fullPrice: state.cart.fullPrice,
         cities: state.order.cities,
         warehouses: state.order.warehouses,
-        selectedWarehouse: state.order.selectedWarehouse,
-        selectedCity: state.order.selectedCity,
+        isLoading: state.base.isLoading,
         user: state.profile,
     };
 };
@@ -350,4 +394,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);
+export default connect(mapStateToProps, mapDispatchToProps)(routerHOC);

@@ -128,11 +128,22 @@
 .input__container:last-child {
   margin-left: 30px;
 }
+.phone__container {
+  margin-top: 20px;
+}
+.phone__input {
+  flex-grow: 1;
+  background: none;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  color: #404040;
+  padding: 10px 15px;
+  outline: none;
+}
 
 .input {
   background: none;
   border-radius: 10px;
-
   border: 1px solid #ccc;
   color: #404040;
 }
@@ -171,7 +182,11 @@
 .save__user__checkbox {
   margin-right: 10px;
 }
-
+.liqpay {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
 @media (max-width: 1000px) {
   .order__container {
     flex-direction: column;

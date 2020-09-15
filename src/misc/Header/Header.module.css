@@ -23,6 +23,8 @@ header {
 .header__info__tag {
   border: none;
   margin-left: 20px;
+  text-decoration: none;
+  color: black;
 }
 
 /* .header__info__tag > span {
@@ -238,7 +240,7 @@ header {
   width: 100%;
   z-index: 1;
   background: #fff;
-  overflow: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -249,6 +251,14 @@ header {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #ccc;
+}
+
+.mobile__search__product {
+  flex: 1
+}
+
+.mobile__search__product__container {
+  width: 100%
 }
 
 .search__container .mobile__search__product h3 {
@@ -281,6 +291,7 @@ header {
 
 .product {
   flex: 1;
+  height: 150px !important;
 }
 
 .mobile__logo__container {

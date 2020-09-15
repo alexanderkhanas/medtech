@@ -18,6 +18,8 @@ const Wishlist = ({ wishlistProducts }) => {
     { name: "Улюблені", path: "/wishlist" },
   ];
 
+  console.log("wishlist ---", wishlistProducts);
+
   return (
     <>
       <div className={s.title__container}>
@@ -27,7 +29,7 @@ const Wishlist = ({ wishlistProducts }) => {
       <FixedWrapper>
         <div className={s.container}>
           <div className={s.products__container}>
-            {wishlistProducts.map((product, i) =>
+            {wishlistProducts?.map((product, i) =>
               window.innerWidth >= 800 ? (
                 <HorizontalProductCard
                   {...{ product }}

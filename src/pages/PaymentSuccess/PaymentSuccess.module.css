@@ -1,0 +1,20 @@
+.background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 80vh;
+}
+
+.icon {
+    font-size: 100px;
+    color: #f8eaea;
+    margin: 0;
+}
+
+.title {
+    color: #2bbd86;
+    font-family: "Open Sans", sans-serif;
+    max-width: 80%;
+    text-align: center;
+}

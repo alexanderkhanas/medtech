@@ -326,6 +326,7 @@ export const editProductAction = (product, gallery, id) => {
 
     if (productRes.status === 200) {
       let productGallery = productRes.gallery;
+      console.log("gallery ===", gallery)
       if (gallery) {
         const galleryResponse = await postProductGallery(
           gallery,

@@ -55,31 +55,21 @@ const Footer = () => {
               </Link>
             </button>
             <button>
-              <Link to="/public-offer" className={s.btn_cl}>
-                <p>Контакти</p>
+              <Link to="/catalog" className={s.btn_cl}>
+                <p>Каталог</p>
               </Link>
             </button>
           </div>
           <div className={s.inf}>
             <h4>Корисна інформація</h4>
             <button>
-              <Link to="/public-offer" className={s.btn_cl}>
+              <Link to="/delivery-inf" className={s.btn_cl}>
                 <p>Доставка і оплата</p>
               </Link>
             </button>
             <button>
-              <Link to="/public-offer" className={s.btn_cl}>
-                <p>Часті запитання</p>
-              </Link>
-            </button>
-            <button>
-              <Link to="/public-offer" className={s.btn_cl}>
+              <Link to="/garant" className={s.btn_cl}>
                 <p>Гарантія і повернення</p>
-              </Link>
-            </button>
-            <button>
-              <Link to="/public-offer" className={s.btn_cl}>
-                <p>Про бонус систему</p>
               </Link>
             </button>
             <button>

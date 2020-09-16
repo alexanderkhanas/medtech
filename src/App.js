@@ -40,6 +40,8 @@ const Politics = lazy(() => import("./misc/Politics/Politics"));
 const PublicOffer = lazy(() => import("./misc/PublicOffer/PublicOffer"));
 const Admin = lazy(() => import("./pages/Admin/Admin"));
 const Order = lazy(() => import("./pages/Order/Order"));
+const Garant = lazy(() => import("./pages/Garant/Garant"));
+const DeliveryInfo = lazy(() => import("./pages/DeliveryInfo/DeliveryInfo"));
 const EditOrder = lazy(() => import("./pages/Admin/pages/EditOrder/EditOrder"));
 const EditNews = lazy(() => import("./pages/Admin/pages/EditNews/EditNews"));
 const EditUser = lazy(() => import("./pages/Admin/pages/EditUser/EditUser"));
@@ -100,7 +102,7 @@ const App = ({
             };
         }, []);
 
-        // const token = useMemo(() => {
+  // const token = useMemo(() => {
         //     return document.cookie.includes("token")
         //         ? document.cookie
         //             .split("; ")
@@ -118,7 +120,7 @@ const App = ({
         //         : null;
         // }, []);
 
-        // const getUserByToken = async (userToken, type) => {
+  // const getUserByToken = async (userToken, type) => {
         //     if (userToken) {
         //         const isSuccess = await getUser(userToken);
         //         if (isSuccess) {
@@ -128,25 +130,25 @@ const App = ({
         //     // document.cookie = `${type}=""; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
         //     // return false;
         // };
-        // console.log('mid === ', token)
+  // console.log('mid === ', token)
 
-        useEffect(() => {
-            (async () => {
-                const loginData = localStorage.getItem("_login");
-                getProducts();
-                getUser();
+  useEffect(() => {
+    (async () => {
+      const loginData = localStorage.getItem("_login");
+      getProducts();
+      getUser();
                 if (loginData) {
-                    await autologin(JSON.parse(loginData));
-                }
-            })();
-        }, []);
+        await autologin(JSON.parse(loginData));
+      }
+    })();
+  }, []);
 
-        useEffect(() => {
-                (async () => {
-                        await getCart();
-                        await getWishlist()
-                    }
-                )();
+  useEffect(() => {
+    (async () => {
+      await getCart();
+      await getWishlist();
+    })();
+
             }, [allProducts]
         );
 
@@ -163,37 +165,38 @@ const App = ({
                             <Route path="/cart" component={Cart}/>
                             <Route path="/catalog" component={Catalog}/>
                             <Route path="/public-offer" component={PublicOffer}/>
-                            <Route path="/politics" component={Politics}/>
-                            <Route path="/about-us" component={AboutUs}/>
-                            <Route path="/news" component={News}/>
-                            <Route path="/single-news/:id" component={SingleNews}/>
-                            <PrivateRoute
-                                path="/login"
-                                condition={!user._id}
-                                redirectTo={`profile`}
-                                component={Login}
-                            />
-                            <PrivateRoute
-                                path="/register"
-                                redirectTo={`profile`}
+                            <Route path="/politics" component={Politics}/><Route path="/garant" component={Garant} />
+            <Route path="/delivery-inf" component={DeliveryInfo} />
+            <Route path="/about-us" component={AboutUs} />
+            <Route path="/news" component={News} />
+            <Route path="/single-news/:id" component={SingleNews} />
+            <PrivateRoute
+              path="/login"
+              condition={!user._id}
+              redirectTo={`profile`}
+              component={Login}
+            />
+            <PrivateRoute
+              path="/register"
+              redirectTo={`profile`}
                                 condition={!user._id}
                                 component={Register}
                             />
                             <PrivateRoute
                                 condition={!!user._id}
                                 // condition={!!token}
-                                path="/profile"
-                                component={Profile}
-                            />
-                            <PrivateRoute
-                                condition={!user._id}
-                                path="/restore"
-                                redirectTo={`profile`}
-                                component={RestorePassword}
-                            />
-                            <Route path="/order" exact component={Order}/>
-                            <Route path="/order/payment/:id/:amount" component={OrderPayment}/>
-                            <Route path="/payment/success" component={PaymentSuccess}/>
+              path="/profile"
+              component={Profile}
+            />
+            <PrivateRoute
+              condition={!user._id}
+              path="/restore"
+              redirectTo={`profile`}
+              component={RestorePassword}
+            />
+            <Route path="/order" exact component={Order} />
+            <Route path="/order/payment/:id/:amount" component={OrderPayment} />
+            <Route path="/payment/success" component={PaymentSuccess} />
 
                             {/* <Route
               path="/admin"

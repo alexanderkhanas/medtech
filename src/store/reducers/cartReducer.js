@@ -27,6 +27,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         all: action.cart,
+        fullPrice: action.fullPrice ? action.fullPrice : state.fullPrice,
       };
 
     case SET_NUMBER_CART:

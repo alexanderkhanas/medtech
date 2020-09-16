@@ -4,7 +4,7 @@ import {
   SET_SELECTED_CITY,
   SET_SELECTED_WAREHOUSE,
   SET_WAREHOUSES,
-  SET_LOADING,
+  SET_LOADING, ADD_HISTORY_ITEM,
 } from "./actionTypes";
 import { getAdminToken, getToken } from "../../utils/utils";
 
@@ -49,8 +49,10 @@ export const submitOrderAction = (order, type = "user") => {
     }
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await postOrder(order, token);
-
     dispatch({ type: SET_LOADING, isLoading: false });
-    return response.status === 200;
+    if (response?.status === 200) {
+      dispatch({type: ADD_HISTORY_ITEM, order: response.data})
+    }
+    return response?.status === 200 ? response.data : false;
   };
 };

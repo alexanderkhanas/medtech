@@ -10,6 +10,16 @@
   align-items: center;
 }
 
+.orderInner {
+  margin: 0 20px;
+}
+
+.orderInfoRow {
+  display: flex;
+  justify-content: space-between;
+  margin: 3px 0;
+}
+
 .title {
   text-align: center;
   font-weight: 300;

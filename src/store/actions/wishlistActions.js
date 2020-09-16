@@ -3,6 +3,8 @@ import {
   REMOVE_FROM_WISHLIST,
   SET_WISHLIST,
 } from "./actionTypes";
+import {getLocalWishlist} from "../../utils/utils";
+import {fetchExactProducts} from "../api/api";
 
 export const addToWishlistAction = (product) => {
   const wishlist = localStorage.getItem("_wishlist");
@@ -32,3 +34,17 @@ export const setWishlist = (wishlist) => {
     wishlist,
   };
 };
+
+export const getWishlistAction = () => {
+  return async dispatch => {
+    const wishlistIds = getLocalWishlist();
+    if (wishlistIds?.length) {
+      const wishlist = await fetchExactProducts(wishlistIds.join(","));
+      dispatch({
+        type: SET_WISHLIST,
+        wishlist,
+      });
+    }
+  }
+
+}

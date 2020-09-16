@@ -26,6 +26,7 @@ const Button = ({
     <button
       {...rest}
       {...{ onClick }}
+        disabled={isDisabled}
       className={`${classes} ${s[`button__${size}`]}`}
     >
       {/* {!!icon && <FontAwesomeIcon className={s.icon} {...{ icon }} />} */}

@@ -11,6 +11,7 @@ const initialState = {
   email: "",
   fName: "",
   fatherName: "",
+  phone: "",
   gallery: [],
   lName: "",
   token: "",
@@ -30,6 +31,7 @@ export default (state = initialState, action) => {
         fatherName: action.user.fatherName,
         gallery: action.user.gallery,
         lName: action.user.lName,
+        phone: action.user.phone,
         _id: action.user._id,
         isLogged: true,
       };

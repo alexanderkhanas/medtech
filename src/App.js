@@ -36,6 +36,8 @@ const News = lazy(() => import("./pages/News/News"));
 const SingleNews = lazy(() => import("./pages/SingleNews/SingleNews"));
 const Politics = lazy(() => import("./misc/Politics/Politics"));
 const PublicOffer = lazy(() => import("./misc/PublicOffer/PublicOffer"));
+const Garant = lazy(() => import("./pages/Garant/Garant"));
+const DeliveryInfo = lazy(() => import("./pages/DeliveryInfo/DeliveryInfo"));
 const Admin = lazy(() => import("./pages/Admin/Admin"));
 const Order = lazy(() => import("./pages/Order/Order"));
 const EditOrder = lazy(() => import("./pages/Admin/pages/EditOrder/EditOrder"));
@@ -124,9 +126,9 @@ const App = ({
       if (isSuccess) {
         return true;
       }
-      document.cookie = `${type}=""; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-      return false;
     }
+    document.cookie = `${type}=""; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    return false;
   };
 
   useEffect(() => {
@@ -191,6 +193,8 @@ const App = ({
             <Route path="/cart" component={Cart} />
             <Route path="/catalog" component={Catalog} />
             <Route path="/public-offer" component={PublicOffer} />
+            <Route path="/garant" component={Garant} />
+            <Route path="/delivery-inf" component={DeliveryInfo} />
             <Route path="/politics" component={Politics} />
             <Route path="/about-us" component={AboutUs} />
             <Route path="/news" component={News} />
@@ -198,24 +202,24 @@ const App = ({
             <PrivateRoute
               path="/login"
               condition={!user._id}
-              redirectTo={`profile/${user._id}`}
+              redirectTo={"/profile"}
               component={Login}
             />
             <PrivateRoute
               path="/register"
-              redirectTo={`profile/${user._id}`}
+              redirectTo={"/profile"}
               condition={!user._id}
               component={Register}
             />
             <PrivateRoute
               condition={!!user._id}
-              path="/profile/:id"
+              path="/profile"
               component={Profile}
             />
             <PrivateRoute
               condition={!user._id}
               path="/restore"
-              redirectTo={`profile/${user._id}`}
+              redirectTo={"/profile"}
               component={RestorePassword}
             />
             <Route path="/order" component={Order} />

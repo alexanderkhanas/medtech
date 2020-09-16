@@ -173,10 +173,10 @@ const Auth = ({
                       <GoBackBtn />
                     </div>
                     <div className={s.logwith}>
-                      <a href='https://medtechnika.te.ua/api/v1/login/google'>
+                      <a href="https://medtechnika.te.ua/api/v1/login/google">
                         <Google className={`${s.logicon} ${s.gl}`} />
                       </a>
-                      <a href='https://medtechnika.te.ua/api/v1/login/fb'>
+                      <a href="https://medtechnika.te.ua/api/v1/login/fb">
                         <Facebook className={`${s.logicon} ${s.fb} `} />
                       </a>
                     </div>

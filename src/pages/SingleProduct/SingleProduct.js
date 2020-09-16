@@ -97,8 +97,11 @@ const SingleProduct = ({
         }
         if (isInCart) {
             removeFromCart(product);
-        } else {
+        } else if (quantity >= 1) {
             addToCart(product, foundAttributes);
+        }
+        if (quantity === 0) {
+            showAlert("Немає в наявності")
         }
     };
 
@@ -209,24 +212,13 @@ const SingleProduct = ({
                                     <img
                                         className={s.main__image}
                                         key={img + i}
-                                        src={title?.includes("Тонометр")
-                                            ? "https://ortop.ua/content/images/32/avtomaticheskiy-tonometr-and-ua-888eac-s-adapterom-19978614581333_small11.png"
-                                            : title?.includes("Нагнітач")
-                                                ? "https://www.medtechnika.com.ua/media/amasty/amoptmobile/catalog/product/cache/baf6f8f808a496b7feacb97c14d7fe0e/r/d/rd-ng-02-2_jpg.webp"
-                                                : "https://www.medtechnika.com.ua/media/amasty/webp/catalog/product/cache/ed9abe2e7e962851fb909ec1e05fa292/r/d/rd-pvc1-m-1_1_jpg.webp"}
-                                        // src={img || require("../../assets/image-placeholder.webp")}
+                                        src={img || require("../../assets/image-placeholder.webp")}
                                         alt="loading"
                                     />
                                 ))
                             ) : (
                                 <img
-                                    // src={require("../../assets/image-placeholder.webp")}
-                                    src={title?.includes("Тонометр")
-                                        ? "https://ortop.ua/content/images/32/avtomaticheskiy-tonometr-and-ua-888eac-s-adapterom-19978614581333_small11.png"
-                                        : title?.includes("Нагнітач")
-                                            ? "https://www.medtechnika.com.ua/media/amasty/amoptmobile/catalog/product/cache/baf6f8f808a496b7feacb97c14d7fe0e/r/d/rd-ng-02-2_jpg.webp"
-                                            : "https://www.medtechnika.com.ua/media/amasty/webp/catalog/product/cache/ed9abe2e7e962851fb909ec1e05fa292/r/d/rd-pvc1-m-1_1_jpg.webp"}
-                                    // src={img || require("../../assets/image-placeholder.webp")}
+                                    src={require("../../assets/image-placeholder.webp")}
                                     className={s.main__image}
                                     alt="loading"
                                 />
@@ -239,7 +231,7 @@ const SingleProduct = ({
                             <h2 className={s.price}>{priceInfo.string || `${price}₴`}</h2>
                             <div className={s.button__container}>
                                 <Button
-                                    title={isInCart ? "В кошику" : "Додати в кошик"}
+                                    title={isInCart && quantity > 0 ? "В кошику" : "Додати в кошик"}
                                     className={classnames({
                                         [s.active__cart__button]: isInCart,
                                     })}
@@ -248,7 +240,7 @@ const SingleProduct = ({
                             </div>
                         </div>
                         <p className={s.desc}>
-                            {desc.slice(0, 300)}
+                            {desc && desc.slice(0, 300)}
                             <button onClick={scrollToDescription}>Більше</button>
                         </p>
                         <div className={s.attributes__wrapper} ref={attributesRef}>
@@ -306,7 +298,7 @@ const SingleProduct = ({
                             <p className={s.desc}>{desc}</p>
                         </TabPanel>
                         <TabPanel className={s.tab__content}>
-                            {reviews.map(
+                            {reviews && reviews.map(
                                 (
                                     {
                                         userID: reviewUserID,
@@ -382,7 +374,7 @@ const SingleProduct = ({
                                                 className={s.save__profile__btn}
                                                 onClick={handleSubmit}
                                             >
-                                                Змінити
+                                                Залишити
                                                 <span className={s.profile__btn__overlay}>
                           <PencilAlt
                               className={s.profile__btn__overlay__icon}
@@ -442,7 +434,7 @@ const SingleProduct = ({
                         <meta
                             itemProp="ratingValue"
                             content={
-                                reviews.reduce((prev, curr) => prev + curr.rating, 0) /
+                                reviews && reviews.reduce((prev, curr) => prev + curr.rating, 0) /
                                 reviews.length || 5
                             }
                         />
@@ -453,17 +445,17 @@ const SingleProduct = ({
                             itemType="http://schema.org/Person"
                             itemScope
                         >
-                            <meta itemProp="name" content={reviews[0]?.userID?.fName}/>
+                            <meta itemProp="name" content={reviews && reviews[0]?.userID?.fName}/>
                         </div>
                         <div
                             itemProp="reviewRating"
                             itemType="http://schema.org/Rating"
                             itemScope
                         >
-                            <meta itemProp="ratingValue" content={reviews[0]?.rating}/>
+                            <meta itemProp="ratingValue" content={reviews && reviews[0]?.rating}/>
                             <meta
                                 itemProp="bestRating"
-                                content={Math.max(reviews.map((review) => review.rating))}
+                                content={Math.max(reviews && reviews.map((review) => review.rating))}
                             />
                         </div>
                     </div>

@@ -237,7 +237,7 @@ const Header = ({
                             <div className={s.small_menu_button}>
                                 {user.isLogged && !user.isAdmin && user._id && (
                                     <Link
-                                        to={`/profile/${user._id}`}
+                                        to={`/profile`}
                                         style={{marginRight: 0}}
                                         className={classnames(s.nav__link, s.profile__nav__link, {
                                             [s.nav__link__active]: pathname.startsWith("/profile"),
@@ -399,7 +399,7 @@ const Header = ({
                     Новини
                 </Link>
                 {user.isLogged && !user.isAdmin && (
-                    <Link to={`/profile/${user._id}`}>
+                    <Link to={`/profile`}>
                         <User className={s.header_icon}/>
                         Мій профіль
                     </Link>

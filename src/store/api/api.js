@@ -272,8 +272,8 @@ export const postProductGallery = (gallery, id, token, isThumbnail) => {
   );
 };
 
-export const fetchUserHistory = (id, token) => {
-  return _axios.get(`/order/history`);
+export const fetchUserHistory = () => {
+  return _axios.get(`/order/history`,);
 };
 
 export const postContactFormMessage = (message) => {
@@ -342,4 +342,8 @@ export const postReview = (review, token) => {
       Authorization: `Bearer ${token}`,
     },
   });
+};
+
+export const logout = () => {
+  return _axios.get(`/logout`,);
 };

@@ -70,7 +70,7 @@ const Auth = ({
             if (location?.state?.redirectTo) {
               h.push(location.state.redirectTo);
             } else {
-              h.push(`/profile/${userId}`);
+              h.push(`/profile`);
             }
           } else {
             showAlert("Помилка при авторизації. Невірно введені дані.");

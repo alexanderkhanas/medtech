@@ -100,47 +100,42 @@ const App = ({
             };
         }, []);
 
-        const token = useMemo(() => {
-            return document.cookie.includes("token")
-                ? document.cookie
-                    .split("; ")
-                    .filter((value) => value.startsWith("token"))[0]
-                    .split("=")[1]
-                : null;
-        }, []);
+        // const token = useMemo(() => {
+        //     return document.cookie.includes("token")
+        //         ? document.cookie
+        //             .split("; ")
+        //             .filter((value) => value.startsWith("token"))[0]
+        //             .split("=")[1]
+        //         : null;
+        // }, []);
+        //
+        // const aToken = useMemo(() => {
+        //     return document.cookie.includes("aToken")
+        //         ? document.cookie
+        //             .split("; ")
+        //             .filter((value) => value.startsWith("aToken"))[0]
+        //             .split("=")[1]
+        //         : null;
+        // }, []);
 
-        const aToken = useMemo(() => {
-            return document.cookie.includes("aToken")
-                ? document.cookie
-                    .split("; ")
-                    .filter((value) => value.startsWith("aToken"))[0]
-                    .split("=")[1]
-                : null;
-        }, []);
-
-        const getUserByToken = async (userToken, type) => {
-            if (userToken) {
-                const isSuccess = await getUser(userToken);
-                if (isSuccess) {
-                    return true;
-                }
-                document.cookie = `${type}=""; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-                return false;
-            }
-        };
+        // const getUserByToken = async (userToken, type) => {
+        //     if (userToken) {
+        //         const isSuccess = await getUser(userToken);
+        //         if (isSuccess) {
+        //             return true;
+        //         }
+        //     }
+        //     // document.cookie = `${type}=""; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+        //     // return false;
+        // };
+        // console.log('mid === ', token)
 
         useEffect(() => {
             (async () => {
                 const loginData = localStorage.getItem("_login");
                 getProducts();
-                let isSuccess = false;
-                if (token) {
-                    isSuccess = await getUserByToken(token, "token");
-                }
-                if (aToken && !isSuccess) {
-                    isSuccess = await getUserByToken(aToken, "aToken");
-                }
-                if (loginData && !isSuccess) {
+                getUser();
+                if (loginData) {
                     await autologin(JSON.parse(loginData));
                 }
             })();
@@ -153,8 +148,8 @@ const App = ({
                     }
                 )();
             }, [allProducts]
-        )
-        ;
+        );
+
         return (
             <Router>
                 <Header/>
@@ -175,24 +170,25 @@ const App = ({
                             <PrivateRoute
                                 path="/login"
                                 condition={!user._id}
-                                redirectTo={`profile/${user._id}`}
+                                redirectTo={`profile`}
                                 component={Login}
                             />
                             <PrivateRoute
                                 path="/register"
-                                redirectTo={`profile/${user._id}`}
+                                redirectTo={`profile`}
                                 condition={!user._id}
                                 component={Register}
                             />
                             <PrivateRoute
                                 condition={!!user._id}
-                                path="/profile/:id"
+                                // condition={!!token}
+                                path="/profile"
                                 component={Profile}
                             />
                             <PrivateRoute
                                 condition={!user._id}
                                 path="/restore"
-                                redirectTo={`profile/${user._id}`}
+                                redirectTo={`profile`}
                                 component={RestorePassword}
                             />
                             <Route path="/order" exact component={Order}/>

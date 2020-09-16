@@ -38,13 +38,7 @@ const ProductCard = ({product, className}) => {
                 {/*/>}*/}
                 {/*{!!converted &&*/}
                 <img
-                    // src={gallery && gallery[0] ? gallery[0] : require("../../assets/image-placeholder.webp")}
-                    src={title?.includes("Тонометр")
-                        ? "https://ortop.ua/content/images/32/avtomaticheskiy-tonometr-and-ua-888eac-s-adapterom-19978614581333_small11.png"
-                        : title?.includes("Нагнітач")
-                            ? "https://www.medtechnika.com.ua/media/amasty/amoptmobile/catalog/product/cache/baf6f8f808a496b7feacb97c14d7fe0e/r/d/rd-ng-02-2_jpg.webp"
-                            : "https://www.medtechnika.com.ua/media/amasty/webp/catalog/product/cache/ed9abe2e7e962851fb909ec1e05fa292/r/d/rd-pvc1-m-1_1_jpg.webp"}
-                    // src={img || require("../../assets/image-placeholder.webp")}
+                    src={gallery && gallery[0] ? gallery[0] : require("../../assets/image-placeholder.webp")}
                     className={s.card__img}
                     onClick={redirectToSingleProduct}
                     alt="loading..."

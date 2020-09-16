@@ -10,6 +10,7 @@ import {
 const initialState = {
   email: "",
   fName: "",
+  phone: "",
   fatherName: "",
   gallery: [],
   lName: "",
@@ -27,6 +28,7 @@ export default (state = initialState, action) => {
         ...state,
         email: action.user.email,
         fName: action.user.fName,
+        phone: action.user.phone,
         fatherName: action.user.fatherName,
         gallery: action.user.gallery,
         lName: action.user.lName,

@@ -62,13 +62,14 @@ const CreateOrder = lazy(() =>
 );
 const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
-const PrivateRoute = ({
-                          redirectTo,
-                          component: Component,
-                          condition,
-                          state = {},
-                          ...rest
-                      }) => (
+const PrivateRoute = (
+    {
+        redirectTo,
+        component: Component,
+        condition,
+        state = {},
+        ...rest
+    }) => (
     <Route {...rest}>
         {condition ? (
             <Component/>
@@ -102,7 +103,7 @@ const App = ({
             };
         }, []);
 
-  // const token = useMemo(() => {
+        // const token = useMemo(() => {
         //     return document.cookie.includes("token")
         //         ? document.cookie
         //             .split("; ")
@@ -120,7 +121,7 @@ const App = ({
         //         : null;
         // }, []);
 
-  // const getUserByToken = async (userToken, type) => {
+        // const getUserByToken = async (userToken, type) => {
         //     if (userToken) {
         //         const isSuccess = await getUser(userToken);
         //         if (isSuccess) {
@@ -130,24 +131,24 @@ const App = ({
         //     // document.cookie = `${type}=""; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
         //     // return false;
         // };
-  // console.log('mid === ', token)
+        // console.log('mid === ', token)
 
-  useEffect(() => {
-    (async () => {
-      const loginData = localStorage.getItem("_login");
-      getProducts();
-      getUser();
+        useEffect(() => {
+            (async () => {
+                const loginData = localStorage.getItem("_login");
+                getProducts();
+                getUser();
                 if (loginData) {
-        await autologin(JSON.parse(loginData));
-      }
-    })();
-  }, []);
+                    await autologin(JSON.parse(loginData));
+                }
+            })();
+        }, []);
 
-  useEffect(() => {
-    (async () => {
-      await getCart();
-      await getWishlist();
-    })();
+        useEffect(() => {
+                (async () => {
+                    await getCart();
+                    await getWishlist();
+                })();
 
             }, [allProducts]
         );
@@ -165,38 +166,36 @@ const App = ({
                             <Route path="/cart" component={Cart}/>
                             <Route path="/catalog" component={Catalog}/>
                             <Route path="/public-offer" component={PublicOffer}/>
-                            <Route path="/politics" component={Politics}/><Route path="/garant" component={Garant} />
-            <Route path="/delivery-inf" component={DeliveryInfo} />
-            <Route path="/about-us" component={AboutUs} />
-            <Route path="/news" component={News} />
-            <Route path="/single-news/:id" component={SingleNews} />
-            <PrivateRoute
-              path="/login"
-              condition={!user._id}
-              redirectTo={`profile`}
-              component={Login}
-            />
-            <PrivateRoute
-              path="/register"
-              redirectTo={`profile`}
+                            <Route path="/politics" component={Politics}/><Route path="/garant" component={Garant}/>
+                            <Route path="/delivery-inf" component={DeliveryInfo}/>
+                            <Route path="/about-us" component={AboutUs}/>
+                            <Route path="/news" component={News}/>
+                            <Route path="/single-news/:id" component={SingleNews}/>
+                            <PrivateRoute
+                                path="/login"
+                                condition={!user._id}
+                                redirectTo={`profile`}
+                                component={Login}
+                            />
+                            <PrivateRoute
+                                path="/register"
+                                redirectTo={`profile`}
                                 condition={!user._id}
                                 component={Register}
                             />
+                            <Route
+                                path="/profile"
+                                component={Profile}
+                            />
                             <PrivateRoute
-                                condition={!!user._id}
-                                // condition={!!token}
-              path="/profile"
-              component={Profile}
-            />
-            <PrivateRoute
-              condition={!user._id}
-              path="/restore"
-              redirectTo={`profile`}
-              component={RestorePassword}
-            />
-            <Route path="/order" exact component={Order} />
-            <Route path="/order/payment/:id/:amount" component={OrderPayment} />
-            <Route path="/payment/success" component={PaymentSuccess} />
+                                condition={!user._id}
+                                path="/restore"
+                                redirectTo={`profile`}
+                                component={RestorePassword}
+                            />
+                            <Route path="/order" exact component={Order}/>
+                            <Route path="/order/payment/:id/:amount" component={OrderPayment}/>
+                            <Route path="/payment/success" component={PaymentSuccess}/>
 
                             {/* <Route
               path="/admin"

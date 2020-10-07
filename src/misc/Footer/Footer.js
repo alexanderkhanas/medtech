@@ -21,14 +21,14 @@ const Footer = () => {
               <Phone className={s.icon_ft} />
               <span className={s.phone}>+ 380(96) 39 55 491</span>
             </div>
-            <div className={s.row}>
-              <Instagram className={s.icon_ft} />
-              <span className={s.social}>Instagram</span>
-            </div>
-            <div className={s.row}>
-              <Facebook className={s.icon_ft} />
-              <span className={s.social}>Facebook</span>
-            </div>
+            {/*<div className={s.row}>*/}
+            {/*  <Instagram className={s.icon_ft} />*/}
+            {/*  <span className={s.social}>Instagram</span>*/}
+            {/*</div>*/}
+            {/*<div className={s.row}>*/}
+            {/*  <Facebook className={s.icon_ft} />*/}
+            {/*  <span className={s.social}>Facebook</span>*/}
+            {/*</div>*/}
             <div className={s.row}>
               <Clock className={s.icon_ft} />
               <div className={s.hours__container}>

@@ -8,7 +8,7 @@ import {
 } from "../../store/actions/singleProductActions";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import ProductAttribute from "../../misc/ProductAttribute/ProductAttribute";
-import _axios from "../../store/api/_axios";
+import WishlistButton from "../../misc/WishlistButton/WishlistButton";
 import {Tabs, TabList, Tab, TabPanel} from "react-tabs";
 import Stars from "../../misc/Stars/Stars";
 import Button from "../../misc/Button/Button";
@@ -206,6 +206,7 @@ const SingleProduct = ({
             <div className={s.container}>
                 <div className={s.desktop__container}>
                     <div className={s.carousel__container}>
+                        <WishlistButton {...{product}} className={s.wishlist__button}/>
                         <ItemsCarousel arrows={false} dots slidesPerPage={1}>
                             {gallery?.length ? (
                                 gallery.map((img, i) => (
@@ -388,13 +389,16 @@ const SingleProduct = ({
                         </TabPanel>
                         <TabPanel className={s.tab__content}>
                             <p className={s.desc}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                Замовлення товарів:
+                                Для Вашої зручності інтернет-магазин "Медтехніка" передбачив два способи замовлення товарів: на САЙТІ – 24 години на добу, 7 днів на тиждень знайдіть виріб, який Вас цікавить, додайте його в кошик своїх покупок і пройдіть за посиланням Кошик для оформлення замовлення; за ТЕЛЕФОНОМ, 7 днів на тиждень із 8.00 до 20.00 знайдіть виріб, який Вас цікавить, і обов'язково зв'яжіться з нами за номерам: + 380(96) 39 55 491 для оформлення замовлення.
+
+                                Оплата замовлення
+                                Для Вашої зручності інтернет-магазин "Рідні Медтехніка" передбачив кілька способів оплати виробу, який Ви вибрали:
+
+                                У нашому магазині "Медтехніка"
+                                - У Тернополі (вулиця Гуго Коллонтая 2)
+                                Банківським переказом (за фактом оформлення замовлення)
+                                під час оформлення замовлення з будь-якого міста України Ви можете оплатити товар, який Ви замовили, через LiqPay або банківським переказом. Квитанцію з нашими реквізитами можна роздрукувати після оформлення замовлення на сайті.
                             </p>
                         </TabPanel>
                     </Tabs>

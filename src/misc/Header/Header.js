@@ -9,7 +9,7 @@ import Input from "../Inputs/Input/Input";
 import Button from "../Button/Button";
 import {
     filterProductsAction,
-    setSearchValueAction,
+    setSearchValueAction
 } from "../../store/actions/productsActions";
 import {connect} from "react-redux";
 import HorizontalProductCard from "../HorizontalProductCard/HorizontalProductCard";
@@ -38,7 +38,7 @@ const Header = ({
                     setSearchValue,
                     searchValue,
                     numberInCart,
-                    user,
+                    user
                 }) => {
     const [isBarOpen, setBarOpen] = useState(null);
     const [isAnimation, setAnimation] = useState(false);
@@ -54,7 +54,7 @@ const Header = ({
         setBarOpen(true);
     };
     const closeSidebar = () => setBarOpen(false);
-    const onStateMenuChange = (state) => {
+    const onStateMenuChange = state => {
         setBarOpen(state.isOpen);
     };
 
@@ -71,7 +71,7 @@ const Header = ({
     };
 
     useEffect(() => {
-        if (searchValue.trim().length >= 3) {
+        if (searchValue.trim().length >= 3 && !pathname.includes("/product")) {
             setDropdownVisible(true);
             searchProductsByValue(searchValue);
         }
@@ -79,9 +79,9 @@ const Header = ({
 
     useEffect(() => {
         if (typeof isBarOpen !== "boolean") return;
-        setAnimation((prev) => !prev);
+        setAnimation(prev => !prev);
         setTimeout(() => {
-            setSidebarIcon((prev) => !prev);
+            setSidebarIcon(prev => !prev);
         }, 200);
     }, [isBarOpen]);
 
@@ -112,10 +112,10 @@ const Header = ({
                             <button className={s.header__info__tag}>
                                 <Phone className={s.header_icon}/>+ 380(96) 39 55 491
                             </button>
-                            <button className={s.header__info__tag}>
-                                <Envelope className={s.header_icon}/>
-                                info@somedomain.com
-                            </button>
+                            {/*<button className={s.header__info__tag}>*/}
+                            {/*    <Envelope className={s.header_icon}/>*/}
+                            {/*    info@somedomain.com*/}
+                            {/*</button>*/}
 
                             <a
                                 href="https://www.google.com.ua/maps/place/вулиця+Гуго+Коллонтая,+2,+Тернопіль,+Тернопільська+область,+46000/@49.5460574,25.5971626,17z/data=!3m1!4b1!4m5!3m4!1s0x473036ae389f3535:0xc367270d0888dda0!8m2!3d49.5460574!4d25.5993513"
@@ -161,19 +161,6 @@ const Header = ({
                                 <Heart className={s.header_icon}/>
                                 Улюблені
                             </Link>
-
-                            <Link
-                                to="/cart"
-                                style={{position: "relative"}}
-                                className={
-                                    pathname === "/cart"
-                                        ? `${s.nav__link} ${s.nav__link__active}`
-                                        : s.nav__link
-                                }
-                            >
-                                <ShoppingCart className={s.header_icon}/>
-                                Кошик
-                            </Link>
                             <Link
                                 to="/news"
                                 className={
@@ -187,7 +174,9 @@ const Header = ({
                             </Link>
                         </div>
                         <div className={s.search__container}>
-                            {isDropdownVisible && pathname !== "/catalog" && (
+                            {isDropdownVisible &&
+                            pathname !== "/catalog" &&
+                            !pathname.includes("/product") && (
                                 <div onClick={hideDropdown} className={s.search__overlay}/>
                             )}
                             <Input
@@ -203,21 +192,22 @@ const Header = ({
                             </Link>
                             {!!foundProducts.length &&
                             isDropdownVisible &&
-                            pathname !== "/catalog" && (
+                            pathname !== "/catalog" &&
+                            !pathname.includes("/product") && (
                                 <div className={s.search__dropdown}>
-                                    {foundProducts.slice(0, 5).map((foundProduct) => (
-                                        <div
-                                            className={s.mobile__search__product__container}>                                        <Link
-                                            to={`product/${foundProduct._id}`}
-                                            onClick={hideDropdown}
-                                        >
-                                            <HorizontalProductCard
-                                                key={foundProduct._id}
-                                                isSmall
-                                                className={s.product}
-                                                product={foundProduct}
-                                            />
-                                        </Link>
+                                    {foundProducts.slice(0, 5).map(foundProduct => (
+                                        <div className={s.mobile__search__product__container}>
+                                            <Link
+                                                to={`product/${foundProduct._id}`}
+                                                onClick={hideDropdown}
+                                            >
+                                                <HorizontalProductCard
+                                                    key={foundProduct._id}
+                                                    isSmall
+                                                    className={s.product}
+                                                    product={foundProduct}
+                                                />
+                                            </Link>
                                         </div>
                                     ))}
                                     <Link
@@ -225,7 +215,7 @@ const Header = ({
                                         onClick={hideDropdown}
                                         to={{
                                             pathname: "/catalog",
-                                            state: {query: searchValue},
+                                            state: {query: searchValue}
                                         }}
                                     >
                                         Показати ще
@@ -240,19 +230,36 @@ const Header = ({
                                         to={`/profile`}
                                         style={{marginRight: 0}}
                                         className={classnames(s.nav__link, s.profile__nav__link, {
-                                            [s.nav__link__active]: pathname.startsWith("/profile"),
+                                            [s.nav__link__active]: pathname.startsWith("/profile")
                                         })}
                                     >
                                         <User className={s.header_icon}/>
                                         Мій профіль
                                     </Link>
                                 )}
+                                <Link
+                                    to="/cart"
+                                    style={{position: "relative"}}
+                                    className={
+                                        pathname === "/cart"
+                                            ? `${s.nav__link} ${s.nav__link__active}`
+                                            : s.nav__link
+                                    }
+                                >
+                                    <ShoppingCart className={s.header_icon}/>
+                                    {!!numberInCart && (
+                                        <div className={s.cart__counter_desktop}>
+                                            <span>{numberInCart}</span>
+                                        </div>
+                                    )}
+                                    Кошик
+                                </Link>
                                 {!user.isLogged && (
                                     <Link
                                         to="/login"
                                         style={{marginRight: 0}}
                                         className={classnames(s.nav__link, s.profile__nav__link, {
-                                            [s.nav__link__active]: pathname.startsWith("/login"),
+                                            [s.nav__link__active]: pathname.startsWith("/login")
                                         })}
                                     >
                                         <Key className={s.header_icon}/>
@@ -264,7 +271,7 @@ const Header = ({
                                         to="/admin"
                                         style={{marginRight: 0}}
                                         className={classnames(s.nav__link, s.profile__nav__link, {
-                                            [s.nav__link__active]: pathname.startsWith("/admin"),
+                                            [s.nav__link__active]: pathname.startsWith("/admin")
                                         })}
                                     >
                                         <Cogs className={s.header_icon}/>
@@ -290,7 +297,7 @@ const Header = ({
                             enterActive: s.burger__icon__entering,
                             enterDone: s.burger__icon__entered,
                             exitActive: s.burger__icon__exiting,
-                            exitDone: s.burger__icon__exited,
+                            exitDone: s.burger__icon__exited
                         }}
                     >
                         {sidebarIcon ? (
@@ -306,7 +313,9 @@ const Header = ({
                         )}
                     </CSSTransition>
                     <div className={s.search__container}>
-                        {isDropdownVisible && pathname !== "/catalog" && (
+                        {isDropdownVisible &&
+                        pathname !== "/catalog" &&
+                        !pathname.includes("/product") && (
                             <div onClick={hideDropdown} className={s.search__overlay}/>
                         )}
                         <Input
@@ -320,11 +329,11 @@ const Header = ({
                         </Button>
                         {!!foundProducts.length &&
                         isDropdownVisible &&
-                        pathname !== "/catalog" && (
+                        pathname !== "/catalog" &&
+                        !pathname.includes("/product") && (
                             <div className={s.search__dropdown}>
-                                {foundProducts.slice(0, 5).map((foundProduct) => (
-                                    <div
-                                        className={s.mobile__search__product__container}>
+                                {foundProducts.slice(0, 5).map(foundProduct => (
+                                    <div className={s.mobile__search__product__container}>
                                         <Link
                                             to={`product/${foundProduct._id}`}
                                             onClick={hideDropdown}
@@ -343,7 +352,7 @@ const Header = ({
                                     onClick={hideDropdown}
                                     to={{
                                         pathname: "/catalog",
-                                        state: {query: searchValue},
+                                        state: {query: searchValue}
                                     }}
                                 >
                                     Показати ще
@@ -421,20 +430,19 @@ const Header = ({
     );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         foundProducts: state.products.filtered,
         searchValue: state.products.searchValue,
         user: state.profile,
-        numberInCart: state.cart.all?.length,
+        numberInCart: state.cart.all?.length
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {
-        searchProductsByValue: (value) =>
-            dispatch(filterProductsAction(null, value)),
-        setSearchValue: (value) => dispatch(setSearchValueAction(value)),
+        searchProductsByValue: value => dispatch(filterProductsAction(null, value)),
+        setSearchValue: value => dispatch(setSearchValueAction(value))
     };
 };
 

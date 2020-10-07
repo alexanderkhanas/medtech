@@ -52,6 +52,7 @@ header {
 .nav__link {
   font-size: 18px;
   border: none;
+  padding-right: 5px;
   transition: 0.2s;
   color: #404040;
   font-family: "Roboto", sans-serif;
@@ -111,6 +112,24 @@ header {
 
 .logo {
   height: 50px;
+}
+
+.cart__counter_desktop {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2bbd86;
+  position: absolute;
+  bottom: 0px;
+  right: -20px;
+  color: #000;
+}
+.cart__counter_desktop span {
+  line-height: 20px;
+  color: #fff;
 }
 
 .cart__counter {

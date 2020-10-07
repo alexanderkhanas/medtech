@@ -311,27 +311,28 @@ const formikHOC = withFormik({
                 quantity,
             })
         );
-        let correctPhone = values.phone
-        if (values.phone && !Number.isNaN(values.phone)) {
-            if (values.phone?.startsWith("0")) {
-                correctPhone = +`38${values.phone}`;
-            } else {
-                correctPhone = +values.phone;
-            }
-        }
+        // let correctPhone = +values.phone
+        // console.log(correctPhone)
+        // if (values.phone && !Number.isNaN(values.phone)) {
+        //     if (values.phone?.startsWith("0")) {
+        //         correctPhone = +`38${values.phone}`;
+        //     } else {
+        //         correctPhone = +values.phone;
+        //     }
+        // }
         if (values.isSaveUser) {
             patchUser({
                 ...user,
                 fName: values.fName,
                 lName: values.lName,
-                phone: values.phone,
+                phone: +values.phone,
             });
         }
 
         const orderData = await createOrder({
             products,
-            phone: values.phone,
-            deliveryCity: values.selectedCity,
+            phone: +values.phone,
+            deliveryCity: values.selectedCity || "Самовивіз",
             deliveryHouse: null,
             deliveryStreet: null,
             deliveryApartament: null,

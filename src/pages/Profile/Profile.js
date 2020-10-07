@@ -37,19 +37,20 @@ import {ReactComponent as HouseUser} from "../../assets/house-user-solid.svg";
 import {ReactComponent as Phone} from "../../assets/phone.svg";
 import {ReactComponent as Envelope} from "../../assets/envelope-solid.svg";
 
-const Profile = ({
-                     user,
-                     patchUser,
-                     isLoading,
-                     showModal,
-                     logout,
-                     getUser,
-                     getUserHistory,
-                     getOrdersProducts,
-                     uploadAvatar,
-                     ordersProducts,
-                     orders,
-                 }) => {
+const Profile = (
+    {
+        user,
+        patchUser,
+        isLoading,
+        showModal,
+        logout,
+        getUser,
+        getUserHistory,
+        getOrdersProducts,
+        uploadAvatar,
+        ordersProducts,
+        orders,
+    }) => {
     const h = useHistory();
     const breadCrumbsItems = [
         {
@@ -69,7 +70,6 @@ const Profile = ({
         }
         return null;
     }, [document.cookie]);
-
     const [activeTabIndex, setActiveTabIndex] = useState(0);
     const uploadedImage = useRef(null);
     const imageUploader = useRef(null);
@@ -85,7 +85,7 @@ const Profile = ({
                 const img = event.target.result;
                 current.src = img;
                 const formData = new FormData();
-                formData.append("gallery", file);
+                formData.append("avatar", file);
                 uploadAvatar(formData);
                 setUserData((prev) => ({...prev, gallery: img}));
             };
@@ -95,7 +95,7 @@ const Profile = ({
     const handleSubmit = () => {
         const submitData = {...userData};
         if (submitData.phone && !Number.isNaN(submitData.phone)) {
-            if (submitData.phone?.startsWith("0")) {
+            if (submitData.phone.startsWith("0")) {
                 submitData.phone = +`38${submitData.phone}`;
             } else {
                 submitData.phone = +submitData.phone;
@@ -132,7 +132,8 @@ const Profile = ({
 
     useEffect(() => {
         getUserHistory();
-        getUser()
+        getUser();
+        !user._id && h.push('/login');
     }, []);
 
     return !isLoading || user._id ? (
@@ -331,9 +332,9 @@ const Profile = ({
                                             <div className={s.profile__info__field}>
                                                 <ProfileInput
                                                     label="Місто"
-                                                    name="city"
+                                                    name="deliveryCity"
                                                     placeholder="Тернопіль"
-                                                    defaultValue={user.deliveryCity}
+                                                    value={userData.deliveryCity}
                                                     onChange={onInputChange}
                                                 >
                                                     <City className={`${s.icon} ${s.input__icon}`}/>
@@ -342,9 +343,9 @@ const Profile = ({
                                             <div className={s.profile__info__field}>
                                                 <ProfileInput
                                                     label="Вулиця"
-                                                    name="street"
+                                                    name="deliveryStreet"
                                                     placeholder="Руська"
-                                                    defaultValue={user.deliveryStreet}
+                                                    value={userData.deliveryStreet}
                                                     onChange={onInputChange}
                                                 >
                                                     <StreetView
@@ -355,9 +356,9 @@ const Profile = ({
                                             <div className={s.profile__info__field}>
                                                 <ProfileInput
                                                     label="Будинок"
-                                                    name="house"
+                                                    name="deliveryHouse"
                                                     placeholder="12"
-                                                    defaultValue={user.deliveryHouse}
+                                                    value={userData.deliveryHouse}
                                                     onChange={onInputChange}
                                                 >
                                                     <HouseUser className={`${s.icon} ${s.input__icon}`}/>
@@ -366,9 +367,9 @@ const Profile = ({
                                             <div className={s.profile__info__field}>
                                                 <ProfileInput
                                                     label="Квартира"
-                                                    name="flat"
+                                                    name="deliveryApartament"
                                                     placeholder="81"
-                                                    defaultValue={user.deliveryApartament}
+                                                    value={userData.deliveryApartament}
                                                     onChange={onInputChange}
                                                 >
                                                     <Building className={`${s.icon} ${s.input__icon}`}/>
@@ -377,9 +378,9 @@ const Profile = ({
                                             <div className={s.profile__info__field}>
                                                 <ProfileInput
                                                     label="Склад Нової пошти"
-                                                    name="warehouse"
+                                                    name="deliveryWarehouse"
                                                     placeholder="1"
-                                                    defaultValue={user.deliveryWarehouse}
+                                                    value={userData.deliveryWarehouse}
                                                     onChange={onInputChange}
                                                 >
                                                     <Mail className={`${s.icon} ${s.input__icon}`}/>

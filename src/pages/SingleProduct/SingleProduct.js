@@ -265,13 +265,13 @@ const SingleProduct = ({
                                     />
                                 );
                             })}
-                            {!!vendorID?._id && (
+                            {!!vendorID?.title && (
                                 <ProductAttribute
                                     name="Країна виробника"
                                     values={[vendorID?.title]}
                                 />
                             )}
-                            {!!categoryID?._id && (
+                            {!!categoryID?.title && (
                                 <ProductAttribute
                                     name="Категорія"
                                     values={[categoryID?.title]}

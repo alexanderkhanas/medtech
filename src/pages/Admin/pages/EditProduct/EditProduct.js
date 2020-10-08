@@ -11,7 +11,7 @@ import {
   getVendorsAction,
   getAttributesAction,
   createProductAction,
-  editProductAction,
+  editProductAction
 } from "../../../../store/actions/adminActions";
 import Cartesian from "react-cartesian";
 import OrderAttributeOptions from "../../../../misc/Admin/OrderAttributeOptions/OrderAttributeOptions";
@@ -34,7 +34,7 @@ const EditProduct = ({
   values,
   setValues,
   getProduct,
-  product,
+  product
 }) => {
   const [filteredVendors, setFilteredVendors] = useState([]);
   const [filteredAttributes, setFilteredAttributes] = useState([]);
@@ -43,7 +43,7 @@ const EditProduct = ({
   const handleImages = ({ target: { files } }) => {
     const temp = [];
 
-    Array.from(files).forEach((file) => {
+    Array.from(files).forEach(file => {
       const reader = new FileReader();
 
       reader.onload = ({ target: { result } }) => {
@@ -51,7 +51,7 @@ const EditProduct = ({
         setValues({
           ...values,
           gallery: temp,
-          galleryFiles: Array.from(files),
+          galleryFiles: Array.from(files)
         });
       };
       reader.readAsDataURL(file);
@@ -64,29 +64,35 @@ const EditProduct = ({
 
   const onCategoryInputChange = (value = "") => {
     const filtered = categories.filter(
-      (category) =>
+      category =>
         category.title ||
-        "".trim().toLowerCase().startsWith(value.trim().toLowerCase())
+        ""
+          .trim()
+          .toLowerCase()
+          .startsWith(value.trim().toLowerCase())
     );
     setFilteredCategories(filtered);
   };
 
   const onAttributeSelect = ({ value }) => {
     const isValueAlreadyExist = !!values.attributesLabels.filter(
-      (attribute) => attribute._id === value._id
+      attribute => attribute._id === value._id
     ).length;
     if (!isValueAlreadyExist) {
       setValues({
         ...values,
         attributesLabels: [...values.attributesLabels, value],
-        attributes: { ...values.attributes, [value.name]: [] },
+        attributes: { ...values.attributes, [value.name]: [] }
       });
     }
   };
 
   const onAttributeInputChange = (value = "") => {
-    const filtered = attributes.filter((attribute) =>
-      attribute.name.trim().toLowerCase().startsWith(value.trim().toLowerCase())
+    const filtered = attributes.filter(attribute =>
+      attribute.name
+        .trim()
+        .toLowerCase()
+        .startsWith(value.trim().toLowerCase())
     );
     setFilteredAttributes(filtered);
   };
@@ -98,19 +104,19 @@ const EditProduct = ({
       ...values,
       attributes: {
         ...values.attributes,
-        [name]: temp,
-      },
+        [name]: temp
+      }
     });
   };
 
-  const setAttrOptions = (attrOptions) => {
+  const setAttrOptions = attrOptions => {
     setValues({ ...values, attrOptions });
   };
 
-  const onAttributesCheckboxChange = (e) => {
+  const onAttributesCheckboxChange = e => {
     setValues({
       ...values,
-      isPriceChangesByAttributes: !values.isPriceChangesByAttributes,
+      isPriceChangesByAttributes: !values.isPriceChangesByAttributes
     });
   };
 
@@ -119,7 +125,7 @@ const EditProduct = ({
   };
 
   const onVendorInputChange = (value = "") => {
-    const filtered = vendors.filter((vendor) => {
+    const filtered = vendors.filter(vendor => {
       return vendor.title
         .trim()
         .toLowerCase()
@@ -128,31 +134,31 @@ const EditProduct = ({
     setFilteredVendors(filtered);
   };
 
-  const deleteImage = (imageToDelete) => {
+  const deleteImage = imageToDelete => {
     const filteredGallery = values.gallery.filter(
-      (image) => image !== imageToDelete
+      image => image !== imageToDelete
     );
     setValues({ ...values, gallery: filteredGallery });
   };
 
   const vendorsOptions = useMemo(() => {
-    return filteredVendors.map((vendor) => ({
+    return filteredVendors.map(vendor => ({
       label: vendor.title,
-      value: vendor,
+      value: vendor
     }));
   }, [filteredVendors]);
 
   const categoriesOptions = useMemo(() => {
-    return filteredCategories.map((category) => ({
+    return filteredCategories.map(category => ({
       label: category.title,
-      value: category,
+      value: category
     }));
   }, [filteredCategories]);
 
   const attributesOptions = useMemo(() => {
-    return filteredAttributes.map((attribute) => ({
+    return filteredAttributes.map(attribute => ({
       label: attribute.name,
-      value: attribute,
+      value: attribute
     }));
   }, [filteredAttributes]);
 
@@ -190,8 +196,8 @@ const EditProduct = ({
     const tempAttributes = {};
     const tempAttributesLabels = [];
 
-    product.attrOptions.forEach((option) => {
-      Object.keys(option).forEach((key) => {
+    product.attrOptions.forEach(option => {
+      Object.keys(option).forEach(key => {
         if (key === "_id" || key === "priceAttr") return;
         if (!tempAttributes[key]) {
           tempAttributes[key] = [];
@@ -200,7 +206,7 @@ const EditProduct = ({
           tempAttributes[key].push(option[key]);
         }
         const isLabelAlreadyExist = !tempAttributesLabels.filter(
-          (label) => label.name === key
+          label => label.name === key
         ).length;
         if (isLabelAlreadyExist) {
           tempAttributesLabels.push({ name: key, _id: uuid() });
@@ -223,7 +229,7 @@ const EditProduct = ({
       quantity: product.quantity,
       visibility: product.visibility,
       reviews: product.reviews,
-      _id: product._id,
+      _id: product._id
     });
   }, [product]);
 
@@ -245,7 +251,7 @@ const EditProduct = ({
           <div className={s.input__container}>
             <p className={s.label}>Фото</p>
             <div className={s.images__container}>
-              {values.gallery.map((image) => (
+              {values.gallery.map(image => (
                 <div className={s.image__container}>
                   <Times
                     className={s.delete__icon}
@@ -258,7 +264,7 @@ const EditProduct = ({
             <input
               type="file"
               multiple
-              onChange={(e) => handleImages(e, setValues, values)}
+              onChange={e => handleImages(e, setValues, values)}
             />
           </div>
           <Input
@@ -333,7 +339,7 @@ const EditProduct = ({
                     <p>{name}</p>
                     <div>
                       {[...Array(attributeValues.length + 1).keys()].map(
-                        (number) => (
+                        number => (
                           <Input
                             placeholder="Значення атрибута"
                             key={_id + number}
@@ -399,7 +405,7 @@ const formikHOC = withFormik({
     vendor: {},
     category: {},
     isPriceChanges: false,
-    _id: "",
+    _id: ""
   }),
   handleSubmit: async (
     val,
@@ -408,7 +414,7 @@ const formikHOC = withFormik({
     const productToSubmit = {
       title: val.title,
       desc: val.desc,
-      attr: val.attributesLabels.map((label) => label.name),
+      attr: val.attributesLabels.map(label => label.name),
       attrOptions: val.attrOptions,
       vendorID: val.vendor?._id,
       categoryID: val.category?._id,
@@ -417,14 +423,14 @@ const formikHOC = withFormik({
       recommended: val.recommended,
       quantity: val.quantity,
       visibility: true,
-      reviews: [],
+      reviews: []
     };
-
+    console.log("productToSubmit === ", productToSubmit);
     let galleryFormData = null;
-    console.log("gallery files length ===", val.galleryFiles.length)
+    console.log("gallery files length ===", val.galleryFiles.length);
     if (val.galleryFiles.length) {
       galleryFormData = new FormData();
-      val.galleryFiles.forEach((image) => {
+      val.galleryFiles.forEach(image => {
         galleryFormData.append("gallery", image);
       });
     }
@@ -452,33 +458,31 @@ const formikHOC = withFormik({
         vendor: {},
         category: {},
         isPriceChanges: false,
-        _id: "",
+        _id: ""
       });
     } else {
       showAlert("Сталась помилка!", "error");
     }
-
-
-  },
+  }
 })(EditProduct);
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     categories: state.products.categories,
     vendors: state.admin.vendors,
     attributes: state.admin.attributes,
-    product: state.single.product,
+    product: state.single.product
   };
 };
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     getCategories: () => dispatch(getCategoriesAction()),
     getVendors: () => dispatch(getVendorsAction()),
     getAttributes: () => dispatch(getAttributesAction()),
-    getProduct: (id) => dispatch(getSingleProductAction(id)),
+    getProduct: id => dispatch(getSingleProductAction(id)),
     showAlert: (content, type) => dispatch(showAlertAction(content, type)),
     editProduct: (product, gallery, id) =>
-      dispatch(editProductAction(product, gallery, id)),
+      dispatch(editProductAction(product, gallery, id))
   };
 };
 

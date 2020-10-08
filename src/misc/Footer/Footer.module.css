@@ -105,6 +105,7 @@ h4 {
 }
 .btn_cl {
   color: white;
+  text-align: left;
 }
 .mastercard {
   flex-direction: row;

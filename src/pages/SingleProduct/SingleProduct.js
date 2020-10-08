@@ -8,7 +8,7 @@ import {
 } from "../../store/actions/singleProductActions";
 import ItemsCarousel from "../../wrappers/ItemsCarousel/ItemsCarousel";
 import ProductAttribute from "../../misc/ProductAttribute/ProductAttribute";
-import _axios from "../../store/api/_axios";
+import WishlistButton from "../../misc/WishlistButton/WishlistButton";
 import {Tabs, TabList, Tab, TabPanel} from "react-tabs";
 import Stars from "../../misc/Stars/Stars";
 import Button from "../../misc/Button/Button";
@@ -97,8 +97,11 @@ const SingleProduct = ({
         }
         if (isInCart) {
             removeFromCart(product);
-        } else {
+        } else if (quantity >= 1) {
             addToCart(product, foundAttributes);
+        }
+        if (quantity === 0) {
+            showAlert("Немає в наявності")
         }
     };
 
@@ -203,30 +206,20 @@ const SingleProduct = ({
             <div className={s.container}>
                 <div className={s.desktop__container}>
                     <div className={s.carousel__container}>
+                        <WishlistButton {...{product}} className={s.wishlist__button}/>
                         <ItemsCarousel arrows={false} dots slidesPerPage={1}>
                             {gallery?.length ? (
                                 gallery.map((img, i) => (
                                     <img
                                         className={s.main__image}
                                         key={img + i}
-                                        src={title?.includes("Тонометр")
-                                            ? "https://ortop.ua/content/images/32/avtomaticheskiy-tonometr-and-ua-888eac-s-adapterom-19978614581333_small11.png"
-                                            : title?.includes("Нагнітач")
-                                                ? "https://www.medtechnika.com.ua/media/amasty/amoptmobile/catalog/product/cache/baf6f8f808a496b7feacb97c14d7fe0e/r/d/rd-ng-02-2_jpg.webp"
-                                                : "https://www.medtechnika.com.ua/media/amasty/webp/catalog/product/cache/ed9abe2e7e962851fb909ec1e05fa292/r/d/rd-pvc1-m-1_1_jpg.webp"}
-                                        // src={img || require("../../assets/image-placeholder.webp")}
+                                        src={img || require("../../assets/image-placeholder.webp")}
                                         alt="loading"
                                     />
                                 ))
                             ) : (
                                 <img
-                                    // src={require("../../assets/image-placeholder.webp")}
-                                    src={title?.includes("Тонометр")
-                                        ? "https://ortop.ua/content/images/32/avtomaticheskiy-tonometr-and-ua-888eac-s-adapterom-19978614581333_small11.png"
-                                        : title?.includes("Нагнітач")
-                                            ? "https://www.medtechnika.com.ua/media/amasty/amoptmobile/catalog/product/cache/baf6f8f808a496b7feacb97c14d7fe0e/r/d/rd-ng-02-2_jpg.webp"
-                                            : "https://www.medtechnika.com.ua/media/amasty/webp/catalog/product/cache/ed9abe2e7e962851fb909ec1e05fa292/r/d/rd-pvc1-m-1_1_jpg.webp"}
-                                    // src={img || require("../../assets/image-placeholder.webp")}
+                                    src={require("../../assets/image-placeholder.webp")}
                                     className={s.main__image}
                                     alt="loading"
                                 />
@@ -239,7 +232,7 @@ const SingleProduct = ({
                             <h2 className={s.price}>{priceInfo.string || `${price}₴`}</h2>
                             <div className={s.button__container}>
                                 <Button
-                                    title={isInCart ? "В кошику" : "Додати в кошик"}
+                                    title={isInCart && quantity > 0 ? "В кошику" : "Додати в кошик"}
                                     className={classnames({
                                         [s.active__cart__button]: isInCart,
                                     })}
@@ -248,7 +241,7 @@ const SingleProduct = ({
                             </div>
                         </div>
                         <p className={s.desc}>
-                            {desc.slice(0, 300)}
+                            {desc && desc.slice(0, 300)}
                             <button onClick={scrollToDescription}>Більше</button>
                         </p>
                         <div className={s.attributes__wrapper} ref={attributesRef}>
@@ -306,7 +299,7 @@ const SingleProduct = ({
                             <p className={s.desc}>{desc}</p>
                         </TabPanel>
                         <TabPanel className={s.tab__content}>
-                            {reviews.map(
+                            {reviews && reviews.map(
                                 (
                                     {
                                         userID: reviewUserID,
@@ -382,7 +375,7 @@ const SingleProduct = ({
                                                 className={s.save__profile__btn}
                                                 onClick={handleSubmit}
                                             >
-                                                Змінити
+                                                Залишити
                                                 <span className={s.profile__btn__overlay}>
                           <PencilAlt
                               className={s.profile__btn__overlay__icon}
@@ -396,13 +389,16 @@ const SingleProduct = ({
                         </TabPanel>
                         <TabPanel className={s.tab__content}>
                             <p className={s.desc}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                Замовлення товарів:
+                                Для Вашої зручності інтернет-магазин "Медтехніка" передбачив два способи замовлення товарів: на САЙТІ – 24 години на добу, 7 днів на тиждень знайдіть виріб, який Вас цікавить, додайте його в кошик своїх покупок і пройдіть за посиланням Кошик для оформлення замовлення; за ТЕЛЕФОНОМ, 7 днів на тиждень із 8.00 до 20.00 знайдіть виріб, який Вас цікавить, і обов'язково зв'яжіться з нами за номерам: + 380(96) 39 55 491 для оформлення замовлення.
+
+                                Оплата замовлення
+                                Для Вашої зручності інтернет-магазин "Рідні Медтехніка" передбачив кілька способів оплати виробу, який Ви вибрали:
+
+                                У нашому магазині "Медтехніка"
+                                - У Тернополі (вулиця Гуго Коллонтая 2)
+                                Банківським переказом (за фактом оформлення замовлення)
+                                під час оформлення замовлення з будь-якого міста України Ви можете оплатити товар, який Ви замовили, через LiqPay або банківським переказом. Квитанцію з нашими реквізитами можна роздрукувати після оформлення замовлення на сайті.
                             </p>
                         </TabPanel>
                     </Tabs>
@@ -442,7 +438,7 @@ const SingleProduct = ({
                         <meta
                             itemProp="ratingValue"
                             content={
-                                reviews.reduce((prev, curr) => prev + curr.rating, 0) /
+                                reviews && reviews.reduce((prev, curr) => prev + curr.rating, 0) /
                                 reviews.length || 5
                             }
                         />
@@ -453,17 +449,17 @@ const SingleProduct = ({
                             itemType="http://schema.org/Person"
                             itemScope
                         >
-                            <meta itemProp="name" content={reviews[0]?.userID?.fName}/>
+                            <meta itemProp="name" content={reviews && reviews[0]?.userID?.fName}/>
                         </div>
                         <div
                             itemProp="reviewRating"
                             itemType="http://schema.org/Rating"
                             itemScope
                         >
-                            <meta itemProp="ratingValue" content={reviews[0]?.rating}/>
+                            <meta itemProp="ratingValue" content={reviews && reviews[0]?.rating}/>
                             <meta
                                 itemProp="bestRating"
-                                content={Math.max(reviews.map((review) => review.rating))}
+                                content={Math.max(reviews && reviews.map((review) => review.rating))}
                             />
                         </div>
                     </div>

@@ -40,6 +40,8 @@ const Politics = lazy(() => import("./misc/Politics/Politics"));
 const PublicOffer = lazy(() => import("./misc/PublicOffer/PublicOffer"));
 const Admin = lazy(() => import("./pages/Admin/Admin"));
 const Order = lazy(() => import("./pages/Order/Order"));
+const Garant = lazy(() => import("./pages/Garant/Garant"));
+const DeliveryInfo = lazy(() => import("./pages/DeliveryInfo/DeliveryInfo"));
 const EditOrder = lazy(() => import("./pages/Admin/pages/EditOrder/EditOrder"));
 const EditNews = lazy(() => import("./pages/Admin/pages/EditNews/EditNews"));
 const EditUser = lazy(() => import("./pages/Admin/pages/EditUser/EditUser"));
@@ -60,13 +62,14 @@ const CreateOrder = lazy(() =>
 );
 const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 
-const PrivateRoute = ({
-                          redirectTo,
-                          component: Component,
-                          condition,
-                          state = {},
-                          ...rest
-                      }) => (
+const PrivateRoute = (
+    {
+        redirectTo,
+        component: Component,
+        condition,
+        state = {},
+        ...rest
+    }) => (
     <Route {...rest}>
         {condition ? (
             <Component/>
@@ -100,47 +103,42 @@ const App = ({
             };
         }, []);
 
-        const token = useMemo(() => {
-            return document.cookie.includes("token")
-                ? document.cookie
-                    .split("; ")
-                    .filter((value) => value.startsWith("token"))[0]
-                    .split("=")[1]
-                : null;
-        }, []);
+        // const token = useMemo(() => {
+        //     return document.cookie.includes("token")
+        //         ? document.cookie
+        //             .split("; ")
+        //             .filter((value) => value.startsWith("token"))[0]
+        //             .split("=")[1]
+        //         : null;
+        // }, []);
+        //
+        // const aToken = useMemo(() => {
+        //     return document.cookie.includes("aToken")
+        //         ? document.cookie
+        //             .split("; ")
+        //             .filter((value) => value.startsWith("aToken"))[0]
+        //             .split("=")[1]
+        //         : null;
+        // }, []);
 
-        const aToken = useMemo(() => {
-            return document.cookie.includes("aToken")
-                ? document.cookie
-                    .split("; ")
-                    .filter((value) => value.startsWith("aToken"))[0]
-                    .split("=")[1]
-                : null;
-        }, []);
-
-        const getUserByToken = async (userToken, type) => {
-            if (userToken) {
-                const isSuccess = await getUser(userToken);
-                if (isSuccess) {
-                    return true;
-                }
-                document.cookie = `${type}=""; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-                return false;
-            }
-        };
+        // const getUserByToken = async (userToken, type) => {
+        //     if (userToken) {
+        //         const isSuccess = await getUser(userToken);
+        //         if (isSuccess) {
+        //             return true;
+        //         }
+        //     }
+        //     // document.cookie = `${type}=""; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+        //     // return false;
+        // };
+        // console.log('mid === ', token)
 
         useEffect(() => {
             (async () => {
                 const loginData = localStorage.getItem("_login");
                 getProducts();
-                let isSuccess = false;
-                if (token) {
-                    isSuccess = await getUserByToken(token, "token");
-                }
-                if (aToken && !isSuccess) {
-                    isSuccess = await getUserByToken(aToken, "aToken");
-                }
-                if (loginData && !isSuccess) {
+                getUser();
+                if (loginData) {
                     await autologin(JSON.parse(loginData));
                 }
             })();
@@ -148,13 +146,13 @@ const App = ({
 
         useEffect(() => {
                 (async () => {
-                        await getCart();
-                        await getWishlist()
-                    }
-                )();
+                    await getCart();
+                    await getWishlist();
+                })();
+
             }, [allProducts]
-        )
-        ;
+        );
+
         return (
             <Router>
                 <Header/>
@@ -168,31 +166,31 @@ const App = ({
                             <Route path="/cart" component={Cart}/>
                             <Route path="/catalog" component={Catalog}/>
                             <Route path="/public-offer" component={PublicOffer}/>
-                            <Route path="/politics" component={Politics}/>
+                            <Route path="/politics" component={Politics}/><Route path="/garant" component={Garant}/>
+                            <Route path="/delivery-inf" component={DeliveryInfo}/>
                             <Route path="/about-us" component={AboutUs}/>
                             <Route path="/news" component={News}/>
                             <Route path="/single-news/:id" component={SingleNews}/>
                             <PrivateRoute
                                 path="/login"
                                 condition={!user._id}
-                                redirectTo={`profile/${user._id}`}
+                                redirectTo={`profile`}
                                 component={Login}
                             />
                             <PrivateRoute
                                 path="/register"
-                                redirectTo={`profile/${user._id}`}
+                                redirectTo={`profile`}
                                 condition={!user._id}
                                 component={Register}
                             />
-                            <PrivateRoute
-                                condition={!!user._id}
-                                path="/profile/:id"
+                            <Route
+                                path="/profile"
                                 component={Profile}
                             />
                             <PrivateRoute
                                 condition={!user._id}
                                 path="/restore"
-                                redirectTo={`profile/${user._id}`}
+                                redirectTo={`profile`}
                                 component={RestorePassword}
                             />
                             <Route path="/order" exact component={Order}/>

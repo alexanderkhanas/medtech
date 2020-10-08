@@ -102,7 +102,7 @@ const Register = ({ register }) => {
             email,
           });
           if (id) {
-            h.push(`/profile/${id}`);
+            h.push(`/profile`);
           }
         }}
       >

@@ -202,6 +202,8 @@ p {
 
 .orders__header {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
   padding-bottom: 10px;
   border-bottom: 1px solid #cccccc80;
   margin-bottom: 10px;
@@ -220,11 +222,13 @@ p {
   width: 1.5rem;
 }
 
-.orders__header span {
+.orders__header p {
   flex: 1;
   font-weight: lighter;
   color: rgb(150, 150, 150);
   display: flex;
+  padding-right: 25px;
+  padding-bottom: 10px;
   align-items: center;
   justify-content: center;
 }

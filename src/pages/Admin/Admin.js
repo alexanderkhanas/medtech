@@ -403,7 +403,11 @@ const Admin = ({
                             return (
                                 <AdminRow
                                     key={_id}
-                                    onDelete={() => deleteCategory(_id)}
+                                    onDelete={() => {
+                                        console.log("title ===", title);
+                                        console.log("id ===", _id);
+                                        deleteCategory(_id)
+                                    }}
                                     onEdit={() => {
                                     }}
                                     items={[

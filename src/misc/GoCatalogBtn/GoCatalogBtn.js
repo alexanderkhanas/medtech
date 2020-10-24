@@ -8,7 +8,7 @@ const GoCatalogBtn = (props) => {
   return (
     <div className={s.body}>
       <Link to="/catalog" className={s.catalog__btn__container}>
-        <Button title="Перейти до покупок" className={s.catalog__btn} size="md">
+        <Button title="Перейти до покупок" className={s.catalog__btn} size="lg">
           <StoreAlt className={s.catalog__btn__icon} />
         </Button>
       </Link>

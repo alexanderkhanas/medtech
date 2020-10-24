@@ -19,7 +19,7 @@ const Footer = () => {
             <h4>Зв'язатися з нами</h4>
             <div className={s.row}>
               <Phone className={s.icon_ft} />
-              <span className={s.phone}>+ 380(96) 39 55 491</span>
+              <span className={s.phone}>+380 (96) 915 61 45</span>
             </div>
             {/*<div className={s.row}>*/}
             {/*  <Instagram className={s.icon_ft} />*/}
@@ -32,8 +32,8 @@ const Footer = () => {
             <div className={s.row}>
               <Clock className={s.icon_ft} />
               <div className={s.hours__container}>
-                <p className={s.hours}>Пн-Пт: 09:00 - 19:00</p>
-                <p className={s.hours}> Сб-Нд: 10:00 -17:00</p>
+                <p className={s.hours}>Пн-Пт: 09:00 - 18:00</p>
+                <p className={s.hours}>Сб: 09:00 - 15:00</p>
               </div>
             </div>
           </div>

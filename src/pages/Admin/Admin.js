@@ -294,6 +294,7 @@ const Admin = ({
                                     categoryToSubmit.sub = [
                                         {title: parentCategory.title, _id: parentCategory._id},
                                     ];
+                                    categoryToSubmit.subParentID = parentCategory._id
                                 }
                                 let isSuccess = false;
                                 isSuccess = await createCategory(categoryToSubmit);
@@ -356,7 +357,12 @@ const Admin = ({
                                                     });
                                                 }}
                                                 options={categories
-                                                    .filter(({sub}) => !sub?.length)
+                                                    .filter(({sub, title}) => {
+                                                        console.log("sujkjnghbtitleg", title)
+
+                                                        console.log("sujkjnghbg", sub)
+                                                        return sub
+                                                    })
                                                     .map(({title, parent, _id}) => {
                                                         const isParentVisible = parent?.length;
                                                         return {

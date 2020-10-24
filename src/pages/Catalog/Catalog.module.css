@@ -46,14 +46,29 @@
   border-radius: 10px;
 }
 
-.filter__title {
+.filter__title__container {
+  display: flex;
   padding: 10px 20px;
   border-radius: 5px;
-  color: #fff;
-  letter-spacing: 2px;
   background: #2bbd86;
+  justify-content: space-between;
   box-shadow: -2px 2px 5px 2px #02ab6a3f;
+  align-items: center;
+}
+
+.filter__title {
+  letter-spacing: 2px;
   color: #ededed;
+}
+
+.filter__caret {
+  width: 20px;
+  height: 20px;
+  color: #fff
+}
+
+.filter__caret__active {
+  transform: rotate(180deg);
 }
 
 .main__content {
@@ -172,6 +187,7 @@
   display: flex;
   align-items: center;
 }
+
 
 @media (min-width: 550px) and (max-width: 750px) {
   .product__card {

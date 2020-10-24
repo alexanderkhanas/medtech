@@ -1,15 +1,14 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import s from "./Catalog.module.css";
 import {connect} from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import ReactPaginate from "react-paginate";
 import HorizontalProductCard from "../../misc/HorizontalProductCard/HorizontalProductCard";
 import {
-    getProductsByPage,
+    clearFilterAction,
     filterProductsAction,
     getCategoriesAction,
-    getProducts,
-    clearFilterAction,
+    getProductsByPage,
     getRecommendedProductsAction,
 } from "../../store/actions/productsActions";
 import ProductCard from "../../misc/ProductCard/ProductCard";
@@ -24,6 +23,9 @@ import {CSSTransition} from "react-transition-group";
 import {ReactComponent as Home} from "../../assets/home.svg";
 import {ReactComponent as Th} from "../../assets/th-solid.svg";
 import {ReactComponent as List} from "../../assets/list-solid.svg";
+import {ReactComponent as Caret} from "../../assets/angle-down.svg";
+import classNames from "classnames";
+
 
 const sortSelectOption = [
     {value: "recommended", label: "Рекомендовані"},
@@ -164,12 +166,15 @@ const Catalog = ({
                 <div className={s.container} ref={containerRef}>
                     <div className={s.filter__container}>
                         <div className={s.filter__body}>
-                            <h3
-                                className={s.filter__title}
+                            <div
                                 onClick={() => setFilterAnimation((prev) => !prev)}
+                                className={s.filter__title__container}
                             >
-                                Фільтр
-                            </h3>
+                                <h3 className={s.filter__title}>
+                                    Фільтр
+                                </h3>
+                                {window.innerWidth < 600 && <Caret className={classNames(s.filter__caret, {[s.filter__caret__active]: isFilterAnimation})}/>}
+                            </div>
                             {window.innerWidth >= 600 ? (
                                 <div className={s.filter__categories}>
                                     {!!sortedCategories?.length &&

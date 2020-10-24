@@ -110,7 +110,7 @@ const Header = ({
                         </Link>
                         <div className={s.contact}>
                             <button className={s.header__info__tag}>
-                                <Phone className={s.header_icon}/>+ 380(96) 39 55 491
+                                <Phone className={s.header_icon}/>+380 (96) 915 61 45
                             </button>
                             {/*<button className={s.header__info__tag}>*/}
                             {/*    <Envelope className={s.header_icon}/>*/}

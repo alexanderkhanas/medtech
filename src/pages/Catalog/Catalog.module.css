@@ -72,7 +72,6 @@
 }
 
 .main__content {
-  width: 69.5%;
 }
 
 .actions__container {
@@ -144,7 +143,7 @@
 }
 
 .product__card {
-  width: 47%;
+  width: 22%;
 }
 
 .filter__categories {
@@ -189,14 +188,14 @@
 }
 
 
-@media (min-width: 550px) and (max-width: 750px) {
+@media (min-width: 600px) and (max-width: 1100px) {
   .product__card {
     height: initial;
-    width: 100%;
+    width: 45%;
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 600px) {
   .product__card {
     height: initial;
     width: 100%;

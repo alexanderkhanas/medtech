@@ -41,7 +41,7 @@ export const searchProductsRequest = async (value) => {
 };
 
 export const fetchFilteredProducts = (
-  categoriesArray,
+  category,
   searchValue,
   page,
   sortType
@@ -53,9 +53,9 @@ export const fetchFilteredProducts = (
   if (page) {
     baseUrl += `page=${page}&`;
   }
-  if (categoriesArray?.length) {
+  if (category) {
     baseUrl += "category=";
-    baseUrl += `${categoriesArray.map((category) => category.id).join(",")}&`;
+    baseUrl += `${category}&`;
   }
 
   if (sortType) {
@@ -273,7 +273,7 @@ export const postProductGallery = (gallery, id, token, isThumbnail) => {
 };
 
 export const fetchUserHistory = () => {
-  return _axios.get(`/order/history`,);
+  return _axios.get(`/order/history`);
 };
 
 export const postContactFormMessage = (message) => {
@@ -345,5 +345,5 @@ export const postReview = (review, token) => {
 };
 
 export const logout = () => {
-  return _axios.get(`/logout`,);
+  return _axios.get(`/logout`);
 };

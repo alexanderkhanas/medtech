@@ -5,7 +5,8 @@ import {
   fetchFilteredProducts,
   fetchCategories,
   fetchHighRatingProducts,
-  postReview, fetchExactProducts,
+  postReview,
+  fetchExactProducts,
 } from "../api/api";
 import {
   SET_PRODUCTS,
@@ -20,7 +21,11 @@ import {
   SET_POPULAR,
 } from "./actionTypes";
 import _axios from "../api/_axios";
-import {randomArrayShuffle, getToken, getLocalWishlist} from "../../utils/utils";
+import {
+  randomArrayShuffle,
+  getToken,
+  getLocalWishlist,
+} from "../../utils/utils";
 
 export const getProducts = () => {
   return async (dispatch) => {
@@ -74,7 +79,7 @@ export const clearFilterAction = (products) => {
 };
 
 export const filterProductsAction = (
-  categoryIdsArray,
+  categoryId,
   searchValue,
   page,
   sortType
@@ -82,7 +87,7 @@ export const filterProductsAction = (
   return async (dispatch) => {
     dispatch({ type: SET_LOADING, isLoading: true });
     const response = await fetchFilteredProducts(
-      categoryIdsArray,
+      categoryId,
       searchValue,
       page,
       sortType
@@ -156,8 +161,6 @@ export const createReviewAction = (review) => {
     return response.status === 200;
   };
 };
-
-
 
 export const setSearchValueAction = (searchValue) => {
   return {

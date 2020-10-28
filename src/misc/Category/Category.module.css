@@ -1,5 +1,22 @@
-.container span {
-  font-weight: lighter;
-  padding: 0 0 20px 0;
+.container {
+  padding: 20px;
+  flex-basis: 12%;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.image {
+  width: 100%;
+  object-fit: cover;
+}
+
+.title {
+  margin-top: 20px;
+  font-family: "Raleway", sans-serif;
+  font-weight: lighter;
+  text-align: center;
+
 }

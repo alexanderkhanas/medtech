@@ -1,11 +1,10 @@
 import React from "react";
 import s from "./ProfileModal.module.css";
 import { connect } from "react-redux";
-import Button from "../Button/Button";
 import { Link } from "react-router-dom";
 
 const ProfileModal = ({ isVisible, hide, user }) => {
-  const { email, phone, fName, lName, _id } = user;
+  const { email, phone, fName, lName } = user;
   return isVisible ? (
     <div className={s.modal__container}>
       <Link to="/profile" onClick={hide}>

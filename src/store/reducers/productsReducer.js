@@ -12,6 +12,7 @@ import {
   DELETE_CATEGORY,
   ADD_PRODUCT,
   DELETE_PRODUCT,
+  EDIT_CATEGORY,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -77,6 +78,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         categories: [...state.categories, action.category],
+      };
+    case EDIT_CATEGORY:
+      return {
+        ...state,
+        categories: state.categories.map((category) =>
+          category._id === action.category._id ? action.category : category
+        ),
       };
     case DELETE_CATEGORY:
       return {

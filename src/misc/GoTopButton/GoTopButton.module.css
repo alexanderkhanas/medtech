@@ -1,0 +1,10 @@
+.arrow__button {
+    position: fixed;
+    bottom: 50px;
+    right: 10px;
+}
+.arrow__button__icon {
+    width: 1rem;
+    fill: white;
+    vertical-align: -0.125em;
+}

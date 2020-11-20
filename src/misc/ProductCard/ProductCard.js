@@ -26,48 +26,34 @@ const ProductCard = ({ product, className }) => {
     console.log("product ===", product);
   }
   return (
-    <div className={classnames(s.card__container, className)}>
-      <div className={classnames(s.card)}>
-        <WishlistButton {...{ product }} className={s.wishlist__button} />
-        <div className={s.card__main}>
-          {/*{!!gallery && gallery[0] && <ConvertImage*/}
-          {/*    image={*/}
-          {/*        gallery[0]*/}
-          {/*    }*/}
-          {/*    format="jpeg"*/}
-          {/*    onConversion={handleConvertedImage}*/}
-          {/*/>}*/}
-          {/*{!!converted &&*/}
-          <img
-            src={
-              gallery && gallery[0]
-                ? gallery[0]
-                : require("../../assets/image-placeholder.webp")
-            }
-            className={s.card__img}
-            onClick={redirectToSingleProduct}
-            alt="loading..."
-          />
-        </div>
-        <div className={s.card__footer}>
-          <h4 className={s.card__title} onClick={redirectToSingleProduct}>
-            {title.slice(0, 40)}
-          </h4>
-          <div className={s.card__price__container}>
-            <span className={s.card__price}>{`${price} ₴`}</span>
-            <div>
-              <Button
-                size="lg"
-                title="Купити"
-                onClick={redirectToSingleProduct}
-              >
-                <ShoppingCart className={s.cart__button__icon} />
-              </Button>
-            </div>
+    // <div className={classnames(s.card__container, className)}>
+    <div className={classnames(s.card, className)}>
+      <WishlistButton {...{ product }} className={s.wishlist__button} />
+      <img
+        src={
+          gallery && gallery[0]
+            ? gallery[0]
+            : require("../../assets/image-placeholder.webp")
+        }
+        className={s.card__img}
+        onClick={redirectToSingleProduct}
+        alt="loading..."
+      />
+      <div className={s.card__footer}>
+        <h4 className={s.card__title} onClick={redirectToSingleProduct}>
+          {title.slice(0, 40)}
+        </h4>
+        <div className={s.card__price__container}>
+          <span className={s.card__price}>{`${price} ₴`}</span>
+          <div>
+            <Button size="lg" title="Купити" onClick={redirectToSingleProduct}>
+              <ShoppingCart className={s.cart__button__icon} />
+            </Button>
           </div>
         </div>
       </div>
     </div>
+    // </div>
   );
 };
 

@@ -68,26 +68,23 @@ const Home = ({
   return (
     <div>
       <div className={s.carousel__container}>
-
-      <ImageCarousel
-        images={[
-          require("../../assets/banner.png"),
-          require("../../assets/medtechbanner-webp.png"),
-          require("../../assets/medtech-banner.png"),
-          require("../../assets/img4.jpg"),
-        ]}
-      >
-        <div className={s.overlay}>
-          <div className={s.overlay__inner}>
-            <h2 className={s.carousel__title}>
-              Зробіть Вашу першу покупку
-            </h2>
-            <div className={s.catalog__btn}>
-              <GoCatalogBtn />
+        <ImageCarousel
+          images={[
+            require("../../assets/banner.png"),
+            require("../../assets/medtechbanner-webp.png"),
+            require("../../assets/medtech-banner.png"),
+            require("../../assets/img4.jpg"),
+          ]}
+        >
+          <div className={s.overlay}>
+            <div className={s.overlay__inner}>
+              <h2 className={s.carousel__title}>Зробіть Вашу першу покупку</h2>
+              <div className={s.catalog__btn}>
+                <GoCatalogBtn />
+              </div>
             </div>
           </div>
-        </div>
-      </ImageCarousel>
+        </ImageCarousel>
       </div>
 
       <FixedWrapper className={s.tabs__container}>
@@ -110,14 +107,14 @@ const Home = ({
               )}
             </TabList>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel arrows {...{ slidesPerPage }}>
+              <ItemsCarousel {...{ slidesPerPage }}>
                 {recommendedProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
               </ItemsCarousel>
             </TabPanel>
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel arrows {...{ slidesPerPage }}>
+              <ItemsCarousel {...{ slidesPerPage }}>
                 {popularProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
@@ -125,7 +122,7 @@ const Home = ({
             </TabPanel>
 
             <TabPanel className={s.tab__panel}>
-              <ItemsCarousel arrows offset={10} {...{ slidesPerPage }}>
+              <ItemsCarousel offset={10} {...{ slidesPerPage }}>
                 {highRatingProducts.map((product, i) => (
                   <ProductCard key={product._id} {...{ product }} />
                 ))}
@@ -166,7 +163,7 @@ const Home = ({
           <Link to="/catalog">
             <h3 className={s.section__title}>Останні товари</h3>
           </Link>
-          <ItemsCarousel arrows {...{ slidesPerPage }}>
+          <ItemsCarousel {...{ slidesPerPage }}>
             {newProducts.map((product, i) => (
               <ProductCard key={product._id} {...{ product }} />
             ))}

@@ -17,11 +17,12 @@ const AdminRow = ({
     setExpanded((prev) => !prev);
     onClick(e);
   };
+
   return (
     <div>
       <div className={classnames(s.card, className)} onClick={clickHandler}>
         <div className={s.card__atrbutes}>
-          {items.map(({ title, key }, i) => (
+          {items.map(({ title, image, key }, i) => (
             <div {...{ key }}>
               <p
                 className={classnames(s.card__title, {
@@ -30,6 +31,11 @@ const AdminRow = ({
               >
                 {title}
               </p>
+              {!!image && (
+                <div className={s.image__container}>
+                  <img src={image} className={s.image} alt="loading" />
+                </div>
+              )}
             </div>
           ))}
           <div className={s.table__container}>

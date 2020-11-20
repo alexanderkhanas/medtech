@@ -6,7 +6,6 @@ import {
   removeFromCartAction,
 } from "../../store/actions/cartActions";
 import Button from "../Button/Button";
-import CartButton from "../CartButton/CartButton";
 import { useHistory } from "react-router-dom";
 import WishlistButton from "../WishlistButton/WishlistButton";
 
@@ -18,12 +17,17 @@ const HorizontalProductCard = ({ product, isSmall, className }) => {
 
   return (
     <div className={`${s.container} ${className}`}>
-      {!isSmall && <img
+      {!isSmall && (
+        <img
           onClick={redirectToSingle}
-          src={gallery && gallery[0] || require("../../assets/image-placeholder.webp")}
+          src={
+            (gallery && gallery[0]) ||
+            require("../../assets/image-placeholder.webp")
+          }
           alt="loading"
           className={s.img}
-      />}
+        />
+      )}
       <div
         className={
           isSmall
@@ -40,12 +44,6 @@ const HorizontalProductCard = ({ product, isSmall, className }) => {
         </div>
         <div className={s.actions__container}>
           <WishlistButton {...{ product }} />
-          {/* <CartButton
-            {...{ product }}
-            {...{ removeFromCart }}
-            {...{ addToCart }}
-            {...{ cartProducts }}
-          /> */}
           <div>
             <Button
               title="Купити"

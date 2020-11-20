@@ -1,31 +1,23 @@
 import {
   fetchProducts,
   fetchProductsByPage,
-  searchProductsRequest,
   fetchFilteredProducts,
   fetchCategories,
   fetchHighRatingProducts,
   postReview,
-  fetchExactProducts,
 } from "../api/api";
 import {
   SET_PRODUCTS,
   SET_RECOMMENDED,
   SET_NEW,
   SET_FILTERED_PRODUCTS,
-  SET_SEARCH,
   SET_LOADING,
   SET_CATEGORIES,
   SET_SEARCH_VALUE,
   SET_HIGHRATING_PRODUCTS,
   SET_POPULAR,
 } from "./actionTypes";
-import _axios from "../api/_axios";
-import {
-  randomArrayShuffle,
-  getToken,
-  getLocalWishlist,
-} from "../../utils/utils";
+import { randomArrayShuffle, getToken } from "../../utils/utils";
 
 export const getProducts = () => {
   return async (dispatch) => {
@@ -106,13 +98,6 @@ export const filterProductsAction = (
         quantity: 0,
       });
     }
-  };
-};
-
-export const getProductsBySearch = (value) => {
-  return async (dispatch) => {
-    const response = await searchProductsRequest(value);
-    dispatch({ type: SET_SEARCH, products: response.data });
   };
 };
 

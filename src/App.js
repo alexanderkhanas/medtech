@@ -25,11 +25,12 @@ import Modal from "./misc/Modal/Modal";
 import { getProducts } from "./store/actions/productsActions";
 import OrderPayment from "./pages/OrderPayment/OrderPayment";
 import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
+import "./App.css";
 
 const Login = lazy(() => import("./pages/Auth/Auth"));
 const Register = lazy(() => import("./pages/Register/Register"));
 const RestorePassword = lazy(() =>
-  import("./pages/RestorePassword/RestorePassord")
+  import("./pages/RestorePassword/RestorePassword")
 );
 const NewPassword = lazy(() => import("./pages/NewPassword/NewPassword"));
 const Profile = lazy(() => import("./pages/Profile/Profile"));
@@ -102,36 +103,6 @@ const App = ({
     };
   }, []);
 
-  // const token = useMemo(() => {
-  //     return document.cookie.includes("token")
-  //         ? document.cookie
-  //             .split("; ")
-  //             .filter((value) => value.startsWith("token"))[0]
-  //             .split("=")[1]
-  //         : null;
-  // }, []);
-  //
-  // const aToken = useMemo(() => {
-  //     return document.cookie.includes("aToken")
-  //         ? document.cookie
-  //             .split("; ")
-  //             .filter((value) => value.startsWith("aToken"))[0]
-  //             .split("=")[1]
-  //         : null;
-  // }, []);
-
-  // const getUserByToken = async (userToken, type) => {
-  //     if (userToken) {
-  //         const isSuccess = await getUser(userToken);
-  //         if (isSuccess) {
-  //             return true;
-  //         }
-  //     }
-  //     // document.cookie = `${type}=""; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-  //     // return false;
-  // };
-  // console.log('mid === ', token)
-
   useEffect(() => {
     (async () => {
       const loginData = localStorage.getItem("_login");
@@ -155,7 +126,7 @@ const App = ({
       <Header />
       <Alert />
       <Modal />
-      <div style={{ marginTop: "45px" }}>
+      <div className="body">
         <Suspense fallback={<div className="fallback" />}>
           <Switch>
             <Route path="/" exact component={Home} />
@@ -164,6 +135,12 @@ const App = ({
             <Route
               path="/catalog/:parentID?/:subParentID?/:childID?"
               component={Catalog}
+            />
+            <PrivateRoute
+              condition={!user._id}
+              path="/restore/:code/:email"
+              redirectTo={`profile`}
+              component={NewPassword}
             />
             <Route path="/public-offer" component={PublicOffer} />
             <Route path="/politics" component={Politics} />
@@ -195,12 +172,6 @@ const App = ({
             <Route path="/order/payment/:id/:amount" component={OrderPayment} />
             <Route path="/payment/success" component={PaymentSuccess} />
 
-            {/* <Route
-              path="/admin"
-              key="/ADMIN"
-              render={({ match: { url } }) => (
-                <> */}
-            <Route path="/new-password" component={NewPassword} />
             <Route path="/wishlist" component={Wishlist} />
             <PrivateRoute
               path="/admin"

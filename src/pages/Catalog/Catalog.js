@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import s from "./Catalog.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
@@ -21,8 +21,9 @@ import BreadCrumbs from "../../misc/BreadCrumbs/BreadCrumbs";
 import { ReactComponent as Home } from "../../assets/home.svg";
 import { ReactComponent as Th } from "../../assets/th-solid.svg";
 import { ReactComponent as List } from "../../assets/list-solid.svg";
-import Categories from "../../misc/Categories/Categories";
 import { withRouter } from "react-router";
+import Category from "../../misc/Category/Category";
+import GoTopButton from "../../misc/GoTopButton/GoTopButton";
 
 const sortSelectOption = [
   { value: "recommended", label: "Рекомендовані" },
@@ -40,16 +41,26 @@ const Catalog = ({
   getCategories,
   categories,
   searchValue,
-  params,
+  match: { params },
+  history: h,
+  location,
   getRecommendedProducts,
 }) => {
   const [productViewType, setProductViewType] = useState("row");
   const [sortType, setSortType] = useState(sortSelectOption[0]);
   const containerRef = useRef();
   const [sortedCategories, setSortedCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
   // const [isFilterAnimation, setFilterAnimation] = useState(true);
   const [activePage, setActivePage] = useState(1);
+
+  const [breadCrumbsItems, setBreadCrumbsItems] = useState([
+    {
+      name: "Головна",
+      path: "/",
+      icon: <Home className={s.bread__crumbs} />,
+    },
+    { name: "Каталог", path: "/catalog" },
+  ]);
 
   const { parentID, subParentID, childID } = params || {};
 
@@ -62,27 +73,57 @@ const Catalog = ({
     setSortType(value);
   };
 
-  // const selectCategory = (categoryTitle, categoryId) => {
-  //   setSelectedCategories((prev) => [
-  //     ...prev,
-  //     { name: categoryTitle, id: categoryId },
-  //   ]);
-  // };
-  //
-  // const removeCategory = (categoryTitle) => {
-  //   const filtered = selectedCategories.filter(
-  //     (selectedCategory) => selectedCategory.name !== categoryTitle
-  //   );
-  //
-  //   setSelectedCategories(filtered);
-  //   if (!filtered?.length) {
-  //     clearFilter(products);
-  //   }
-  // };
+  const selectCategory = (categoryId) => {
+    h.push(`${location.pathname}/${categoryId}`);
+  };
 
   const switchProductViewType = () => {
     setProductViewType((prev) => (prev === "row" ? "column" : "row"));
   };
+  const selectedCategories = useMemo(() => {
+    const temp = [];
+    let parent;
+    let subParent;
+    Object.values(params).forEach((categoryID, i) => {
+      let foundCategory;
+      if (!parent) {
+        foundCategory = sortedCategories.find(({ _id }) => _id === categoryID);
+        parent = foundCategory;
+      } else if (parent && !subParent) {
+        foundCategory = parent.subChildren.find(
+          ({ _id }) => _id === categoryID
+        );
+        subParent = foundCategory;
+      } else {
+        foundCategory = subParent.children.find(
+          ({ _id }) => _id === categoryID
+        );
+      }
+      if (foundCategory) {
+        temp.push(foundCategory);
+      }
+    });
+    return temp;
+  }, [params, sortedCategories]);
+
+  const [
+    selectedParentCategory,
+    selectedSubParentCategory,
+  ] = selectedCategories;
+
+  const categoriesToDisplay = useMemo(() => {
+    if (!selectedParentCategory) {
+      return sortedCategories;
+    }
+    if (childID) {
+      return [];
+    }
+    let temp = [];
+    temp = subParentID
+      ? selectedSubParentCategory?.children
+      : selectedParentCategory?.subChildren;
+    return temp || [];
+  }, [selectedCategories, sortedCategories]);
 
   useEffect(() => {
     filterProducts(
@@ -94,10 +135,32 @@ const Catalog = ({
   }, [activePage, sortType, params]);
 
   useEffect(() => {
+    const tempBreadCrumbs = [
+      {
+        name: "Головна",
+        path: "/",
+        icon: <Home className={s.bread__crumbs} />,
+      },
+      { name: "Каталог", path: "/catalog" },
+    ];
+
+    if (selectedCategories.length) {
+      let categoriesPathString = "/catalog";
+
+      selectedCategories.forEach(({ _id, title }) => {
+        categoriesPathString += `/${_id}`;
+        tempBreadCrumbs.push({ name: title, path: categoriesPathString });
+      });
+    }
+
+    setBreadCrumbsItems(tempBreadCrumbs);
+  }, [selectedCategories]);
+
+  useEffect(() => {
     let filtered = categories.map((category) => {
       const categoryCopy = { ...category };
       return !category.parent.length && !category.sub.length
-        ? { ...categoryCopy, subchilds: [], childs: {} }
+        ? { ...categoryCopy, subChildren: [], children: [] }
         : null;
     });
 
@@ -107,23 +170,20 @@ const Catalog = ({
       if (category.parent.length && !category.sub.length) {
         Object.keys(filtered).forEach((key) => {
           if (filtered[key]._id === category.parent[0]._id) {
-            filtered[key].subchilds = [...filtered[key].subchilds, category];
+            filtered[key].subChildren = [
+              ...filtered[key].subChildren,
+              { ...category, children: [] },
+            ];
           }
         });
       }
     });
     Object.keys(filtered).forEach((key) => {
       const parent = filtered[key];
-      parent.subchilds.forEach((subchild) => {
-        categories.forEach((category, i) => {
-          if (category.sub.length) {
-            if (subchild._id === category.sub[0]._id) {
-              let childKey = parent.childs[subchild._id] || [];
-              parent.childs = {
-                ...parent.childs,
-                [subchild._id]: [...childKey, category],
-              };
-            }
+      parent.subChildren.forEach((subchild, i) => {
+        categories.forEach((category) => {
+          if (subchild?._id === category.sub[0]?._id) {
+            parent.subChildren[i].children.push(category);
           }
         });
       });
@@ -135,15 +195,6 @@ const Catalog = ({
 
   const isEmptyResults = !filteredProducts.length && !isLoading;
 
-  const breadCrumbsItems = [
-    {
-      name: "Головна",
-      path: "/",
-      icon: <Home className={s.bread__crumbs} />,
-    },
-    { name: "Каталог", path: "/catalog" },
-  ];
-
   useEffect(() => {
     if (!categories?.length) {
       getCategories();
@@ -153,8 +204,6 @@ const Catalog = ({
     }
   }, []);
 
-  console.log("sortedCategories ===", sortedCategories);
-
   return (
     <div>
       <div className={s.title__container}>
@@ -162,62 +211,33 @@ const Catalog = ({
         <BreadCrumbs items={breadCrumbsItems} />
       </div>
       <FixedWrapper>
-        <Categories categories={sortedCategories} />
+        <div className={s.filter__container}>
+          <div className={s.filter__list}>
+            <div className={s.filter__title__container}>
+              <h3 className={s.filter__title}>Фільтр</h3>
+            </div>
+            {categoriesToDisplay?.map((category) => (
+              <p
+                key={category._id}
+                onClick={() => selectCategory(category._id)}
+                className={s.filter__category}
+              >
+                {category.title}
+              </p>
+            ))}
+          </div>
+          <div className={s.categories__container}>
+            {categoriesToDisplay?.map((category) => (
+              <Category
+                {...{ category }}
+                key={category._id}
+                onSelect={selectCategory}
+              />
+            ))}
+          </div>
+        </div>
+
         <div className={s.container} ref={containerRef}>
-          {/*<div className={s.filter__container}>*/}
-          {/*  <div className={s.filter__body}>*/}
-          {/*    <div*/}
-          {/*      onClick={() => setFilterAnimation((prev) => !prev)}*/}
-          {/*      className={s.filter__title__container}*/}
-          {/*    >*/}
-          {/*      <h3 className={s.filter__title}>Фільтр</h3>*/}
-          {/*      {window.innerWidth < 600 && (*/}
-          {/*        <Caret*/}
-          {/*          className={classNames(s.filter__caret, {*/}
-          {/*            [s.filter__caret__active]: isFilterAnimation,*/}
-          {/*          })}*/}
-          {/*        />*/}
-          {/*      )}*/}
-          {/*    </div>*/}
-          {/*    {window.innerWidth >= 600 ? (*/}
-          {/*      <div className={s.filter__categories}>*/}
-          {/*        {!!sortedCategories?.length &&*/}
-          {/*          sortedCategories.map((parent) => (*/}
-          {/*            <CategoryAccordion*/}
-          {/*              {...{ selectCategory }}*/}
-          {/*              {...{ removeCategory }}*/}
-          {/*              {...{ selectedCategories }}*/}
-          {/*              {...{ parent }}*/}
-          {/*              key={parent._id}*/}
-          {/*            />*/}
-          {/*          ))}*/}
-          {/*      </div>*/}
-          {/*    ) : (*/}
-          {/*      <CSSTransition*/}
-          {/*        in={isFilterAnimation}*/}
-          {/*        timeout={600}*/}
-          {/*        classNames={{*/}
-          {/*          exitActive: s.filter__exiting,*/}
-          {/*          exitDone: s.filter__exited,*/}
-          {/*          enterActive: s.filter__entering,*/}
-          {/*          enterDone: s.filter__entered,*/}
-          {/*        }}*/}
-          {/*      >*/}
-          {/*        <div className={s.filter__categories}>*/}
-          {/*          {sortedCategories.map((parent) => (*/}
-          {/*            <CategoryAccordion*/}
-          {/*              {...{ selectCategory }}*/}
-          {/*              {...{ removeCategory }}*/}
-          {/*              {...{ selectedCategories }}*/}
-          {/*              {...{ parent }}*/}
-          {/*              key={parent._id}*/}
-          {/*            />*/}
-          {/*          ))}*/}
-          {/*        </div>*/}
-          {/*      </CSSTransition>*/}
-          {/*    )}*/}
-          {/*  </div>*/}
-          {/*</div>*/}
           <div className={s.main__content}>
             <div className={s.actions__container}>
               <div className={s.change__view__container}>
@@ -255,11 +275,13 @@ const Catalog = ({
                   .sort((a, b) => (a.quantity > b.quantity ? -1 : 1))
                   .map((product, i) =>
                     productViewType === "row" ? (
-                      <ProductCard
-                        className={s.product__card}
-                        key={product._id}
-                        {...{ product }}
-                      />
+                      <div className={s.product__card__container}>
+                        <ProductCard
+                          className={s.product__card}
+                          key={product._id}
+                          {...{ product }}
+                        />
+                      </div>
                     ) : (
                       <HorizontalProductCard
                         {...{ product }}
@@ -276,11 +298,14 @@ const Catalog = ({
             {isEmptyResults && (
               <div className={s.carousel__container}>
                 <ItemsCarousel
-                  arrows
-                  slidesPerPage={Math.floor(window.innerWidth / 550)}
+                  slidesPerPage={Math.floor(window.innerWidth / 450) || 1}
                 >
                   {recommendedProducts.map((product, i) => (
-                    <ProductCard {...{ product }} key={product._id} />
+                    <ProductCard
+                      className={s.product__card}
+                      {...{ product }}
+                      key={product._id}
+                    />
                   ))}
                 </ItemsCarousel>
               </div>
@@ -288,7 +313,7 @@ const Catalog = ({
           </div>
         </div>
         <ReactPaginate
-          pageCount={Math.round(filteredProductsQuantity / 24)}
+          pageCount={Math.ceil(filteredProductsQuantity / 24)}
           pageRangeDisplayed={5}
           marginPagesDisplayed={1}
           {...{ onPageChange }}
@@ -298,6 +323,7 @@ const Catalog = ({
           nextLabel=""
           pageClassName={s.pagination__link}
         />
+        <GoTopButton />
       </FixedWrapper>
     </div>
   );

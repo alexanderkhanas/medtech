@@ -6,9 +6,8 @@ const BreadCrumbs = ({ items }) => {
   return (
     <div className={s.container}>
       {items.map(({ name, path, icon }, i) => {
-        const isLast = i + 1 === items.length;
-        const text = isLast ? name : `${name} / `;
-        const className = isLast ? s.last__crumb : s.crumb;
+        const text = i === 0 ? `${name} ` : `/ ${name} `;
+        const className = i === items.length - 1 ? s.last__crumb : s.crumb;
         return (
           <Link to={path} key={i} className={s.link}>
             {!!icon && icon}

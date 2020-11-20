@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import s from "./CreateUser.module.css";
 import { connect } from "react-redux";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import FixedWrapper from "../../../../wrappers/FixedWrapper/FixedWrapper";
 import Input from "../../../../misc/Inputs/Input/Input";
 import PhoneNumberInput from "../../../../misc/Inputs/PhoneNumberInput/PhoneNumberInput";
@@ -41,7 +41,6 @@ const CreateUser = ({ register, showAlert }) => {
     uploaderRef.current.click();
   };
 
-  const h = useHistory();
   return (
     <div>
       <div className={s.title__container}>
@@ -275,7 +274,7 @@ const CreateUser = ({ register, showAlert }) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = () => {
   return {};
 };
 const mapDispatchToProps = (dispatch) => {

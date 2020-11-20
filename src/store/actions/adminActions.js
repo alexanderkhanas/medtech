@@ -25,6 +25,7 @@ import {
   fetchSingleProduct,
   deleteOrder,
   fetchExactProducts,
+  patchCategory,
 } from "../api/api";
 import { getToken, getAdminToken } from "../../utils/utils";
 import {
@@ -44,21 +45,32 @@ import {
   SET_ORDERS,
   DELETE_PRODUCT,
   SET_ORDERS_PRODUCTS,
+  EDIT_CATEGORY,
 } from "./actionTypes";
 
 export const createCategoryAction = (category) => {
   return async (dispatch) => {
     const token = getAdminToken();
     dispatch({ type: SET_LOADING, isLoading: true });
-    const response = await createCategory(
-      { ...category, desc: "", gallery: [""] },
-      token
-    );
+    const response = await createCategory({ ...category, desc: "" }, token);
     dispatch({ type: SET_LOADING, isLoading: false });
     if (response.status === 200) {
       dispatch({ type: ADD_CATEGORY, category: response.data });
     }
-    return response.status === 200;
+    return response?.data?._id;
+  };
+};
+
+export const editCategoryAction = (category, id) => {
+  return async (dispatch) => {
+    const token = getAdminToken();
+    dispatch({ type: SET_LOADING, isLoading: true });
+    const response = await patchCategory({ ...category, desc: "" }, token, id);
+    dispatch({ type: SET_LOADING, isLoading: false });
+    if (response.status === 200) {
+      dispatch({ type: EDIT_CATEGORY, category: response.data });
+    }
+    return response?.data?._id;
   };
 };
 
@@ -326,7 +338,7 @@ export const editProductAction = (product, gallery, id) => {
 
     if (productRes.status === 200) {
       let productGallery = productRes.gallery;
-      console.log("gallery ===", gallery)
+      console.log("gallery ===", gallery);
       if (gallery) {
         const galleryResponse = await postProductGallery(
           gallery,

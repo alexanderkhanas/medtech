@@ -41,25 +41,6 @@ const CreateProduct = ({
       const reader = new FileReader();
 
       reader.onload = async ({ target: { result } }) => {
-        if (i === 0) {
-          const output = await Resizer.imageFileResizer(
-            file,
-            300,
-            300,
-            "JPEG",
-            100,
-            0,
-            (uri) => {
-              setValues({
-                ...values,
-                gallery: temp,
-                galleryFiles: Array.from(files),
-                thumbnail: uri,
-              });
-            },
-            "blob"
-          );
-        }
         temp.push(result);
         setValues({
           ...values,

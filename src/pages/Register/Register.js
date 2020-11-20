@@ -128,7 +128,7 @@ const Register = ({ register }) => {
               <div className={s.body}>
                 <div className={s.container}>
                   <div className={s.title__container}>
-                    <h3 className={s.title}>CREATE ACCOUNT</h3>
+                    <h3 className={s.title}>Зареєструватись</h3>
                     <BreadCrumbs items={breadCrumbsItems} />
                   </div>
                   <div className={s.register}>

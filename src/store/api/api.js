@@ -163,8 +163,24 @@ export const createCategory = (category, token) => {
   });
 };
 
+export const patchCategory = (category, token, id) => {
+  return _axios.patch(`/category/${id}`, category, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const deleteCategory = (id, token) => {
   return _axios.delete(`/category/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const postCategoryImage = (image, id, token) => {
+  return _axios.post(`/category/upload/${id}`, image, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -1,3 +1,9 @@
+@media(max-width: 950px) {
+  .body {
+    margin-top: 45px;
+  }
+}
+
 .second {
   background: red;
   height: 30vh;

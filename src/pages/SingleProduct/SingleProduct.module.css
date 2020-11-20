@@ -21,6 +21,7 @@
 
 .main__image {
   width: 600px;
+  object-fit: cover;
   height: 450px;
 }
 

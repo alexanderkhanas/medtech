@@ -5,46 +5,47 @@ import Button from "../../misc/Button/Button";
 import { useHistory } from "react-router-dom";
 import _axios from "../../store/api/_axios";
 import GoBackBtn from "../../misc/GoBackBtn/GoBackBtn";
+import { withFormik } from "formik";
+import { connect } from "react-redux";
+import { showAlertAction } from "../../store/actions/alertActions";
+import { withRouter } from "react-router";
 
-const RestorePassord = () => {
-  const h = useHistory();
-  const [password, setPassword] = useState();
-  const handleSubmit = () => {
-    _axios
-      .post("/change/password", { password })
-      .then((res) => {})
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+const RestorePassword = ({ values, errors, handleChange, handleSubmit }) => {
+  console.log("errors ===", errors);
   return (
     <>
       <div className={s.body}>
         <div className={s.container}>
           <div className={s.title__container}>
-            <h4 className={s.title}>Відновлення паролю</h4>
+            <h4 className={s.title}>Зміна паролю</h4>
           </div>
           <div className={s.login}>
-            <h5>Відновлення паролю</h5>
-            <h6>Введіть ваш новий пароль</h6>
             <div className={s.input__container}>
               <div className={s.password}>
                 <Input
                   placeholder="••••••••"
                   type="password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  label="Пароль"
+                  name="password"
+                  onChange={handleChange}
                 />
               </div>
               <div className={s.password}>
                 <Input
                   placeholder="••••••••"
+                  label="Підтвердження паролю"
                   type="password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="confirmPassword"
+                  onChange={handleChange}
                 />
               </div>
             </div>
             <div className={s.submit_button}>
-              <Button title="Змінити пароль" onClick={handleSubmit} />
+              <Button
+                title="Змінити пароль"
+                isDisabled={Object.keys(errors).length || !values.password}
+                onClick={handleSubmit}
+              />
             </div>
             <GoBackBtn />
           </div>
@@ -54,4 +55,53 @@ const RestorePassord = () => {
   );
 };
 
-export default RestorePassord;
+const formikHOC = withFormik({
+  mapPropsToValues: () => ({
+    password: "",
+    confirmPassword: "",
+  }),
+  validate: ({ password, confirmPassword }) => {
+    const errors = {};
+    if (password.length < 6) {
+      errors.password = "too short";
+    }
+    if (password !== confirmPassword) {
+      errors.confirmPassword = "not match";
+    }
+    return errors;
+  },
+  handleSubmit: (
+    { password },
+    {
+      props: {
+        history,
+        match: {
+          params: { code, email },
+        },
+      },
+      resetForm,
+    }
+  ) => {
+    _axios
+      .post("/change/password", {
+        code,
+        password,
+        email,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          resetForm({ password: "", confirmPassword: "" });
+          history.push("/login");
+        } else {
+          throw new Error("bad res");
+        }
+      })
+      .catch(() => {});
+  },
+})(RestorePassword);
+
+const mapDispatchToProps = (dispatch) => ({
+  showAlert: (content, type) => dispatch(showAlertAction(content, type)),
+});
+
+export default withRouter(connect(null, mapDispatchToProps)(formikHOC));

@@ -95,8 +95,8 @@
   fill: #00d231;
 }
 .restore {
-  margin-top: 10px;
-  padding: 0 auto;
+  margin-top: 0;
+  padding: 0;
 }
 .restore,
 .reg,
@@ -113,7 +113,7 @@ button {
   background-color: transparent;
 }
 .submit_button {
-  padding: 0 0 20px 0;
+  padding: 10px 0;
   justify-content: center;
 }
 .submit_button > button {

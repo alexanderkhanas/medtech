@@ -4,8 +4,8 @@ import "@brainhubeu/react-carousel/lib/style.css";
 
 const ItemsCarousel = ({
   children,
-  arrows = true,
-  dots = false,
+  arrows = window.innerWidth > 500,
+  dots = window.innerWidth < 500,
   slidesPerPage = Math.ceil(window.innerWidth / 350) || 1,
 }) => {
   return (
